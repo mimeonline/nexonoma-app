@@ -1,91 +1,160 @@
-import {
-  Boxes,
-  Building,
-  Database,
-  User,
-  Wrench,
-} from "lucide-react";
-
-export type SubCluster = {
-  id: string;
+export type ContentItem = {
+  slug: string;
   title: string;
+  type: "concept" | "method" | "tool" | "technology";
+  summary: string;
 };
 
-export type Category = {
-  id: string;
+export type Segment = {
+  slug: string;
   title: string;
-  icon: keyof typeof iconMap;
+  contents: Record<ContentItem["type"], ContentItem[]>;
+};
+
+export type SubCluster = {
+  slug: string;
+  title: string;
+  segments: Segment[];
+};
+
+export type Cluster = {
+  slug: string;
+  title: string;
+  icon: string;
   subclusters: SubCluster[];
 };
 
-export const iconMap = {
-  Wrench,
-  Boxes,
-  Building,
-  Database,
-  User,
-};
+const makeContents = (segment: string): Record<ContentItem["type"], ContentItem[]> => ({
+  concept: [
+    {
+      slug: `${segment}-concept`,
+      title: "Concept Placeholder",
+      type: "concept",
+      summary: "Konzeptioneller Überblick für dieses Segment.",
+    },
+  ],
+  method: [
+    {
+      slug: `${segment}-method`,
+      title: "Method Placeholder",
+      type: "method",
+      summary: "Methode, um das Segment praktisch umzusetzen.",
+    },
+  ],
+  tool: [
+    {
+      slug: `${segment}-tool`,
+      title: "Tool Placeholder",
+      type: "tool",
+      summary: "Werkzeug-Empfehlung für dieses Segment.",
+    },
+  ],
+  technology: [
+    {
+      slug: `${segment}-technology`,
+      title: "Technology Placeholder",
+      type: "technology",
+      summary: "Technologie-Beispiel für dieses Segment.",
+    },
+  ],
+});
 
-export const categories: Category[] = [
+const makeSegment = (slug: string, title: string): Segment => ({
+  slug,
+  title,
+  contents: makeContents(slug),
+});
+
+export const clusters: Cluster[] = [
   {
-    id: "tech-infra",
+    slug: "tech-infra",
     title: "Technologie & Infrastruktur",
-    icon: "Wrench",
+    icon: "Server",
     subclusters: [
-      { id: "ai-ml", title: "AI & Machine Learning" },
-      { id: "cloud", title: "Cloud & Infrastruktur" },
-      { id: "cost", title: "Kosten & Effizienz" },
-      { id: "incident", title: "Incident Management & Resilience" },
-      { id: "integration", title: "Integration & APIs" },
-      { id: "observability", title: "Observability & Monitoring" },
+      {
+        slug: "ai-ml",
+        title: "AI & Machine Learning",
+        segments: [
+          makeSegment("modeling", "Modeling"),
+          makeSegment("deployment", "Deployment"),
+        ],
+      },
+      {
+        slug: "cloud",
+        title: "Cloud & Infrastruktur",
+        segments: [
+          makeSegment("platform", "Platform Engineering"),
+          makeSegment("networking", "Networking"),
+        ],
+      },
     ],
   },
   {
-    id: "software-arch",
+    slug: "software-arch",
     title: "Software & Architektur",
     icon: "Boxes",
     subclusters: [
-      { id: "backend", title: "Backend" },
-      { id: "frontend", title: "Frontend" },
-      { id: "devops", title: "DevOps & Platform Engineering" },
-      { id: "legacy", title: "Legacy & Modernisierung" },
-      { id: "mobile-edge", title: "Mobile & Edge Development" },
-      { id: "architecture", title: "Software Architektur" },
-      { id: "sdlc", title: "Software Development Lifecycle" },
+      {
+        slug: "backend",
+        title: "Backend",
+        segments: [
+          makeSegment("apis", "APIs"),
+          makeSegment("services", "Services"),
+        ],
+      },
+      {
+        slug: "frontend",
+        title: "Frontend",
+        segments: [
+          makeSegment("ui-patterns", "UI Patterns"),
+          makeSegment("performance", "Performance"),
+        ],
+      },
     ],
   },
   {
-    id: "strategy",
+    slug: "strategy",
     title: "Strategie & Organisation",
     icon: "Building",
     subclusters: [
-      { id: "business-org", title: "Business & Organisation" },
-      { id: "org-maturity", title: "Organisationale Reife & Capability Development" },
-      { id: "change", title: "Change & Transformation" },
-      { id: "governance", title: "Governance & Architekturentscheidungen" },
-      { id: "operating-model", title: "IT Operating Model" },
+      {
+        slug: "change",
+        title: "Change & Transformation",
+        segments: [
+          makeSegment("roadmaps", "Roadmaps"),
+          makeSegment("enablement", "Enablement"),
+        ],
+      },
     ],
   },
   {
-    id: "data-intelligence",
+    slug: "data-intelligence",
     title: "Data & Intelligence",
     icon: "Database",
     subclusters: [
-      { id: "bi", title: "Data & Business Intelligence" },
-      { id: "datastrategy", title: "Datenstrategie & Governance" },
-      { id: "qa-testing", title: "Quality Assurance & Testing" },
+      {
+        slug: "bi",
+        title: "Business Intelligence",
+        segments: [
+          makeSegment("dashboards", "Dashboards"),
+          makeSegment("quality", "Data Quality"),
+        ],
+      },
     ],
   },
   {
-    id: "user-context",
+    slug: "user-context",
     title: "User & Kontext",
     icon: "User",
     subclusters: [
-      { id: "ethics", title: "Ethics & Sustainability" },
-      { id: "knowledge", title: "Knowledge Management & Collaboration" },
-      { id: "security", title: "Security & Compliance" },
-      { id: "system-thinking", title: "System Thinking" },
-      { id: "ux", title: "UX & Product Design" },
+      {
+        slug: "ux",
+        title: "UX & Product Design",
+        segments: [
+          makeSegment("research", "Research"),
+          makeSegment("prototyping", "Prototyping"),
+        ],
+      },
     ],
   },
 ];
