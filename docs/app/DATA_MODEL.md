@@ -25,158 +25,173 @@ Diese drei Ebenen bilden zusammen die Grundlage der Grid View → Matrix View �
 
 ## 2. Dateien
 
-Alle Daten liegen im MVP unter:
+Für das MVP liegen **keine einzelnen großen JSON-Dateien** wie `clusters.json`, `segments.json` oder `items.json` vor.
 
-content/json/
-clusters.json
-segments.json
-items.json
+Stattdessen existiert folgende Struktur:
+
+```text
+  content/json/
+  clusters/.json
+  segments/.json
+  concepts/.json
+  methods/.json
+  technologies/.json
+  tools/.json
+  roles/*.json
+````
+
+Jede Datei ist ein **vollständiger AssetBlock**, validiert von einem der vorhandenen Schemas.
 
 ---
 
-## 3. `clusters.json`
+## 3. Cluster (`content/json/clusters/...`)
 
-Cluster definieren thematische Hauptbereiche.  
-Sie referenzieren Segmente über deren IDs.
+Cluster definieren thematische Hauptbereiche.
 
-**Beispielstruktur (vereinfachte Form):**
+Eine Datei entspricht **einem Cluster**.
+
+MVP-relevante Felder:
+
+- `id` (string)
+- `name` (string)
+- `slug` (string)
+- `type` = "cluster"
+- `segments` (array von Segment-IDs)
+
+Beispiel:
 
 ```json
-[
-  {
-    "id": "sdlc",
-    "name": "SDLC",
-    "description": "Software Development Lifecycle",
-    "segments": ["plan", "build", "run"]
-  },
-  {
-    "id": "architecture",
-    "name": "Architecture",
-    "description": "Architecture principles & patterns",
-    "segments": ["concepts", "patterns", "governance"]
-  }
-]
-```
-
-Felder (MVP):
-
-- id (string)
-- name (string)
-- description (string)
-- segments (array of segment IDs)
+{
+  "id": "software-architecture",
+  "name": "Software Architecture",
+  "slug": "software-architecture",
+  "type": "cluster",
+  "segments": ["design", "development", "operations"]
+}
+````
 
 Validierung & Details: siehe /schemas/cluster.schema.json.
 
-## 4. segments.json
+## 4. Segmente (content/json/segments/...)
 
-Segmente repräsentieren Einordnungen innerhalb eines Clusters.
-Sie sind eigenständig definierte Entitäten und werden in Clustern verlinkt.
+Segmente repräsentieren Unterbereiche eines Clusters.
 
-Beispielstruktur:
+MVP-relevante Felder:
 
-```json
-[
-  { "id": "plan", "name": "Plan" },
-  { "id": "build", "name": "Build" },
-  { "id": "run", "name": "Run" },
+- id
+- name
+- slug
+- type = "segment"
 
-  { "id": "concepts", "name": "Concepts" },
-  { "id": "patterns", "name": "Patterns" },
-  { "id": "governance", "name": "Governance" }
-]
-````
-
-Felder (MVP):
-
-- id (string)
-- name (string)
-
-Validierung: siehe /schemas/segment.schema.json.
-
-## 5. items.json
-
-Items sind die eigentlichen Wissenselemente.
-Die City View visualisiert sie.
-
-Beispielstruktur:
+Beispiel:
 
 ```json
-[
-  {
-    "id": "event-storming",
-    "title": "Event Storming",
-    "cluster": "sdlc",
-    "segment": "plan",
-    "summary": "Collaborative modeling for domain exploration."
-  },
-  {
-    "id": "c4-model",
-    "title": "C4 Model",
-    "cluster": "architecture",
-    "segment": "concepts",
-    "summary": "Visual modeling for software architecture."
-  },
-  {
-    "id": "cqrs",
-    "title": "CQRS",
-    "cluster": "architecture",
-    "segment": "patterns",
-    "summary": "Split read & write models for complex domains."
-  }
-]
+{
+  "id": "design",
+  "name": "Design",
+  "slug": "design",
+  "type": "segment"
+}
 ```
 
-Felder (MVP):
+Validierung: /schemas/segment.schema.json.
 
-- id (string)
-- title (string)
-- cluster (cluster ID)
-- segment (segment ID)
-- summary (string)
+## 5. AssetBlocks (Items)
 
-Validierung: siehe /schemas/technology.schema.json, /schemas/method.schema.json, etc.
-(MVP erlaubt gemischte Items in einem File; spätere Version trennt nach AssetBlocks.)
+AssetBlocks sind konkrete Wissenselemente, z. B.:
+
+- Event Storming
+- C4 Model
+- CQRS
+- Microservices
+- Kanban
+- Kafka
+- Terraform
+- etc.
+
+Sie liegen in:
+
+```text
+content/json/concepts/
+content/json/methods/
+content/json/technologies/
+content/json/tools/
+content/json/roles/
+```
+
+Ein AssetBlock enthält sehr viele Felder, aber das MVP nutzt nur eine minimale Teilmenge:
+
+MVP-relevante Felder:
+
+- id (UUID)
+- name
+- slug
+- type
+- cluster
+- segment
+- shortDescription (optional)
+
+Alles weitere (useCases, relations, metrics etc.) bleibt für spätere Releases bestehen.
+
+Beispiel (gekürzt):
+
+```json
+{
+  "id": "b2e3b1a4-62b8-4dbf-bde1-ff3f0c3f7f9c",
+  "name": "12-Factor App",
+  "slug": "12-factor-app",
+  "type": "concept",
+  "cluster": "software-architecture",
+  "segment": "development",
+  "shortDescription": "Ein Methodenset für moderne SaaS-Anwendungen."
+}
+```
 
 ## 6. Relationen (MVP)
 
-Relationen werden implizit durch die IDs hergestellt:
+Es gibt keine eigene relations.json.
+Relationen entstehen implizit:
 
-- Cluster → Segment: über cluster.segments[]
-- Segment → Cluster: über items[].segment
-- Item → Cluster: über items[].cluster
+- Cluster ↔ Segmente: über cluster.segments[]
+- Items → Cluster: über item.cluster
+- Items → Segment: über item.segment
 
-Keine explizite relations.json im MVP.
+Das MVP nutzt ausschließlich diese Basis-Relationen.
 
 ## 7. Regeln für das Datenmodell (MVP)
 
 - IDs sind lowercase-kebab-case
-    z. B. event-storming, c4-model
-- JSON-Dateien sollen keine unnötigen Felder enthalten
-- Jede City View lädt:
-→ alle Items, die cluster === X und segment === Y
-  - Clusters und Segments müssen zueinander passen
-- Items referenzieren nur bestehende IDs
-- Keine Duplikate in IDs
+- JSON-Dateien sollen so klein wie möglich bleiben
+- Jede City View lädt ausschließlich:
+  - Items, deren cluster === X
+  - und deren segment === Y
+- Items dürfen nur gültige IDs referenzieren
+- Keine Duplikate
+-
+
+ Keine circular dependencies im MVP
 
 ## 8. Erweiterbarkeit (Post MVP)
 
-Später kann das Modell erweitert werden um:
+Zukünftige Features basieren auf deinen vorhandenen Schemas:
 
 - Tags / Kategorien
-- Relations (from, to, type)
-- Capability-Maps
+- Relations (Nodes + Edges)
+- Capability Mapping
 - Versionierung
-- Complexity Levels
-- Maturity Levels
-- AssetBlocks (nach den JSON-Schemas)
-- Neo4j + Graph Queries
-- Full Knowledge Graph Explorer
+- Complexity & Maturity Levels
+- AssetBlock Full Model (alle Felder)
+- Graph Queries in Neo4j
+- Vollständiger Knowledge Graph Explorer
+- Empfehlungssystem (Graph Embeddings)
+- Navigation Context Maps (hierarchisch + lateral)
 
 ## 9. Verbindung zu den JSON-Schemas
 
-Die MVP-Daten orientieren sich an:
+Die folgenden Schemas definieren langfristig das vollständige Datenmodell:
 
-/schemas/
+```text
+schemas/
   assetblock-base.schema.json
   assetblock-implementation.schema.json
   cluster.schema.json
@@ -186,21 +201,24 @@ Die MVP-Daten orientieren sich an:
   role.schema.json
   technology.schema.json
   tool.schema.json
+````
 
-Für das MVP gilt:
+Für die MVP-Implementierung gilt:
 
-- nur kleine Teilmengen werden genutzt
-- die vollständigen Schemas sind bereits zukunftssicher
-- die MVP-JSONs sollen so simpel wie möglich sein
-- beim Umstieg auf Neo4j können alle bestehenden Schemas direkt verwendet werden
+- nur Kernfelder werden genutzt
+- Daten bleiben bewusst flach
+- Schemas sorgen für Zukunftssicherheit
+- Neo4j kann später alle Daten direkt übernehmen
 
 ## 10. Fazit
 
-Dieses Datenmodell ist:
+Das MVP-Datenmodell ist:
 
 - minimal
 - verständlich
-- AI-freundlich
-- skalierbar
-- kompatibel mit deinen bestehenden Schemas
-- perfekt für den MVP und Codex-Iterationen
+- KI-freundlich
+- leicht erweiterbar
+- kompatibel mit Neo4j
+- perfekt für iteratives Bauen mit Codex
+
+Es bildet den optimalen Kompromiss aus Einfachheit für den Start und Skalierbarkeit für die Vision von Nexonoma.
