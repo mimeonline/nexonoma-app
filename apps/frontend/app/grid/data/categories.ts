@@ -110,6 +110,60 @@ export const clusters: Cluster[] = [
           makeSegment("performance", "Performance"),
         ],
       },
+      {
+        slug: "software-development-lifecycle",
+        title: "Software Development Lifecycle",
+        segments: [
+          makeSegment("analyse", "Analyse"),
+          makeSegment("planung", "Planung"),
+          makeSegment("requirements", "Requirements"),
+          makeSegment("design", "Design"),
+          makeSegment("development", "Implementierung"),
+          makeSegment("testing", "Testen"),
+          makeSegment("deployment", "Deployment"),
+          makeSegment("operations", "Operations"),
+        ].map((segment) =>
+          segment.slug === "development"
+            ? {
+                ...segment,
+                contents: {
+                  concept: [
+                    {
+                      slug: "clean-code",
+                      title: "Clean Code",
+                      type: "concept",
+                      summary: "Clean Code Prinzipien als Dummy-Beispiel.",
+                    },
+                  ],
+                  method: [
+                    {
+                      slug: "tdd",
+                      title: "Test Driven Development",
+                      type: "method",
+                      summary: "TDD als Dummy-Methode für Implementierung.",
+                    },
+                  ],
+                  tool: [
+                    {
+                      slug: "visual-studio-code",
+                      title: "Visual Studio Code",
+                      type: "tool",
+                      summary: "Editor-Beispiel für das Segment Implementierung.",
+                    },
+                  ],
+                  technology: [
+                    {
+                      slug: "git",
+                      title: "Git",
+                      type: "technology",
+                      summary: "Versionsverwaltung als Dummy-Technologie.",
+                    },
+                  ],
+                },
+              }
+            : segment,
+        ),
+      },
     ],
   },
   {

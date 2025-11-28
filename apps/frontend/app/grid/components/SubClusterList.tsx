@@ -21,7 +21,7 @@ export function SubClusterList({ cluster }: Props) {
           <CardContent className="flex justify-between pt-0 text-sm text-slate-200/80">
             <span>{sub.segments.length} Segmente</span>
             <Link
-              href={`/grid/${cluster.slug}`}
+              href={`/grid/${cluster.slug}/${sub.slug}`}
               className="font-semibold text-[#4FF4E0] hover:underline"
             >
               Öffnen

@@ -4,6 +4,7 @@ import type { ContentItem } from "../data/categories";
 
 type Props = {
   clusterSlug: string;
+  subclusterSlug: string;
   segmentSlug: string;
   contents: Record<ContentItem["type"], ContentItem[]>;
 };
@@ -15,7 +16,7 @@ const labels: Record<ContentItem["type"], string> = {
   technology: "Technology",
 };
 
-export function ContentTypeList({ clusterSlug, segmentSlug, contents }: Props) {
+export function ContentTypeList({ clusterSlug, subclusterSlug, segmentSlug, contents }: Props) {
   const types = Object.keys(contents) as Array<ContentItem["type"]>;
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -34,7 +35,7 @@ export function ContentTypeList({ clusterSlug, segmentSlug, contents }: Props) {
               <p className="mb-3">Öffne die Liste oder direkt ein Detail.</p>
               <div className="flex gap-3 text-[#4FF4E0] font-semibold">
                 <Link
-                  href={`/grid/${clusterSlug}/${segmentSlug}/${type}/${first.slug}`}
+                  href={`/grid/${clusterSlug}/${subclusterSlug}/${segmentSlug}/${type}/${first.slug}`}
                   className="hover:underline"
                 >
                   Erstes Detail öffnen

@@ -4,15 +4,15 @@ import type { Segment } from "../data/categories";
 
 type Props = {
   clusterSlug: string;
-  segments: Segment[];
+  segments: Array<{ segment: Segment; subclusterSlug: string }>;
 };
 
 export function SegmentList({ clusterSlug, segments }: Props) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {segments.map((segment) => (
+      {segments.map(({ segment, subclusterSlug }) => (
         <Card
-          key={segment.slug}
+          key={`${subclusterSlug}-${segment.slug}`}
           className="border border-white/10 bg-[#1A2E5D] text-white transition hover:border-cyan-400"
         >
           <CardHeader className="pb-2">
@@ -22,7 +22,7 @@ export function SegmentList({ clusterSlug, segments }: Props) {
           <CardContent className="flex items-center justify-between pt-0 text-sm text-slate-200/85">
             <span>4 Content-Typen</span>
             <Link
-              href={`/grid/${clusterSlug}/${segment.slug}`}
+              href={`/grid/${clusterSlug}/${subclusterSlug}/${segment.slug}`}
               className="font-semibold text-[#4FF4E0] hover:underline"
             >
               Öffnen

@@ -15,7 +15,9 @@ export default function ClusterPage({ params }: { params: Promise<Params> }) {
   const cluster = clusters.find((c) => c.slug === clusterSlug);
   if (!cluster) return notFound();
 
-  const segments = cluster.subclusters.flatMap((s) => s.segments);
+  const segments = cluster.subclusters.flatMap((s) =>
+    s.segments.map((segment) => ({ segment, subclusterSlug: s.slug })),
+  );
 
   return (
     <div className="min-h-screen bg-linear-to-b from-[#0B1220] to-[#1A2E5D] text-white">
