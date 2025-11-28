@@ -1,4 +1,5 @@
 import { LandingCard } from "@/components/ui/landing-card";
+import { LayoutGrid, Table2, Building2 } from "lucide-react";
 import { Inter, Space_Grotesk } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({
@@ -42,16 +43,19 @@ export default function Home() {
             title="Grid-Ansicht"
             description="Themenlandschaft als Übersicht"
             href="/grid"
+            icon={<LayoutGrid className="h-5 w-5" />}
           />
           <LandingCard
             title="Matrix-Ansicht"
             description="Cluster × Segmente analysieren"
             href="/matrix"
+            icon={<Table2 className="h-5 w-5" />}
           />
           <LandingCard
             title="City-Ansicht"
             description="Wissensblöcke im Detail erkunden"
             href="/city"
+            icon={<Building2 className="h-5 w-5" />}
           />
         </section>
 
