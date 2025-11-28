@@ -1,0 +1,14 @@
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea
+
+# Local Netlify folder
+.netlify
+
+screenshots/
+tmp/
+docs/domain/
+content/json
+schemas
