@@ -1,15 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { MacroCluster } from "@/types/grid";
 import { iconMap } from "./icons";
-import type { Cluster } from "../data/categories";
 
 type Props = {
-  cluster: Cluster;
+  cluster: MacroCluster;
   isOpen: boolean;
   onToggle: (slug: string) => void;
 };
 
-export function ClusterCard({ cluster, isOpen, onToggle }: Props) {
-  const Icon = iconMap[cluster.icon] ?? iconMap.Default;
+export function MacroClusterCard({ cluster, isOpen, onToggle }: Props) {
+  const Icon = iconMap[cluster.icon ?? "Default"] ?? iconMap.Default;
 
   return (
     <Card
@@ -28,8 +28,8 @@ export function ClusterCard({ cluster, isOpen, onToggle }: Props) {
             <Icon className="h-5 w-5" />
           </span>
           <CardHeader className="p-0">
-            <CardTitle className="text-lg">{cluster.title}</CardTitle>
-            <p className="text-sm text-slate-200/75">Sub-Cluster anzeigen</p>
+            <CardTitle className="text-lg">{cluster.name}</CardTitle>
+            <p className="text-sm text-slate-200/75">{cluster.shortDescription}</p>
           </CardHeader>
         </div>
         <span
@@ -43,7 +43,7 @@ export function ClusterCard({ cluster, isOpen, onToggle }: Props) {
       {isOpen && (
         <CardContent className="animate-fadeIn border-t border-white/5 bg-[#0B1220]/40">
           <p className="text-sm text-slate-200/80">
-            Wähle einen Sub-Cluster oder öffne die Cluster-Seite.
+            Wähle einen Cluster oder öffne die Cluster-Seite.
           </p>
         </CardContent>
       )}

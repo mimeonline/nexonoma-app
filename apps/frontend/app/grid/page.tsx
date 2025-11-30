@@ -1,9 +1,22 @@
 "use client";
 
-import { ClusterList } from "./components/ClusterList";
-import { clusters } from "./data/categories";
+import { fetchGrid } from "@/lib/api/grid";
+import type { MacroCluster } from "@/types/grid";
+import { useEffect, useState } from "react";
+import { MacroClusterList } from "./components/MacroClusterList";
 
 export default function GridPage() {
+  const [macroClusters, setMacroClusters] = useState<MacroCluster[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchGrid()
+      .then((response) => setMacroClusters(response.data.macroClusters ?? []))
+      .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen bg-linear-to-b from-[#0B1220] to-[#1A2E5D] text-white">
       <main className="mx-auto flex max-w-6xl flex-col gap-8 px-6 pb-12 pt-10 sm:pt-16 sm:pb-16">
@@ -12,16 +25,22 @@ export default function GridPage() {
             Wissensbereiche
           </p>
           <h1 className="text-3xl font-semibold sm:text-4xl">
-            Grid: Makro-Cluster, Sub-Cluster und Segmente
+            Grid: Makro-Cluster, Cluster und Segmente
           </h1>
           <div className="h-px w-full bg-white/10 my-4" />
           <p className="max-w-3xl text-base text-gray-300">
-            Wähle einen Makro-Cluster, öffne die Sub-Cluster im Accordion und wechsle auf
-            Cluster- und Segmentseiten.
+            Wähle einen Makro-Cluster, öffne die Cluster im Accordion und wechsle auf
+            die Segmentseiten.
           </p>
         </header>
 
-        <ClusterList clusters={clusters} />
+        {loading && <p className="text-sm text-slate-200/80">Lade Grid-Daten...</p>}
+        {error && (
+          <p className="text-sm text-red-300">
+            Grid-Daten konnten nicht geladen werden: {error}
+          </p>
+        )}
+        {!loading && !error && <MacroClusterList macroClusters={macroClusters} />}
       </main>
       <style jsx global>{`
         @keyframes fadeIn {

@@ -1,85 +1,85 @@
 {
   "grid": {
     "data": {
-      "data": {
-        "clusters": [
-          {
-            "id": "9b1deb4d-6f5a-4b2e-8e8e-c5c7a2bb432e",
-            "name": "Software Development Lifecycle",
-            "slug": "software-development-lifecycle",
-            "type": "cluster",
-            "shortDescription": "Von Planung bis Betrieb – SDLC-Phasen und Best Practices.",
-            "longDescription": "Der Software Development Lifecycle (SDLC) beschreibt strukturierte Phasen und Prozesse zur Entwicklung von Software. Er umfasst typischerweise Analyse, Design, Implementierung, Test, Deployment und Wartung, um Qualität und Effizienz zu sichern.",
-            "segments": [
-              {
-                "id": "1e4d5f64-5717-4562-b3fc-2c963f66ac01",
-                "name": "Analyse",
-                "slug": "analyse",
-                "type": "segment",
-                "shortDescription": "Systematische Untersuchung von Anforderungen, Risiken und Rahmenbedingungen.",
-                "longDescription": "Die Analysephase umfasst das Erheben fachlicher und technischer Anforderungen, die Bewertung relevanter Risiken sowie die Klärung aller Randbedingungen. Sie bildet die Grundlage für Architektur, Design und Umsetzung.",
-                "content": {
-                  "methods": [
-                    {
-                      "id": "570719fb-2144-4e67-84b7-3b0e5a1e4ef3",
-                      "name": "Event Storming",
-                      "slug": "event-storming",
-                      "type": "method",
-                      "shortDescription": "Workshop-basierte Methode zur gemeinsamen Exploration von Geschäftsprozessen und Domänenmodellen.",
-                      "longDescription": "Event Storming ist eine kollaborative, visuelle Methode, bei der Domänenexperten und Entwickler gemeinsam Geschäftsprozesse auf Basis von Domain Events modellieren. Sie wird häufig im Domain-Driven Design (DDD) eingesetzt und hilft, komplexe Systeme verständlich zu machen."
-                    }
-                  ],
-                  "concepts": [
-                    {
-                      "id": "b2e3b1a4-62b8-4dbf-bde1-ff3f0c3f7f9c",
-                      "name": "12-Factor App",
-                      "slug": "12-factor-app",
-                      "type": "concept",
-                      "shortDescription": "Ein Methodenset für den Aufbau von modernen, Cloud-nativen Software-as-a-Service-Anwendungen.",
-                      "longDescription": "Das 12-Factor App-Prinzip definiert zwölf Best Practices für die Entwicklung von Cloud-nativen Anwendungen. Es entstand bei Heroku und bietet einen Leitfaden für portierbare, skalierbare und leicht wartbare Services. Die 12 Faktoren decken Konfiguration, Code-Basis, Build- und Release-Management, Skalierung und DevOps-Aspekte ab."
-                    }
-                  ],
-                  "tools": [
-                    {
-                      "id": "f0f4f6cc-85fa-42a3-88a3-2f46368a1a6b",
-                      "name": "Miro",
-                      "slug": "miro",
-                      "type": "tool",
-                      "shortDescription": "Kollaboratives Whiteboard für Remote-Teams.",
-                      "longDescription": "Miro ist ein Online-Whiteboard-Tool für kollaboratives Arbeiten. Es unterstützt Brainstorming, Workshops und visuelle Prozessplanung in verteilten Teams."
-                    }
-                  ],
-                  "technologies": [
-                    {
-                      "id": "f9d2a5b4-3c1e-4f6a-9b07-8f1c2e3d4a5b",
-                      "name": "Java",
-                      "slug": "java",
-                      "type": "technology",
-                      "shortDescription": "Java ist eine objektorientierte, plattformunabhängige Programmiersprache, die auf der JVM läuft.",
-                      "longDescription": "Java wurde 1995 von Sun Microsystems entwickelt und ist heute einer der meistgenutzten Programmiersprachen für Unternehmensanwendungen, Android-Apps, Webservices, Microservices, eingebettete Systeme und vieles mehr. Die Sprache legt großen Wert auf Stabilität, Sicherheit und Portabilität und nutzt die Java Virtual Machine (JVM), die Bytecode auf jeder unterstützten Plattform ausführt. Java bietet ein umfangreiches Standard-API, zahlreiche Bibliotheken und ein aktives Ökosystem."
-                    }
-                  ]
+      "macroClusters": [
+        {
+          "id": "3f0a41e2-2c6b-4a39-b8b4-9d6c1ff5805d",
+          "name": "Software & Architektur",
+          "slug": "software-and-architecture",
+          "type": "macroCluster",
+          "shortDescription": "Software Engineering, Architekturstile, Patterns und strukturelle Prinzipien.",
+          "longDescription": "Dieser MacroCluster umfasst Softwarearchitektur, Architekturstile, Entwurfsmuster, Engineering-Praktiken und technische Entscheidungsmechanismen im gesamten Software Development Lifecycle.",
+          "clusters": [
+            {
+              "id": "9b1deb4d-6f5a-4b2e-8e8e-c5c7a2bb432e",
+              "name": "Software Development Lifecycle",
+              "slug": "software-development-lifecycle",
+              "type": "cluster",
+              "shortDescription": "Von Planung bis Betrieb – SDLC-Phasen und Best Practices.",
+              "longDescription": "Der Software Development Lifecycle (SDLC) beschreibt strukturierte Phasen und Prozesse zur Entwicklung von Software. Er umfasst typischerweise Analyse, Design, Implementierung, Test, Deployment und Wartung, um Qualität und Effizienz zu sichern.",
+              "segments": [
+                {
+                  "id": "1e4d5f64-5717-4562-b3fc-2c963f66ac01",
+                  "name": "Analyse",
+                  "slug": "analyse",
+                  "type": "segment",
+                  "shortDescription": "Systematische Untersuchung von Anforderungen, Risiken und Rahmenbedingungen.",
+                  "longDescription": "Die Analysephase umfasst das Erheben fachlicher und technischer Anforderungen, die Bewertung relevanter Risiken sowie die Klärung aller Randbedingungen. Sie bildet die Grundlage für Architektur, Design und Umsetzung.",
+                  "content": {
+                    "methods": [
+                      {
+                        "id": "570719fb-2144-4e67-84b7-3b0e5a1e4ef3",
+                        "name": "Event Storming",
+                        "slug": "event-storming",
+                        "type": "method",
+                        "shortDescription": "Workshop-basierte Methode zur gemeinsamen Exploration von Geschäftsprozessen und Domänenmodellen.",
+                        "longDescription": "Event Storming ist eine kollaborative, visuelle Methode, bei der Domänenexperten und Entwickler gemeinsam Geschäftsprozesse auf Basis von Domain Events modellieren. Sie wird häufig im Domain-Driven Design (DDD) eingesetzt und hilft, komplexe Systeme verständlich zu machen."
+                      }
+                    ],
+                    "concepts": [
+                      {
+                        "id": "b2e3b1a4-62b8-4dbf-bde1-ff3f0c3f7f9c",
+                        "name": "12-Factor App",
+                        "slug": "12-factor-app",
+                        "type": "concept",
+                        "shortDescription": "Ein Methodenset für den Aufbau von modernen, Cloud-nativen Software-as-a-Service-Anwendungen.",
+                        "longDescription": "Das 12-Factor App-Prinzip definiert zwölf Best Practices für die Entwicklung von Cloud-nativen Anwendungen. Es entstand bei Heroku und bietet einen Leitfaden für portierbare, skalierbare und leicht wartbare Services. Die 12 Faktoren decken Konfiguration, Code-Basis, Build- und Release-Management, Skalierung und DevOps-Aspekte ab."
+                      }
+                    ],
+                    "tools": [
+                      {
+                        "id": "f0f4f6cc-85fa-42a3-88a3-2f46368a1a6b",
+                        "name": "Miro",
+                        "slug": "miro",
+                        "type": "tool",
+                        "shortDescription": "Kollaboratives Whiteboard für Remote-Teams.",
+                        "longDescription": "Miro ist ein Online-Whiteboard-Tool für kollaboratives Arbeiten. Es unterstützt Brainstorming, Workshops und visuelle Prozessplanung in verteilten Teams."
+                      }
+                    ],
+                    "technologies": [
+                      {
+                        "id": "f9d2a5b4-3c1e-4f6a-9b07-8f1c2e3d4a5b",
+                        "name": "Java",
+                        "slug": "java",
+                        "type": "technology",
+                        "shortDescription": "Java ist eine objektorientierte, plattformunabhängige Programmiersprache, die auf der JVM läuft.",
+                        "longDescription": "Java wurde 1995 von Sun Microsystems entwickelt und ist heute einer der meistgenutzten Programmiersprachen für Unternehmensanwendungen, Android-Apps, Webservices, Microservices, eingebettete Systeme und vieles mehr. Die Sprache legt großen Wert auf Stabilität, Sicherheit und Portabilität und nutzt die Java Virtual Machine (JVM), die Bytecode auf jeder unterstützten Plattform ausführt. Java bietet ein umfangreiches Standard-API, zahlreiche Bibliotheken und ein aktives Ökosystem."
+                      }
+                    ]
+                  }
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "meta": {
-        "requestId": "3f7df9ab-8df1-49c3-b72b-7361f039fb0a",
-        "timestamp": "2025-11-30T08:34:00Z",
-        "page": 1,
-        "pageSize": 50,
-        "total": 1
-      },
-      "errors": []
+              ]
+            }
+          ]
+        }
+      ]
     },
     "meta": {
-      "requestId": "uuid",
-      "timestamp": "2025-11-29T19:21:00Z",
+      "requestId": "3f7df9ab-8df1-49c3-b72b-7361f039fb0a",
+      "timestamp": "2025-11-30T08:34:00Z",
       "page": 1,
       "pageSize": 50,
-      "total": 123
+      "total": 1
     },
     "errors": []
   }
