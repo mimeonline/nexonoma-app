@@ -17,35 +17,82 @@ export class GridAggregate {
   static fromNeo4j(rows: GridRow[]): GridAggregate {
     const macroClusters: GridEntity[] = [];
 
+    // Maps zur Wiederverwendung, damit wir keine Duplikate erzeugen
+    const macroMap = new Map<string, GridEntity>();
+    const clusterMap = new Map<string, GridEntity>();
+
     for (const row of rows) {
-      const mcNode = row.mc as { properties?: NodeProps } | null;
+      // MacroCluster
+      const mcNode = (row as any).mc as { properties?: NodeProps } | null;
       const mcProps: NodeProps = mcNode?.properties ?? {};
 
-      const childEntities = (row.clusters ?? []).map((c) => {
-        const node = c as { properties?: NodeProps };
-        const p: NodeProps = node.properties ?? {};
+      if (!mcProps.id) {
+        continue; // ohne ID kein stabiles Aggregat
+      }
 
-        return new GridEntity({
-          id: p.id ?? '',
-          name: p.name ?? '',
-          slug: p.slug ?? '',
-          type: p.type ?? '',
-          shortDescription: p.shortDescription,
-          longDescription: p.longDescription,
-        });
-      });
-
-      macroClusters.push(
-        new GridEntity({
-          id: mcProps.id ?? '',
+      let macro = macroMap.get(mcProps.id);
+      if (!macro) {
+        macro = new GridEntity({
+          id: mcProps.id,
           name: mcProps.name ?? '',
           slug: mcProps.slug ?? '',
           type: mcProps.type ?? '',
           shortDescription: mcProps.shortDescription,
           longDescription: mcProps.longDescription,
-          children: childEntities,
-        }),
-      );
+          children: [],
+        });
+
+        macroMap.set(mcProps.id, macro);
+        macroClusters.push(macro);
+      }
+
+      // Cluster (optional)
+      const cNode = (row as any).c as { properties?: NodeProps } | null;
+      const cProps: NodeProps = cNode?.properties ?? {};
+
+      let cluster: GridEntity | undefined;
+      if (cProps.id) {
+        cluster = clusterMap.get(cProps.id);
+        if (!cluster) {
+          cluster = new GridEntity({
+            id: cProps.id,
+            name: cProps.name ?? '',
+            slug: cProps.slug ?? '',
+            type: cProps.type ?? '',
+            shortDescription: cProps.shortDescription,
+            longDescription: cProps.longDescription,
+            children: [],
+          });
+
+          clusterMap.set(cProps.id, cluster);
+
+          // nur anhängen, wenn noch nicht vorhanden
+          if (!macro.children.find((child) => child.id === cluster!.id)) {
+            (macro.children as GridEntity[]).push(cluster);
+          }
+        }
+      }
+
+      // Segment (optional, hängt unter Cluster)
+      const sNode = (row as any).s as { properties?: NodeProps } | null;
+      const sProps: NodeProps = sNode?.properties ?? {};
+
+      if (cluster && sProps.id) {
+        const exists = cluster.children.some((seg) => seg.id === sProps.id);
+        if (!exists) {
+          const segment = new GridEntity({
+            id: sProps.id,
+            name: sProps.name ?? '',
+            slug: sProps.slug ?? '',
+            type: sProps.type ?? '',
+            shortDescription: sProps.shortDescription,
+            longDescription: sProps.longDescription,
+            children: [],
+          });
+
+          (cluster.children as GridEntity[]).push(segment);
+        }
+      }
     }
 
     return new GridAggregate(macroClusters);

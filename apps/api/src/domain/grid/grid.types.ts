@@ -1,5 +1,8 @@
 // src/domain/grid/grid.types.ts
 export interface GridRow {
-  mc: any; // Neo4j Node
-  clusters: any[]; // Neo4j Nodes[]
+  mc: unknown;
+  c: unknown | null;
+  cv: unknown | null;
+  s: unknown | null;
+  content: unknown | null;
 }

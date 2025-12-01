@@ -48,9 +48,10 @@ export class Neo4jService {
 
       const rows = result.records.map((r) => ({
         mc: (r.get('mc') ?? null) as unknown,
-        clusters: (Array.isArray(r.get('clusters'))
-          ? r.get('clusters')
-          : []) as unknown[],
+        c: (r.get('c') ?? null) as unknown,
+        cv: (r.get('cv') ?? null) as unknown,
+        s: (r.get('s') ?? null) as unknown,
+        content: (r.get('content') ?? null) as unknown,
       }));
 
       return rows;

@@ -13,21 +13,38 @@ export class GridRepositoryNeo4j implements GridRepositoryPort {
     const query = `
       MATCH (mc:Macrocluster)
       OPTIONAL MATCH (mc)-[:CONTAINS]->(c:Cluster)
-      WITH mc, collect(DISTINCT c) AS clusters
-      RETURN mc, clusters
-      ORDER BY mc.name
+      OPTIONAL MATCH (c)-[:CONTAINS]->(cv:Clusterview)
+      OPTIONAL MATCH (cv)-[:CONTAINS]->(s:Segment)
+      OPTIONAL MATCH (s)-[:RELATED_TO]->(content)
+      WHERE content:Concept OR content:Method OR content:Tool OR content:Technology
+
+      RETURN mc, c, cv, s, content
+      ORDER BY mc.name, c.name, s.name
     `;
 
     const rows = await this.neo.run(query);
 
-    const mcCount = rows.length;
-    const clusterCount = rows.reduce(
-      (sum, r) => sum + (Array.isArray(r.clusters) ? r.clusters.length : 0),
-      0,
-    );
+    // Echte Anzahl unterschiedlicher MacroCluster & Cluster ermitteln
+    const mcIds = new Set<string>();
+    const clusterIds = new Set<string>();
+
+    for (const r of rows as any[]) {
+      const mcNode = r.mc as { properties?: { id?: string } } | null;
+      const cNode = r.c as { properties?: { id?: string } } | null;
+
+      const mcId = mcNode?.properties?.id;
+      const cId = cNode?.properties?.id;
+
+      if (mcId) {
+        mcIds.add(mcId);
+      }
+      if (cId) {
+        clusterIds.add(cId);
+      }
+    }
 
     this.logger.debug(
-      `Summary: MacroClusters=${mcCount}, Clusters=${clusterCount}`,
+      `Summary: MacroClusters=${mcIds.size}, Clusters=${clusterIds.size}`,
     );
 
     return GridAggregate.fromNeo4j(rows);
