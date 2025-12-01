@@ -17,7 +17,6 @@ export class Neo4jService {
       ),
     );
 
-    // DB-Name aus .env, z. B. "nexonoma"
     this.database = this.config.get<string>('NEO4J_DB') || undefined;
 
     this.logger.log(
@@ -29,7 +28,7 @@ export class Neo4jService {
 
   getSession(): Session {
     if (this.database) {
-      this.logger.debug(`Opening session for database \"${this.database}\"`);
+      this.logger.debug(`Opening session for database "${this.database}"`);
       return this.driver.session({ database: this.database });
     }
 
@@ -39,21 +38,19 @@ export class Neo4jService {
 
   async run(query: string, params: Record<string, any> = {}) {
     const session = this.getSession();
-    
+
     try {
+      const start = Date.now();
       const result = await session.run(query, params);
-      this.logger.debug(`Query returned ${result.records.length}.`);
+      const duration = Date.now() - start;
 
-      if (result.records[0]) {
-        const first = result.records[0];
-
-        const mc = first.get('mc');
-        const clusters = first.get('clusters');
-      }
+      this.logger.debug(`Query executed in ${duration}ms`);
 
       const rows = result.records.map((r) => ({
-        mc: r.get('mc'),
-        clusters: r.get('clusters'),
+        mc: (r.get('mc') ?? null) as unknown,
+        clusters: (Array.isArray(r.get('clusters'))
+          ? r.get('clusters')
+          : []) as unknown[],
       }));
 
       return rows;
