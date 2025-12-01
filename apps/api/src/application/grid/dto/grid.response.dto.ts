@@ -1,11 +1,20 @@
 import { newId } from '../../../common/utils/uuid.util';
 import { GridAggregate } from '../../../domain/grid/grid.aggregate';
 
+interface SegmentContentItemLike {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+  shortDescription?: string;
+  longDescription?: string;
+}
+
 interface SegmentContentLike {
-  methods?: unknown[];
-  concepts?: unknown[];
-  tools?: unknown[];
-  technologies?: unknown[];
+  methods?: SegmentContentItemLike[];
+  concepts?: SegmentContentItemLike[];
+  tools?: SegmentContentItemLike[];
+  technologies?: SegmentContentItemLike[];
 }
 
 interface SegmentLike {
@@ -111,10 +120,10 @@ export class GridResponseDto {
       shortDescription: s.shortDescription ?? '',
       longDescription: s.longDescription ?? '',
       content: {
-        methods: content.methods ?? [],
-        concepts: content.concepts ?? [],
-        tools: content.tools ?? [],
-        technologies: content.technologies ?? [],
+        methods: (content.methods ?? []) as SegmentContentItemLike[],
+        concepts: (content.concepts ?? []) as SegmentContentItemLike[],
+        tools: (content.tools ?? []) as SegmentContentItemLike[],
+        technologies: (content.technologies ?? []) as SegmentContentItemLike[],
       },
     };
   }
@@ -148,9 +157,9 @@ export interface SegmentDto {
   shortDescription: string;
   longDescription: string;
   content: {
-    methods: unknown[];
-    concepts: unknown[];
-    tools: unknown[];
-    technologies: unknown[];
+    methods: { id: string; name: string; slug: string; type: string; shortDescription?: string; longDescription?: string }[];
+    concepts: { id: string; name: string; slug: string; type: string; shortDescription?: string; longDescription?: string }[];
+    tools: { id: string; name: string; slug: string; type: string; shortDescription?: string; longDescription?: string }[];
+    technologies: { id: string; name: string; slug: string; type: string; shortDescription?: string; longDescription?: string }[];
   };
 }

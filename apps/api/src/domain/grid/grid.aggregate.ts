@@ -1,5 +1,5 @@
 // src/domain/grid/grid.aggregate.ts
-import { GridEntity } from './grid.entity';
+import { GridContentItem, GridEntity } from './grid.entity';
 import { GridRow } from './grid.types';
 
 interface NodeProps {
@@ -20,6 +20,7 @@ export class GridAggregate {
     // Maps zur Wiederverwendung, damit wir keine Duplikate erzeugen
     const macroMap = new Map<string, GridEntity>();
     const clusterMap = new Map<string, GridEntity>();
+    const segmentMap = new Map<string, GridEntity>();
 
     for (const row of rows) {
       // MacroCluster
@@ -77,10 +78,11 @@ export class GridAggregate {
       const sNode = (row as any).s as { properties?: NodeProps } | null;
       const sProps: NodeProps = sNode?.properties ?? {};
 
+      let segment: GridEntity | undefined;
       if (cluster && sProps.id) {
-        const exists = cluster.children.some((seg) => seg.id === sProps.id);
-        if (!exists) {
-          const segment = new GridEntity({
+        segment = segmentMap.get(sProps.id);
+        if (!segment) {
+          segment = new GridEntity({
             id: sProps.id,
             name: sProps.name ?? '',
             slug: sProps.slug ?? '',
@@ -90,7 +92,76 @@ export class GridAggregate {
             children: [],
           });
 
-          (cluster.children as GridEntity[]).push(segment);
+          segmentMap.set(sProps.id, segment);
+
+          const exists = cluster.children.some((seg) => seg.id === sProps.id);
+          if (!exists) {
+            (cluster.children as GridEntity[]).push(segment);
+          }
+        }
+      }
+
+      // Content (optional, hängt unter Segment)
+      const contentNode = (row as any).content as
+        | { properties?: NodeProps; labels?: string[] }
+        | null;
+
+      if (segment && contentNode && contentNode.properties?.id) {
+        const cPropsContent = contentNode.properties as NodeProps;
+        const labels: string[] = (contentNode as any).labels ?? [];
+
+        // Kategorie bestimmen: concept | method | tool | technology
+        let category: 'concept' | 'method' | 'tool' | 'technology' | undefined;
+        if (labels.includes('Concept')) {
+          category = 'concept';
+        } else if (labels.includes('Method')) {
+          category = 'method';
+        } else if (labels.includes('Tool')) {
+          category = 'tool';
+        } else if (labels.includes('Technology')) {
+          category = 'technology';
+        } else if (cPropsContent.type) {
+          const t = cPropsContent.type.toLowerCase();
+          if (t === 'concept' || t === 'method' || t === 'tool' || t === 'technology') {
+            category = t as typeof category;
+          }
+        }
+
+        if (category) {
+          const item: GridContentItem = {
+            id: cPropsContent.id ?? '',
+            name: cPropsContent.name ?? '',
+            slug: cPropsContent.slug ?? '',
+            type: cPropsContent.type ?? category,
+            shortDescription: cPropsContent.shortDescription,
+            longDescription: cPropsContent.longDescription,
+          };
+
+          const segContent = segment.content;
+
+          let targetArray: GridContentItem[];
+          switch (category) {
+            case 'concept':
+              targetArray = segContent.concepts;
+              break;
+            case 'method':
+              targetArray = segContent.methods;
+              break;
+            case 'tool':
+              targetArray = segContent.tools;
+              break;
+            case 'technology':
+              targetArray = segContent.technologies;
+              break;
+            default:
+              targetArray = segContent.concepts;
+              break;
+          }
+
+          const alreadyExists = targetArray.some((i) => i.id === item.id);
+          if (!alreadyExists) {
+            targetArray.push(item);
+          }
         }
       }
     }
