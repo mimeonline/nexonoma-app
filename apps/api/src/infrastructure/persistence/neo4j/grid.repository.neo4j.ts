@@ -15,7 +15,6 @@ export class GridRepositoryNeo4j implements GridRepositoryPort {
     `;
 
     const rows = await this.neo.run(query);
-
     return GridAggregate.fromNeo4j(rows);
   }
 }

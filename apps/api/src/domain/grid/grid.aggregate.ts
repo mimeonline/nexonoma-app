@@ -1,3 +1,4 @@
+// src/domain/grid/grid.aggregate.ts
 import { GridEntity } from './grid.entity';
 import { GridRow } from './grid.types';
 
@@ -8,23 +9,26 @@ export class GridAggregate {
     const clusters: GridEntity[] = [];
 
     for (const row of rows) {
-      const node = row.mc;
-      const clusterEntities = row.clusters.map((c: any) =>
-        new GridEntity({
-          id: c.id,
-          name: c.name,
-          slug: c.slug,
-          type: c.type,
-        }),
-      );
+      const mcNode = row.mc;
+      const mcProps = mcNode.properties || {};
+
+      const childEntities = (row.clusters || []).map((c: any) => {
+        const p = c.properties || {};
+        return new GridEntity({
+          id: p.id,
+          name: p.name,
+          slug: p.slug,
+          type: p.type,
+        });
+      });
 
       clusters.push(
         new GridEntity({
-          id: node.id,
-          name: node.name,
-          slug: node.slug,
-          type: node.type,
-          children: clusterEntities,
+          id: mcProps.id,
+          name: mcProps.name,
+          slug: mcProps.slug,
+          type: mcProps.type,
+          children: childEntities,
         }),
       );
     }
