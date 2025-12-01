@@ -19,23 +19,27 @@ export function MacroClusterList({ macroClusters }: Props) {
 
   return (
     <div className="space-y-4">
-      {macroClusters.map((macroClusters) => (
-        <div key={macroClusters.slug} className="space-y-3">
-          <MacroClusterCard cluster={macroClusters} isOpen={open === macroClusters.slug} onToggle={toggle} />
-          {open === macroClusters.slug && (
+      {macroClusters.map((macroCluster) => (
+        <div key={macroCluster.slug} className="space-y-3">
+          <MacroClusterCard
+            cluster={macroCluster}
+            isOpen={open === macroCluster.slug}
+            onToggle={toggle}
+          />
+          {open === macroCluster.slug && (
             <div className="rounded-xl border border-white/5 bg-[#0B1220]/60 p-4 animate-fadeIn">
               <div className="mb-3 flex items-center justify-between">
                 <p className="text-sm text-slate-200/80">
-                  Cluster innerhalb von {macroClusters.name}
+                  Cluster innerhalb von {macroCluster.name}
                 </p>
                 <Link
-                  href={`/grid/${macroClusters.slug}`}
+                  href={`/grid/${macroCluster.slug}`}
                   className="text-sm font-semibold text-[#4FF4E0] hover:underline"
                 >
                   Cluster-Seite öffnen
                 </Link>
               </div>
-              <ClusterList macroCluster={macroClusters} />
+              <ClusterList macroCluster={macroCluster} />
             </div>
           )}
         </div>

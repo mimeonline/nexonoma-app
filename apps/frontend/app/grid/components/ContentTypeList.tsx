@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ContentGroup, ContentType } from "@/types/grid";
+import type { SegmentContent, SegmentContentType } from "@/types/grid";
 
 type Props = {
   clusterSlug: string;
   subclusterSlug: string;
   segmentSlug: string;
-  contents: ContentGroup;
+  contents: SegmentContent;
 };
 
-const contentMap: Array<{ key: keyof ContentGroup; label: string; type: ContentType }> = [
+const contentMap: Array<{ key: keyof SegmentContent; label: string; type: SegmentContentType }> = [
   { key: "concepts", label: "Concept", type: "concept" },
   { key: "methods", label: "Method", type: "method" },
   { key: "tools", label: "Tool", type: "tool" },

@@ -13,27 +13,27 @@ type Params = {
 
 export default function ClusterPage({ params }: { params: Promise<Params> }) {
   const { clusterSlug } = use(params);
-  const [cluster, setCluster] = useState<MacroCluster | null>(null);
+  const [macroCluster, setMacroCluster] = useState<MacroCluster | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchGrid()
       .then((response) => {
-        const found = response.data.macroClusters.find((c) => c.slug === clusterSlug) ?? null;
-        setCluster(found);
+        const found = response.data?.macroClusters?.find((c) => c.slug === clusterSlug) ?? null;
+        setMacroCluster(found);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))
       .finally(() => setLoading(false));
   }, [clusterSlug]);
 
-  if (!loading && !error && !cluster) {
+  if (!loading && !error && !macroCluster) {
     return notFound();
   }
 
   const segments =
-    cluster?.clusters.flatMap((child) =>
-      child.segments.map<{ segment: Segment; subclusterSlug: string }>((segment) => ({
+    macroCluster?.clusters?.flatMap((child) =>
+      (child.segments ?? []).map<{ segment: Segment; subclusterSlug: string }>((segment) => ({
         segment,
         subclusterSlug: child.slug,
       })),
@@ -48,15 +48,15 @@ export default function ClusterPage({ params }: { params: Promise<Params> }) {
             Cluster
           </p>
           <h1 className="text-3xl font-semibold sm:text-4xl">
-            {cluster?.name ?? "Lade Cluster..."}
+            {macroCluster?.name ?? "Lade Cluster..."}
           </h1>
           <p className="text-base text-gray-300">Alle Segmente innerhalb dieses Clusters.</p>
         </header>
 
         {loading && <p className="text-sm text-slate-200/80">Lade Cluster...</p>}
         {error && <p className="text-sm text-red-300">Fehler: {error}</p>}
-        {!loading && !error && cluster && (
-          <SegmentList clusterSlug={cluster.slug} segments={segments} />
+        {!loading && !error && macroCluster && (
+          <SegmentList clusterSlug={macroCluster.slug} segments={segments} />
         )}
       </main>
     </div>

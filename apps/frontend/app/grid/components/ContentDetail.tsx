@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ContentItem } from "@/types/grid";
+import type { SegmentContentItem, SegmentContentType } from "@/types/grid";
 
 type Props = {
-  item: ContentItem;
+  item: SegmentContentItem;
   path: {
     cluster: string;
     segment: string;
-    type: ContentItem["type"];
+    type: SegmentContentType;
   };
 };
 

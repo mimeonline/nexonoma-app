@@ -1,32 +1,32 @@
-export type ContentType = "method" | "concept" | "tool" | "technology";
+export type SegmentContentType = "method" | "concept" | "tool" | "technology";
 
-export type ContentItem = {
+export interface SegmentContentItem {
   id: string;
   name: string;
   slug: string;
-  type: ContentType;
-  shortDescription: string;
-  longDescription: string;
-};
+  type: SegmentContentType;
+  shortDescription?: string;
+  longDescription?: string;
+}
 
-export type ContentGroup = {
-  methods: ContentItem[];
-  concepts: ContentItem[];
-  tools: ContentItem[];
-  technologies: ContentItem[];
-};
+export interface SegmentContent {
+  methods: SegmentContentItem[];
+  concepts: SegmentContentItem[];
+  tools: SegmentContentItem[];
+  technologies: SegmentContentItem[];
+}
 
-export type Segment = {
+export interface Segment {
   id: string;
   name: string;
   slug: string;
   type: "segment";
   shortDescription: string;
   longDescription: string;
-  content: ContentGroup;
-};
+  content: SegmentContent;
+}
 
-export type Cluster = {
+export interface Cluster {
   id: string;
   name: string;
   slug: string;
@@ -34,9 +34,9 @@ export type Cluster = {
   shortDescription: string;
   longDescription: string;
   segments: Segment[];
-};
+}
 
-export type MacroCluster = {
+export interface MacroCluster {
   id: string;
   name: string;
   slug: string;
@@ -45,22 +45,22 @@ export type MacroCluster = {
   longDescription: string;
   clusters: Cluster[];
   icon?: string;
-};
+}
 
-export type GridData = {
+export interface GridData {
   macroClusters: MacroCluster[];
-};
+}
 
-export type GridMeta = {
+export interface GridMeta {
   requestId: string;
   timestamp: string;
   page: number;
   pageSize: number;
   total: number;
-};
+}
 
-export type GridResponse = {
+export interface GridResponse {
   data: GridData;
   meta: GridMeta;
   errors: unknown[];
-};
+}

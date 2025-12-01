@@ -30,6 +30,9 @@ export function SegmentList({ clusterSlug, segments }: Props) {
           </CardContent>
         </Card>
       ))}
+      {segments.length === 0 && (
+        <p className="text-sm text-slate-200/75">Keine Segmente vorhanden.</p>
+      )}
     </div>
   );
 }

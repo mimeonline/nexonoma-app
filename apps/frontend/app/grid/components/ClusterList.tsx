@@ -7,9 +7,13 @@ type Props = {
 };
 
 export function ClusterList({ macroCluster }: Props) {
+  const clusters = macroCluster.clusters ?? [];
+
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-      {macroCluster.clusters.map((cluster) => (
+      {clusters.map((cluster) => {
+        const segmentCount = (cluster.segments ?? []).length;
+        return (
         <Card
           key={cluster.slug}
           className="border border-white/10 bg-[#0B1220] text-white shadow-md shadow-black/20 transition hover:border-cyan-400"
@@ -19,7 +23,7 @@ export function ClusterList({ macroCluster }: Props) {
             <p className="text-xs text-slate-300">{cluster.shortDescription}</p>
           </CardHeader>
           <CardContent className="flex justify-between pt-0 text-sm text-slate-200/80">
-            <span>{cluster.segments.length} Segmente</span>
+            <span>{segmentCount} Segmente</span>
             <Link
               href={`/grid/${macroCluster.slug}/${cluster.slug}`}
               className="font-semibold text-[#4FF4E0] hover:underline"
@@ -28,7 +32,11 @@ export function ClusterList({ macroCluster }: Props) {
             </Link>
           </CardContent>
         </Card>
-      ))}
+        );
+      })}
+      {clusters.length === 0 && (
+        <p className="text-sm text-slate-200/75">Keine Cluster vorhanden.</p>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type { GridResponse } from "@/types/grid";
 
-const GRID_ENDPOINT = "http://localhost:4500/grid";
+const GRID_ENDPOINT = process.env.NEXT_PUBLIC_GRID_ENDPOINT || "/api/grid";
 
 export async function fetchGrid(): Promise<GridResponse> {
   const response = await fetch(GRID_ENDPOINT, {

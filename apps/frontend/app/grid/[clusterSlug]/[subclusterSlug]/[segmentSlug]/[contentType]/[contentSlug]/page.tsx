@@ -5,17 +5,24 @@ import { notFound } from "next/navigation";
 import { BackButton } from "../../../../../components/BackButton";
 import { ContentDetail } from "../../../../../components/ContentDetail";
 import { fetchGrid } from "@/lib/api/grid";
-import type { Cluster, ContentGroup, ContentItem, ContentType, MacroCluster, Segment } from "@/types/grid";
+import type {
+  Cluster,
+  MacroCluster,
+  Segment,
+  SegmentContent,
+  SegmentContentItem,
+  SegmentContentType,
+} from "@/types/grid";
 
 type Params = {
   clusterSlug: string;
   subclusterSlug: string;
   segmentSlug: string;
-  contentType: ContentType;
+  contentType: SegmentContentType;
   contentSlug: string;
 };
 
-const groupKeyMap: Record<ContentType, keyof ContentGroup> = {
+const groupKeyMap: Record<SegmentContentType, keyof SegmentContent> = {
   concept: "concepts",
   method: "methods",
   tool: "tools",
@@ -28,7 +35,7 @@ export default function ContentDetailPage({ params }: { params: Promise<Params> 
   const [macroCluster, setMacroCluster] = useState<MacroCluster | null>(null);
   const [subcluster, setSubcluster] = useState<Cluster | null>(null);
   const [segment, setSegment] = useState<Segment | null>(null);
-  const [item, setItem] = useState<ContentItem | null>(null);
+  const [item, setItem] = useState<SegmentContentItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,15 +43,15 @@ export default function ContentDetailPage({ params }: { params: Promise<Params> 
     fetchGrid()
       .then((response) => {
         const foundMacro =
-          response.data.macroClusters.find((macro) => macro.slug === clusterSlug) ?? null;
+          response.data?.macroClusters?.find((macro) => macro.slug === clusterSlug) ?? null;
         setMacroCluster(foundMacro);
-        const foundSub = foundMacro?.clusters.find((c) => c.slug === subclusterSlug) ?? null;
+        const foundSub = foundMacro?.clusters?.find((c) => c.slug === subclusterSlug) ?? null;
         setSubcluster(foundSub);
-        const foundSegment = foundSub?.segments.find((seg) => seg.slug === segmentSlug) ?? null;
+        const foundSegment = foundSub?.segments?.find((seg) => seg.slug === segmentSlug) ?? null;
         setSegment(foundSegment ?? null);
         const groupKey = groupKeyMap[contentType];
         const foundItem =
-          foundSegment?.content[groupKey]?.find((entry) => entry.slug === contentSlug) ?? null;
+          foundSegment?.content?.[groupKey]?.find((entry) => entry.slug === contentSlug) ?? null;
         setItem(foundItem);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))

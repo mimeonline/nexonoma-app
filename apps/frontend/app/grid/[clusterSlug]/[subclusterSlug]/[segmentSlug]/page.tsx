@@ -7,7 +7,13 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { BackButton } from "../../../components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchGrid } from "@/lib/api/grid";
-import type { Cluster, ContentGroup, ContentType, MacroCluster, Segment } from "@/types/grid";
+import type {
+  Cluster,
+  MacroCluster,
+  Segment,
+  SegmentContent,
+  SegmentContentType,
+} from "@/types/grid";
 
 type Params = {
   clusterSlug: string;
@@ -15,7 +21,7 @@ type Params = {
   segmentSlug: string;
 };
 
-const contentGroups: Array<{ key: keyof ContentGroup; label: string; type: ContentType }> = [
+const contentGroups: Array<{ key: keyof SegmentContent; label: string; type: SegmentContentType }> = [
   { key: "concepts", label: "Concept", type: "concept" },
   { key: "methods", label: "Method", type: "method" },
   { key: "tools", label: "Tool", type: "tool" },
@@ -30,17 +36,17 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
   const [segment, setSegment] = useState<Segment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [openType, setOpenType] = useState<ContentType | null>(null);
+  const [openType, setOpenType] = useState<SegmentContentType | null>(null);
 
   useEffect(() => {
     fetchGrid()
       .then((response) => {
         const foundMacro =
-          response.data.macroClusters.find((macro) => macro.slug === clusterSlug) ?? null;
+          response.data?.macroClusters?.find((macro) => macro.slug === clusterSlug) ?? null;
         setMacroCluster(foundMacro);
-        const foundSub = foundMacro?.clusters.find((c) => c.slug === subclusterSlug) ?? null;
+        const foundSub = foundMacro?.clusters?.find((c) => c.slug === subclusterSlug) ?? null;
         setSubcluster(foundSub);
-        const foundSegment = foundSub?.segments.find((seg) => seg.slug === segmentSlug) ?? null;
+        const foundSegment = foundSub?.segments?.find((seg) => seg.slug === segmentSlug) ?? null;
         setSegment(foundSegment);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))
@@ -49,14 +55,14 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
 
   const labelMap = useMemo(
     () =>
-      contentGroups.reduce<Record<ContentType, string>>((acc, entry) => {
+      contentGroups.reduce<Record<SegmentContentType, string>>((acc, entry) => {
         acc[entry.type] = entry.label;
         return acc;
-      }, {} as Record<ContentType, string>),
+      }, {} as Record<SegmentContentType, string>),
     [],
   );
 
-  const toggleType = (type: ContentType) =>
+  const toggleType = (type: SegmentContentType) =>
     setOpenType((prev) => (prev === type ? null : type));
 
   if (!loading && !error && (!macroCluster || !subcluster || !segment)) {
@@ -88,7 +94,7 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
         {!loading && !error && segment && (
           <div className="space-y-3">
             {contentGroups.map(({ key, label, type }) => {
-              const items = segment.content[key] ?? [];
+              const items = segment.content?.[key] ?? [];
               const isOpen = openType === type;
 
               return (

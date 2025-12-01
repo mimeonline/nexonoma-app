@@ -23,9 +23,9 @@ export default function SubclusterPage({ params }: { params: Promise<Params> }) 
     fetchGrid()
       .then((response) => {
         const foundMacro =
-          response.data.macroClusters.find((macro) => macro.slug === clusterSlug) ?? null;
+          response.data?.macroClusters?.find((macro) => macro.slug === clusterSlug) ?? null;
         setMacroCluster(foundMacro);
-        const foundSub = foundMacro?.clusters.find((c) => c.slug === subclusterSlug) ?? null;
+        const foundSub = foundMacro?.clusters?.find((c) => c.slug === subclusterSlug) ?? null;
         setSubcluster(foundSub);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))
@@ -57,7 +57,7 @@ export default function SubclusterPage({ params }: { params: Promise<Params> }) 
         {!loading && !error && subcluster && macroCluster && (
           <SegmentList
             clusterSlug={macroCluster.slug}
-            segments={subcluster.segments.map((segment) => ({
+            segments={(subcluster.segments ?? []).map((segment) => ({
               segment,
               subclusterSlug: subcluster.slug,
             }))}
