@@ -61,8 +61,9 @@ export default async function MacroClusterPage({ params }: PageProps) {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {clusters.map((cluster) => (
-            <div
+            <Link
               key={cluster.slug}
+              href={`/grid/${macroCluster.slug}/${cluster.slug}`}
               className="cursor-pointer rounded-2xl border border-white/10 bg-slate-900/70 p-6 transition hover:border-nexo-aqua/40 hover:shadow-lg"
             >
               <div className="mb-4 flex items-center gap-3">
@@ -75,7 +76,7 @@ export default async function MacroClusterPage({ params }: PageProps) {
               </div>
               <h3 className="mb-1 text-lg font-semibold text-white">{cluster.name}</h3>
               <p className="text-sm text-slate-400">{cluster.shortDescription}</p>
-            </div>
+            </Link>
           ))}
           {clusters.length === 0 && (
             <p className="text-sm text-slate-300">
