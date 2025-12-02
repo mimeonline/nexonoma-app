@@ -4,6 +4,7 @@ import { GridController } from './controllers/grid.controller';
 
 import { CatalogRepositoryPort } from '../../application/catalog/ports/catalog.repository.port';
 import { GetCatalogUseCase } from '../../application/catalog/usecases/get-catalog.usecase';
+import { GetCatalogItemByIdUseCase } from '../../application/catalog/usecases/get-catalog-item-by-id.usecase';
 import { CatalogRepositoryNeo4j } from '../persistence/neo4j/catalog.repository.neo4j';
 import { GridRepositoryPort } from '../../application/grid/ports/grid.repository.port';
 import { GetGridUseCase } from '../../application/grid/usecases/get-grid.usecase';
@@ -17,6 +18,7 @@ import { Neo4jModule } from '../persistence/neo4j/neo4j.module';
   providers: [
     GetGridUseCase,
     GetCatalogUseCase,
+    GetCatalogItemByIdUseCase,
     {
       provide: GridRepositoryPort,
       useClass: GridRepositoryNeo4j,
