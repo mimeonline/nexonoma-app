@@ -218,7 +218,7 @@ export default function ClusterDetailPage({ params }: PageProps) {
                 {filtered.map((item) => (
                   <Link
                     key={item.slug}
-                    href={`/grid/${item.type}/${item.slug}`}
+                    href={`/catalog/${item.type}/${item.slug}`}
                     className="group relative rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-sm transition hover:border-nexo-aqua/40 hover:shadow-lg"
                   >
                     <div className="mb-3 flex items-start justify-between">
@@ -271,7 +271,7 @@ export default function ClusterDetailPage({ params }: PageProps) {
                         {items.map((item) => (
                           <Link
                             key={item.slug}
-                            href={`/grid/${item.type}/${item.slug}`}
+                            href={`/catalog/${item.type}/${item.slug}`}
                             className="block rounded-xl border border-white/10 bg-slate-900/70 p-3 transition hover:border-nexo-aqua/40 hover:shadow"
                           >
                             <div className="mb-2 flex items-center justify-between text-xs">
