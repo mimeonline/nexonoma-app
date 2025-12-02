@@ -1,53 +1,34 @@
 import type { MacroCluster } from "@/types/grid";
 import Link from "next/link";
-import { useState } from "react";
-import { ClusterList } from "./ClusterList";
-import { MacroClusterCard } from "./MacroClusterCard";
 
 type Props = {
   macroClusters: MacroCluster[];
 };
 
 export function MacroClusterList({ macroClusters }: Props) {
-  const [open, setOpen] = useState<string | null>(null);
-
-  const toggle = (slug: string) => {
-    setOpen((prev) => (prev === slug ? null : slug));
-  };
-
-  const openMacroluster = macroClusters.find((c) => c.slug === open);
+  const hasMacroClusters = macroClusters.length > 0;
 
   return (
-    <div className="space-y-4">
-      {macroClusters.map((macroCluster) => (
-        <div key={macroCluster.slug} className="space-y-3">
-          <MacroClusterCard
-            cluster={macroCluster}
-            isOpen={open === macroCluster.slug}
-            onToggle={toggle}
-          />
-          {open === macroCluster.slug && (
-            <div className="rounded-xl border border-white/5 bg-[#0B1220]/60 p-4 animate-fadeIn">
-              <div className="mb-3 flex items-center justify-between">
-                <p className="text-sm text-slate-200/80">
-                  Cluster innerhalb von {macroCluster.name}
-                </p>
-                <Link
-                  href={`/grid/${macroCluster.slug}`}
-                  className="text-sm font-semibold text-[#4FF4E0] hover:underline"
-                >
-                  Cluster-Seite öffnen
-                </Link>
-              </div>
-              <ClusterList macroCluster={macroCluster} />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {macroClusters.map((macroCluster) => (
+          <Link
+            key={macroCluster.slug}
+            href={`/grid/${macroCluster.slug}`}
+            className="relative w-full rounded-2xl bg-slate-900/70 border border-white/10 p-6 text-left transition cursor-pointer hover:border-nexo-aqua/40 hover:shadow-lg"
+          >
+            <div className="absolute top-4 right-4">
+              <span className="text-xs bg-white/10 text-slate-300 px-2 py-1 rounded-full border border-white/10">
+                {macroCluster.clusters.length} Cluster
+              </span>
             </div>
-          )}
-        </div>
-      ))}
-      {!openMacroluster && (
-        <p className="text-sm text-slate-200/70">
-          Wähle ein Makro-Cluster, um Cluster zu sehen.
-        </p>
+            <h3 className="text-xl font-semibold text-white mb-2">{macroCluster.name}</h3>
+            <p className="text-sm text-slate-400">{macroCluster.shortDescription}</p>
+          </Link>
+        ))}
+      </div>
+      {!hasMacroClusters && (
+        <p className="text-sm text-slate-200/70">Keine Makro-Cluster gefunden.</p>
       )}
     </div>
   );
