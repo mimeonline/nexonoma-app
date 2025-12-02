@@ -1,0 +1,31 @@
+export type CatalogContentType = "concept" | "method" | "tool" | "technology";
+
+export interface CatalogItem {
+  id: string;
+  name: string;
+  slug: string;
+  type: CatalogContentType | string;
+  shortDescription?: string;
+  longDescription?: string;
+  tags?: string[];
+  segmentName?: string;
+  clusterName?: string;
+  macroClusterName?: string;
+  maturityLevel?: string;
+  complexityLevel?: string;
+  [key: string]: unknown;
+}
+
+export interface CatalogResponse {
+  data: {
+    items: CatalogItem[];
+  };
+  meta: {
+    requestId: string;
+    timestamp: string;
+    page: number;
+    pageSize: number;
+    total: number;
+  };
+  errors: unknown[];
+}
