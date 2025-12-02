@@ -11,6 +11,9 @@ export interface CatalogItem {
   segmentName?: string;
   clusterName?: string;
   macroClusterName?: string;
+  segmentSlug?: string;
+  clusterSlug?: string;
+  macroClusterSlug?: string;
   maturityLevel?: string;
   complexityLevel?: string;
   [key: string]: unknown;

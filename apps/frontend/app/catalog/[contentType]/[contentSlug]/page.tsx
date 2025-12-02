@@ -2,6 +2,7 @@ import { fetchCatalog, fetchCatalogItemById } from "@/lib/api/catalog";
 import type { CatalogContentType, CatalogItem } from "@/types/catalog";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ReferrerNav } from "./ReferrerNav";
 
 type PageProps = {
   params: Promise<{ contentType: CatalogContentType; contentSlug: string }> | {
@@ -52,6 +53,11 @@ export default async function ContentDetailPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-linear-to-b from-[#0B1220] to-[#0f172a] text-slate-100">
       <main className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
+        <ReferrerNav
+          segmentName={(item as CatalogItem).segmentName as string | undefined}
+          clusterName={(item as CatalogItem).clusterName as string | undefined}
+          macroClusterName={(item as CatalogItem).macroClusterName as string | undefined}
+        />
         <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-lg md:p-8">
           <div className="mb-4 flex items-start justify-between gap-4">
             <span
