@@ -1,0 +1,107 @@
+[
+  {
+    "outputs": [
+      "Cloud-native Anwendung",
+      "Standardisierte Deployment-Prozesse"
+    ],
+    "inputs": [
+      "Anwendungsarchitektur",
+      "Deployment-Pipeline",
+      "Cloud-Infrastruktur"
+    ],
+    "valueStreamStage": "build",
+    "language": "de",
+    "scenarios": "[{\"name\":\"Migration einer bestehenden App\",\"context\":\"Modernisierung eines Monolithen hin zu Cloud-Native Architektur.\",\"steps\":[\"Analyse der bestehenden Architektur\",\"Mapping der Komponenten auf die 12 Faktoren\",\"Umbau der App in Richtung Cloud-Infrastruktur\"]},{\"name\":\"Greenfield Microservices-Design\",\"context\":\"Ein neues System soll Cloud-native entwickelt werden.\",\"steps\":[\"Definition der Services\",\"Konfiguration über Umgebungsvariablen etablieren\",\"CI/CD-Pipeline nach 12-Factor-Prinzipien erstellen\"]},{\"name\":\"CI/CD-Einführung\",\"context\":\"DevOps-Team führt automatisierte Deployments ein.\",\"steps\":[\"Build/Release/Run trennen\",\"Konfigurationsverwaltung überarbeiten\",\"Monitoring & Logging integrieren\"]}]",
+    "type": "concept",
+    "techDebts": [
+      "Unzureichende Trennung der Phasen",
+      "Fehlende Abhängigkeitsisolierung"
+    ],
+    "constraints": "[\"Erfordert Containerisierung oder ähnliche Isolationsmechanismen\",\"Braucht vollautomatisierte Deployments\"]",
+    "createdAt": "2025-08-03",
+    "implementationSteps": "[\"Mapping der Applikation auf die 12 Faktoren\",\"Konfiguration aus Code entfernen\",\"Build/Release/Run trennen\",\"CI/CD-Pipelines konsistent aufbauen\"]",
+    "id": "b2e3b1a4-62b8-4dbf-bde1-ff3f0c3f7f9c",
+    "slug": "12-factor-app",
+    "updatedAt": "2025-11-19",
+    "limitations": [
+      "Für Legacy-Monolithen schwer einführbar",
+      "Erfordert automatisierte Pipelines",
+      "Für kleine Projekte manchmal Overkill"
+    ],
+    "image": "12factor-overview.png",
+    "tradeoffMatrix": "[{\"pros\":[\"Klare Struktur\",\"Weniger Konfigurationsfehler\"],\"factor\":\"Maintainability\",\"cons\":[\"Erfordert diszipliniertes Team\"]},{\"pros\":[\"Skalierung horizontaler Prozesse\"],\"factor\":\"Scalability\",\"cons\":[\"Erfordert Cloud-Runtime & Automatisierung\"]}]",
+    "author": "Michael Meierhoff <michael@meierhoff-systems.de>",
+    "impact": "technical",
+    "shortDescription": "Ein Methodenset für den Aufbau von modernen, Cloud-nativen Software-as-a-Service-Anwendungen.",
+    "version": "1.0",
+    "tags": ["Cloud", "DevOps", "Architecture", "Best Practice"],
+    "license": "CC-BY-SA",
+    "complexityLevel": "medium",
+    "examples": "[{\"benefits\":[\"Klarere Deployments\",\"Weniger Fehleranfälligkeit\"],\"assets\":[],\"name\":\"Node.js-App mit Build-Release-Run-Trennung\",\"description\":\"Eine Node.js-App, die Build, Release und Run strikt trennt.\"},{\"benefits\":[\"Skalierbarkeit\",\"Portabilität\"],\"assets\":[],\"name\":\"Kubernetes-Deployment mit Environment-Konfiguration\",\"description\":\"Konfiguration ausschließlich über ENV-Variablen.\"},{\"benefits\":[\"Reproduzierbarkeit\",\"Wartbarkeit\"],\"assets\":[],\"name\":\"Docker-Container mit deklarativen Abhängigkeiten\",\"description\":\"Definierte Dependencies in der Dockerfile.\"}]",
+    "preconditions": [
+      "Cloud-fähige Infrastruktur",
+      "Deployment-Automatisierung",
+      "Team mit DevOps-Erfahrung"
+    ],
+    "name": "12-Factor App",
+    "integration": [
+      "Kubernetes",
+      "Docker",
+      "CI/CD-Pipelines",
+      "DevOps-Methoden"
+    ],
+    "maturityLevel": "established",
+    "principles": "[\"Portabilität und Skalierbarkeit\",\"Konfigurationsmanagement über Umgebungsvariablen\",\"Trennung von Build, Release und Run\",\"Logs als Event-Stream behandeln\"]",
+    "alternatives": ["15-Factor App", "Cloud-Native Patterns"],
+    "bottleneckTags": [
+      "deployment-complexity",
+      "integration-sprawl",
+      "manual-process",
+      "version-drift"
+    ],
+    "requiredSkills": ["Cloud-Architektur", "Containerisierung", "DevOps"],
+    "metrics": "[{\"name\":\"Deployment-Zykluszeit\",\"description\":\"Dauer vom Commit bis zum Deployment.\"},{\"name\":\"Skalierungszeit\",\"description\":\"Zeit zum Bereitstellen neuer Instanzen.\"},{\"name\":\"Konfigurationsfehler\",\"description\":\"Anzahl fehlerhafter Deployments durch falsche ENV-Variablen.\"}]",
+    "cognitiveLoad": "medium",
+    "status": "draft",
+    "bestPractices": [
+      "Konfiguration ausschließlich über ENV-Variablen",
+      "Strikte Build/Release/Run-Trennung",
+      "Logs als Stream behandeln",
+      "Jeden Prozess als eigenständigen Service betreiben"
+    ],
+    "longDescription": "Das 12-Factor App-Prinzip definiert zwölf Best Practices für die Entwicklung von Cloud-nativen Anwendungen. Es entstand bei Heroku und bietet einen Leitfaden für portierbare, skalierbare und leicht wartbare Services. Die 12 Faktoren decken Konfiguration, Code-Basis, Build- und Release-Management, Skalierung und DevOps-Aspekte ab.",
+    "benefits": [
+      "Hohe Portabilität",
+      "Bessere Skalierbarkeit",
+      "Standardisierte Deployments",
+      "Einheitliches Betriebsmodell"
+    ],
+    "customFields": "{}",
+    "icon": "12factor-icon.svg",
+    "architecturalDrivers": [
+      "maintainability",
+      "scalability",
+      "portability",
+      "operational-efficiency",
+      "testability"
+    ],
+    "contributor": ["OpenAI"],
+    "organizationalMaturity": "intermediate",
+    "antiPatterns": [
+      "Konfiguration im Code",
+      "Lokal gespeicherte Logs",
+      "Unklare Trennung von Build und Run"
+    ],
+    "resources": "[{\"name\":\"12-Factor App – Offizielle Website\",\"url\":\"https://12factor.net\"},{\"name\":\"Heroku Engineering Blog\",\"url\":\"https://blog.heroku.com\"}]",
+    "misuseExamples": [
+      "Nur 2–3 Faktoren implementieren, aber '12-Factor' draufschreiben"
+    ],
+    "traps": [
+      "12-Factor als Cloud-Native-Ersatz missverstehen",
+      "Zu strikte Auslegung ohne Team-Kontext"
+    ],
+    "useCases": "[{\"outputs\":[\"Skalierbare Kubernetes-Deployments\"],\"inputs\":[\"Service-Spezifikationen\",\"Container-Images\"],\"description\":\"Aufbau von Microservices auf Kubernetes.\"},{\"outputs\":[\"Laufende Anwendung in der Cloud\"],\"inputs\":[\"Build-Artefakte\",\"Umgebungsvariablen\"],\"description\":\"Deployment auf PaaS wie Heroku oder Cloud Foundry.\"},{\"outputs\":[\"Automatisierte Build- und Deployment-Prozesse\"],\"inputs\":[\"Quellcode\",\"Tests\",\"Pipeline-Konfiguration\"],\"description\":\"Erstellung einer CI/CD-Pipeline für moderne SaaS-Apps.\"}]",
+    "risks": "[\"Dogmatische Anwendung ohne Kontext\",\"Team-Überforderung bei fehlender Automatisierung\"]",
+    "decisionType": "pattern-selection"
+  }
+]
