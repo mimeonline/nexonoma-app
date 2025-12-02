@@ -9,6 +9,7 @@ const navItems = [
   { href: "/grid", label: "Grid" },
   { href: "/matrix", label: "Matrix" },
   { href: "/city", label: "City" },
+  { href: "/catalog", label: "Katalog" },
 ];
 
 export default function Header() {
