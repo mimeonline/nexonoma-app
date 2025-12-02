@@ -32,3 +32,22 @@ export async function fetchCatalog(): Promise<CatalogResponse> {
   const data: CatalogResponse = await response.json();
   return data;
 }
+
+export async function fetchCatalogItemById(id: string) {
+  const endpoint = `${resolveCatalogEndpoint().replace(/\/$/, "")}/${id}`;
+
+  const response = await fetch(endpoint, {
+    headers: { Accept: "application/json" },
+    cache: "no-store",
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Catalog item fetch failed with status ${response.status}`);
+  }
+
+  return response.json();
+}
