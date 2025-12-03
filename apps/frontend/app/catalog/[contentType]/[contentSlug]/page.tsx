@@ -4,9 +4,7 @@ import { notFound } from "next/navigation";
 import { ReferrerNav } from "./ReferrerNav";
 
 type PageProps = {
-  params:
-    | Promise<{ contentType: CatalogContentType; contentSlug: string }>
-    | { contentType: CatalogContentType; contentSlug: string };
+  params: Promise<{ contentType: CatalogContentType; contentSlug: string }> | { contentType: CatalogContentType; contentSlug: string };
 };
 
 type AnyRecord = Record<string, any>;
@@ -42,9 +40,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
 
   const catalog = await fetchCatalog();
   const items = catalog.data?.items ?? [];
-  const match = items.find(
-    (it) => it.slug === contentSlug && (it.type?.toString().toLowerCase() ?? "") === contentType,
-  );
+  const match = items.find((it) => it.slug === contentSlug && (it.type?.toString().toLowerCase() ?? "") === contentType);
   if (!match?.id) return notFound();
 
   const item = (await fetchCatalogItemById(match.id)) as CatalogItem | null;
@@ -83,9 +79,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
   };
 
   const heroQuote =
-    item.longDescription ||
-    (parsed.principles.length ? parsed.principles[0] : undefined) ||
-    (parsed.goals.length ? parsed.goals[0] : undefined);
+    item.longDescription || (parsed.principles.length ? parsed.principles[0] : undefined) || (parsed.goals.length ? parsed.goals[0] : undefined);
 
   const metaChips = [
     { label: "Reifegrad", value: (item as AnyRecord).maturityLevel },
@@ -151,10 +145,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
   ];
 
   const listBadge = (content: string, key: string) => (
-    <span
-      key={key}
-      className="inline-flex items-center rounded-full bg-[#101827] px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/5"
-    >
+    <span key={key} className="inline-flex items-center rounded-full bg-[#101827] px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/5">
       {content}
     </span>
   );
@@ -187,10 +178,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
     return (
       <div className="space-y-2">
         {value.map((obj, idx) => (
-          <div
-            key={`${key}-${idx}`}
-            className="rounded-xl border border-white/5 bg-[#101827] px-3 py-2 text-sm text-slate-100"
-          >
+          <div key={`${key}-${idx}`} className="rounded-xl border border-white/5 bg-[#101827] px-3 py-2 text-sm text-slate-100">
             {Object.entries(obj).map(([k, v]) => (
               <div key={k} className="flex gap-2 text-xs text-slate-200">
                 <span className="text-slate-500">{k}:</span>
@@ -204,133 +192,138 @@ export default async function ContentDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1021] text-white">
-      <main
-        className="mx-auto max-w-[1240px] px-4 pb-12 pt-8 sm:px-6 lg:px-8 lg:pt-12 lg:pb-16 space-y-8"
-        suppressHydrationWarning
-      >
-        <ReferrerNav segmentName={item.segmentName} clusterName={item.clusterName} macroClusterName={item.macroClusterName} />
+    <>
+      <ReferrerNav segmentName={item.segmentName} clusterName={item.clusterName} macroClusterName={item.macroClusterName} />
 
-        {/* Hero */}
-        <section className="rounded-3xl border border-white/12 bg-gradient-to-br from-[#0F172A] via-[#0d1430] to-[#0b1226] p-6 shadow-[0_18px_55px_rgba(0,0,0,0.4)] lg:p-9">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="flex flex-1 flex-col gap-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${typeStyles[contentType]}`}>
-                  {contentType}
+      {/* Hero */}
+      <section className="rounded-3xl border border-white/12 bg-gradient-to-br from-[#0F172A] via-[#0d1430] to-[#0b1226] p-6 shadow-[0_18px_55px_rgba(0,0,0,0.4)] lg:p-9">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-1 flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${typeStyles[contentType]}`}
+              >
+                {contentType}
+              </span>
+              {parsed.tags.slice(0, 8).map((tag, idx) => (
+                <span
+                  key={`${tag}-${idx}`}
+                  className="inline-flex items-center rounded-full bg-[#111c35] px-3 py-1 text-[11px] font-semibold text-slate-100 ring-1 ring-white/10"
+                >
+                  {tag}
                 </span>
-                {parsed.tags.slice(0, 8).map((tag, idx) => (
-                  <span key={`${tag}-${idx}`} className="inline-flex items-center rounded-full bg-[#111c35] px-3 py-1 text-[11px] font-semibold text-slate-100 ring-1 ring-white/10">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="flex items-center gap-3">
-                {(item as AnyRecord).icon && (
-                  <span className="text-3xl" aria-hidden>
-                    {(item as AnyRecord).icon}
-                  </span>
-                )}
-                <h1 className="text-3xl font-bold leading-tight sm:text-4xl">{item.name}</h1>
-              </div>
-              {item.shortDescription && (
-                <p className="text-base leading-relaxed text-slate-200/90">{item.shortDescription}</p>
+              ))}
+            </div>
+            <div className="flex items-center gap-3">
+              {(item as AnyRecord).icon && (
+                <span className="text-3xl" aria-hidden>
+                  {(item as AnyRecord).icon}
+                </span>
               )}
-              {heroQuote && (
-                <div className="rounded-2xl border border-white/10 bg-[#0B1220] p-4 text-sm text-slate-200 shadow-inner shadow-black/30">
-                  <p className="italic leading-relaxed text-slate-100">“{heroQuote}”</p>
+              <h1 className="text-3xl font-bold leading-tight sm:text-4xl">{item.name}</h1>
+            </div>
+            {item.shortDescription && <p className="text-base leading-relaxed text-slate-200/90">{item.shortDescription}</p>}
+            {heroQuote && (
+              <div className="rounded-2xl border border-white/10 bg-[#0B1220] p-4 text-sm text-slate-200 shadow-inner shadow-black/30">
+                <p className="italic leading-relaxed text-slate-100">“{heroQuote}”</p>
+              </div>
+            )}
+          </div>
+          <div className="flex w-full max-w-xs flex-col gap-3 rounded-2xl border border-white/10 bg-[#0B1220] p-4">
+            <div className="flex flex-wrap gap-2">
+              {metaChips.length === 0 && <span className="text-xs text-slate-500">Keine Meta-Infos</span>}
+              {metaChips.map((chip) => (
+                <span
+                  key={chip.label}
+                  className="inline-flex items-center rounded-full bg-[#111C3A] px-3 py-1 text-[11px] font-semibold text-slate-100 ring-1 ring-white/10"
+                >
+                  {chip.label}: {chip.value}
+                </span>
+              ))}
+            </div>
+            <h3 className="text-xs uppercase tracking-[0.15em] text-slate-400">Meta</h3>
+            <div className="flex flex-col gap-1 text-sm text-slate-200">
+              <span>
+                Segment: <span className="text-slate-100">{item.segmentName ?? "—"}</span>
+              </span>
+              <span>
+                Cluster: <span className="text-slate-100">{item.clusterName ?? "—"}</span>
+              </span>
+              <span>
+                Macro: <span className="text-slate-100">{item.macroClusterName ?? "—"}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bento grid */}
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {gridCards.map((card) => (
+          <div
+            key={card.title}
+            className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-[#0F172A] p-4 shadow-[0_10px_25px_rgba(0,0,0,0.28)]"
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-[0.12em]">{card.title}</h3>
+            </div>
+            <div className="space-y-3 text-sm">
+              {card.items.map((entry, idx) => (
+                <div key={`${card.title}-${idx}`} className="space-y-1">
+                  <p className="text-[11px] uppercase tracking-wide text-slate-500">{entry.label}</p>
+                  {entry.list
+                    ? renderValue(entry.list)
+                    : Array.isArray(entry.value) && entry.value.length && typeof entry.value[0] === "object"
+                      ? renderObjArray(entry.value as AnyRecord[], `${card.title}-${idx}`)
+                      : renderValue(entry.value)}
                 </div>
-              )}
-            </div>
-            <div className="flex w-full max-w-xs flex-col gap-3 rounded-2xl border border-white/10 bg-[#0B1220] p-4">
-              <div className="flex flex-wrap gap-2">
-                {metaChips.length === 0 && <span className="text-xs text-slate-500">Keine Meta-Infos</span>}
-                {metaChips.map((chip) => (
-                  <span key={chip.label} className="inline-flex items-center rounded-full bg-[#111C3A] px-3 py-1 text-[11px] font-semibold text-slate-100 ring-1 ring-white/10">
-                    {chip.label}: {chip.value}
-                  </span>
-                ))}
-              </div>
-              <h3 className="text-xs uppercase tracking-[0.15em] text-slate-400">Meta</h3>
-              <div className="flex flex-col gap-1 text-sm text-slate-200">
-                <span>Segment: <span className="text-slate-100">{item.segmentName ?? "—"}</span></span>
-                <span>Cluster: <span className="text-slate-100">{item.clusterName ?? "—"}</span></span>
-                <span>Macro: <span className="text-slate-100">{item.macroClusterName ?? "—"}</span></span>
-              </div>
+              ))}
             </div>
           </div>
-        </section>
+        ))}
+      </section>
 
-        {/* Bento grid */}
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {gridCards.map((card) => (
-            <div
-              key={card.title}
-              className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-[#0F172A] p-4 shadow-[0_10px_25px_rgba(0,0,0,0.28)]"
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-[0.12em]">
-                  {card.title}
-                </h3>
-              </div>
-              <div className="space-y-3 text-sm">
-                {card.items.map((entry, idx) => (
-                  <div key={`${card.title}-${idx}`} className="space-y-1">
-                    <p className="text-[11px] uppercase tracking-wide text-slate-500">{entry.label}</p>
-                    {entry.list
-                      ? renderValue(entry.list)
-                      : Array.isArray(entry.value) && entry.value.length && typeof entry.value[0] === "object"
-                        ? renderObjArray(entry.value as AnyRecord[], `${card.title}-${idx}`)
-                        : renderValue(entry.value)}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </section>
+      {/* Detail content */}
+      <section className="space-y-6">
+        <div className="rounded-2xl border border-white/10 bg-[#0F172A] p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-white border-l-4 border-[#5EE0FF] pl-3">Beschreibung</h2>
+          <p className="mt-3 text-sm leading-relaxed text-slate-200">
+            {item.longDescription || item.shortDescription || "Keine Beschreibung vorhanden."}
+          </p>
+        </div>
 
-        {/* Detail content */}
-        <section className="space-y-6">
-          <div className="rounded-2xl border border-white/10 bg-[#0F172A] p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-white border-l-4 border-[#5EE0FF] pl-3">Beschreibung</h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-200">
-              {item.longDescription || item.shortDescription || "Keine Beschreibung vorhanden."}
-            </p>
-          </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <CardList title="Benefits" items={parsed.benefits} />
+          <CardList title="Limitations" items={parsed.limitations} />
+        </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <CardList title="Benefits" items={parsed.benefits} />
-            <CardList title="Limitations" items={parsed.limitations} />
-          </div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <CardList title="Implementation Steps" items={parsed.implementationSteps} />
+          <CardList
+            title="Technische Schulden & Engpässe"
+            items={[...parsed.techDebts, ...parsed.bottleneckTags, ...parsed.misuseExamples, ...parsed.risks]}
+          />
+        </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <CardList title="Implementation Steps" items={parsed.implementationSteps} />
-            <CardList
-              title="Technische Schulden & Engpässe"
-              items={[...parsed.techDebts, ...parsed.bottleneckTags, ...parsed.misuseExamples, ...parsed.risks]}
-            />
-          </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <CardList title="Required Skills" items={parsed.requiredSkills} />
+          <CardList title="Architectural Drivers" items={parsed.architecturalDrivers} />
+          <CardList title="Constraints" items={parsed.constraints} />
+        </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <CardList title="Required Skills" items={parsed.requiredSkills} />
-            <CardList title="Architectural Drivers" items={parsed.architecturalDrivers} />
-            <CardList title="Constraints" items={parsed.constraints} />
-          </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <CardObjectList title="Use Cases" items={parsed.useCases} />
+          <CardObjectList title="Szenarien" items={parsed.scenarios} />
+          <CardObjectList title="Beispiele & Implementierungen" items={parsed.examples} />
+          <CardObjectList title="Trade-off Matrix" items={parsed.tradeoffMatrix} />
+        </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <CardObjectList title="Use Cases" items={parsed.useCases} />
-            <CardObjectList title="Szenarien" items={parsed.scenarios} />
-            <CardObjectList title="Beispiele & Implementierungen" items={parsed.examples} />
-            <CardObjectList title="Trade-off Matrix" items={parsed.tradeoffMatrix} />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <CardObjectList title="Ressourcen" items={parsed.resources} />
-            <CardObjectList title="Metriken" items={parsed.metrics} />
-          </div>
-        </section>
-      </main>
-    </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <CardObjectList title="Ressourcen" items={parsed.resources} />
+          <CardObjectList title="Metriken" items={parsed.metrics} />
+        </div>
+      </section>
+    </>
   );
 }
 

@@ -16,11 +16,10 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const isActive = (href: string) =>
-    pathname === href || (pathname?.startsWith(href + "/") ?? false);
+  const isActive = (href: string) => pathname === href || (pathname?.startsWith(href + "/") ?? false);
 
   return (
-    <header className="sticky top-0 z-30 bg-[#0B1220]/80 backdrop-blur-md">
+    <>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3 text-white">
           <svg
@@ -82,9 +81,7 @@ export default function Header() {
                   key={item.href}
                   href={item.href}
                   className={`block rounded-xl px-4 py-3 text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/30 ${
-                    active
-                      ? "bg-white/10 text-blue-300"
-                      : "text-gray-300 hover:text-white"
+                    active ? "bg-white/10 text-blue-300" : "text-gray-300 hover:text-white"
                   }`}
                   onClick={() => setOpen(false)}
                 >
@@ -95,6 +92,6 @@ export default function Header() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
