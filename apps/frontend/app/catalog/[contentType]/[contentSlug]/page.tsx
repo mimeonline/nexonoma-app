@@ -1,5 +1,5 @@
 import { fetchCatalog, fetchCatalogItemById } from "@/lib/api/catalog";
-import type { CatalogContentType, CatalogItem } from "@/types/catalog";
+import type { CatalogContentType, CatalogItem as ContentModel } from "@/types/catalog";
 import { notFound } from "next/navigation";
 import { ReferrerNav } from "./ReferrerNav";
 
@@ -7,38 +7,98 @@ type PageProps = {
   params: Promise<{ contentType: CatalogContentType; contentSlug: string }> | { contentType: CatalogContentType; contentSlug: string };
 };
 
-type AnyRecord = Record<string, any>;
+type AnyRecord = Record<string, unknown>;
 
-const typeStyles: Record<CatalogContentType, string> = {
-  method: "bg-amber-500/15 text-amber-100 border border-amber-400/30",
-  concept: "bg-sky-500/15 text-sky-100 border border-sky-400/30",
-  tool: "bg-emerald-500/15 text-emerald-100 border border-emerald-400/30",
-  technology: "bg-fuchsia-500/15 text-fuchsia-100 border border-fuchsia-400/30",
+type ParsedContent = {
+  tags: string[];
+  principles: string[];
+  goals: string[];
+  organizationalLevel: string[];
+  useCases: AnyRecord[];
+  scenarios: AnyRecord[];
+  examples: AnyRecord[];
+  risks: string[];
+  traps: string[];
+  antiPatterns: string[];
+  bestPractices: string[];
+  inputs: string[];
+  outputs: string[];
+  resources: AnyRecord[];
+  metrics: AnyRecord[];
+  constraints: string[];
+  integration: string[];
+  alternatives: string[];
+  technologies: string[];
+  platforms: string[];
+  valueStreamStage?: string;
+  architecturalDrivers: string[];
+  benefits: string[];
+  limitations: string[];
+  implementationSteps: string[];
+  techDebts: string[];
+  bottleneckTags: string[];
+  misuseExamples: string[];
+  requiredSkills: string[];
+  tradeoffMatrix: AnyRecord[];
+  cognitiveLoad?: string;
+  status?: string;
+  impact: string[];
+  decisionType: string[];
+  complexityLevel: string[];
+  organizationalMaturity: string[];
 };
 
-function safeArray(value: unknown): any[] {
+type ContentModelData = ContentModel & {
+  goals?: string[] | string;
+  useCases?: AnyRecord[] | AnyRecord;
+  scenarios?: AnyRecord[] | AnyRecord;
+  examples?: AnyRecord[] | AnyRecord;
+  risks?: string[] | string;
+  traps?: string[] | string;
+  antiPatterns?: string[] | string;
+  bestPractices?: string[] | string;
+  inputs?: string[] | string;
+  outputs?: string[] | string;
+  resources?: AnyRecord[] | AnyRecord;
+  metrics?: AnyRecord[] | AnyRecord;
+  constraints?: string[] | string;
+  integration?: string[] | string;
+  alternatives?: string[] | string;
+  technologies?: string[] | string;
+  platforms?: string[] | string;
+  valueStreamStage?: string;
+  architecturalDrivers?: string[] | string;
+  benefits?: string[] | string;
+  limitations?: string[] | string;
+  implementationSteps?: string[] | string;
+  techDebts?: string[] | string;
+  bottleneckTags?: string[] | string;
+  misuseExamples?: string[] | string;
+  requiredSkills?: string[] | string;
+  tradeoffMatrix?: AnyRecord[] | AnyRecord;
+  icon?: string;
+  impact?: string[] | string;
+  decisionType?: string[] | string;
+  complexityLevel?: string[] | string;
+  organizationalMaturity?: string[] | string;
+};
+
+function toArray<T = string>(value: unknown): T[] {
   if (!value) return [];
-  if (Array.isArray(value)) return value;
-  if (typeof value === "string") {
-    try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
+  if (Array.isArray(value)) return value as T[];
+  if (typeof value === "string") return [value as unknown as T];
+  if (typeof value === "object") return Object.values(value) as T[];
   return [];
+}
+
+function toObjectArray(value: unknown): AnyRecord[] {
+  return toArray<AnyRecord>(value).filter((entry) => entry && typeof entry === "object");
 }
 
 function firstSentence(text?: string): string | undefined {
   if (!text) return undefined;
   const match = text.match(/[^.!?]*[.!?]/);
   return match ? match[0].trim() : text.trim();
-}
-
-function safeObjectArray(value: unknown): AnyRecord[] {
-  const arr = safeArray(value);
-  return arr.filter((item) => item && typeof item === "object");
 }
 
 export default async function ContentDetailPage({ params }: PageProps) {
@@ -49,160 +109,53 @@ export default async function ContentDetailPage({ params }: PageProps) {
   const match = items.find((it) => it.slug === contentSlug && (it.type?.toString().toLowerCase() ?? "") === contentType);
   if (!match?.id) return notFound();
 
-  const item = (await fetchCatalogItemById(match.id)) as CatalogItem | null;
+  const item = (await fetchCatalogItemById(match.id)) as ContentModelData | null;
   if (!item) return notFound();
 
-  const parsed = {
-    tags: safeArray(item.tags) as string[],
-    principles: safeArray((item as AnyRecord).principles) as string[],
-    goals: safeArray((item as AnyRecord).goals) as string[],
-    organizationalLevel: safeArray((item as AnyRecord).organizationalLevel) as string[],
-    useCases: safeObjectArray((item as AnyRecord).useCases),
-    scenarios: safeObjectArray((item as AnyRecord).scenarios),
-    examples: safeObjectArray((item as AnyRecord).examples),
-    risks: safeArray((item as AnyRecord).risks) as string[],
-    traps: safeArray((item as AnyRecord).traps) as string[],
-    antiPatterns: safeArray((item as AnyRecord).antiPatterns) as string[],
-    bestPractices: safeArray((item as AnyRecord).bestPractices) as string[],
-    inputs: safeArray((item as AnyRecord).inputs) as string[],
-    outputs: safeArray((item as AnyRecord).outputs) as string[],
-    resources: safeObjectArray((item as AnyRecord).resources),
-    metrics: safeObjectArray((item as AnyRecord).metrics),
-    constraints: safeArray((item as AnyRecord).constraints) as string[],
-    integration: safeArray((item as AnyRecord).integration) as string[],
-    technologies: safeArray((item as AnyRecord).technologies) as string[],
-    platforms: safeArray((item as AnyRecord).platforms) as string[],
-    valueStreamStage: (item as AnyRecord).valueStreamStage as string | undefined,
-    architecturalDrivers: safeArray((item as AnyRecord).architecturalDrivers) as string[],
-    benefits: safeArray((item as AnyRecord).benefits) as string[],
-    limitations: safeArray((item as AnyRecord).limitations) as string[],
-    implementationSteps: safeArray((item as AnyRecord).implementationSteps) as string[],
-    techDebts: safeArray((item as AnyRecord).techDebts) as string[],
-    bottleneckTags: safeArray((item as AnyRecord).bottleneckTags) as string[],
-    misuseExamples: safeArray((item as AnyRecord).misuseExamples) as string[],
-    requiredSkills: safeArray((item as AnyRecord).requiredSkills) as string[],
-    tradeoffMatrix: safeObjectArray((item as AnyRecord).tradeoffMatrix),
-    cognitiveLoad: safeObjectArray((item as AnyRecord).cognitiveLoad),
-    status: safeObjectArray((item as AnyRecord).status),
-    impact: safeArray((item as AnyRecord).impact) as string[],
-    decisionType: safeArray((item as AnyRecord).decisionType) as string[],
-    complexityLevel: safeArray((item as AnyRecord).complexityLevel) as string[],
-    organizationalMaturity: safeArray((item as AnyRecord).organizationalMaturity) as string[],
+  const parsed: ParsedContent = {
+    tags: toArray<string>(item.tags),
+    principles: toArray<string>(item.principles),
+    goals: toArray<string>(item.goals),
+    organizationalLevel: toArray<string>(item.organizationalLevel),
+    useCases: toObjectArray(item.useCases),
+    scenarios: toObjectArray(item.scenarios),
+    examples: toObjectArray(item.examples),
+    risks: toArray<string>(item.risks),
+    traps: toArray<string>(item.traps),
+    antiPatterns: toArray<string>(item.antiPatterns),
+    bestPractices: toArray<string>(item.bestPractices),
+    inputs: toArray<string>(item.inputs),
+    outputs: toArray<string>(item.outputs),
+    resources: toObjectArray(item.resources),
+    metrics: toObjectArray(item.metrics),
+    constraints: toArray<string>(item.constraints),
+    integration: toArray<string>(item.integration),
+    alternatives: toArray<string>(item.alternatives),
+    technologies: toArray<string>(item.technologies),
+    platforms: toArray<string>(item.platforms),
+    valueStreamStage: typeof item.valueStreamStage === "string" ? item.valueStreamStage : undefined,
+    architecturalDrivers: toArray<string>(item.architecturalDrivers),
+    benefits: toArray<string>(item.benefits),
+    limitations: toArray<string>(item.limitations),
+    implementationSteps: toArray<string>(item.implementationSteps),
+    techDebts: toArray<string>(item.techDebts),
+    bottleneckTags: toArray<string>(item.bottleneckTags),
+    misuseExamples: toArray<string>(item.misuseExamples),
+    requiredSkills: toArray<string>(item.requiredSkills),
+    tradeoffMatrix: toObjectArray(item.tradeoffMatrix),
+    cognitiveLoad: typeof item.cognitiveLoad === "string" ? item.cognitiveLoad : undefined,
+    status: typeof item.status === "string" ? item.status : undefined,
+    impact: toArray<string>(item.impact),
+    decisionType: toArray<string>(item.decisionType),
+    complexityLevel: toArray<string>(item.complexityLevel),
+    organizationalMaturity: toArray<string>(item.organizationalMaturity),
   };
+
+  const icon = item.icon;
 
   const heroQuote = firstSentence(
     item.longDescription || (parsed.principles.length ? parsed.principles[0] : undefined) || (parsed.goals.length ? parsed.goals[0] : undefined)
   );
-  const metaChips = [
-    { label: "Reifegrad", value: (item as AnyRecord).maturityLevel },
-    { label: "Cognitive Load", value: (item as AnyRecord).cognitiveLoad },
-    { label: "Status", value: (item as AnyRecord).status },
-  ].filter((m) => m.value);
-
-  const gridCards: { title: string; items: { label: string; value?: any; list?: string[] }[] }[] = [
-    {
-      title: "Klassifikation",
-      items: [
-        { label: "Komplexität", value: (item as AnyRecord).complexityLevel },
-        { label: "Impact", value: (item as AnyRecord).impact },
-        { label: "Decision Type", value: (item as AnyRecord).decisionType },
-        { label: "Org Maturity", value: (item as AnyRecord).organizationalMaturity },
-        { label: "Organizational Level", list: parsed.organizationalLevel as string[] },
-      ],
-    },
-    {
-      title: "Technischer Kontext",
-      items: [
-        { label: "Integrationen", list: parsed.integrations as string[] },
-        { label: "Technologien", list: parsed.technologies as string[] },
-        { label: "Plattformen", list: parsed.platforms as string[] },
-        { label: "Value Stream Stage", value: parsed.valueStreamStage },
-        { label: "Drivers", list: parsed.architecturalDrivers as string[] },
-      ],
-    },
-    {
-      title: "Prinzipien & Ziele",
-      items: [
-        { label: "Prinzipien", list: parsed.principles as string[] },
-        { label: "Ziele", list: parsed.goals as string[] },
-      ],
-    },
-    {
-      title: "Use Cases & Szenarien",
-      items: [
-        { label: "Use Cases", value: parsed.useCases },
-        { label: "Szenarien", value: parsed.scenarios },
-        { label: "Beispiele", value: parsed.examples },
-      ],
-    },
-    {
-      title: "Trade-offs",
-      items: [
-        { label: "Risiken", list: parsed.risks as string[] },
-        { label: "Fallen", list: parsed.traps as string[] },
-        { label: "Anti-Patterns", list: parsed.antiPatterns as string[] },
-        { label: "Best Practices", list: parsed.bestPractices as string[] },
-      ],
-    },
-    {
-      title: "I/O & Ressourcen",
-      items: [
-        { label: "Inputs", list: parsed.inputs as string[] },
-        { label: "Outputs", list: parsed.outputs as string[] },
-        { label: "Ressourcen", value: parsed.resources },
-        { label: "Metriken", value: parsed.metrics },
-        { label: "Constraints", list: parsed.constraints as string[] },
-      ],
-    },
-  ];
-
-  const listBadge = (content: string, key: string) => (
-    <span key={key} className="inline-flex items-center rounded-full bg-[#101827] px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/5">
-      {content}
-    </span>
-  );
-
-  const renderValue = (value: any) => {
-    if (!value) return <span className="text-sm text-slate-500">N/A</span>;
-    if (Array.isArray(value)) {
-      if (!value.length) return <span className="text-sm text-slate-500">N/A</span>;
-      return <div className="flex flex-wrap gap-2">{value.map((v, idx) => listBadge(String(v), `${String(v)}-${idx}`))}</div>;
-    }
-    if (typeof value === "string") return <span className="text-sm text-slate-100">{value}</span>;
-    if (typeof value === "object") {
-      const entries = Object.entries(value as AnyRecord);
-      return (
-        <div className="flex flex-col gap-1 text-sm text-slate-100">
-          {entries.map(([k, v]) => (
-            <div key={k} className="flex items-center gap-2">
-              <span className="text-slate-500">{k}:</span>
-              <span>{typeof v === "string" ? v : JSON.stringify(v)}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return <span className="text-sm text-slate-100">{String(value)}</span>;
-  };
-
-  const renderObjArray = (value: AnyRecord[], key: string) => {
-    if (!value.length) return <span className="text-sm text-slate-500">N/A</span>;
-    return (
-      <div className="space-y-2">
-        {value.map((obj, idx) => (
-          <div key={`${key}-${idx}`} className="rounded-xl border border-white/5 bg-[#101827] px-3 py-2 text-sm text-slate-100">
-            {Object.entries(obj).map(([k, v]) => (
-              <div key={k} className="flex gap-2 text-xs text-slate-200">
-                <span className="text-slate-500">{k}:</span>
-                <span>{typeof v === "string" ? v : JSON.stringify(v)}</span>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <>
       <ReferrerNav segmentName={item.segmentName} clusterName={item.clusterName} macroClusterName={item.macroClusterName} />
@@ -226,9 +179,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
             </div>
             <div>
               <div className="flex items-center gap-3 mb-2">
-                {(item as AnyRecord).icon && (
+                {icon && (
                   <span className="text-3xl" aria-hidden>
-                    {(item as AnyRecord).icon}
+                    {icon}
                   </span>
                 )}
                 <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">{item.name}</h1>
@@ -307,23 +260,21 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Integrationen</span>
               <div className="flex flex-wrap gap-2">
-                {Array.isArray((item as AnyRecord).integration) &&
-                  (item as AnyRecord).integration.map((integ: string, idx: number) => (
-                    <span key={`integration-${idx}`} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
-                      {integ}
-                    </span>
-                  ))}
+                {parsed.integration.map((integ, idx) => (
+                  <span key={`integration-${idx}`} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
+                    {integ}
+                  </span>
+                ))}
               </div>
             </div>
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Alternativen</span>
               <ul className="text-sm text-slate-300 list-disc list-inside">
-                {Array.isArray((item as AnyRecord).alternatives) &&
-                  (item as AnyRecord).alternatives.map((alternative: string, idx: number) => (
-                    <li key={`alternative-${idx}`} className="mb-1">
-                      {alternative}
-                    </li>
-                  ))}
+                {parsed.alternatives.map((alternative, idx) => (
+                  <li key={`alternative-${idx}`} className="mb-1">
+                    {alternative}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -339,20 +290,19 @@ export default async function ContentDetailPage({ params }: PageProps) {
           </div>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              {Array.isArray((item as AnyRecord).principles) &&
-                (item as AnyRecord).principles.map((principle: string, idx: number) => (
-                  <span key={`principle-${idx}`} className="px-2 py-1 bg-slate-800/60 rounded text-xs border border-slate-700">
-                    {principle}
-                  </span>
-                ))}
+              {parsed.principles.map((principle, idx) => (
+                <span key={`principle-${idx}`} className="px-2 py-1 bg-slate-800/60 rounded text-xs border border-slate-700">
+                  {principle}
+                </span>
+              ))}
             </div>
             <p className="text-sm text-nexo-muted leading-relaxed mt-2">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Wertstrom</span>
-              Phase: <span className="text-white">{item.valueStreamStage}</span>
+              Phase: <span className="text-white">{parsed.valueStreamStage}</span>
             </p>
             <p className="text-sm text-nexo-muted leading-relaxed">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Organisationsebene</span>
-              <span className="text-white"> {Array.isArray(item.organizationalLevel) ? item.organizationalLevel.join(", ") : ""}</span>
+              <span className="text-white"> {parsed.organizationalLevel.join(", ")}</span>
             </p>
           </div>
         </div>
@@ -416,15 +366,17 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">Risiken & Fallstricke</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-red-500">
-                {Array.isArray((item as AnyRecord).risks) &&
-                  (item as AnyRecord).risks.map((risks: string, idx: number) => <li key={`risk-${idx}`}>{risks}</li>)}
+                {parsed.risks.map((risk, idx) => (
+                  <li key={`risk-${idx}`}>{risk}</li>
+                ))}
               </ul>
             </div>
             <div>
               <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">Bewährte Verfahren</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-green-500">
-                {Array.isArray((item as AnyRecord).bestPractices) &&
-                  (item as AnyRecord).bestPractices.map((bestPractice: string, idx: number) => <li key={`risk-${idx}`}>{bestPractice}</li>)}
+                {parsed.bestPractices.map((bestPractice, idx) => (
+                  <li key={`risk-${idx}`}>{bestPractice}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -497,15 +449,17 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h3 className="text-lg font-bold text-white mb-2">Vorteile</h3>
             <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {Array.isArray((item as AnyRecord).benefits) &&
-                (item as AnyRecord).benefits.map((benefit: string, idx: number) => <li key={`benefit-${idx}`}>{benefit}</li>)}
+              {parsed.benefits.map((benefit, idx) => (
+                <li key={`benefit-${idx}`}>{benefit}</li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-bold text-white mb-2">Limitationen</h3>
             <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {Array.isArray((item as AnyRecord).limitations) &&
-                (item as AnyRecord).limitations.map((limitation: string, idx: number) => <li key={`limitation-${idx}`}>{limitation}</li>)}
+              {parsed.limitations.map((limitation, idx) => (
+                <li key={`limitation-${idx}`}>{limitation}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -519,12 +473,11 @@ export default async function ContentDetailPage({ params }: PageProps) {
                   <h4 className="font-bold text-white mb-1">{example.name}</h4>
                   <p className="text-sm text-slate-400 mb-2">{example.description}</p>
                   <div className="flex gap-2">
-                    {Array.isArray((example as AnyRecord).assets) &&
-                      (example as AnyRecord).assets.map((asset: string, idx: number) => (
-                        <span key={`assets-${idx}`} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">
-                          {asset}
-                        </span>
-                      ))}
+                    {toArray<string>((example as { assets?: unknown }).assets).map((asset, assetIdx) => (
+                      <span key={`assets-${assetIdx}`} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">
+                        {asset}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -534,8 +487,8 @@ export default async function ContentDetailPage({ params }: PageProps) {
         {/* Implementation Steps */}
         <div className="bg-slate-900/30 border border-slate-800 rounded-xl p-6">
           <h2 className="text-lg font-bold text-white mb-4">Implementierungsschritte</h2>
-          {Array.isArray((item as AnyRecord).limitations) &&
-            (item as AnyRecord).implementationSteps.map((step: string, idx: number) => (
+          {parsed.implementationSteps.length > 0 &&
+            parsed.implementationSteps.map((step, idx) => (
               <li key={`step-${idx}`} className="space-y-2 text-sm text-nexo-muted list-iside">
                 {step}
               </li>
@@ -548,23 +501,21 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Technische Schulden</h5>
               <ul className="space-y-1">
-                {Array.isArray((item as AnyRecord).techDebts) &&
-                  (item as AnyRecord).techDebts.map((techDebt: string, idx: number) => (
-                    <li key={`techDebt-${idx}`} className="flex items-center gap-2 text-sm text-slate-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span> {techDebt}
-                    </li>
-                  ))}
+                {parsed.techDebts.map((techDebt, idx) => (
+                  <li key={`techDebt-${idx}`} className="flex items-center gap-2 text-sm text-slate-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span> {techDebt}
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
               <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">Engpässe</h5>
               <div className="flex flex-wrap gap-2">
-                {Array.isArray((item as AnyRecord).bottleneckTags) &&
-                  (item as AnyRecord).bottleneckTags.map((tag: string, idx: number) => (
-                    <span key={`tag-${idx}`} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
-                      {tag}
-                    </span>
-                  ))}
+                {parsed.bottleneckTags.map((tag, idx) => (
+                  <span key={`tag-${idx}`} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -572,8 +523,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div className="mt-4 pt-4 border-t border-red-500/10">
             <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Beispiele für Missbrauch</h5>
             <ul className="text-sm text-slate-400 list-disc list-inside">
-              {Array.isArray((item as AnyRecord).misuseExamples) &&
-                (item as AnyRecord).misuseExamples.map((example: string, idx: number) => <li key={`example-${idx}`}>{example}</li>)}
+              {parsed.misuseExamples.map((example, idx) => (
+                <li key={`misuse-example-${idx}`}>{example}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -582,94 +534,33 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Erforderliche Fähigkeiten</h5>
             <div className="flex flex-wrap gap-2">
-              {Array.isArray((item as AnyRecord).requiredSkills) &&
-                (item as AnyRecord).requiredSkills.map((skill: string, idx: number) => (
-                  <span key={`skill-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
-                    {skill}
-                  </span>
-                ))}
+              {parsed.requiredSkills.map((skill, idx) => (
+                <span key={`skill-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Architektonische Treiber</h5>
             <div className="flex flex-wrap gap-2">
-              {Array.isArray((item as AnyRecord).architecturalDrivers) &&
-                (item as AnyRecord).architecturalDrivers.map((driver: string, idx: number) => (
-                  <span key={`driver-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
-                    {driver}
-                  </span>
-                ))}
+              {parsed.architecturalDrivers.map((driver, idx) => (
+                <span key={`driver-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
+                  {driver}
+                </span>
+              ))}
             </div>
           </div>
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Einschränkungen</h5>
             <ul className="text-xs text-nexo-muted space-y-1">
-              {Array.isArray((item as AnyRecord).constraints) &&
-                (item as AnyRecord).constraints.map((constraint: string, idx: number) => <li key={`constraint-${idx}`}>{constraint}</li>)}
+              {parsed.constraints.map((constraint, idx) => (
+                <li key={`constraint-${idx}`}>{constraint}</li>
+              ))}
             </ul>
           </div>
         </div>
       </section>
     </>
-  );
-}
-
-type CardListProps = { title: string; items: string[] };
-function CardList({ title, items }: CardListProps) {
-  if (!items || items.length === 0) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-[#0F172A] p-4">
-        <h3 className="text-sm font-semibold text-white border-l-2 border-white/15 pl-2">{title}</h3>
-        <p className="mt-2 text-sm text-slate-500">Keine Angaben.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="rounded-2xl border border-white/10 bg-[#0F172A] p-4">
-      <h3 className="text-sm font-semibold text-white border-l-2 border-white/15 pl-2">{title}</h3>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {items.map((it, idx) => (
-          <span
-            key={`${title}-${it}-${idx}`}
-            className="rounded-full bg-[#101827] px-3 py-1 text-xs font-semibold text-slate-100 ring-1 ring-white/10"
-          >
-            {it}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-type CardObjectListProps = { title: string; items: AnyRecord[] };
-function CardObjectList({ title, items }: CardObjectListProps) {
-  if (!items || items.length === 0) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-[#0F172A] p-4">
-        <h3 className="text-sm font-semibold text-white border-l-2 border-white/15 pl-2">{title}</h3>
-        <p className="mt-2 text-sm text-slate-500">Keine Angaben.</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3 rounded-2xl border border-white/10 bg-[#0F172A] p-4">
-      <h3 className="text-sm font-semibold text-white border-l-2 border-white/15 pl-2">{title}</h3>
-      {items.map((obj, idx) => (
-        <div
-          key={`${title}-${idx}`}
-          className="rounded-xl border border-white/5 bg-[#101827] px-3 py-2 text-sm text-slate-100"
-          suppressHydrationWarning
-        >
-          {Object.entries(obj).map(([k, v]) => (
-            <div key={k} className="flex gap-2 text-xs text-slate-200">
-              <span className="text-slate-500">{k}:</span>
-              <span>{typeof v === "string" ? v : JSON.stringify(v)}</span>
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
   );
 }
