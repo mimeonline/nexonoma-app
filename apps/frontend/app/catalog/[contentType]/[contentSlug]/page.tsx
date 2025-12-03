@@ -9,7 +9,7 @@ type PageProps = {
 
 type AnyRecord = Record<string, unknown>;
 
-type ParsedContent = {
+type ContentModelNormalized = {
   tags: string[];
   principles: string[];
   goals: string[];
@@ -46,6 +46,8 @@ type ParsedContent = {
   decisionType: string[];
   complexityLevel: string[];
   organizationalMaturity: string[];
+  shortDescription: string;
+  longDescription: string;
 };
 
 type ContentModelData = ContentModel & {
@@ -81,6 +83,8 @@ type ContentModelData = ContentModel & {
   decisionType?: string[] | string;
   complexityLevel?: string[] | string;
   organizationalMaturity?: string[] | string;
+  shortDescription?: string;
+  longDescription?: string;
 };
 
 function toArray<T = string>(value: unknown): T[] {
@@ -125,7 +129,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
   const item = (await fetchCatalogItemById(match.id)) as ContentModelData | null;
   if (!item) return notFound();
 
-  const parsed: ParsedContent = {
+  const content: ContentModelNormalized = {
     tags: toArray<string>(item.tags),
     principles: toArray<string>(item.principles),
     goals: toArray<string>(item.goals),
@@ -162,16 +166,20 @@ export default async function ContentDetailPage({ params }: PageProps) {
     decisionType: toArray<string>(item.decisionType),
     complexityLevel: toArray<string>(item.complexityLevel),
     organizationalMaturity: toArray<string>(item.organizationalMaturity),
+    shortDescription: typeof item.shortDescription === "string" ? item.shortDescription : undefined,
+    longDescription: typeof item.longDescription === "string" ? item.longDescription : undefined,
   };
 
   const icon = item.icon;
 
   const heroQuote = firstSentence(
-    item.longDescription || (parsed.principles.length ? parsed.principles[0] : undefined) || (parsed.goals.length ? parsed.goals[0] : undefined)
+    content.longDescription ||
+      (content.principles.length ? content.principles[0] : undefined) ||
+      (content.goals.length ? content.goals[0] : undefined)
   );
   return (
     <>
-      <ReferrerNav segmentName={item.segmentName} clusterName={item.clusterName} macroClusterName={item.macroClusterName} />
+      <ReferrerNav segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
       {/* HERO SECTION (Full Width Card) */}
       <section className="elative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">
         {/* Decorative Gradient Blob */}
@@ -184,7 +192,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 {contentType}
               </span>
               <div className="flex gap-2"></div>
-              {parsed.tags.slice(0, 8).map((tag, idx) => (
+              {content.tags.slice(0, 8).map((tag, idx) => (
                 <span key={`${tag}-${idx}`} className="text-xs text-nexo-muted bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700/50">
                   #{tag}
                 </span>
@@ -197,9 +205,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
                     {icon}
                   </span>
                 )}
-                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">{item.name}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">{content.name}</h1>
               </div>
-              <p className="text-lg text-nexo-muted font-light leading-relaxed">{item.shortDescription}</p>
+              <p className="text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>
             </div>
             <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div>
           </div>
@@ -209,18 +217,18 @@ export default async function ContentDetailPage({ params }: PageProps) {
               <span className="text-xs text-slate-500 uppercase font-semibold">Reifegrad</span>
               <div className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]"></span>
-                <span className="text-sm text-white font-medium">{item.maturityLevel}</span>
+                <span className="text-sm text-white font-medium">{content.maturityLevel}</span>
               </div>
             </div>
 
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
               <span className="text-xs text-slate-500 uppercase font-semibold">Kognitive Belastung</span>
-              <span className="text-sm text-red-400 font-medium">{item.cognitiveLoad}</span>
+              <span className="text-sm text-red-400 font-medium">{content.cognitiveLoad}</span>
             </div>
 
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
               <span className="text-xs text-slate-500 uppercase font-semibold">Status</span>
-              <span className="text-sm text-slate-300 font-medium">{item.status}</span>
+              <span className="text-sm text-slate-300 font-medium">{content.status}</span>
             </div>
           </div>
         </div>
@@ -244,19 +252,20 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Komplexität</span>
-              <span className="text-red-400">{parsed.complexityLevel}</span>
+              <span className="text-red-400">{content.complexityLevel}</span>
+              <span className="text-red-400">{content.complexityLevel}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Auswirkungsbereich</span>
-              <span className="text-slate-200">{parsed.impact}</span>
+              <span className="text-slate-200">{content.impact}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Entscheidungstyp</span>
-              <span className="text-slate-200">{parsed.decisionType}</span>
+              <span className="text-slate-200">{content.decisionType}</span>
             </li>
             <li className="flex justify-between pt-1">
               <span className="text-slate-500">Organisationsreife</span>
-              <span className="text-slate-200">{parsed.organizationalMaturity}</span>
+              <span className="text-slate-200">{content.organizationalMaturity}</span>
             </li>
           </ul>
         </div>
@@ -273,7 +282,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Integrationen</span>
               <div className="flex flex-wrap gap-2">
-                {parsed.integration.map((integ, idx) => (
+                {content.integration.map((integ, idx) => (
                   <span key={`integration-${idx}`} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
                     {integ}
                   </span>
@@ -283,7 +292,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Alternativen</span>
               <ul className="text-sm text-slate-300 list-disc list-inside">
-                {parsed.alternatives.map((alternative, idx) => (
+                {content.alternatives.map((alternative, idx) => (
                   <li key={`alternative-${idx}`} className="mb-1">
                     {alternative}
                   </li>
@@ -303,7 +312,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           </div>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              {parsed.principles.map((principle, idx) => (
+              {content.principles.map((principle, idx) => (
                 <span key={`principle-${idx}`} className="px-2 py-1 bg-slate-800/60 rounded text-xs border border-slate-700">
                   {principle}
                 </span>
@@ -311,11 +320,11 @@ export default async function ContentDetailPage({ params }: PageProps) {
             </div>
             <p className="text-sm text-nexo-muted leading-relaxed mt-2">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Wertstrom</span>
-              Phase: <span className="text-white">{parsed.valueStreamStage}</span>
+              Phase: <span className="text-white">{content.valueStreamStage}</span>
             </p>
             <p className="text-sm text-nexo-muted leading-relaxed">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Organisationsebene</span>
-              <span className="text-white"> {parsed.organizationalLevel.join(", ")}</span>
+              <span className="text-white"> {content.organizationalLevel.join(", ")}</span>
             </p>
           </div>
         </div>
@@ -330,9 +339,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
             </svg>
             <h3 className="font-semibold text-white">Use Cases</h3>
           </div>
-          {parsed.useCases.length > 0 && (
+          {content.useCases.length > 0 && (
             <div className="space-y-3">
-              {parsed.useCases.map((uc, idx) => (
+              {content.useCases.map((uc, idx) => (
                 <div key={`usecase-${idx}`} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
                   <strong className="block text-blue-400 text-xs uppercase mb-1">Use Case {idx + 1}</strong>
                   <p className="mb-1">{uc.description}</p>
@@ -350,9 +359,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
             </svg>
             <h3 className="font-semibold text-white">Szenarien</h3>
           </div>
-          {parsed.scenarios.length > 0 && (
+          {content.scenarios.length > 0 && (
             <div className="space-y-3">
-              {parsed.scenarios.map((scenario, idx) => (
+              {content.scenarios.map((scenario, idx) => (
                 <div key={`scenario-${idx}`} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
                   <strong className="block text-green-400 text-xs uppercase mb-1">Szenario {idx + 1}</strong>
                   <p className="mb-1">{scenario.name}</p>
@@ -379,7 +388,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">Risiken & Fallstricke</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-red-500">
-                {parsed.risks.map((risk, idx) => (
+                {content.risks.map((risk, idx) => (
                   <li key={`risk-${idx}`}>{risk}</li>
                 ))}
               </ul>
@@ -387,7 +396,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">Bewährte Verfahren</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-green-500">
-                {parsed.bestPractices.map((bestPractice, idx) => (
+                {content.bestPractices.map((bestPractice, idx) => (
                   <li key={`risk-${idx}`}>{bestPractice}</li>
                 ))}
               </ul>
@@ -413,19 +422,19 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Eingaben</span>
-                <div className="text-xs text-slate-300">{Array.isArray(parsed.inputs) ? parsed.inputs.join(", ") : ""}</div>
+                <div className="text-xs text-slate-300">{Array.isArray(content.inputs) ? content.inputs.join(", ") : ""}</div>
               </div>
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Ausgaben</span>
-                <div className="text-xs text-slate-300">{Array.isArray(parsed.outputs) ? parsed.outputs.join(", ") : ""}</div>
+                <div className="text-xs text-slate-300">{Array.isArray(content.outputs) ? content.outputs.join(", ") : ""}</div>
               </div>
             </div>
             <div>
               <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Ressourcen</span>
-              {parsed.resources.length > 0 && (
+              {content.resources.length > 0 && (
                 <ul className="space-y-1">
-                  {parsed.resources.map((resource, idx) => (
-                    <li>
+                  {content.resources.map((resource, idx) => (
+                    <li key={`resource-${idx}`}>
                       <a href={resource.url} target="_blank" className="text-xs text-nexo-aqua hover:underline flex items-center gap-1">
                         {resource.name}{" "}
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -454,7 +463,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             Beschreibung
           </h2>
           <div className="prose prose-invert prose-slate max-w-none text-nexo-muted">
-            <p className="leading-relaxed">{item.longDescription || ""}</p>
+            <p className="leading-relaxed">{content.longDescription || ""}</p>
           </div>
         </div>
         {/* Benefits & Limitations (New Section) */}
@@ -462,7 +471,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h3 className="text-lg font-bold text-white mb-2">Vorteile</h3>
             <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {parsed.benefits.map((benefit, idx) => (
+              {content.benefits.map((benefit, idx) => (
                 <li key={`benefit-${idx}`}>{benefit}</li>
               ))}
             </ul>
@@ -470,7 +479,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h3 className="text-lg font-bold text-white mb-2">Limitationen</h3>
             <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {parsed.limitations.map((limitation, idx) => (
+              {content.limitations.map((limitation, idx) => (
                 <li key={`limitation-${idx}`}>{limitation}</li>
               ))}
             </ul>
@@ -479,9 +488,9 @@ export default async function ContentDetailPage({ params }: PageProps) {
         {/* Examples Grid */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">Beispiele & Implementierungen</h2>
-          {parsed.examples.length > 0 && (
+          {content.examples.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {parsed.examples.map((example, idx) => (
+              {content.examples.map((example, idx) => (
                 <div key={`example-${idx}`} className="bg-slate-900/40 border border-slate-800 rounded-xl p-5">
                   <h4 className="font-bold text-white mb-1">{example.name}</h4>
                   <p className="text-sm text-slate-400 mb-2">{example.description}</p>
@@ -500,8 +509,8 @@ export default async function ContentDetailPage({ params }: PageProps) {
         {/* Implementation Steps */}
         <div className="bg-slate-900/30 border border-slate-800 rounded-xl p-6">
           <h2 className="text-lg font-bold text-white mb-4">Implementierungsschritte</h2>
-          {parsed.implementationSteps.length > 0 &&
-            parsed.implementationSteps.map((step, idx) => (
+          {content.implementationSteps.length > 0 &&
+            content.implementationSteps.map((step, idx) => (
               <li key={`step-${idx}`} className="space-y-2 text-sm text-nexo-muted list-iside">
                 {step}
               </li>
@@ -514,7 +523,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Technische Schulden</h5>
               <ul className="space-y-1">
-                {parsed.techDebts.map((techDebt, idx) => (
+                {content.techDebts.map((techDebt, idx) => (
                   <li key={`techDebt-${idx}`} className="flex items-center gap-2 text-sm text-slate-400">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span> {techDebt}
                   </li>
@@ -524,7 +533,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div>
               <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">Engpässe</h5>
               <div className="flex flex-wrap gap-2">
-                {parsed.bottleneckTags.map((tag, idx) => (
+                {content.bottleneckTags.map((tag, idx) => (
                   <span key={`tag-${idx}`} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
                     {tag}
                   </span>
@@ -536,7 +545,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div className="mt-4 pt-4 border-t border-red-500/10">
             <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Beispiele für Missbrauch</h5>
             <ul className="text-sm text-slate-400 list-disc list-inside">
-              {parsed.misuseExamples.map((example, idx) => (
+              {content.misuseExamples.map((example, idx) => (
                 <li key={`misuse-example-${idx}`}>{example}</li>
               ))}
             </ul>
@@ -547,7 +556,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Erforderliche Fähigkeiten</h5>
             <div className="flex flex-wrap gap-2">
-              {parsed.requiredSkills.map((skill, idx) => (
+              {content.requiredSkills.map((skill, idx) => (
                 <span key={`skill-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
                   {skill}
                 </span>
@@ -557,7 +566,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Architektonische Treiber</h5>
             <div className="flex flex-wrap gap-2">
-              {parsed.architecturalDrivers.map((driver, idx) => (
+              {content.architecturalDrivers.map((driver, idx) => (
                 <span key={`driver-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
                   {driver}
                 </span>
@@ -567,7 +576,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Einschränkungen</h5>
             <ul className="text-xs text-nexo-muted space-y-1">
-              {parsed.constraints.map((constraint, idx) => (
+              {content.constraints.map((constraint, idx) => (
                 <li key={`constraint-${idx}`}>{constraint}</li>
               ))}
             </ul>
