@@ -92,6 +92,19 @@ function toArray<T = string>(value: unknown): T[] {
 }
 
 function toObjectArray(value: unknown): AnyRecord[] {
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((entry) => entry && typeof entry === "object") as AnyRecord[];
+      }
+      if (parsed && typeof parsed === "object") {
+        return [parsed as AnyRecord];
+      }
+    } catch {
+      return [];
+    }
+  }
   return toArray<AnyRecord>(value).filter((entry) => entry && typeof entry === "object");
 }
 
