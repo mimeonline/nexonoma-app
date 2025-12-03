@@ -263,7 +263,6 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Komplexität</span>
               <span className="text-red-400">{content.complexityLevel}</span>
-              <span className="text-red-400">{content.complexityLevel}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Auswirkungsbereich</span>

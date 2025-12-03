@@ -10,5 +10,5 @@
 screenshots/
 tmp/
 docs/domain/
-content/json
-schemas
+content/
+schemas/
