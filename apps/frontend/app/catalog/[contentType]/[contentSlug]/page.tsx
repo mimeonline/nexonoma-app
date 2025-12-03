@@ -10,6 +10,11 @@ type PageProps = {
 type AnyRecord = Record<string, unknown>;
 
 type ContentModelNormalized = {
+  segmentName: string | undefined;
+  clusterName: string | undefined;
+  macroClusterName: string | undefined;
+  name: string;
+  maturityLevel: string;
   tags: string[];
   principles: string[];
   goals: string[];
@@ -166,8 +171,13 @@ export default async function ContentDetailPage({ params }: PageProps) {
     decisionType: toArray<string>(item.decisionType),
     complexityLevel: toArray<string>(item.complexityLevel),
     organizationalMaturity: toArray<string>(item.organizationalMaturity),
-    shortDescription: typeof item.shortDescription === "string" ? item.shortDescription : undefined,
-    longDescription: typeof item.longDescription === "string" ? item.longDescription : undefined,
+    shortDescription: typeof item.shortDescription === "string" ? item.shortDescription : "",
+    longDescription: typeof item.longDescription === "string" ? item.longDescription : "",
+    segmentName: undefined,
+    clusterName: undefined,
+    macroClusterName: undefined,
+    name: typeof item.name === "string" ? item.name : "",
+    maturityLevel: typeof item.maturityLevel === "string" ? item.maturityLevel : "",
   };
 
   const icon = item.icon;
@@ -344,7 +354,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
               {content.useCases.map((uc, idx) => (
                 <div key={`usecase-${idx}`} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
                   <strong className="block text-blue-400 text-xs uppercase mb-1">Use Case {idx + 1}</strong>
-                  <p className="mb-1">{uc.description}</p>
+                  <p className="mb-1">{String(uc.description)}</p>
                 </div>
               ))}
             </div>
@@ -364,7 +374,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
               {content.scenarios.map((scenario, idx) => (
                 <div key={`scenario-${idx}`} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
                   <strong className="block text-green-400 text-xs uppercase mb-1">Szenario {idx + 1}</strong>
-                  <p className="mb-1">{scenario.name}</p>
+                  <p className="mb-1">{String(scenario.name)}</p>
                 </div>
               ))}
             </div>
@@ -435,8 +445,12 @@ export default async function ContentDetailPage({ params }: PageProps) {
                 <ul className="space-y-1">
                   {content.resources.map((resource, idx) => (
                     <li key={`resource-${idx}`}>
-                      <a href={resource.url} target="_blank" className="text-xs text-nexo-aqua hover:underline flex items-center gap-1">
-                        {resource.name}{" "}
+                      <a
+                        href={typeof resource.url === "string" ? resource.url : undefined}
+                        target="_blank"
+                        className="text-xs text-nexo-aqua hover:underline flex items-center gap-1"
+                      >
+                        {String(resource.name)}{" "}
                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
                             strokeLinecap="round"
@@ -492,8 +506,8 @@ export default async function ContentDetailPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {content.examples.map((example, idx) => (
                 <div key={`example-${idx}`} className="bg-slate-900/40 border border-slate-800 rounded-xl p-5">
-                  <h4 className="font-bold text-white mb-1">{example.name}</h4>
-                  <p className="text-sm text-slate-400 mb-2">{example.description}</p>
+                  <h4 className="font-bold text-white mb-1">{String(example.name)}</h4>
+                  <p className="text-sm text-slate-400 mb-2">{String(example.description)}</p>
                   <div className="flex gap-2">
                     {toArray<string>((example as { assets?: unknown }).assets).map((asset, assetIdx) => (
                       <span key={`assets-${assetIdx}`} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">
