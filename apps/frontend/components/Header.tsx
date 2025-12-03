@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 text-white">
           <svg
             className="h-8 w-8 text-blue-400"
@@ -36,7 +36,7 @@ export default function Header() {
               d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6A1.125 1.125 0 012.25 11.25v-4.125zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
             />
           </svg>
-          <span className="text-blue-300 text-lg font-semibold">Nexonoma</span>
+          <span className="text-blue-300 text-lg font-bold tracking-tight sm:block">Nexonoma</span>
         </Link>
 
         <nav className="hidden items-center gap-3 md:flex">

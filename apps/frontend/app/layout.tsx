@@ -28,14 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-nexo-bg text-nexo-text`}>
-        <header role="banner" className="sticky top-0 z-30 bg-[#0B1220]/80 backdrop-blur-md">
+    <html lang="de" className="dark">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-nexo-bg text-nexo-text antialiased min-h-screen flex flex-col font-sans selection:bg-nexo-aqua selection:text-nexo-bg`}
+      >
+        <header role="banner" className="sticky top-0 z-50 bg-nexo-bg/80 backdrop-blur-md border-b border-nexo-border">
           <Header />
         </header>
-        <main role="main" className="mx-auto flex min-h-screen max-w-6xl flex-col gap-12 px-6 py-12 sm:py-16">
-          {children}
-        </main>
+        <main className="grow w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">{children}</main>
         <footer role="contentinfo" className="w-full border-t border-white/5 py-6 text-center text-sm text-slate-400/70">
           <Footer />
         </footer>

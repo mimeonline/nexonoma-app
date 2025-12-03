@@ -16,6 +16,16 @@ export interface CatalogItem {
   macroClusterSlug?: string;
   maturityLevel?: string;
   complexityLevel?: string;
+  cognitiveLoad?: string;
+  status?: string;
+  impact?: string;
+  decisionType?: string;
+  organizationalMaturity?: string;
+  tradeoffMatrix?: Record<string, unknown>[];
+  integration?: string;
+  valueStreamStage?: string;
+  principles?: string[];
+  organizationalLevel?: string[];
   [key: string]: unknown;
 }
 

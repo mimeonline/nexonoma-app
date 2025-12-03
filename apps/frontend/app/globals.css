@@ -1,34 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *)); 
 
 @theme inline {
-  --color-nexo-bg: #020617;
-  --color-nexo-surface: #0B1220;
-  --color-nexo-card: #111827;
-  --color-nexo-border: #1E293B;
-  --color-nexo-text: #E2E8F0;
-  --color-nexo-sub: #94A3B8;
-  --color-nexo-aqua: #4FF4E0;  
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Fonts aus next/font mappen auf Tailwind-Utilities */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Nexo Farben */ 
+  --color-nexo-bg: #020617;       /* bg-nexo-bg */
+  --color-nexo-surface: #0B1220;  /* bg-nexo-surface */
+  --color-nexo-card: #111827;     /* bg-nexo-card */
+  --color-nexo-border: #1E293B;   /* border-nexo-border */
+  --color-nexo-text: #E2E8F0;     /* text-nexo-text */
+  --color-nexo-muted: #94A3B8;    /* text-nexo-muted */
+  --color-nexo-aqua: #4FF4E0;     /* text-/bg-nexo-aqua */
+  --color-nexo-ocean: #38bdf8;    /* text-/bg-nexo-ocean */
+
+  /* ggf. alte background/foreground-Bridge */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Box-Shadows → shadow-glow, shadow-card  [oai_citation:2‡tailwindcss.com](https://tailwindcss.com/docs/box-shadow?utm_source=chatgpt.com) */
+  --shadow-glow: 0 0 20px -5px rgba(79, 244, 224, 0.15);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
+                 0 2px 4px -1px rgba(0, 0, 0, 0.15);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Custom Scrollbar for a premium feel */
+
+/* Für Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #020617; /* thumb, track */
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Für WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
- */
+
+::-webkit-scrollbar-track {
+  background: var(--color-nexo-bg); /* oder bg-nexo-bg → var(--color-nexo-bg) */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
