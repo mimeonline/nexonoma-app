@@ -1,14 +1,20 @@
 import { NexonomaApi } from "@/services/api";
 import type { CatalogContentType } from "@/types/catalog";
-import type { ContentDetail } from "@/types/nexonoma";
+import type {
+  ContentDetail,
+  Example,
+  ExternalResource,
+  Metric,
+  Scenario,
+  TradeoffFactor,
+  UseCase,
+} from "@/types/nexonoma";
 import { notFound } from "next/navigation";
 import { ReferrerNav } from "./ReferrerNav";
 
 type PageProps = {
   params: Promise<{ contentType: CatalogContentType; contentSlug: string }> | { contentType: CatalogContentType; contentSlug: string };
 };
-
-type AnyRecord = Record<string, unknown>;
 
 type ContentModelNormalized = {
   segmentName: string | undefined;
@@ -20,17 +26,17 @@ type ContentModelNormalized = {
   principles: string[];
   goals: string[];
   organizationalLevel: string[];
-  useCases: AnyRecord[];
-  scenarios: AnyRecord[];
-  examples: AnyRecord[];
+  useCases: UseCase[];
+  scenarios: Scenario[];
+  examples: Example[];
   risks: string[];
   traps: string[];
   antiPatterns: string[];
   bestPractices: string[];
   inputs: string[];
   outputs: string[];
-  resources: AnyRecord[];
-  metrics: AnyRecord[];
+  resources: ExternalResource[];
+  metrics: Metric[];
   constraints: string[];
   integration: string[];
   alternatives: string[];
@@ -45,7 +51,7 @@ type ContentModelNormalized = {
   bottleneckTags: string[];
   misuseExamples: string[];
   requiredSkills: string[];
-  tradeoffMatrix: AnyRecord[];
+  tradeoffMatrix: TradeoffFactor[];
   cognitiveLoad?: string;
   status?: string;
   impact: string[];
@@ -56,41 +62,24 @@ type ContentModelNormalized = {
   longDescription: string;
 };
 
-type ContentModelData = ContentDetail & {
+type ContentModelData = Partial<ContentDetail> & {
   goals?: string[] | string;
-  useCases?: AnyRecord[] | AnyRecord;
-  scenarios?: AnyRecord[] | AnyRecord;
-  examples?: AnyRecord[] | AnyRecord;
-  risks?: string[] | string;
-  traps?: string[] | string;
-  antiPatterns?: string[] | string;
   bestPractices?: string[] | string;
   inputs?: string[] | string;
   outputs?: string[] | string;
-  resources?: AnyRecord[] | AnyRecord;
-  metrics?: AnyRecord[] | AnyRecord;
   constraints?: string[] | string;
-  integration?: string[] | string;
-  alternatives?: string[] | string;
   technologies?: string[] | string;
   platforms?: string[] | string;
-  valueStreamStage?: string;
-  architecturalDrivers?: string[] | string;
-  benefits?: string[] | string;
-  limitations?: string[] | string;
-  implementationSteps?: string[] | string;
-  techDebts?: string[] | string;
-  bottleneckTags?: string[] | string;
-  misuseExamples?: string[] | string;
-  requiredSkills?: string[] | string;
-  tradeoffMatrix?: AnyRecord[] | AnyRecord;
-  icon?: string;
+  useCases?: UseCase[] | UseCase | string;
+  scenarios?: Scenario[] | Scenario | string;
+  examples?: Example[] | Example | string;
+  resources?: ExternalResource[] | ExternalResource | string;
+  metrics?: Metric[] | Metric | string;
+  tradeoffMatrix?: TradeoffFactor[] | TradeoffFactor | string;
   impact?: string[] | string;
   decisionType?: string[] | string;
   complexityLevel?: string[] | string;
   organizationalMaturity?: string[] | string;
-  shortDescription?: string;
-  longDescription?: string;
 };
 
 function toArray<T = string>(value: unknown): T[] {
@@ -101,21 +90,21 @@ function toArray<T = string>(value: unknown): T[] {
   return [];
 }
 
-function toObjectArray(value: unknown): AnyRecord[] {
+function toObjectArray<T extends object>(value: unknown): T[] {
   if (typeof value === "string") {
     try {
       const parsed = JSON.parse(value);
       if (Array.isArray(parsed)) {
-        return parsed.filter((entry) => entry && typeof entry === "object") as AnyRecord[];
+        return parsed.filter((entry) => entry && typeof entry === "object") as T[];
       }
       if (parsed && typeof parsed === "object") {
-        return [parsed as AnyRecord];
+        return [parsed as T];
       }
     } catch {
       return [];
     }
   }
-  return toArray<AnyRecord>(value).filter((entry) => entry && typeof entry === "object");
+  return toArray<T>(value).filter((entry) => entry && typeof entry === "object");
 }
 
 function firstSentence(text?: string): string | undefined {
@@ -141,17 +130,17 @@ export default async function ContentDetailPage({ params }: PageProps) {
     principles: toArray<string>(item.principles),
     goals: toArray<string>(item.goals),
     organizationalLevel: toArray<string>(item.organizationalLevel),
-    useCases: toObjectArray(item.useCases),
-    scenarios: toObjectArray(item.scenarios),
-    examples: toObjectArray(item.examples),
+    useCases: toObjectArray<UseCase>(item.useCases),
+    scenarios: toObjectArray<Scenario>(item.scenarios),
+    examples: toObjectArray<Example>(item.examples),
     risks: toArray<string>(item.risks),
     traps: toArray<string>(item.traps),
     antiPatterns: toArray<string>(item.antiPatterns),
     bestPractices: toArray<string>(item.bestPractices),
     inputs: toArray<string>(item.inputs),
     outputs: toArray<string>(item.outputs),
-    resources: toObjectArray(item.resources),
-    metrics: toObjectArray(item.metrics),
+    resources: toObjectArray<ExternalResource>(item.resources),
+    metrics: toObjectArray<Metric>(item.metrics),
     constraints: toArray<string>(item.constraints),
     integration: toArray<string>(item.integration),
     alternatives: toArray<string>(item.alternatives),
@@ -166,7 +155,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
     bottleneckTags: toArray<string>(item.bottleneckTags),
     misuseExamples: toArray<string>(item.misuseExamples),
     requiredSkills: toArray<string>(item.requiredSkills),
-    tradeoffMatrix: toObjectArray(item.tradeoffMatrix),
+    tradeoffMatrix: toObjectArray<TradeoffFactor>(item.tradeoffMatrix),
     cognitiveLoad: typeof item.cognitiveLoad === "string" ? item.cognitiveLoad : undefined,
     status: typeof item.status === "string" ? item.status : undefined,
     impact: toArray<string>(item.impact),
