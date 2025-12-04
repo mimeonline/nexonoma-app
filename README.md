@@ -1,151 +1,172 @@
-# Nexonoma App – MVP
+# 🚀 Nexonoma Monorepo
 
-Nexonoma ist eine visuelle Navigationsplattform für Software-, Architektur- und Organisationswissen.  
-Dieses Repository enthält die **MVP-Version** der Nexonoma App – gebaut mit Next.js, TailwindCSS und shadcn/ui.
+Die visuelle Navigationsplattform für Software-, Architektur- und Organisationswissen
 
-Ziel: ein funktionierender Prototyp, der aufzeigt, wie Cluster, Segmente und Wissens-Items visuell erfahrbar werden.
+Dieses Repository enthält das gesamte Nexonoma-System – Frontend, API, Domain-Schemas und geteilte Typbibliotheken.
+Das Ziel: Ein typsicheres, erweiterbares, modular aufgebautes Wissenssystem, das Cluster, Segmente und Content-Bausteine (Concepts, Methods, Tools, Technologies) in mehreren Views erlebbar macht.
 
----
-
-## 🚀 Features (MVP)
-
-- Landing Page  
-- Grid View (Cluster als Cards)  
-- Matrix View (Cluster × Segmente)  
-- City View (Items in Stadt-/Block-Layout)  
-- Daten aus JSON-Dateien  
-- Marineblauer Nexonoma-Look (#0B1220)
-
----
-
-## 📁 Projektstruktur
+## 📁 Monorepo-Struktur (pnpm Workspaces)
 
 ```text
-nexonoma-app/
+nexonoma/
 │
-├── apps
-│ ├── frontend/ # Next.js App
-│ ├── api/ # (später) API + Services
-│ └── db/ # (später) Neo4j / SQLite
+├── apps/
+│   ├── frontend/         # Next.js 16 · React 19 · Tailwind 4 · shadcn/ui
+│   └── api/              # NestJS 11 · REST API · Neo4j Driver (optional)
 │
-├── content
-│ └── json/ # clusters.json, segments.json, items.json
+├── packages/
+│   ├── nexonoma-types/   # TypeScript Domain Types (AssetBlocks, Relations, etc.)
+│   └── nexonoma-schema/  # JSON Schemas als Source of Truth
 │
-├── schemas/ # JSON Schemas (AssetBlocks, Cluster usw.)
+├── content/
+│   └── json/             # Domainspezifische Daten (gelegt nach Schema)
 │
-├── docs/
-│ ├── PROJECT.md
-│ ├── PRD-MVP.md
-│ ├── DESIGN_GUIDE.md
-│ ├── DATA_MODEL.md
-│ └── adr/ # Architecture Decision Records
-│
-├── infra/
-│ ├── docker/
-│ ├── traefik/
-│ └── scripts/
-│
-└── README.md
+└── docs/                 # Projektunterlagen (PRD, Architektur, Patterns, ADRs)
 ````
 
----
+Philosophie:
 
-## 🧩 Datenquellen
+> „Datenmodell im Paket, Content im Workspace, Views im Frontend, Logik im Backend.“
 
-Alle Daten liegen im Ordner:
-content/json/
+## 🧠 Domänenmodell
 
-Beispieldateien:
+Nexonoma basiert auf dem **AssetBlock-Modell**, bestehend aus:
 
-- `clusters.json`
-- `segments.json`
-- `items.json`
+- **MacroCluster** (oberste Ebene)
+- **Cluster**
+- **Segment**
+- **ContentBlock**  
+    → unterteilt in _Concept · Method · Tool · Technology_
 
-Strukturen siehe → `docs/DATA_MODEL.md`.
+Dazu kommen typisierte **Relations**:
 
----
+- Structure
+- Process
+- Content
+- Dependency
 
-## 🛠️ Tech Stack
+**Alle Modelle werden zentral in `nexonoma-schema` definiert und über `nexonoma-types` als TypeScript-Typen konsumiert.**
 
-- Next.js 16  
-- React Server Components  
-- TailwindCSS  
-- shadcn/ui  
-- JSON als Datenlayer  
-- optional: Neo4j (später)  
+## 🎨 Features & Views (Frontend)
 
----
+Das Frontend bildet Wissen in verschiedenen Navigationsmustern ab:
 
-## 🧪 Entwicklung
+### ▣ Grid View
 
-Dev-Server starten:
+Visualisiert MacroCluster und Cluster in modularen Cards.
+
+### ╳ Matrix View
+
+Verknüpft Cluster × Segmente über ein zweidimensionales Raster.
+
+### 🏙 City View
+
+Gamifizierte Stadtmetapher: Segmente → Blocks → Content.
+
+### 🔍 Content Detail View
+
+Strukturierter „Bento“-Aufbau zur Darstellung eines einzelnen Wissens-Bausteins.
+
+### 🧭 Semantic Navigation
+
+Traversal über Relations: „Explore how things connect“.
+
+## 🔧 API-Backend (NestJS)
+
+Die API liefert strukturierte Daten für die Views:
+
+- `/api/macroClusters`
+- `/api/clusters/:slug`
+- `/api/segments/:slug/tree`
+- `/api/content/:type/:slug`
+
+**Backend-Philosophie:**
+
+- strikte Trennung zwischen **DTO**, **Domain Types**, **Persistence**
+- OpenAPI-Generierung via Swagger
+- optionale Neo4j-Persistenz
+
+## 📦 Installation & Entwicklung
+
+### 1️⃣ Install mit pnpm
 
 ```bash
-cd apps/frontend
-npm install
-npm run dev
-````
+pnpm install
+```
 
-Frontend erreichbar unter:
-<http://localhost:3000>
+### 2️⃣ Frontend starten
 
-## 🤖 Entwicklung mit Codex
+```bash
+pnpm --filter frontend dev
+```
 
-Die Datei AGENTS.md beschreibt:
+Frontend:
+👉 <http://localhost:3000/>
 
-- wie Codex CLI eingesetzt wird
-- wie Prompts strukturiert werden sollen
-- welche Dateien nie verändert werden dürfen
-- welche Schritte empfohlen sind
+### 3️⃣ API starten
 
-Bitte beachten:
+```bash
+pnpm --filter api start:dev
+```
 
-- Iteratives Vorgehen
-- Jede Page separat generieren
-- Niemals One-Shot Projektgenerierung
+API:
+👉 <http://localhost:3001/>
 
-## 📦 Deployment
+## Tests & Qualität
 
-Zwei Wege möglich:
+- Frontend: `pnpm --filter frontend lint` für ESLint.
+- API: `pnpm --filter api lint` sowie `pnpm --filter api test` für Jest.
 
-- Vercel (empfohlen für MVP)
-- IONOS Deploy Now
+## 🔐 Lizenzierung & Schutz
 
-Build-Command für Next.js:
+|Bereich|Lizenz|Kommentar|
+|---|---|---|
+|**Code (Repo)**|MIT|öffentlich nutzbar, Forks erlaubt|
+|**Schemas**|MIT|sollen verbreitet & genutzt werden|
+|**Content (JSON)**|**CC BY-NC 4.0**|nicht kommerziell verwertbar|
+|**Premium-Module**|proprietär|nicht im Repo enthalten|
 
-npm run build
+## 🧭 Roadmap
 
-## 📄 Lizenzen & Rechte
+### 0.1 – In Progress
 
-Die Nexonoma-Codebasis und Schemadefinitionen werden unter der MIT-Lizenz veröffentlicht.
+✔ Grid View  
+✔ Catalog View
+✔ Content Detail  
+✔ Domain Types  
+✔ pnpm Monorepo  
+⭑ Erste API Endpunkte
+⭑ Neo4j Integration  
 
-Alle *Inhalte*, einschließlich Beschreibungen, Beispiele, Anwendungsfälle,
-Langtexte, relationale Interpretationen und Domänenmodelle, unterliegen der Lizenz
-CC BY-NC 4.0 und dürfen NICHT für kommerzielle Zwecke verwendet werden.
+### 0.2 – Planned
 
-Premium-Module und Knowledge Packs sind urheberrechtlich geschützt und nicht Teil dieses Repositorys.
+⭑ Matrix View  
+⭑ City View  
+⭑ Semantic Explorer  
+⭑ API Tree Endpunkte
 
-## 📬 Feedback
+### 0.3 – Planned
 
-Feedback, Issues und Vorschläge sind willkommen.
-Wenn das Repository später public wird, werden GitHub Issues aktiviert.
+⭑ Search & Filters  
+⭑ Agent-gestützte Content-Generation  
+⭑ Public Demo Deployment
 
-## 🗺️ Roadmap (0.1 → 0.3)
+## 🤝 Contributing / Agent Usage
 
-0.1
+Für KI-gestützte Entwicklung siehe:
 
-- Landing Page
-- Grid View
-- Matrix View
+`AGENTS.md`
 
-0.2
+Dort steht:
 
-- City View
-- Verbesserte Daten
+- welche Dateien KI **niemals** anfassen darf
+- wie Codex Prompts aussehen sollen
+- wie Views generiert werden sollen
+- wie du agentisch neue Content-Bausteine erzeugst
 
-0.3
+---
 
-- Search
-- Filters
+## 📬 Feedback & Support
 
-Neo4j-Integration (optional)
+Issues, Fragen und Feedback willkommen!  
+Nexonoma wächst iterativ – jede Erkenntnis fließt zurück ins Modell.

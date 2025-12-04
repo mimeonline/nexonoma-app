@@ -1,35 +1,39 @@
 # Repository Guidelines
 
-## Project Structure & Ownership
-- Frontend lives in `apps/frontend` (Next.js 16 + React 19). Public assets in `apps/frontend/public`, routes/components under `apps/frontend/app`.
-- Domain data is JSON-only in `content/json/` (`clusters.json`, `segments.json`, `items.json`); schemas in `schemas/`. Never rename or drop IDs/keys without explicit approval.
-- Docs and decisions: `docs/` (PRD, design guide, ADRs). Infrastructure assets under `infra/` (docker, traefik, scripts).
+## Project Structure & Module Organization
+- Monorepo managed via `pnpm-workspace.yaml`.
+- Apps: Next.js frontend in `apps/frontend`, NestJS API in `apps/api`.
+- Shared domain types in `packages/nexonoma-types`; JSON schemas in `packages/nexonoma-schema`.
+- Public assets live in `apps/frontend/public`; routes/components under `apps/frontend/app`.
+- Keep data JSON-only under `content/json/`; schemas stay unchanged unless explicitly approved.
 
 ## Build, Test, and Development Commands
-- Install deps once: `cd apps/frontend && npm install`.
-- Dev server with hot reload: `npm run dev` (http://localhost:3000).
-- Production bundle: `npm run build`; serve locally: `npm run start`.
-- Lint all code: `npm run lint` (ESLint 9 via `eslint.config.mjs`).
+- Install all deps: `pnpm install`.
+- Frontend: `pnpm --filter frontend dev` (http://localhost:3000), `pnpm --filter frontend build`, `pnpm --filter frontend start`.
+- API: `pnpm --filter api start:dev` for hot reload, `pnpm --filter api build`, `pnpm --filter api start:prod`.
+- Lint: `pnpm --filter frontend lint` (ESLint 9 + Next), API lint via `pnpm --filter api lint`.
 
 ## Coding Style & Naming Conventions
-- TypeScript-first, ES modules. Prefer React Server Components unless client hooks required.
-- TailwindCSS v4; keep utility-first styling, avoid ad-hoc inline styles when utilities exist.
-- File naming: kebab-case for routes, PascalCase for React components, camelCase for functions/vars. Keep co-located styles/assets beside components.
-- No inline comments in JSON/YAML/TOML; keep structures stable and additive.
+- TypeScript-first, ES modules. Prefer React Server Components unless client hooks needed.
+- TailwindCSS v4 utility-first; avoid ad-hoc inline styles when utilities exist.
+- File naming: kebab-case for routes, PascalCase for React components, camelCase for vars/functions.
+- Formatting: Prettier 3 with Tailwind plugin; run `pnpm exec prettier --write` as needed.
 
 ## Testing Guidelines
-- No automated suite yet; add tests alongside code when introducing logic-heavy modules. Use Next.js testing-compatible tools (e.g., Vitest/RTL) if added; place under `__tests__/` near source.
-- For data changes, validate against `schemas/` before commit; ensure sample data still renders key views (Landing, Grid, Matrix, City).
+- API uses Jest (`pnpm --filter api test`, coverage via `pnpm --filter api test:cov`).
+- Frontend has no formal suite yet; add Vitest/RTL near features when logic grows (`__tests__` co-located).
+- Keep tests deterministic; name test files `*.spec.ts` or `*.test.ts`.
 
 ## Commit & Pull Request Guidelines
-- Commit style: `<type>: <summary>` (e.g., `feat: add matrix legend`, `fix: lint warnings`). Keep commits scoped and reversible.
-- PRs should include: purpose, linked issue/reference, screenshots for UI changes (desktop + mobile), and test/QA notes (what you ran).
-- Avoid breaking changes to data schemas or IDs; prefer additive migrations and document decisions in `docs/adr/` when architecture shifts.
+- Commit format: `<type>(<scope>): <summary>` e.g., `feat(frontend): add matrix legend`.
+- Scope examples: docs, data, frontend, api, infra, schemas, config.
+- PRs: state purpose, link issue, include screenshots for UI changes (desktop + mobile) and note tests run.
 
 ## Security & Configuration Tips
-- Never commit secrets. Environment variables belong in local `.env` files (not in git); mirror any required keys in docs instead of sample values.
-- Scripts in `infra/scripts/` may assume local Docker; verify commands before running and avoid destructive operations unless requested.
+- Never commit secrets; use local `.env` (not tracked). Mirror required keys in docs, not in code.
+- Respect schema IDs/keys; no breaking changes to data models without explicit approval.
+- Do not delete fields; prefer additive changes and document architecture shifts in `docs/adr/` when applicable.
 
 ## Agent-Specific Notes
-- Respect existing structure; do not restructure folders without approval.
-- When uncertain about data or behavior, ask rather than invent placeholders. Prefer minimal, deterministic changes over sweeping refactors.
+- Preserve existing folder structure; avoid sweeping refactors unless requested.
+- Favor minimal, reversible changes; ask when data is missing rather than guessing.
