@@ -74,7 +74,7 @@ export default function CatalogPage() {
       (acc, item) => {
         const t = normalizeType(typeof item.type === "string" ? item.type : "");
         if (t === "unknown") return acc;
-        acc[t] = (acc[t] ?? 0) + 1;
+        acc[t as Exclude<FilterType, "all">] = (acc[t as Exclude<FilterType, "all">] ?? 0) + 1;
         return acc;
       },
       {

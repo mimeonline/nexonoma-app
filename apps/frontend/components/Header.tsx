@@ -73,7 +73,7 @@ export default function Header() {
 
       {open && (
         <div className="md:hidden">
-          <div className="mx-4 mb-4 rounded-2xl border border-white/10 bg-[#0B1220]/95 p-2 shadow-xl shadow-black/40">
+          <div className="mx-4 mb-4 rounded-2xl border border-white/10 bg-nexo-surface/95 p-2 shadow-xl shadow-black/40">
             {navItems.map((item) => {
               const active = isActive(item.href);
               return (

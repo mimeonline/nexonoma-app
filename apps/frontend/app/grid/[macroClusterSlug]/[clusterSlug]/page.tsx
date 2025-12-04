@@ -7,12 +7,7 @@ import { notFound } from "next/navigation";
 import { use, useEffect, useMemo, useState } from "react";
 
 type PageProps = {
-  params:
-    | Promise<{ macroClusterSlug: string; clusterSlug: string }>
-    | {
-        macroClusterSlug: string;
-        clusterSlug: string;
-      };
+  params: Promise<{ macroClusterSlug: string; clusterSlug: string }>;
 };
 
 type ContentWithSegment = SegmentContentItem & {

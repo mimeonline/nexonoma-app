@@ -18,8 +18,10 @@
         "name": "next"
       }
     ],
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@nexonoma/*": ["lib/nexonoma/*"]
     }
   },
   "include": [
