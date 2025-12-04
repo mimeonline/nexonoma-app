@@ -1,5 +1,6 @@
-import { fetchCatalog, fetchCatalogItemById } from "@/lib/api/catalog";
-import type { CatalogContentType, CatalogItem as ContentModel } from "@/types/catalog";
+import { NexonomaApi } from "@/services/api";
+import type { CatalogContentType } from "@/types/catalog";
+import type { ContentDetail } from "@/types/nexonoma";
 import { notFound } from "next/navigation";
 import { ReferrerNav } from "./ReferrerNav";
 
@@ -55,7 +56,7 @@ type ContentModelNormalized = {
   longDescription: string;
 };
 
-type ContentModelData = ContentModel & {
+type ContentModelData = ContentDetail & {
   goals?: string[] | string;
   useCases?: AnyRecord[] | AnyRecord;
   scenarios?: AnyRecord[] | AnyRecord;
@@ -126,12 +127,13 @@ function firstSentence(text?: string): string | undefined {
 export default async function ContentDetailPage({ params }: PageProps) {
   const { contentType, contentSlug } = await params;
 
-  const catalog = await fetchCatalog();
-  const items = catalog.data?.items ?? [];
-  const match = items.find((it) => it.slug === contentSlug && (it.type?.toString().toLowerCase() ?? "") === contentType);
-  if (!match?.id) return notFound();
+  let item: ContentModelData | null = null;
+  try {
+    item = (await NexonomaApi.getContentBySlug(contentType, contentSlug)) as ContentModelData;
+  } catch (error) {
+    return notFound();
+  }
 
-  const item = (await fetchCatalogItemById(match.id)) as ContentModelData | null;
   if (!item) return notFound();
 
   const content: ContentModelNormalized = {

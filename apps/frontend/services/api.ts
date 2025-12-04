@@ -40,4 +40,29 @@ export const NexonomaApi = {
     if (!res.ok) throw new Error(`Failed to fetch detail for ID: ${id}`);
     return res.json();
   },
+
+  // --- NEU: PAGE 5b: Detailansicht via Slug & Type ---
+  // Wird benötigt für URLs wie /catalog/technology/nestjs
+  async getContentBySlug(type: string, slug: string): Promise<ContentDetail> {
+    // API Route: /catalog/:type/:slug
+    const slugUrl = `${API_BASE}/catalog/${type}/${slug}`;
+    const res = await fetch(slugUrl, { cache: "no-store" });
+
+    if (res.ok) {
+      return res.json();
+    }
+
+    // Fallback: wenn Slug-Route 404 liefert, versuche über Katalogliste + Detail-ID.
+    if (res.status === 404) {
+      const catalog = await this.getCatalog();
+      const match = catalog.find(
+        (item) => (item.type?.toString().toLowerCase() ?? "") === type && (item.slug?.toString().toLowerCase() ?? "") === slug
+      );
+      if (match?.id) {
+        return this.getContentDetail(match.id);
+      }
+    }
+
+    throw new Error(`Failed to fetch content for type '${type}' and slug '${slug}' (status ${res.status})`);
+  },
 };

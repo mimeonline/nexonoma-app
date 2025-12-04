@@ -1,0 +1,16 @@
+meta {
+  name: content details bySlug copy
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/catalog/concept/12-factor-app
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
