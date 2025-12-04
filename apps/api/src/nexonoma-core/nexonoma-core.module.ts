@@ -6,6 +6,7 @@ import { GridController } from './infrastructure/http/grid.controller';
 
 // 2. Use Cases (Application Layer)
 import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-content.use-case';
+import { GetContentBySlugUseCase } from './application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from './application/use-cases/catalog/get-content-detail.use-case';
 import { GetGridClustersUseCase } from './application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from './application/use-cases/grid/get-grid-macros.use-case';
@@ -31,6 +32,7 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
     GetGridSegmentsUseCase,
     GetAllContentUseCase,
     GetContentDetailUseCase,
+    GetContentBySlugUseCase,
 
     // C) Der Hexagonal-Trick (Dependency Inversion):
     // Wir sagen NestJS: "Wann immer jemand (z.B. ein UseCase) den 'AssetRepositoryPort' anfordert,

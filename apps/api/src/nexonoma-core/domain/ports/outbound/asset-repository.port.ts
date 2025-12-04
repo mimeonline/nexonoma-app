@@ -10,6 +10,12 @@ export abstract class AssetRepositoryPort {
   // Findet Content (Tool, Method) oder Context (Role) anhand ID (für Detail Page)
   abstract findById(id: string): Promise<ContentAsset | ContextAsset | null>;
 
+  // Findet Context (Role) anhand Slug
+  abstract findContentBySlug(
+    type: string,
+    slug: string,
+  ): Promise<ContentAsset | null>;
+
   // Findet alle Kinder eines Parents (egal ob Structure oder Content)
   abstract findChildren(parentId: string): Promise<AssetBlock[]>;
 

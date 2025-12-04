@@ -133,4 +133,21 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
 
     return asset as ContentAsset | ContextAsset;
   }
+  async findContentBySlug(
+    type: string,
+    slug: string,
+  ): Promise<ContentAsset | null> {
+    const query = `
+      MATCH (n:AssetBlock)
+      WHERE n.slug = $slug AND n.type = $type
+      RETURN n
+    `;
+
+    const result = await this.neo4j.read(query, { slug, type });
+
+    if (result.length === 0) return null;
+
+    const nodeProps = result[0].get('n').properties;
+    return AssetMapper.toDomain(nodeProps) as ContentAsset;
+  }
 }
