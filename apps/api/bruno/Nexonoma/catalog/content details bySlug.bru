@@ -1,15 +1,16 @@
 meta {
-  name: content details type and slug
+  name: content details bySlug
   type: http
   seq: 3
 }
 
 get {
-  url: 
+  url: {{baseUrl}}/catalog/concept/12-factor-app
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
