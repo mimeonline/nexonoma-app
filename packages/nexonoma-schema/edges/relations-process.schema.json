@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/relations.process.schema.json",
+  "title": "Nexonoma Process Relations",
+  "description": "Relationsschema für prozessuale Abläufe, Reihenfolgen, Blockierungen und Flow-bezogene Zusammenhänge im Nexonoma Wissensgraph.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "https://nexonoma.de/schema/relations.base.schema.json"
+    },
+    {
+      "properties": {
+        "relation": {
+          "type": "string",
+          "enum": [
+            "PRECEDES",
+            "BLOCKED_BY",
+            "ENABLES",
+            "INFLUENCES",
+            "DEPENDS_ON",
+            "REQUIRES"
+          ],
+          "enumDescriptions": [
+            "PRECEDES: Dieses Element geht einem anderen zeitlich oder prozessual voraus.",
+            "BLOCKED_BY: Dieses Element kann nicht verwendet werden, solange das Ziel blockiert ist.",
+            "ENABLES: Dieses Element ermöglicht oder erleichtert die Umsetzung eines anderen Elements.",
+            "INFLUENCES: Dieses Element beeinflusst Verhalten, Eigenschaften oder Entscheidungen eines anderen Elements.",
+            "DEPENDS_ON: Dieses Element benötigt ein anderes Element, um sinnvoll zu funktionieren.",
+            "REQUIRES: Dieses Element erfordert die Existenz oder Einführung eines anderen Elements."
+          ],
+          "description": "Prozessuale Relationship (Ablauf, Abhängigkeit oder Blockade)."
+        }
+      }
+    }
+  ]
+}

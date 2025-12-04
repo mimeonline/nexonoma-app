@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/cluster.schema.json",
+  "title": "Nexonoma Cluster",
+  "description": "Ein Cluster ist ein thematischer Oberbereich (Navigationsanker) und fasst Segmente sowie zugehörige Konzepte, Methoden, Tools und Technologien zusammen.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./assetblock-base.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "category": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "Strategie & Organisation",
+              "description": "Übergreifende Unternehmens- und Organisationsstrukturen, Governance und Management."
+            },
+            {
+              "const": "Software & Architektur",
+              "description": "Softwaredesign, Architektur-Patterns, Entwicklungsprozesse und Frameworks."
+            },
+            {
+              "const": "Technologie & Infrastruktur",
+              "description": "Technologische Plattformen, Infrastruktur, Hardware und Netzwerke."
+            },
+            {
+              "const": "Data & Intelligence",
+              "description": "Datenmanagement, Analytik, KI und Business Intelligence."
+            },
+            {
+              "const": "User & Kontext",
+              "description": "Nutzererfahrung, Interaktion, Markt- und Umfeldanalyse."
+            }
+          ],
+          "description": "Thematische Hauptkategorie des Clusters."
+        }
+      },
+      "required": ["category"]
+    }
+  ]
+}

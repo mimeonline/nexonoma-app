@@ -1,0 +1,149 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/assetblock-base.schema.json",
+  "title": "Nexonoma AssetBlock Base",
+  "description": "Basisschema für alle inhaltlichen Typen (Concept, Method, Tool, Technology, Role, Cluster, Segment) in Nexonoma. Enthält die gemeinsamen Kernfelder.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "slug",
+    "type",
+    "shortDescription",
+    "longDescription",
+    "status",
+    "version",
+    "createdAt",
+    "updatedAt",
+    "author",
+    "contributor",
+    "license",
+    "language",
+    "tags",
+    "customFields"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Eindeutige UUID zur Identifikation des Elements."
+    },
+    "name": {
+      "type": "string",
+      "description": "Der Name des Elements."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Maschinenlesbarer, eindeutiger Kurzbezeichner."
+    },
+    "abbreviation": {
+      "type": "string",
+      "description": "Bekannte Kurzform oder Abkürzung."
+    },
+    "type": {
+      "type": "string",
+      "oneOf": [
+        { "const": "macroCluster", "description": "" },
+        {
+          "const": "cluster",
+          "description": "Großer Themenbereich oder Oberkategorie."
+        },
+        { "const": "clusterView", "description": "" },
+        {
+          "const": "segment",
+          "description": "Unterteilung innerhalb eines Clusters, z. B. Phase oder Aktivität."
+        },
+        {
+          "const": "concept",
+          "description": "Ein Konzept ist ein übergeordnetes Modell, Framework oder Paradigma, das beschreibt Was und Warum und oft Richtlinien für die Umsetzung liefert."
+        },
+        { "const": "method", "description": "Vorgehensweise oder Prozess." },
+        {
+          "const": "tool",
+          "description": "Ein Tool ist ein Werkzeug oder eine Software, die hilft, Konzepte und Methoden praktisch umzusetzen."
+        },
+        {
+          "const": "technology",
+          "description": "Eine Technology ist die technologische Basis (Frameworks, Sprachen, Plattformen), auf der Systeme und Produkte entwickelt werden."
+        },
+        {
+          "const": "role",
+          "description": "Rolle oder Funktion innerhalb einer Organisation."
+        }
+      ]
+    },
+    "shortDescription": {
+      "type": "string",
+      "description": "Kurze, prägnante Zusammenfassung."
+    },
+    "longDescription": {
+      "type": "string",
+      "description": "Ausführliche Beschreibung."
+    },
+    "organizationalLevel": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "oneOf": [
+          {
+            "const": "Enterprise",
+            "description": "Gesamtunternehmenssicht, z. B. strategische Ebene."
+          },
+          {
+            "const": "Domain",
+            "description": "Fachliche oder Produkt-Domäne, z. B. Geschäftsfeld oder Produktlinie."
+          },
+          {
+            "const": "Team",
+            "description": "Operative Ebene, Team- oder Abteilungsebene."
+          }
+        ],
+        "description": "Scope des Clusters."
+      },
+      "description": "Scope des Clusters."
+    },
+    "status": {
+      "type": "string",
+      "description": "Status es AssetBlocks (z. B. 'draft', 'review', 'published', 'deprecated')."
+    },
+    "version": {
+      "type": "string",
+      "description": "Versionsnummer."
+    },
+    "createdAt": {
+      "type": "string",
+      "description": "Erstellungsdatum (YYYY-MM-DD)."
+    },
+    "updatedAt": {
+      "type": "string",
+      "description": "Datum der letzten Aktualisierung (YYYY-MM-DD)."
+    },
+    "author": {
+      "type": "string",
+      "description": "Autor oder Ersteller."
+    },
+    "contributor": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Liste von Mitwirkenden."
+    },
+    "license": {
+      "type": "string",
+      "description": "Lizenzangabe."
+    },
+    "language": {
+      "type": "string",
+      "description": "Sprache (z. B. 'de', 'en')."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Freie Schlagwörter zur Suche, Filterung und Visualisierung (z. B. 'observability', 'frontend')."
+    },
+    "customFields": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Team-/projektindividuelle Erweiterungen. Beispiele: { \"owner\": \"Architecture Board\", \"costCenter\": \"IT100\" }."
+    }
+  }
+}

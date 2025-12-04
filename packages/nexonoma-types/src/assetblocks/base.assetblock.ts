@@ -1,6 +1,15 @@
 import { Relation } from "../relations";
 
-export type AssetBlockType = "macroCluster" | "cluster" | "clusterView" | "segment" | "concept" | "method" | "tool" | "technology" | "role";
+export type AssetBlockType =
+  | "macroCluster"
+  | "cluster"
+  | "clusterView"
+  | "segment"
+  | "concept"
+  | "method"
+  | "tool"
+  | "technology"
+  | "role";
 
 // Organizational scope matches json schema (Enterprise/Domain/Team)
 export type OrganizationalLevel = "Enterprise" | "Domain" | "Team";

@@ -11,4 +11,4 @@ screenshots/
 tmp/
 docs/domain/
 content/
-schemas/
+node_modules

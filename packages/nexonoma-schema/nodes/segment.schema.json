@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/segment.schema.json",
+  "title": "Nexonoma AssetBlock Segment",
+  "description": "Segment erbt das Nexonoma-Basisschema. Es erweitert ausschließlich die Relations-Items um einen Pflicht-Kontext (clusterID etc.).",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./assetblock-base.schema.json" },
+    {
+      "type": "object",
+      "properties": { "type": { "const": "segment" } },
+      "required": ["type"]
+    }
+  ]
+}

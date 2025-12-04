@@ -117,8 +117,13 @@ npm run build
 
 ## 📄 Lizenzen & Rechte
 
-- Code des MVP: später öffentliche Lizenz (noch offen)
-- Wissensdaten: aus Nexonoma-Docs generiert (privat)
+Die Nexonoma-Codebasis und Schemadefinitionen werden unter der MIT-Lizenz veröffentlicht.
+
+Alle *Inhalte*, einschließlich Beschreibungen, Beispiele, Anwendungsfälle,
+Langtexte, relationale Interpretationen und Domänenmodelle, unterliegen der Lizenz
+CC BY-NC 4.0 und dürfen NICHT für kommerzielle Zwecke verwendet werden.
+
+Premium-Module und Knowledge Packs sind urheberrechtlich geschützt und nicht Teil dieses Repositorys.
 
 ## 📬 Feedback
 

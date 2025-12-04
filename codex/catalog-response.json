@@ -35,7 +35,7 @@
     "shortDescription": "Ein Methodenset für den Aufbau von modernen, Cloud-nativen Software-as-a-Service-Anwendungen.",
     "version": "1.0",
     "tags": ["Cloud", "DevOps", "Architecture", "Best Practice"],
-    "license": "CC-BY-SA",
+    "license": "CC-BY-NC-4.0",
     "complexityLevel": "medium",
     "examples": "[{\"benefits\":[\"Klarere Deployments\",\"Weniger Fehleranfälligkeit\"],\"assets\":[],\"name\":\"Node.js-App mit Build-Release-Run-Trennung\",\"description\":\"Eine Node.js-App, die Build, Release und Run strikt trennt.\"},{\"benefits\":[\"Skalierbarkeit\",\"Portabilität\"],\"assets\":[],\"name\":\"Kubernetes-Deployment mit Environment-Konfiguration\",\"description\":\"Konfiguration ausschließlich über ENV-Variablen.\"},{\"benefits\":[\"Reproduzierbarkeit\",\"Wartbarkeit\"],\"assets\":[],\"name\":\"Docker-Container mit deklarativen Abhängigkeiten\",\"description\":\"Definierte Dependencies in der Dockerfile.\"}]",
     "preconditions": [

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/macro-cluster.schema.json",
+  "title": "Nexonoma MacroCluster",
+  "description": "Oberste thematische Gruppierung für Cluster.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./assetblock-base.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "type": { "const": "macroCluster" }
+      },
+      "required": ["type"]
+    }
+  ]
+}

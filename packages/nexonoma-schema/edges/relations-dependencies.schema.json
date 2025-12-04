@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://nexonoma.de/schema/relations.dependencies.schema.json",
+  "title": "Nexonoma Dependency Relations",
+  "description": "Relationsschema für technische, organisatorische und logisch notwendige Abhängigkeiten im Nexonoma Wissensgraph.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "https://nexonoma.de/schema/relations.base.schema.json"
+    },
+    {
+      "properties": {
+        "relation": {
+          "type": "string",
+          "enum": ["DEPENDS_ON", "REQUIRES", "IMPLEMENTED_BY", "BLOCKED_BY"],
+          "enumDescriptions": [
+            "DEPENDS_ON: Dieses Element benötigt ein anderes Element, um sinnvoll zu funktionieren.",
+            "REQUIRES: Dieses Element erfordert die Existenz oder Einführung eines anderen Elements.",
+            "IMPLEMENTED_BY: Dieses Element wird durch ein Tool oder eine Technologie umgesetzt.",
+            "BLOCKED_BY: Dieses Element kann nicht verwendet werden, solange das Ziel blockiert ist."
+          ],
+          "description": "Abhängigkeitsbezogene Relation zwischen zwei Elementen."
+        }
+      }
+    }
+  ]
+}
