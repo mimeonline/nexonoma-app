@@ -121,7 +121,9 @@ export function ClusterClient({ macroCluster, cluster }: Props) {
                   }`}
                   type="button"
                 >
-                  <span aria-hidden className="text-base leading-none">{toggle.icon}</span>
+                  <span aria-hidden className="text-base leading-none">
+                    {toggle.icon}
+                  </span>
                   {toggle.label}
                 </button>
               ))}
@@ -192,7 +194,7 @@ export function ClusterClient({ macroCluster, cluster }: Props) {
               const borderClass = color[(segments.indexOf(segment) % 5) as 0 | 1 | 2 | 3 | 4];
 
               return (
-                <div key={segment.slug} className="min-w-[240px] flex-1 rounded-2xl border border-white/10 bg-slate-900/60 p-4 shadow-sm">
+                <div key={segment.slug} className="min-w-60 flex-1 rounded-2xl border border-white/10 bg-slate-900/60 p-4 shadow-sm">
                   <div className={`mb-4 border-b-2 pb-2 text-xs font-semibold uppercase text-slate-200 ${borderClass}`}>
                     {segment.name} ({items.length})
                   </div>

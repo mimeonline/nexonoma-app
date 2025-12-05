@@ -1,4 +1,4 @@
-import { CatalogClient } from "./CatalogClient";
+import { Catalog } from "@/features/catalog/templates/Catalog";
 import { NexonomaApi } from "@/services/api";
 import type { CatalogItem } from "@/types/catalog";
 import type { ContentDetail } from "@/types/nexonoma";
@@ -29,6 +29,5 @@ export default async function CatalogPage() {
   const catalog = await NexonomaApi.getCatalog();
   const items = catalog.map(mapContentToCatalogItem);
 
-  return <CatalogClient items={items} />;
+  return <Catalog items={items} />;
 }
-
