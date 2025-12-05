@@ -23,11 +23,6 @@ export function CatalogGrid({ items }: CatalogGridProps) {
           >
             <div className="flex items-start justify-between gap-3">
               <TypeBadge type={String(badgeType)} />
-              <div className="text-right text-xs text-slate-300">
-                {item.segmentName && <div>Segment: {item.segmentName}</div>}
-                {!item.segmentName && item.clusterName && <div>Cluster: {item.clusterName}</div>}
-                {!item.segmentName && !item.clusterName && item.macroClusterName && <div>Macro: {item.macroClusterName}</div>}
-              </div>
             </div>
 
             <div className="space-y-2">
