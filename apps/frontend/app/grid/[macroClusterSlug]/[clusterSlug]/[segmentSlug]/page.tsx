@@ -91,14 +91,14 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
               >
                 <button
                   onClick={() => toggleType(type)}
-                  className="flex w-full items-center justify-between px-5 py-4 text-left transition hover:text-[#4FF4E0]"
+                  className="flex w-full items-center justify-between px-5 py-4 text-left transition hover:text-nexo-aqua"
                 >
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200/80">{label}</p>
                     <p className="text-xs text-slate-300">{items.length} Einträge</p>
                   </div>
                   {isOpen ? (
-                    <ChevronDown className="h-5 w-5 text-[#4FF4E0] transition" />
+                    <ChevronDown className="h-5 w-5 text-nexo-aqua transition" />
                   ) : (
                     <ChevronRight className="h-5 w-5 text-slate-300 transition" />
                   )}
@@ -112,7 +112,7 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
                     {items.map((item) => (
                       <Card
                         key={item.slug}
-                        className="border border-white/10 bg-[#0B1220] text-white transition hover:border-cyan-400 hover:text-[#4FF4E0]"
+                        className="border border-white/10 bg-nexo-surface text-white transition hover:border-cyan-400 hover:text-nexo-aqua"
                       >
                         <CardHeader className="pb-2">
                           <CardTitle className="text-lg">{item.name}</CardTitle>
@@ -122,7 +122,7 @@ export default function SegmentPage({ params }: { params: Promise<Params> }) {
                           <p>{item.shortDescription}</p>
                           <Link
                             href={`/grid/${macroCluster?.slug ?? ""}/${subcluster?.slug ?? ""}/${segment.slug}/${type}/${item.slug}`}
-                            className="inline-flex w-fit items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-[#4FF4E0] transition hover:border-cyan-400 hover:bg-white/10"
+                            className="inline-flex w-fit items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-nexo-aqua transition hover:border-cyan-400 hover:bg-white/10"
                           >
                             Öffnen
                           </Link>

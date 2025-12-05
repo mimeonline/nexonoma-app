@@ -79,6 +79,7 @@ export interface GridNode {
 
   // Visuelles & Status
   shortDescription: string;
+  longDescription: string;
   icon?: string;
   image?: string;
   status: AssetStatus;
