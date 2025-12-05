@@ -1,5 +1,6 @@
-import type { GridNode } from "@/types/nexonoma";
 import Link from "next/link";
+
+import type { GridNode } from "@/types/nexonoma";
 
 type Props = {
   macroClusters: GridNode[];
@@ -27,9 +28,7 @@ export function MacroClusterList({ macroClusters }: Props) {
           </Link>
         ))}
       </div>
-      {!hasMacroClusters && (
-        <p className="text-sm text-slate-200/70">Keine Makro-Cluster gefunden.</p>
-      )}
+      {!hasMacroClusters && <p className="text-sm text-slate-200/70">Keine Makro-Cluster gefunden.</p>}
     </div>
   );
 }
