@@ -1,5 +1,5 @@
-import { fetchGrid } from "@/lib/api/grid";
-import type { Cluster, MacroCluster } from "@/types/grid";
+import { NexonomaApi } from "@/services/api";
+import type { GridNode } from "@/types/nexonoma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -7,20 +7,20 @@ type PageProps = {
   params: Promise<{ macroClusterSlug: string }> | { macroClusterSlug: string };
 };
 
-function findMacroCluster(slug: string, macroClusters: MacroCluster[]): MacroCluster | null {
-  return macroClusters.find((macroCluster) => macroCluster.slug === slug) ?? null;
-}
-
 export default async function MacroClusterPage({ params }: PageProps) {
   const { macroClusterSlug } = await params;
-  const grid = await fetchGrid();
-  const macroCluster = findMacroCluster(macroClusterSlug, grid.data?.macroClusters ?? []);
+  let macroCluster: GridNode | null = null;
 
-  if (!macroCluster) {
+  try {
+    macroCluster = await NexonomaApi.getClusters(macroClusterSlug);
+  } catch (error) {
+    console.error("Failed to load macro cluster", error);
     return notFound();
   }
 
-  const clusters: Cluster[] = macroCluster.clusters ?? [];
+  if (!macroCluster) return notFound();
+
+  const clusters: GridNode[] = macroCluster.children ?? [];
 
   return (
     <>
@@ -64,7 +64,7 @@ export default async function MacroClusterPage({ params }: PageProps) {
                 {cluster.name.charAt(0)}
               </div>
               <span className="text-xs font-medium text-slate-300">
-                {cluster.segments?.length ? `${cluster.segments.length} Segmente` : "Cluster"}
+                {cluster.children?.length ? `${cluster.children.length} Segmente` : "Cluster"}
               </span>
             </div>
             <h3 className="mb-1 text-lg font-semibold text-white">{cluster.name}</h3>
