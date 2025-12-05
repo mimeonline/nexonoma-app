@@ -1,8 +1,8 @@
-import type { MacroCluster } from "@/types/grid";
+import type { GridNode } from "@/types/nexonoma";
 import Link from "next/link";
 
 type Props = {
-  macroClusters: MacroCluster[];
+  macroClusters: GridNode[];
 };
 
 export function MacroClusterList({ macroClusters }: Props) {
@@ -19,7 +19,7 @@ export function MacroClusterList({ macroClusters }: Props) {
           >
             <div className="absolute top-4 right-4">
               <span className="text-xs bg-white/10 text-slate-300 px-2 py-1 rounded-full border border-white/10">
-                {macroCluster.clusters.length} Cluster
+                {macroCluster.children.length} Cluster
               </span>
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">{macroCluster.name}</h3>

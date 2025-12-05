@@ -1,21 +1,9 @@
-"use client";
-
-import { fetchGrid } from "@/lib/api/grid";
-import type { MacroCluster } from "@/types/grid";
-import { useEffect, useState } from "react";
+import { NexonomaApi } from "@/services/api";
 import { MacroClusterList } from "./components/MacroClusterList";
+import type { GridNode } from "@/types/nexonoma";
 
-export default function GridPage() {
-  const [macroClusters, setMacroClusters] = useState<MacroCluster[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchGrid()
-      .then((response) => setMacroClusters(response.data.macroClusters ?? []))
-      .catch((err) => setError(err instanceof Error ? err.message : "Unbekannter Fehler"))
-      .finally(() => setLoading(false));
-  }, []);
+export default async function GridPage() {
+  const macroClusters: GridNode[] = await NexonomaApi.getMacroClusters();
 
   return (
     <>
@@ -28,25 +16,7 @@ export default function GridPage() {
         </p>
       </header>
 
-      {loading && <p className="text-sm text-slate-200/80">Lade Grid-Daten...</p>}
-      {error && <p className="text-sm text-red-300">Grid-Daten konnten nicht geladen werden: {error}</p>}
-      {!loading && !error && <MacroClusterList macroClusters={macroClusters} />}
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(4px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out forwards;
-        }
-      `}</style>
+      <MacroClusterList macroClusters={macroClusters} />
     </>
   );
 }
