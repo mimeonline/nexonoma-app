@@ -1,8 +1,8 @@
+import { Segments } from "@/features/grid/templates/Segments";
 import { NexonomaApi } from "@/services/api";
 import type { GridNode } from "@/types/nexonoma";
 import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { notFound } from "next/navigation";
-import { ClusterClient } from "./ClusterClient";
 
 type PageProps = {
   params: Promise<{ macroClusterSlug: string; clusterSlug: string }> | { macroClusterSlug: string; clusterSlug: string };
@@ -78,5 +78,5 @@ export default async function ClusterDetailPage({ params }: PageProps) {
 
   const { cluster, macroCluster } = mapCluster(clusterNode, macroClusterSlug);
 
-  return <ClusterClient macroCluster={macroCluster} cluster={cluster} />;
+  return <Segments macroCluster={macroCluster} cluster={cluster} />;
 }

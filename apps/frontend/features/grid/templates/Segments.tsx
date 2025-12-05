@@ -1,13 +1,10 @@
 "use client";
 
-import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-type Props = {
-  macroCluster: MacroCluster;
-  cluster: Cluster;
-};
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -16,6 +13,18 @@ type ContentWithSegment = SegmentContentItem & {
 
 type ViewMode = "grid" | "pipeline";
 type FilterType = "all" | SegmentContentType;
+
+const typeStyles: Record<SegmentContentType, string> = {
+  method: "bg-purple-500/15 text-purple-200 border-purple-500/30",
+  concept: "bg-sky-500/15 text-sky-200 border-sky-500/30",
+  tool: "bg-teal-500/15 text-teal-200 border-teal-500/30",
+  technology: "bg-amber-500/15 text-amber-200 border-amber-500/30",
+};
+
+const viewToggle = [
+  { key: "grid" as const, label: "Grid", icon: "▦" },
+  { key: "pipeline" as const, label: "Pipeline", icon: "≡" },
+];
 
 function flattenContents(cluster: Cluster): ContentWithSegment[] {
   const segments = cluster.segments ?? [];
@@ -48,19 +57,12 @@ function filterContents(contents: ContentWithSegment[], activeSegment: "all" | s
   });
 }
 
-const typeStyles: Record<SegmentContentType, string> = {
-  method: "bg-purple-500/15 text-purple-200 border-purple-500/30",
-  concept: "bg-sky-500/15 text-sky-200 border-sky-500/30",
-  tool: "bg-teal-500/15 text-teal-200 border-teal-500/30",
-  technology: "bg-amber-500/15 text-amber-200 border-amber-500/30",
-};
+interface SegmentsProps {
+  macroCluster: MacroCluster;
+  cluster: Cluster;
+}
 
-const viewToggle = [
-  { key: "grid" as const, label: "Grid", icon: "▦" },
-  { key: "pipeline" as const, label: "Pipeline", icon: "≡" },
-];
-
-export function ClusterClient({ macroCluster, cluster }: Props) {
+export function Segments({ macroCluster, cluster }: SegmentsProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");

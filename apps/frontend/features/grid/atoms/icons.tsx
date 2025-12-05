@@ -1,11 +1,4 @@
-import {
-  Boxes,
-  Building,
-  Database,
-  Server,
-  User,
-  Circle,
-} from "lucide-react";
+import { Boxes, Building, Circle, Database, Server, User } from "lucide-react";
 
 export const iconMap = {
   Boxes,

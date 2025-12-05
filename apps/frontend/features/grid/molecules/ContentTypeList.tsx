@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SegmentContent, SegmentContentType } from "@/types/grid";
 
@@ -23,10 +24,7 @@ export function ContentTypeList({ clusterSlug, subclusterSlug, segmentSlug, cont
         const items = contents[key] ?? [];
         const first = items[0];
         return (
-          <Card
-            key={key}
-            className="border border-white/10 bg-[#1A2E5D] text-white transition hover:border-cyan-400"
-          >
+          <Card key={key} className="border border-white/10 bg-[#1A2E5D] text-white transition hover:border-cyan-400">
             <CardHeader className="pb-1">
               <CardTitle className="text-lg">{label}</CardTitle>
               <p className="text-sm text-slate-300">{items.length} Einträge</p>
@@ -35,10 +33,7 @@ export function ContentTypeList({ clusterSlug, subclusterSlug, segmentSlug, cont
               <p className="mb-3">Öffne die Liste oder direkt ein Detail.</p>
               {first ? (
                 <div className="flex gap-3 text-[#4FF4E0] font-semibold">
-                  <Link
-                    href={`/grid/${clusterSlug}/${subclusterSlug}/${segmentSlug}/${type}/${first.slug}`}
-                    className="hover:underline"
-                  >
+                  <Link href={`/grid/${clusterSlug}/${subclusterSlug}/${segmentSlug}/${type}/${first.slug}`} className="hover:underline">
                     Erstes Detail öffnen
                   </Link>
                 </div>
