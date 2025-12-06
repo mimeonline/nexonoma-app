@@ -1,11 +1,13 @@
 "use client";
 
+import { LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 
+// --- Types & Helpers ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
   segmentName: string;
@@ -21,31 +23,20 @@ const typeStyles: Record<SegmentContentType, string> = {
   technology: "bg-amber-500/15 text-amber-200 border-amber-500/30",
 };
 
-const viewToggle = [
-  { key: "grid" as const, label: "Grid", icon: "▦" },
-  { key: "pipeline" as const, label: "Pipeline", icon: "≡" },
-];
-
 function flattenContents(cluster: Cluster): ContentWithSegment[] {
   const segments = cluster.segments ?? [];
   const bucket: ContentWithSegment[] = [];
-
   segments.forEach((segment) => {
     const content = segment.content;
     if (!content) return;
-
     const pushItems = (items: SegmentContentItem[], type: SegmentContentType) => {
-      items.forEach((item) => {
-        bucket.push({ ...item, type, segmentSlug: segment.slug, segmentName: segment.name });
-      });
+      items.forEach((item) => bucket.push({ ...item, type, segmentSlug: segment.slug, segmentName: segment.name }));
     };
-
     pushItems(content.methods ?? [], "method");
     pushItems(content.concepts ?? [], "concept");
     pushItems(content.tools ?? [], "tool");
     pushItems(content.technologies ?? [], "technology");
   });
-
   return bucket;
 }
 
@@ -57,13 +48,14 @@ function filterContents(contents: ContentWithSegment[], activeSegment: "all" | s
   });
 }
 
+// --- Main Component ---
 interface SegmentsProps {
   macroCluster: MacroCluster;
   cluster: Cluster;
 }
 
 export function Segments({ macroCluster, cluster }: SegmentsProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("pipeline");
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");
 
@@ -71,40 +63,44 @@ export function Segments({ macroCluster, cluster }: SegmentsProps) {
   const filtered = useMemo(() => filterContents(contents, activeSegment, activeType), [contents, activeSegment, activeType]);
 
   const segments: Segment[] = cluster.segments ?? [];
-  const segmentsToRender = activeSegment === "all" ? segments : segments.filter((s) => s.slug === activeSegment);
+  const segmentsToRender = segments;
 
   return (
-    <>
-      <div className="rounded-2xl border border-white/10 bg-slate-900/50 p-6 shadow-lg shadow-black/20">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-2">
-            <nav className="mb-2 flex items-center gap-2 text-sm text-slate-400">
-              <Link href="/grid" className="hover:text-slate-200">
-                Start
+    <div className="space-y-8">
+      {/* --- HEADER PANEL --- */}
+      {/* TODO Refactor create a new Component with example the name Panel or something different an change car with the new component. This is semantical not a card. It is a block, a box, a containeer or something different.  */}
+      <Card variant="panel" className="p-6 md:p-8 bg-nexo-surface border-white/10">
+        <div className="flex flex-col gap-6 md:flex-row md:justify-between md:items-start">
+          <div className="space-y-3 flex-1 min-w-0">
+            <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+              <Link href="/grid" className="hover:text-white transition-colors">
+                Grid
               </Link>
-              <span>/</span>
-              <Link href={`/grid/${macroCluster.slug}`} className="hover:text-slate-200">
-                {macroCluster.name || "Makro-Cluster"}
+              <span className="text-slate-700">/</span>
+              <Link href={`/grid/${macroCluster.slug}`} className="hover:text-white transition-colors">
+                {macroCluster.name}
               </Link>
-              <span>/</span>
-              <span className="font-semibold text-slate-200">{cluster.name ?? "Cluster"}</span>
+              <span className="text-slate-700">/</span>
+              <span className="text-nexo-ocean truncate">{cluster.name}</span>
             </nav>
-            <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold md:text-4xl">{cluster.name ?? "Lade..."}</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-white sm:text-4xl">{cluster.name ?? "Lade..."}</h1>
               {cluster.type && (
-                <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200 border border-emerald-500/30">
+                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   Live
                 </span>
               )}
             </div>
-            <p className="text-sm text-slate-300 md:text-base">{cluster.shortDescription ?? ""}</p>
+            <p className="max-w-2xl text-base text-nexo-muted leading-relaxed">
+              {cluster.shortDescription ?? "Erkunde die Bausteine dieses Clusters."}
+            </p>
           </div>
 
-          <div className="flex flex-col gap-3 md:items-end">
+          <div className="flex flex-col gap-3 shrink-0 md:items-end">
             <select
               value={activeType}
               onChange={(e) => setActiveType(e.target.value as FilterType)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-slate-100 shadow-inner shadow-black/20 focus:border-nexo-aqua/60 focus:outline-none md:w-44"
+              className="w-full md:w-48 h-10 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 transition-all cursor-pointer shadow-sm"
             >
               <option value="all">Alle Typen</option>
               <option value="concept">Nur Konzepte</option>
@@ -113,118 +109,117 @@ export function Segments({ macroCluster, cluster }: SegmentsProps) {
               <option value="technology">Nur Technologien</option>
             </select>
 
-            <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/60 p-1 text-sm text-slate-200">
-              {viewToggle.map((toggle) => (
-                <button
-                  key={toggle.key}
-                  onClick={() => setViewMode(toggle.key)}
-                  className={`flex items-center gap-2 rounded-md px-3 py-1 transition ${
-                    viewMode === toggle.key ? "bg-nexo-aqua/20 text-nexo-aqua border border-nexo-aqua/40 shadow" : "hover:bg-slate-800/80"
-                  }`}
-                  type="button"
-                >
-                  <span aria-hidden className="text-base leading-none">
-                    {toggle.icon}
-                  </span>
-                  {toggle.label}
-                </button>
-              ))}
+            <div className="flex h-10 items-center rounded-xl border border-white/10 bg-white/5 p-1">
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`flex h-full items-center gap-2 rounded-lg px-3 text-xs font-medium transition-all ${viewMode === "grid" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm " : "text-slate-400 hover:text-white"}`}
+              >
+                <LayoutGrid className="h-3.5 w-3.5" /> Grid
+              </button>
+              <button
+                onClick={() => setViewMode("pipeline")}
+                className={`flex h-full items-center gap-2 rounded-lg px-3 text-xs font-medium transition-all ${viewMode === "pipeline" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm " : "text-slate-400 hover:text-white"}`}
+              >
+                <List className="h-3.5 w-3.5" /> Pipeline
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex items-center gap-4 overflow-x-auto border-b border-white/5 pb-2 text-sm text-slate-300">
-          <button
-            type="button"
-            onClick={() => setActiveSegment("all")}
-            className={`pb-2 transition ${activeSegment === "all" ? "border-b-2 border-nexo-aqua text-white" : "hover:text-white/80"}`}
-          >
-            Alles anzeigen
-          </button>
+        {/* Segment Tabs */}
+        <div className="pt-8 flex items-center gap-6 overflow-x-auto border-b border-white/5 pb-0 scrollbar-hide">
+          <TabButton active={activeSegment === "all"} onClick={() => setActiveSegment("all")} label="Alles anzeigen" />
           {segments.map((segment) => (
-            <button
+            <TabButton
               key={segment.slug}
-              type="button"
+              active={activeSegment === segment.slug}
               onClick={() => setActiveSegment(segment.slug)}
-              className={`pb-2 transition ${activeSegment === segment.slug ? "border-b-2 border-nexo-aqua text-white" : "hover:text-white/80"}`}
-            >
-              {segment.name}
-            </button>
+              label={segment.name}
+            />
           ))}
         </div>
-      </div>
+      </Card>
 
-      <div className="space-y-4">
-        {viewMode === "grid" ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {filtered.map((item) => (
-              <Link
-                key={item.slug}
-                href={`/catalog/${item.type}/${item.slug}`}
-                className="group relative rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-sm transition hover:border-nexo-aqua/40 hover:shadow-lg"
-              >
-                <div className="mb-3 flex items-start justify-between">
-                  <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${typeStyles[item.type]}`}>
-                    {item.type}
-                  </span>
-                  <span className="text-xs text-slate-400">{item.segmentName}</span>
-                </div>
-                <h3 className="text-base font-semibold text-white group-hover:text-nexo-aqua">{item.name}</h3>
-                {item.shortDescription && <p className="mt-2 text-sm text-slate-400">{item.shortDescription}</p>}
-              </Link>
-            ))}
-
-            <div className="rounded-2xl border-2 border-dashed border-slate-700/80 bg-slate-900/40 p-6 text-center text-slate-300">
-              <div className="text-3xl font-semibold text-slate-200">+20</div>
-              <p className="mt-2 text-sm">Weitere Elemente laden</p>
-              <Link href="/katalog" className="mt-3 inline-block text-sm font-semibold text-nexo-aqua hover:underline">
-                Zum Katalog wechseln →
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {segmentsToRender.map((segment) => {
-              const items = filterContents(contents, segment.slug, activeType);
-              const color = {
-                0: "border-purple-400",
-                1: "border-sky-400",
-                2: "border-emerald-400",
-                3: "border-rose-400",
-                4: "border-amber-400",
-              } as const;
-              const borderClass = color[(segments.indexOf(segment) % 5) as 0 | 1 | 2 | 3 | 4];
-
-              return (
-                <div key={segment.slug} className="min-w-60 flex-1 rounded-2xl border border-white/10 bg-slate-900/60 p-4 shadow-sm">
-                  <div className={`mb-4 border-b-2 pb-2 text-xs font-semibold uppercase text-slate-200 ${borderClass}`}>
-                    {segment.name} ({items.length})
+      {/* --- CONTENT AREA --- */}
+      {viewMode === "grid" ? (
+        // GRID MODE: Standard Card Grid
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filtered.map((item) => (
+            <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
+              <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
+                <CardHeader className="pb-2 space-y-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${typeStyles[item.type]}`}>
+                      {item.type}
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
                   </div>
-                  <div className="space-y-3">
-                    {items.map((item) => (
-                      <Link
-                        key={item.slug}
-                        href={`/catalog/${item.type}/${item.slug}`}
-                        className="block rounded-xl border border-white/10 bg-slate-900/70 p-3 transition hover:border-nexo-aqua/40 hover:shadow"
-                      >
-                        <div className="mb-2 flex items-center justify-between text-xs">
-                          <span className={`rounded-full border px-2 py-0.5 font-semibold uppercase tracking-wide ${typeStyles[item.type]}`}>
+                </CardHeader>
+                <CardContent>
+                  <CardTitle className="text-base group-hover:text-nexo-ocean transition-colors mb-2">{item.name}</CardTitle>
+                  {item.shortDescription && <p className="text-xs text-nexo-muted line-clamp-2 leading-relaxed">{item.shortDescription}</p>}
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        // PIPELINE MODE: Optimized Lanes
+        <div className={`grid grid-cols-1 gap-6 md:grid-cols-${Math.min(segmentsToRender.length, 4)}`}>
+          {segmentsToRender.map((segment, idx) => {
+            const items = filterContents(contents, segment.slug, activeType);
+            const colors = ["border-purple-500", "border-sky-500", "border-emerald-500", "border-rose-500", "border-amber-500"];
+
+            // Border Bottom Color
+            const borderColor = colors[idx % colors.length].replace("border-", "border-b-");
+
+            return (
+              <div key={segment.slug} className="flex flex-col h-full rounded-2xl border border-white/5 bg-[#121926] overflow-hidden">
+                {/* Column Header: With colored bottom border */}
+                <div className={`px-4 py-3 bg-[#151e2e] flex justify-between items-center border-b-2 ${borderColor}`}>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">{segment.name}</h3>
+                  <span className="text-[10px] text-slate-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{items.length}</span>
+                </div>
+
+                {/* Items List: Denser Gap & Padding */}
+                <div className="flex flex-col gap-3 p-4 flex-1">
+                  {items.map((item) => (
+                    <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
+                      <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${typeStyles[item.type]}`}>
                             {item.type}
                           </span>
-                          <span className="text-slate-400">{segment.name}</span>
                         </div>
-                        <div className="text-sm font-semibold text-white">{item.name}</div>
-                        {item.shortDescription && <p className="text-xs text-slate-400">{item.shortDescription}</p>}
-                      </Link>
-                    ))}
-                    {items.length === 0 && <p className="text-xs text-slate-400">Keine Inhalte in diesem Segment.</p>}
-                  </div>
+                        <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
+                        {item.shortDescription && <p className="text-[11px] text-nexo-muted line-clamp-2">{item.shortDescription}</p>}
+                      </Card>
+                    </Link>
+                  ))}
+                  {items.length === 0 && (
+                    <div className="flex flex-1 items-center justify-center min-h-[100px] border-2 border-dashed border-white/5 rounded-lg bg-white/1">
+                      <span className="text-[11px] italic text-slate-600">Leer</span>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// --- Sub-Component: Tab Button ---
+function TabButton({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`pb-3.5 text-sm font-medium transition-all relative whitespace-nowrap ${active ? "text-white" : "text-slate-400 hover:text-slate-200"}`}
+    >
+      {label}
+      {active && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexo-ocean rounded-full" />}
+    </button>
   );
 }
