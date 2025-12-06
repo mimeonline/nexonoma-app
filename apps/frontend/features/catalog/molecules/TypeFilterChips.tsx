@@ -1,4 +1,4 @@
-import type { CatalogType } from "../atoms/TypeBadge";
+type CatalogType = "concept" | "method" | "tool" | "technology" | string;
 
 interface TypeOption {
   value: CatalogType;

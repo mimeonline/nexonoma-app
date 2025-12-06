@@ -4,6 +4,7 @@ import { LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 
@@ -149,9 +150,9 @@ export function Segments({ macroCluster, cluster }: SegmentsProps) {
               <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
                 <CardHeader className="pb-2 space-y-0">
                   <div className="flex items-start justify-between gap-2">
-                    <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${typeStyles[item.type]}`}>
+                    <Badge variant={getBadgeVariant(item.type)} size="sm">
                       {item.type}
-                    </span>
+                    </Badge>
                     <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
                   </div>
                 </CardHeader>
@@ -187,9 +188,9 @@ export function Segments({ macroCluster, cluster }: SegmentsProps) {
                     <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
                       <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer">
                         <div className="flex items-center justify-between mb-2">
-                          <span className={`rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide ${typeStyles[item.type]}`}>
+                          <Badge variant={getBadgeVariant(item.type)} size="sm">
                             {item.type}
-                          </span>
+                          </Badge>
                         </div>
                         <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
                         {item.shortDescription && <p className="text-[11px] text-nexo-muted line-clamp-2">{item.shortDescription}</p>}

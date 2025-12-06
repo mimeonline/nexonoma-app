@@ -2,11 +2,10 @@
 
 import { useMemo, useState } from "react";
 
-import { TypeBadge, normalizeCatalogType } from "../atoms/TypeBadge";
+import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import type { CatalogItem } from "@/types/catalog";
 import { TypeFilterChips } from "../molecules/TypeFilterChips";
 import { CatalogGrid } from "../organisms/CatalogGrid";
-
-import type { CatalogItem } from "@/types/catalog";
 
 type FilterType = "all" | "concept" | "method" | "tool" | "technology";
 
@@ -28,6 +27,14 @@ export function Catalog({ items }: CatalogTemplateProps) {
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<FilterType>("all");
 
+  function normalizeCatalogType(type?: string) {
+    const normalized = (type ?? "").toLowerCase();
+    if (normalized === "concept" || normalized === "method" || normalized === "tool" || normalized === "technology") {
+      return normalized as "concept" | "method" | "tool" | "technology";
+    }
+    return "unknown" as const;
+  }
+
   const filteredItems = useMemo(() => {
     const term = search.trim().toLowerCase();
 
@@ -37,10 +44,7 @@ export function Catalog({ items }: CatalogTemplateProps) {
       const matchesType = activeType === "all" ? true : itemType === activeType;
 
       const matchesSearch =
-        term.length === 0 ||
-        [item.name, item.shortDescription]
-          .filter(Boolean)
-          .some((field) => (field as string).toLowerCase().includes(term));
+        term.length === 0 || [item.name, item.shortDescription].filter(Boolean).some((field) => (field as string).toLowerCase().includes(term));
 
       return matchesType && matchesSearch;
     });
@@ -83,13 +87,7 @@ export function Catalog({ items }: CatalogTemplateProps) {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
           <div className="flex flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              className="h-4 w-4 text-slate-300"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4 text-slate-300">
               <circle cx="11" cy="11" r="7" strokeWidth="1.5" />
               <path strokeWidth="1.5" d="m16.5 16.5 3 3" />
             </svg>
@@ -112,7 +110,9 @@ export function Catalog({ items }: CatalogTemplateProps) {
                 onClick={() => setActiveType(t as FilterType)}
                 className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 transition hover:border-white/40"
               >
-                <TypeBadge type={t} />
+                <Badge variant={getBadgeVariant(t)} size="lg">
+                  {t}
+                </Badge>
                 <span className="text-slate-100">{(typeCounts as Record<string, number>)[t] ?? 0} Stück</span>
               </button>
             ))}

@@ -17,7 +17,7 @@ export function ClusterList({ macroCluster }: Props) {
         return (
           <Card
             key={cluster.slug}
-            className="border border-white/10 bg-[#0B1220] text-white shadow-md shadow-black/20 transition hover:border-cyan-400"
+            className="border border-white/10 bg-nexo-surface text-white shadow-md shadow-black/20 transition hover:border-cyan-400"
           >
             <CardHeader className="pb-2">
               <CardTitle className="text-base">{cluster.name}</CardTitle>
@@ -25,7 +25,7 @@ export function ClusterList({ macroCluster }: Props) {
             </CardHeader>
             <CardContent className="flex justify-between pt-0 text-sm text-slate-200/80">
               <span>{segmentCount} Segmente</span>
-              <Link href={`/grid/${macroCluster.slug}/${cluster.slug}`} className="font-semibold text-[#4FF4E0] hover:underline">
+              <Link href={`/grid/${macroCluster.slug}/${cluster.slug}`} className="font-semibold text-nexo-aqua hover:underline">
                 Öffnen
               </Link>
             </CardContent>

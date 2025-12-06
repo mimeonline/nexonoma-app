@@ -2,8 +2,7 @@ import Link from "next/link";
 
 import type { CatalogItem } from "@/types/catalog";
 
-import { TypeBadge, normalizeCatalogType } from "../atoms/TypeBadge";
-
+import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 interface CatalogGridProps {
   items: CatalogItem[];
 }
@@ -12,9 +11,6 @@ export function CatalogGrid({ items }: CatalogGridProps) {
   return (
     <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {items.map((item) => {
-        const type = normalizeCatalogType(typeof item.type === "string" ? item.type : "");
-        const badgeType = type === "unknown" ? item.type : type;
-
         return (
           <Link
             key={`${item.id}-${item.slug}`}
@@ -22,7 +18,9 @@ export function CatalogGrid({ items }: CatalogGridProps) {
             className="group flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/10 hover:shadow-lg"
           >
             <div className="flex items-start justify-between gap-3">
-              <TypeBadge type={String(badgeType)} />
+              <Badge variant={getBadgeVariant(item.type)} size="sm">
+                {item.type}
+              </Badge>
             </div>
 
             <div className="space-y-2">
