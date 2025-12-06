@@ -53,3 +53,15 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* Custom Animations für Nexonoma Home */
+@keyframes beam-drop {
+  0% { top: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.animate-beam-drop {
+  animation: beam-drop 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}

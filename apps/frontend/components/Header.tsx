@@ -38,7 +38,11 @@ export default function Header() {
           </svg>
           <span className="text-blue-300 text-lg font-bold tracking-tight sm:block">Nexonoma</span>
         </Link>
-
+        {process.env.NODE_ENV === "development" && (
+          <Link href="/sandbox" className="text-nexo-muted hover:text-nexo-aqua transition">
+            Sandbox
+          </Link>
+        )}
         <nav className="hidden items-center gap-3 md:flex">
           {navItems.map((item) => {
             const active = isActive(item.href);
