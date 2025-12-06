@@ -1,23 +1,18 @@
-"use client";
-
 import Link from "next/link";
-import { useMemo, useState } from "react";
 
 import type { GridNode } from "@/types/nexonoma";
 
 interface ClustersProps {
   macroCluster: GridNode;
+  filterQuery?: string;
 }
 
-export function Clusters({ macroCluster }: ClustersProps) {
+export function Clusters({ macroCluster, filterQuery }: ClustersProps) {
   const clusters: GridNode[] = macroCluster.children ?? [];
-  const [filter, setFilter] = useState("");
-
-  const filteredClusters = useMemo(() => {
-    const term = filter.trim().toLowerCase();
-    if (!term) return clusters;
-    return clusters.filter((cluster) => cluster.name.toLowerCase().includes(term) || (cluster.shortDescription ?? "").toLowerCase().includes(term));
-  }, [clusters, filter]);
+  const term = (filterQuery ?? "").trim().toLowerCase();
+  const filteredClusters = term
+    ? clusters.filter((cluster) => cluster.name.toLowerCase().includes(term) || (cluster.shortDescription ?? "").toLowerCase().includes(term))
+    : clusters;
 
   return (
     <>
@@ -34,25 +29,25 @@ export function Clusters({ macroCluster }: ClustersProps) {
           <p className="text-sm text-slate-300 md:text-base">{macroCluster.shortDescription || macroCluster.longDescription}</p>
         </div>
 
-        <div className="relative w-full md:w-64">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-          >
+        <form className="relative w-full md:w-64" method="get" role="search">
+          <label className="sr-only" htmlFor="cluster-filter">
+            Cluster filtern
+          </label>
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400">
             <path
               fill="currentColor"
               d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.71.71l.27.28v.78l5 5L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14"
             />
           </svg>
           <input
-            type="text"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            id="cluster-filter"
+            type="search"
+            name="q"
+            defaultValue={filterQuery}
             placeholder="Filter Cluster..."
             className="w-full rounded-lg border border-slate-700 bg-slate-900/60 pl-9 pr-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-nexo-aqua/60 focus:outline-none"
           />
-        </div>
+        </form>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -5,10 +5,12 @@ import { notFound } from "next/navigation";
 
 type PageProps = {
   params: Promise<{ macroClusterSlug: string }> | { macroClusterSlug: string };
+  searchParams?: { q?: string };
 };
 
-export default async function MacroClusterPage({ params }: PageProps) {
+export default async function MacroClusterPage({ params, searchParams }: PageProps) {
   const { macroClusterSlug } = await params;
+  const filterQuery = searchParams?.q ?? "";
   let macroCluster: GridNode | null = null;
 
   try {
@@ -20,5 +22,5 @@ export default async function MacroClusterPage({ params }: PageProps) {
 
   if (!macroCluster) return notFound();
 
-  return <Clusters macroCluster={macroCluster} />;
+  return <Clusters macroCluster={macroCluster} filterQuery={filterQuery} />;
 }
