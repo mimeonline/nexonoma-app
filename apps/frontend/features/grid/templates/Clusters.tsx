@@ -1,76 +1,90 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import type { GridNode } from "@/types/nexonoma";
 
 interface ClustersProps {
   macroCluster: GridNode;
-  filterQuery?: string;
 }
 
-export function Clusters({ macroCluster, filterQuery }: ClustersProps) {
+export function Clusters({ macroCluster }: ClustersProps) {
   const clusters: GridNode[] = macroCluster.children ?? [];
-  const term = (filterQuery ?? "").trim().toLowerCase();
-  const filteredClusters = term
-    ? clusters.filter((cluster) => cluster.name.toLowerCase().includes(term) || (cluster.shortDescription ?? "").toLowerCase().includes(term))
-    : clusters;
 
   return (
-    <>
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div className="space-y-3">
-          <nav className="mb-2 flex items-center gap-2 text-sm text-slate-400">
-            <Link href="/grid" className="hover:text-slate-200">
-              Start
-            </Link>
-            <span>/</span>
-            <span className="font-semibold text-slate-200">{macroCluster.name}</span>
-          </nav>
-          <h1 className="text-3xl font-bold text-white md:text-4xl">{macroCluster.name}</h1>
-          <p className="text-sm text-slate-300 md:text-base">{macroCluster.shortDescription || macroCluster.longDescription}</p>
-        </div>
-
-        <form className="relative w-full md:w-64" method="get" role="search">
-          <label className="sr-only" htmlFor="cluster-filter">
-            Cluster filtern
-          </label>
-          <svg aria-hidden="true" viewBox="0 0 24 24" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400">
-            <path
-              fill="currentColor"
-              d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.71.71l.27.28v.78l5 5L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14"
-            />
-          </svg>
-          <input
-            id="cluster-filter"
-            type="search"
-            name="q"
-            defaultValue={filterQuery}
-            placeholder="Filter Cluster..."
-            className="w-full rounded-lg border border-slate-700 bg-slate-900/60 pl-9 pr-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-nexo-aqua/60 focus:outline-none"
-          />
-        </form>
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredClusters.map((cluster) => (
-          <Link
-            key={cluster.slug}
-            href={`/grid/${macroCluster.slug}/${cluster.slug}`}
-            className="cursor-pointer rounded-2xl border border-white/10 bg-slate-900/70 p-6 transition hover:border-nexo-aqua/40 hover:shadow-lg"
-          >
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-sm font-semibold text-nexo-aqua">
-                {cluster.name.charAt(0)}
-              </div>
-              <span className="text-xs font-medium text-slate-300">
-                {cluster.children?.length ? `${cluster.children.length} Segmente` : "Cluster"}
-              </span>
-            </div>
-            <h3 className="mb-1 text-lg font-semibold text-white">{cluster.name}</h3>
-            <p className="text-sm text-slate-400">{cluster.shortDescription}</p>
+    <div className="space-y-10">
+      {/* --- HEADER SECTION --- */}
+      <div className="space-y-4">
+        {/* Breadcrumb Navigation */}
+        <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+          <Link href="/grid" className="hover:text-white transition-colors">
+            Grid
           </Link>
-        ))}
-        {filteredClusters.length === 0 && <p className="text-sm text-slate-300">Für dieses Makro-Cluster sind keine Cluster vorhanden.</p>}
+          <span className="text-slate-700">/</span>
+          <span className="text-nexo-ocean">{macroCluster.name}</span>
+        </nav>
+
+        {/* Title & Context */}
+        <SectionTitle
+          badge="Themen-Cluster"
+          title={macroCluster.name}
+          description={
+            macroCluster.longDescription ||
+            macroCluster.shortDescription ||
+            "Erkunde die spezifischen Themengebiete innerhalb dieses Wissensbereichs."
+          }
+          className="mb-0"
+        />
       </div>
-    </>
+
+      {/* --- GRID SECTION --- */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {clusters.map((cluster) => {
+          // Meta-Daten berechnen
+          const segmentCount = cluster.children?.length || 0;
+          const initial = cluster.name.charAt(0).toUpperCase();
+
+          return (
+            <Link key={cluster.slug} href={`/grid/${macroCluster.slug}/${cluster.slug}`} passHref>
+              <Card variant="interactive" className="h-full min-h-[220px] flex flex-col justify-between group">
+                <CardHeader className="flex-row items-start justify-between space-y-0 pb-4">
+                  {/* Visual: Initial Letter Icon */}
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 border border-white/5 text-xl font-bold text-nexo-ocean group-hover:bg-nexo-ocean/10 group-hover:border-nexo-ocean/20 transition-colors shadow-inner">
+                    {initial}
+                  </div>
+
+                  {/* Meta: Segment Count Badge */}
+                  <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-slate-400 group-hover:border-white/20 transition-colors">
+                    {segmentCount} {segmentCount === 1 ? "Segment" : "Segmente"}
+                  </span>
+                </CardHeader>
+
+                <CardContent>
+                  <CardTitle className="mb-2 text-xl group-hover:text-nexo-ocean transition-colors">{cluster.name}</CardTitle>
+                  <p className="text-sm text-nexo-muted leading-relaxed line-clamp-2">
+                    {cluster.shortDescription || "Keine Beschreibung verfügbar."}
+                  </p>
+                </CardContent>
+
+                <CardFooter className="pt-4 mt-auto border-t border-white/5">
+                  <span className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 group-hover:text-white transition-colors">
+                    Erkunden
+                    <ArrowRight className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </CardFooter>
+              </Card>
+            </Link>
+          );
+        })}
+
+        {/* Empty State */}
+        {clusters.length === 0 && (
+          <div className="col-span-full flex h-40 items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/5">
+            <p className="text-sm text-nexo-muted">In diesem Bereich sind aktuell noch keine Cluster hinterlegt.</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
