@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import type { GridNode } from "@/types/nexonoma";
 import Link from "next/link";
@@ -28,14 +29,13 @@ export function MacroClusterList({ macroClusters }: Props) {
               <CardHeader className="space-y-0 pb-3">
                 <div className="flex items-start justify-between gap-4">
                   {/* Title: min-h ensures alignment, line-clamp limits rows */}
-                  <CardTitle className="text-xl group-hover:text-nexo-ocean transition-colors duration-300 min-h-14 flex items-center leading-tight">
+                  <CardTitle className="text-xl group-hover:text-nexo-ocean transition-colors duration-300 min-h-14 flex items-start leading-tight">
                     <span className="line-clamp-2">{cluster.name}</span>
                   </CardTitle>
 
-                  {/* Badge: Fixed height/width helps alignment */}
-                  <span className="shrink-0 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-slate-400 group-hover:border-nexo-ocean/20 group-hover:text-nexo-ocean transition-colors h-fit whitespace-nowrap">
+                  <Badge variant="ocean" size="md">
                     {clusterCount} Cluster
-                  </span>
+                  </Badge>
                 </div>
               </CardHeader>
 

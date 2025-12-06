@@ -1,9 +1,9 @@
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-
+import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import type { GridNode } from "@/types/nexonoma";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface ClustersProps {
   macroCluster: GridNode;
@@ -54,10 +54,9 @@ export function Clusters({ macroCluster }: ClustersProps) {
                     {initial}
                   </div>
 
-                  {/* Meta: Segment Count Badge */}
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-slate-400 group-hover:border-white/20 transition-colors">
+                  <Badge variant="ocean" size="md">
                     {segmentCount} {segmentCount === 1 ? "Segment" : "Segmente"}
-                  </span>
+                  </Badge>
                 </CardHeader>
 
                 <CardContent>

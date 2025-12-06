@@ -175,9 +175,9 @@ export function Segments({ macroCluster, cluster }: SegmentsProps) {
             const borderColor = colors[idx % colors.length].replace("border-", "border-b-");
 
             return (
-              <div key={segment.slug} className="flex flex-col h-full rounded-2xl border border-white/5 bg-[#121926] overflow-hidden">
+              <div key={segment.slug} className="flex flex-col h-full rounded-2xl border border-white/5  overflow-hidden">
                 {/* Column Header: With colored bottom border */}
-                <div className={`px-4 py-3 bg-[#151e2e] flex justify-between items-center border-b-2 ${borderColor}`}>
+                <div className={`px-4 py-3 bg-[#151e2e]/50 flex justify-between items-center border-b ${borderColor}`}>
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">{segment.name}</h3>
                   <span className="text-[10px] text-slate-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{items.length}</span>
                 </div>
@@ -217,7 +217,7 @@ function TabButton({ active, onClick, label }: { active: boolean; onClick: () =>
   return (
     <button
       onClick={onClick}
-      className={`pb-3.5 text-sm font-medium transition-all relative whitespace-nowrap ${active ? "text-white" : "text-slate-400 hover:text-slate-200"}`}
+      className={`pb-3 text-sm font-medium transition-all relative whitespace-nowrap ${active ? "text-white" : "text-slate-400 hover:text-slate-200"}`}
     >
       {label}
       {active && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexo-ocean rounded-full" />}
