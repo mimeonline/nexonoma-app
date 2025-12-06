@@ -1,3 +1,4 @@
+import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import type { CatalogContentType } from "@/types/catalog";
 import type { Example, ExternalResource, Metric, Scenario, TradeoffFactor, UseCase } from "@/types/nexonoma";
 import { ReferrerNav } from "../organisms/ReferrerNav";
@@ -93,13 +94,22 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <Badge
+                variant={getBadgeVariant(contentType)}
+                size="md"
+                radius="md" // <-- Der Tech-Look
+              >
                 {contentType}
-              </span>
+              </Badge>
               {content.tags?.slice(0, 8).map((tag: string, idx: number) => (
-                <span key={`${tag}-${idx}`} className="text-xs text-nexo-muted bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700/50">
+                <Badge
+                  key={`${tag}-${idx}`}
+                  variant="default"
+                  size="md"
+                  radius="md" // <-- Der Tech-Look
+                >
                   #{tag}
-                </span>
+                </Badge>
               ))}
             </div>
             <div>
@@ -171,9 +181,9 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Integrationen</span>
               <div className="flex flex-wrap gap-2">
                 {content.integration?.map((integ: string, idx: number) => (
-                  <span key={idx} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
+                  <Badge key={`${integ}-${idx}`} variant="outline" size="md" radius="md" className="font-normal">
                     {integ}
-                  </span>
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -359,7 +369,7 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
           <div className="space-y-6">
             {content.implementationSteps?.map((step: string, idx: number) => (
               <div key={idx} className="flex gap-4">
-                <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-nexo-ocean/10 text-nexo-ocean font-bold text-sm border border-nexo-ocean/20">
+                <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-nexo-ocean/10 text-nexo-ocean font-bold text-sm border border-nexo-ocean/20">
                   {idx + 1}
                 </div>
                 <p className="text-sm text-slate-300 pt-1.5">{step}</p>
@@ -415,9 +425,9 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">Erforderliche Fähigkeiten</h5>
             <div className="flex flex-wrap gap-2">
               {content.requiredSkills?.map((skill: string, idx: number) => (
-                <span key={idx} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
+                <Badge key={`${skill}-${idx}`} variant="default" size="md" radius="md" className="font-normal">
                   {skill}
-                </span>
+                </Badge>
               ))}
             </div>
           </div>
