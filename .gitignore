@@ -8,7 +8,7 @@
 .netlify
 
 screenshots/
-tmp/
+sandbox/
 docs/domain/
 content/
 node_modules
