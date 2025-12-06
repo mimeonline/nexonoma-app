@@ -1,8 +1,8 @@
 import type { CatalogContentType } from "@/types/catalog";
 import type { Example, ExternalResource, Metric, Scenario, TradeoffFactor, UseCase } from "@/types/nexonoma";
-
 import { ReferrerNav } from "../organisms/ReferrerNav";
 
+// --- Types (Vollständig übernommen) ---
 export type ContentDetailsData = {
   segmentName?: string;
   clusterName?: string;
@@ -56,23 +56,47 @@ interface ContentDetailsProps {
   content: ContentDetailsData;
 }
 
+// --- HELPER COMPONENT (Für das Bento Grid Design) ---
+const InfoCard = ({
+  title,
+  iconColor,
+  stripeColorClass,
+  children,
+}: {
+  title: string;
+  iconColor: string;
+  stripeColorClass: string;
+  children: React.ReactNode;
+}) => (
+  <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden group">
+    <div className={`absolute top-0 left-0 w-full h-0.5 ${stripeColorClass}`}></div>
+    <div className="flex items-center gap-2 mb-4">
+      <svg className={`w-5 h-5 ${iconColor}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 className="font-semibold text-white">{title}</h3>
+    </div>
+    {children}
+  </div>
+);
+
 export function ContentDetails({ contentType, icon, heroQuote, content }: ContentDetailsProps) {
   return (
-    <>
+    <div className="space-y-8 pb-20">
+      {/* 0. Navigation */}
       <ReferrerNav segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
-      {/* HERO SECTION (Full Width Card) */}
-      <section className="elative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">
-        {/* Decorative Gradient Blob */}
+
+      {/* 1. HERO SECTION */}
+      <section className="relative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-nexo-aqua/5 rounded-full blur-3xl pointer-events-none"></div>
+
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
-          {/* Left Content */}
           <div className="space-y-4 max-w-3xl">
             <div className="flex items-center gap-3">
               <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 {contentType}
               </span>
-              <div className="flex gap-2"></div>
-              {content.tags.slice(0, 8).map((tag, idx) => (
+              {content.tags?.slice(0, 8).map((tag: string, idx: number) => (
                 <span key={`${tag}-${idx}`} className="text-xs text-nexo-muted bg-slate-800/50 px-2 py-0.5 rounded border border-slate-700/50">
                   #{tag}
                 </span>
@@ -89,10 +113,10 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
               </div>
               <p className="text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>
             </div>
-            <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div>
+            {heroQuote && <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div>}
           </div>
-          {/* Right Metadata */}
-          <div className="flex md:flex-col items-start md:items-end gap-3 min-w-[200px]">
+
+          <div className="flex flex-row flex-wrap md:flex-col items-start md:items-end gap-3 min-w-[200px]">
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
               <span className="text-xs text-slate-500 uppercase font-semibold">Reifegrad</span>
               <div className="flex items-center gap-1.5">
@@ -100,35 +124,26 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
                 <span className="text-sm text-white font-medium">{content.maturityLevel}</span>
               </div>
             </div>
-
-            <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-xs text-slate-500 uppercase font-semibold">Kognitive Belastung</span>
-              <span className="text-sm text-red-400 font-medium">{content.cognitiveLoad}</span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-xs text-slate-500 uppercase font-semibold">Status</span>
-              <span className="text-sm text-slate-300 font-medium">{content.status}</span>
-            </div>
+            {content.cognitiveLoad && (
+              <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span className="text-xs text-slate-500 uppercase font-semibold">Kognitive Belastung</span>
+                <span className="text-sm text-red-400 font-medium">{content.cognitiveLoad}</span>
+              </div>
+            )}
+            {content.status && (
+              <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
+                <span className="text-xs text-slate-500 uppercase font-semibold">Status</span>
+                <span className="text-sm text-slate-300 font-medium">{content.status}</span>
+              </div>
+            )}
           </div>
         </div>
       </section>
-      {/* BENTO GRID */}
+
+      {/* 2. BENTO GRID (Key Information) */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* CARD 1: Klassifikation */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition group relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-purple-500 to-indigo-500"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-              />
-            </svg>
-            <h3 className="font-semibold text-white">Klassifikation</h3>
-          </div>
+        <InfoCard title="Klassifikation" iconColor="text-purple-400" stripeColorClass="bg-linear-to-r from-purple-500 to-indigo-500">
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Komplexität</span>
@@ -147,22 +162,16 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
               <span className="text-slate-200">{content.organizationalMaturity}</span>
             </li>
           </ul>
-        </div>
-        {/* CARD 2: Technisch  */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-nexo-aqua to-nexo-ocean"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-nexo-aqua" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-            </svg>
-            <h3 className="font-semibold text-white">Technischer Kontext</h3>
-          </div>
+        </InfoCard>
+
+        {/* CARD 2: Technisch */}
+        <InfoCard title="Technischer Kontext" iconColor="text-nexo-aqua" stripeColorClass="bg-linear-to-r from-nexo-aqua to-nexo-ocean">
           <div className="space-y-4">
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Integrationen</span>
               <div className="flex flex-wrap gap-2">
-                {content.integration.map((integ, idx) => (
-                  <span key={`integration-${idx}`} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
+                {content.integration?.map((integ: string, idx: number) => (
+                  <span key={idx} className="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300 border border-slate-700">
                     {integ}
                   </span>
                 ))}
@@ -171,302 +180,269 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Alternativen</span>
               <ul className="text-sm text-slate-300 list-disc list-inside">
-                {content.alternatives.map((alternative, idx) => (
-                  <li key={`alternative-${idx}`} className="mb-1">
-                    {alternative}
+                {content.alternatives?.map((alt: string, idx: number) => (
+                  <li key={idx} className="mb-1">
+                    {alt}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-        </div>
-        {/* CARD 3: Prinzipien (statt Anwendung Text) */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-slate-600"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <h3 className="font-semibold text-white">Prinzipien & Ziele</h3>
-          </div>
+        </InfoCard>
+
+        {/* CARD 3: Prinzipien */}
+        <InfoCard title="Prinzipien & Ziele" iconColor="text-slate-400" stripeColorClass="bg-slate-600">
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
-              {content.principles.map((principle, idx) => (
-                <span key={`principle-${idx}`} className="px-2 py-1 bg-slate-800/60 rounded text-xs border border-slate-700">
+              {content.principles?.map((principle: string, idx: number) => (
+                <span key={idx} className="px-2 py-1 bg-slate-800/60 rounded text-xs border border-slate-700">
                   {principle}
                 </span>
               ))}
             </div>
             <p className="text-sm text-nexo-muted leading-relaxed mt-2">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Wertstrom</span>
-              Phase: <span className="text-white">{content.valueStreamStage}</span>
+              <span className="text-white">{content.valueStreamStage}</span>
             </p>
             <p className="text-sm text-nexo-muted leading-relaxed">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">Organisationsebene</span>
-              <span className="text-white"> {content.organizationalLevel.join(", ")}</span>
+              <span className="text-white">{content.organizationalLevel?.join(", ")}</span>
             </p>
           </div>
-        </div>
-        {/* ROW 2 START */}
-        {/* CARD 4a: Use Cases */}
+        </InfoCard>
 
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-blue-500"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 className="font-semibold text-white">Use Cases</h3>
+        {/* CARD 4: Use Cases & Scenarios */}
+        <InfoCard title="Use Cases & Szenarien" iconColor="text-blue-400" stripeColorClass="bg-blue-500">
+          <div className="space-y-4">
+            {content.useCases?.length > 0 && (
+              <div className="space-y-2">
+                <span className="text-[10px] uppercase text-blue-400 font-bold">Use Cases</span>
+                {content.useCases.map((uc: any, idx: number) => (
+                  <div key={idx} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
+                    <p>{uc.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            {content.scenarios?.length > 0 && (
+              <div className="space-y-2 pt-2 border-t border-white/5">
+                <span className="text-[10px] uppercase text-green-400 font-bold">Szenarien</span>
+                {content.scenarios.map((sc: any, idx: number) => (
+                  <div key={idx} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
+                    <p>{sc.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          {content.useCases.length > 0 && (
-            <div className="space-y-3">
-              {content.useCases.map((uc, idx) => (
-                <div key={`usecase-${idx}`} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
-                  <strong className="block text-blue-400 text-xs uppercase mb-1">Use Case {idx + 1}</strong>
-                  <p className="mb-1">{String(uc.description)}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        {/* CARD 4b: Szeanarios */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-green-400"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 className="font-semibold text-white">Szenarien</h3>
-          </div>
-          {content.scenarios.length > 0 && (
-            <div className="space-y-3">
-              {content.scenarios.map((scenario, idx) => (
-                <div key={`scenario-${idx}`} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
-                  <strong className="block text-green-400 text-xs uppercase mb-1">Szenario {idx + 1}</strong>
-                  <p className="mb-1">{String(scenario.name)}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        {/* CARD 5: Risiken & Best Practices */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-red-500 to-green-500"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-              />
-            </svg>
-            <h3 className="font-semibold text-white">Kompromisse</h3>
-          </div>
+        </InfoCard>
+
+        {/* CARD 5: Kompromisse */}
+        <InfoCard title="Kompromisse" iconColor="text-slate-400" stripeColorClass="bg-linear-to-r from-red-500 to-green-500">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">Risiken & Fallstricke</span>
+              <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">Risiken</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-red-500">
-                {content.risks.map((risk, idx) => (
-                  <li key={`risk-${idx}`}>{risk}</li>
+                {content.risks?.map((risk: string, idx: number) => (
+                  <li key={idx}>{risk}</li>
                 ))}
               </ul>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">Bewährte Verfahren</span>
+              <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">Best Practices</span>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-green-500">
-                {content.bestPractices.map((bestPractice, idx) => (
-                  <li key={`risk-${idx}`}>{bestPractice}</li>
+                {content.bestPractices?.map((bp: string, idx: number) => (
+                  <li key={idx}>{bp}</li>
                 ))}
               </ul>
             </div>
           </div>
-        </div>
-        {/* CARD 6: Metadaten & Ressourcen */}
-        <div className="bg-nexo-card rounded-2xl border border-nexo-border p-6 shadow-sm hover:border-slate-600 transition relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-indigo-500"></div>
-          <div className="flex items-center gap-2 mb-4">
-            <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-              />
-            </svg>
-            <h3 className="font-semibold text-white">I/O & Ressourcen</h3>
-          </div>
+        </InfoCard>
 
+        {/* CARD 6: I/O & Ressourcen */}
+        <InfoCard title="I/O & Ressourcen" iconColor="text-indigo-400" stripeColorClass="bg-indigo-500">
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Eingaben</span>
-                <div className="text-xs text-slate-300">{Array.isArray(content.inputs) ? content.inputs.join(", ") : ""}</div>
+                <div className="text-xs text-slate-300">{content.inputs?.join(", ")}</div>
               </div>
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Ausgaben</span>
-                <div className="text-xs text-slate-300">{Array.isArray(content.outputs) ? content.outputs.join(", ") : ""}</div>
+                <div className="text-xs text-slate-300">{content.outputs?.join(", ")}</div>
               </div>
             </div>
             <div>
               <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Ressourcen</span>
-              {content.resources.length > 0 && (
-                <ul className="space-y-1">
-                  {content.resources.map((resource, idx) => (
-                    <li key={`resource-${idx}`}>
-                      <a
-                        href={typeof resource.url === "string" ? resource.url : undefined}
-                        target="_blank"
-                        className="text-xs text-nexo-aqua hover:underline flex items-center gap-1"
-                      >
-                        {String(resource.name)}{" "}
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="space-y-1">
+                {content.resources?.map((res: any, idx: number) => (
+                  <li key={idx}>
+                    <a href={res.url} target="_blank" className="text-xs text-nexo-aqua hover:underline flex items-center gap-1">
+                      {res.name} ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-        </div>
+        </InfoCard>
       </section>
-      {/* DETAIL CONTENT AREA */}
-      <section className="space-y-10 pt-4">
-        {/* Description  */}
+
+      {/* 3. DETAIL CONTENT AREA */}
+      <section className="space-y-10 pt-8 border-t border-white/5">
+        {/* Description */}
         <div className="max-w-4xl">
           <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
             <span className="w-1 h-6 bg-nexo-aqua rounded-full"></span>
             Beschreibung
           </h2>
-          <div className="prose prose-invert prose-slate max-w-none text-nexo-muted">
-            <p className="leading-relaxed">{content.longDescription || ""}</p>
+          <div className="prose prose-invert prose-slate max-w-none text-nexo-muted text-base leading-relaxed">
+            <p>{content.longDescription}</p>
           </div>
         </div>
-        {/* Benefits & Limitations (New Section) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="text-lg font-bold text-white mb-2">Vorteile</h3>
-            <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {content.benefits.map((benefit, idx) => (
-                <li key={`benefit-${idx}`}>{benefit}</li>
+
+        {/* Pros / Cons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-green-400">✔</span> Vorteile
+            </h3>
+            <ul className="space-y-2">
+              {content.benefits?.map((b: string, idx: number) => (
+                <li key={idx} className="flex gap-2 text-sm text-slate-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-green-500 shrink-0" />
+                  {b}
+                </li>
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-white mb-2">Limitationen</h3>
-            <ul className="list-disc list-inside text-sm text-nexo-muted space-y-1">
-              {content.limitations.map((limitation, idx) => (
-                <li key={`limitation-${idx}`}>{limitation}</li>
+          <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-red-400">✖</span> Limitationen
+            </h3>
+            <ul className="space-y-2">
+              {content.limitations?.map((l: string, idx: number) => (
+                <li key={idx} className="flex gap-2 text-sm text-slate-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
+                  {l}
+                </li>
               ))}
             </ul>
           </div>
         </div>
-        {/* Examples Grid */}
+
+        {/* Examples */}
         <div>
           <h2 className="text-xl font-bold text-white mb-4">Beispiele & Implementierungen</h2>
-          {content.examples.length > 0 && (
+          {content.examples?.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {content.examples.map((example, idx) => (
-                <div key={`example-${idx}`} className="bg-slate-900/40 border border-slate-800 rounded-xl p-5">
-                  <h4 className="font-bold text-white mb-1">{String(example.name)}</h4>
-                  <p className="text-sm text-slate-400 mb-2">{String(example.description)}</p>
+              {content.examples.map((example: any, idx: number) => (
+                <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-xl p-5">
+                  <h4 className="font-bold text-white mb-1">{example.name}</h4>
+                  <p className="text-sm text-slate-400 mb-2">{example.description}</p>
                   <div className="flex gap-2">
-                    {Array.isArray(example.assets) &&
-                      example.assets.map((asset, assetIdx) => (
-                        <span key={`assets-${assetIdx}`} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">
-                          {asset}
-                        </span>
-                      ))}
+                    {example.assets?.map((asset: string, assetIdx: number) => (
+                      <span key={assetIdx} className="text-xs bg-slate-800 px-2 py-1 rounded text-slate-300">
+                        {asset}
+                      </span>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
           )}
         </div>
+
         {/* Implementation Steps */}
-        <div className="bg-slate-900/30 border border-slate-800 rounded-xl p-6">
-          <h2 className="text-lg font-bold text-white mb-4">Implementierungsschritte</h2>
-          {content.implementationSteps.length > 0 &&
-            content.implementationSteps.map((step, idx) => (
-              <li key={`step-${idx}`} className="space-y-2 text-sm text-nexo-muted list-iside">
-                {step}
-              </li>
+        <div className="bg-slate-900/30 border border-slate-800 rounded-xl p-8">
+          <h2 className="text-xl font-bold text-white mb-6">Implementierungsschritte</h2>
+          <div className="space-y-6">
+            {content.implementationSteps?.map((step: string, idx: number) => (
+              <div key={idx} className="flex gap-4">
+                <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-nexo-ocean/10 text-nexo-ocean font-bold text-sm border border-nexo-ocean/20">
+                  {idx + 1}
+                </div>
+                <p className="text-sm text-slate-300 pt-1.5">{step}</p>
+              </div>
             ))}
+          </div>
         </div>
-        {/* Tech Debts & Bottlenecks */}
+
+        {/* Tech Debt (Warning Section) */}
         <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-6">
-          <h2 className="text-lg font-bold text-red-200 mb-3">Technische Schulden & Engpässe</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h2 className="text-lg font-bold text-red-200 mb-4 flex items-center gap-2">
+            <span className="p-1 rounded bg-red-500/20">⚠️</span> Technische Schulden & Engpässe
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Technische Schulden</h5>
-              <ul className="space-y-1">
-                {content.techDebts.map((techDebt, idx) => (
-                  <li key={`techDebt-${idx}`} className="flex items-center gap-2 text-sm text-slate-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span> {techDebt}
+              <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Risiko-Faktoren</h5>
+              <ul className="space-y-2">
+                {content.techDebts?.map((td: string, idx: number) => (
+                  <li key={idx} className="flex gap-2 text-sm text-slate-400">
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shrink-0" />
+                    {td}
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">Engpässe</h5>
+              <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">Bekannte Engpässe</h5>
               <div className="flex flex-wrap gap-2">
-                {content.bottleneckTags.map((tag, idx) => (
-                  <span key={`tag-${idx}`} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
+                {content.bottleneckTags?.map((tag: string, idx: number) => (
+                  <span key={idx} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-
-          <div className="mt-4 pt-4 border-t border-red-500/10">
-            <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Beispiele für Missbrauch</h5>
-            <ul className="text-sm text-slate-400 list-disc list-inside">
-              {content.misuseExamples.map((example, idx) => (
-                <li key={`misuse-example-${idx}`}>{example}</li>
-              ))}
-            </ul>
-          </div>
+          {/* Missuse Examples */}
+          {content.misuseExamples?.length > 0 && (
+            <div className="mt-6 pt-4 border-t border-red-500/10">
+              <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Beispiele für Missbrauch</h5>
+              <ul className="text-sm text-slate-400 list-disc list-inside">
+                {content.misuseExamples.map((ex, idx) => (
+                  <li key={idx}>{ex}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-        {/* Additional Info */}
+
+        {/* Additional Info (Skills, Drivers, Constraints) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4 border-t border-slate-800">
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Erforderliche Fähigkeiten</h5>
+            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">Erforderliche Fähigkeiten</h5>
             <div className="flex flex-wrap gap-2">
-              {content.requiredSkills.map((skill, idx) => (
-                <span key={`skill-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
+              {content.requiredSkills?.map((skill: string, idx: number) => (
+                <span key={idx} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
                   {skill}
                 </span>
               ))}
             </div>
           </div>
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Architektonische Treiber</h5>
+            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">Architektonische Treiber</h5>
             <div className="flex flex-wrap gap-2">
-              {content.architecturalDrivers.map((driver, idx) => (
-                <span key={`driver-${idx}`} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
+              {content.architecturalDrivers?.map((driver: string, idx: number) => (
+                <span key={idx} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
                   {driver}
                 </span>
               ))}
             </div>
           </div>
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-2">Einschränkungen</h5>
+            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">Einschränkungen</h5>
             <ul className="text-xs text-nexo-muted space-y-1">
-              {content.constraints.map((constraint, idx) => (
-                <li key={`constraint-${idx}`}>{constraint}</li>
+              {content.constraints?.map((constraint: string, idx: number) => (
+                <li key={idx} className="flex gap-2">
+                  <span className="text-slate-600">•</span> {constraint}
+                </li>
               ))}
             </ul>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
