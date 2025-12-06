@@ -1,5 +1,5 @@
-import type { GridNode } from "@/types/nexonoma";
-
+import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
+import type { GridNode } from "@/types/nexonoma"; // Passe den Pfad ggf. an
 import { MacroClusterList } from "../organisms/MacroClusterList";
 
 interface MacroClusterProps {
@@ -8,17 +8,16 @@ interface MacroClusterProps {
 
 export function MacroCluster({ macroClusters }: MacroClusterProps) {
   return (
-    <>
-      <header className="space-y-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200/70">Wissensbereiche</p>
-        <h1 className="text-3xl font-semibold sm:text-4xl">Grid: Makro-Cluster, Cluster und Segmente</h1>
-        <div className="h-px w-full bg-white/10 my-4" />
-        <p className="max-w-3xl text-base text-gray-300">
-          Wähle einen Makro-Cluster, öffne die Cluster im Accordion und wechsle auf die Segmentseiten.
-        </p>
-      </header>
+    <div className="space-y-12">
+      {/* Header Bereich basierend auf bereiche.pdf */}
+      <SectionTitle
+        badge="Grid Navigation"
+        title="Wissensbereiche"
+        description="Die oberste Struktur des Wissensnetzes. Diese Bereiche bündeln verwandte Themen in thematische Räume – von der Strategie über die Architektur bis hin zu User & Kontext."
+      />
 
+      {/* Die Liste der Karten */}
       <MacroClusterList macroClusters={macroClusters} />
-    </>
+    </div>
   );
 }
