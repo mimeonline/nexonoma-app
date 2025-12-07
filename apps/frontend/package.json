@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@nexonoma/types": "workspace:*",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
+    "@types/three": "^0.181.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "three": "^0.181.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
