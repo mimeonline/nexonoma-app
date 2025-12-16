@@ -7,6 +7,8 @@ import { StructuralAsset } from '../../domain/entities/structural-asset.entity';
 import { AssetRepositoryPort } from '../../domain/ports/outbound/asset-repository.port';
 import { AssetType } from '../../domain/types/asset-enums';
 import { AssetMapper } from './asset.mapper';
+// Importiere deinen Helper (Pfad ggf. anpassen)
+import { getI18nProjection } from '../../../shared/infrastructure/neo4j/cypher-fragments';
 
 @Injectable()
 export class Neo4jAssetRepository implements AssetRepositoryPort {
@@ -16,89 +18,116 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
 
   /**
    * Page 1: Holt alle MacroClusters
-   * Label: AssetBlock
    */
-  async findMacroClusters(): Promise<StructuralAsset[]> {
+  async findMacroClusters(lang: string = 'en'): Promise<StructuralAsset[]> {
+    const i18n = getI18nProjection('n');
+
+    // Wir nutzen Map Projection: n { .*, name: ... }
+    // Das holt alle Properties UND überschreibt die i18n Felder mit der gewählten Sprache
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.type = $type
-      RETURN n
-      ORDER BY n.name ASC
+      RETURN n {
+        .*,
+        ${i18n}
+      } AS assetData
+      ORDER BY assetData.name ASC
     `;
 
     const result = await this.neo4j.read(query, {
       type: AssetType.MACRO_CLUSTER,
+      lang: lang,
     });
 
     return result.map((record) => {
-      const nodeProps = record.get('n').properties;
-      return AssetMapper.toDomain(nodeProps) as StructuralAsset;
+      const assetData = record.get('assetData');
+      return AssetMapper.toDomain(assetData, lang) as StructuralAsset;
     });
   }
 
   /**
    * Page 2 & 3: Findet ein Strukturelement (Macro, Cluster, Segment) anhand des Slugs.
    */
-  async findStructuralBySlug(slug: string): Promise<StructuralAsset | null> {
+  async findStructuralBySlug(
+    lang: string = 'en',
+    slug: string,
+  ): Promise<StructuralAsset | null> {
+    const i18n = getI18nProjection('n');
+
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.slug = $slug AND n.type IN [$mc, $c, $s, $cv]
-      RETURN n
+      RETURN n {
+        .*,
+        ${i18n}
+      } AS assetData
     `;
 
     const params = {
       slug,
+      lang: lang,
       mc: AssetType.MACRO_CLUSTER,
       c: AssetType.CLUSTER,
       s: AssetType.SEGMENT,
       cv: AssetType.CLUSTER_VIEW,
     };
-
+    console.log(query);
     const result = await this.neo4j.read(query, params);
 
     if (result.length === 0) {
       return null;
     }
 
-    const nodeProps = result[0].get('n').properties;
-    return AssetMapper.toDomain(nodeProps) as StructuralAsset;
+    const assetData = result[0].get('assetData');
+    return AssetMapper.toDomain(assetData, lang) as StructuralAsset;
   }
 
   /**
    * Findet alle Kinder eines Parents.
-   * Label: AssetBlock
-   * Relationen:
-   * - Struktur (Macro -> Cluster -> Segment): nutzt [:CONTAINS]
-   * - Inhalt (Segment -> Content): nutzt [:RELATED_TO]
    */
-  async findChildren(parentId: string): Promise<AssetBlock[]> {
+  async findChildren(
+    lang: string = 'en',
+    parentId: string,
+  ): Promise<AssetBlock[]> {
+    // Hier ist der Alias 'c' für Child
+    const i18n = getI18nProjection('c');
+
     const query = `
       MATCH (p:AssetBlock {id: $parentId})
       MATCH (p)-[:CONTAINS|RELATED_TO]->(c:AssetBlock)
-      RETURN c
-      ORDER BY c.name ASC
+      RETURN c {
+        .*,
+        ${i18n}
+      } AS assetData
+      ORDER BY assetData.name ASC
     `;
 
-    const result = await this.neo4j.read(query, { parentId });
+    const result = await this.neo4j.read(query, { parentId, lang: lang });
 
     return result.map((record) => {
-      const nodeProps = record.get('c').properties;
-      return AssetMapper.toDomain(nodeProps);
+      const assetData = record.get('assetData');
+      return AssetMapper.toDomain(assetData, lang);
     });
   }
 
   /**
    * Page 4: Katalog Liste (Alle Content Types)
    */
-  async findAllContent(): Promise<ContentAsset[]> {
+  async findAllContent(lang: string = 'en'): Promise<ContentAsset[]> {
+    const i18n = getI18nProjection('n');
+
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.type IN [$t1, $t2, $t3, $t4]
-      RETURN n
-      ORDER BY n.name ASC
+      RETURN n {
+        .*,
+        ${i18n}
+      } AS assetData
+      ORDER BY assetData.name ASC
     `;
 
     const params = {
+      lang: lang,
       t1: AssetType.TOOL,
       t2: AssetType.METHOD,
       t3: AssetType.CONCEPT,
@@ -108,46 +137,63 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     const result = await this.neo4j.read(query, params);
 
     return result.map((record) => {
-      const nodeProps = record.get('n').properties;
-      return AssetMapper.toDomain(nodeProps) as ContentAsset;
+      const assetData = record.get('assetData');
+      return AssetMapper.toDomain(assetData, lang) as ContentAsset;
     });
   }
 
   /**
    * Page 5: Detailansicht (Find by ID)
    */
-  async findById(id: string): Promise<ContentAsset | ContextAsset | null> {
+  async findById(
+    lang: string = 'en',
+    id: string,
+  ): Promise<ContentAsset | ContextAsset | null> {
+    const i18n = getI18nProjection('n');
+
     const query = `
       MATCH (n:AssetBlock {id: $id})
-      RETURN n
+      RETURN n {
+        .*,
+        ${i18n}
+      } AS assetData
     `;
 
-    const result = await this.neo4j.read(query, { id });
+    const result = await this.neo4j.read(query, { id, lang: lang });
 
     if (result.length === 0) {
       return null;
     }
 
-    const nodeProps = result[0].get('n').properties;
-    const asset = AssetMapper.toDomain(nodeProps);
-
-    return asset as ContentAsset | ContextAsset;
+    const assetData = result[0].get('assetData');
+    return AssetMapper.toDomain(assetData, lang) as ContentAsset | ContextAsset;
   }
+
   async findContentBySlug(
+    lang: string = 'en',
     type: string,
     slug: string,
   ): Promise<ContentAsset | null> {
+    const i18n = getI18nProjection('n');
+
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.slug = $slug AND n.type = $type
-      RETURN n
+      RETURN n {
+        .*,
+        ${i18n}
+      } AS assetData
     `;
 
-    const result = await this.neo4j.read(query, { slug, type });
+    const result = await this.neo4j.read(query, {
+      slug,
+      type,
+      lang: lang,
+    });
 
     if (result.length === 0) return null;
 
-    const nodeProps = result[0].get('n').properties;
-    return AssetMapper.toDomain(nodeProps) as ContentAsset;
+    const assetData = result[0].get('assetData');
+    return AssetMapper.toDomain(assetData, lang) as ContentAsset;
   }
 }

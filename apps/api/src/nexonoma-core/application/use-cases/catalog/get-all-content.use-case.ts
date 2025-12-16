@@ -6,9 +6,9 @@ import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-reposi
 export class GetAllContentUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(): Promise<ContentAsset[]> {
+  async execute(lang: string): Promise<ContentAsset[]> {
     // Ruft alle Content-Bausteine ab.
     // Hier könnte man später Filter-Parameter (z.B. type='tool') durchreichen.
-    return this.assetRepo.findAllContent();
+    return this.assetRepo.findAllContent(lang);
   }
 }

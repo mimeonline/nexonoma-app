@@ -1,8 +1,8 @@
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { I18nLang } from 'nestjs-i18n';
 import { GetAllContentUseCase } from '../../application/use-cases/catalog/get-all-content.use-case';
 import { GetContentBySlugUseCase } from '../../application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from '../../application/use-cases/catalog/get-content-detail.use-case';
-
 @Controller('catalog')
 export class CatalogController {
   constructor(
@@ -16,8 +16,8 @@ export class CatalogController {
    * GET /api/catalog
    */
   @Get()
-  async getCatalog() {
-    return this.getAll.execute();
+  async getCatalog(@I18nLang() lang: string) {
+    return this.getAll.execute(lang);
   }
 
   /**
@@ -26,8 +26,11 @@ export class CatalogController {
    * (Wird genutzt, wenn man vom Grid kommt, wo die ID bekannt ist)
    */
   @Get(':id')
-  async getContentDetail(@Param('id', ParseUUIDPipe) id: string) {
-    return this.getDetail.execute(id);
+  async getContentDetail(
+    @I18nLang() lang: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.getDetail.execute(lang, id);
   }
 
   /**
@@ -40,7 +43,8 @@ export class CatalogController {
   async getContentBySlug(
     @Param('type') type: string,
     @Param('slug') slug: string,
+    @I18nLang() lang: string,
   ) {
-    return this.getBySlug.execute(type, slug);
+    return this.getBySlug.execute(lang, type, slug);
   }
 }

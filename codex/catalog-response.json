@@ -76,7 +76,6 @@
       "Standardisierte Deployments",
       "Einheitliches Betriebsmodell"
     ],
-    "customFields": "{}",
     "icon": "12factor-icon.svg",
     "architecturalDrivers": [
       "maintainability",

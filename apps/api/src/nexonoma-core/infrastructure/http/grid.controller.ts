@@ -1,10 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
 // Diese Imports erstellen wir in den nächsten Schritten
+import { I18nLang } from 'nestjs-i18n';
 import { GetGridClustersUseCase } from '../../application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from '../../application/use-cases/grid/get-grid-macros.use-case';
 import { GetGridSegmentsUseCase } from '../../application/use-cases/grid/get-grid-segments.use-case';
-
 @Controller('grid') // Base Route: /api/grid (wenn global prefix 'api' gesetzt ist)
 export class GridController {
   constructor(
@@ -18,8 +18,9 @@ export class GridController {
    * Zeigt alle Macro Clusters an (z.B. "Software & Architektur", "Organisation").
    */
   @Get('macros')
-  async getMacrosPage() {
-    return this.getMacros.execute();
+  async getMacrosPage(@I18nLang() lang: string) {
+    console.log('Detected Language:', lang);
+    return this.getMacros.execute(lang);
   }
 
   /**
@@ -28,8 +29,11 @@ export class GridController {
    * Beispiel: /api/grid/macros/software-architecture/clusters
    */
   @Get('macros/:slug/clusters')
-  async getClustersPage(@Param('slug') macroSlug: string) {
-    return this.getClusters.execute(macroSlug);
+  async getClustersPage(
+    @I18nLang() lang: string,
+    @Param('slug') macroSlug: string,
+  ) {
+    return this.getClusters.execute(lang, macroSlug);
   }
 
   /**
@@ -39,7 +43,10 @@ export class GridController {
    * Beispiel: /api/grid/clusters/frontend-development/segments
    */
   @Get('clusters/:slug/segments')
-  async getSegmentsPage(@Param('slug') clusterSlug: string) {
-    return this.getSegments.execute(clusterSlug);
+  async getSegmentsPage(
+    @I18nLang() lang: string,
+    @Param('slug') clusterSlug: string,
+  ) {
+    return this.getSegments.execute(lang, clusterSlug);
   }
 }

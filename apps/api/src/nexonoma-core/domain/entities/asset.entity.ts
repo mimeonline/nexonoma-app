@@ -19,7 +19,6 @@ export interface AssetBlockProps {
   tags?: string[];
   abbreviation?: string;
   organizationalLevel?: string[];
-  customFields?: Record<string, any>;
   icon?: string;
   image?: string; // Neu hinzugefügt
 }
@@ -43,7 +42,6 @@ export abstract class AssetBlock {
   public readonly tags: string[];
   public readonly abbreviation?: string;
   public readonly organizationalLevel: string[];
-  public readonly customFields: Record<string, any>;
   public readonly icon?: string;
   public readonly image?: string;
 
@@ -66,7 +64,6 @@ export abstract class AssetBlock {
     this.tags = props.tags || [];
     this.abbreviation = props.abbreviation;
     this.organizationalLevel = props.organizationalLevel || [];
-    this.customFields = props.customFields || {};
     this.icon = props.icon;
     this.image = props.image;
   }

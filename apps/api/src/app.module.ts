@@ -1,20 +1,38 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import {
+  AcceptLanguageResolver,
+  HeaderResolver,
+  I18nModule,
+  QueryResolver,
+} from 'nestjs-i18n';
+import * as path from 'path'; // fs wird nicht mehr gebraucht
 import { NexonomaCoreModule } from './nexonoma-core/nexonoma-core.module';
 import { Neo4jModule } from './shared/infrastructure/neo4j/neo4j.module';
+
 @Module({
   imports: [
-    // 1. Config laden: Das muss als allererstes passieren
-    ConfigModule.forRoot({
-      isGlobal: true, // Macht ConfigService überall verfügbar
-      envFilePath: '.env', // Optional, standardmäßig wird im Root gesucht
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        // WICHTIG: Das hier reicht, wenn Schritt 2 & 3 gemacht sind!
+        // __dirname zeigt im Build auf 'dist/apps/api/src'
+        path: path.join(__dirname, 'i18n'),
+        watch: true,
+      },
+      resolvers: [
+        new QueryResolver(['lang', 'locale']),
+        new HeaderResolver(['x-custom-lang']),
+        AcceptLanguageResolver,
+      ],
     }),
 
-    // 2. Shared Modules: Globale Infrastruktur bereitstellen
-    Neo4jModule,
-    // Da Neo4jModule @Global() ist, ist der Service jetzt in der ganzen App verfügbar
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
 
-    // 3. Feature Modules: Deine eigentliche Business-Logik
+    Neo4jModule,
     NexonomaCoreModule,
   ],
   controllers: [],

@@ -6,9 +6,9 @@ import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-reposi
 export class GetGridMacrosUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(): Promise<StructuralAsset[]> {
+  async execute(lang: string): Promise<StructuralAsset[]> {
     // Ruft einfach alle MacroCluster aus dem Repo ab.
     // Hier könnte später Caching passieren.
-    return this.assetRepo.findMacroClusters();
+    return this.assetRepo.findMacroClusters(lang);
   }
 }

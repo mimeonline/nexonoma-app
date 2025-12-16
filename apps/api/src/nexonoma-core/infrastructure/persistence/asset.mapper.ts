@@ -13,80 +13,78 @@ import {
   StructuralAssetProps,
 } from '../../domain/entities/structural-asset.entity';
 import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+// Importiere deinen Helper
+import { LocalizationHelper } from '../../../shared/common/utils/localization.helper';
 
 @Injectable()
 export class AssetMapper {
   /**
-   * Wandelt ein rohes Neo4j-Node-Objekt (Properties) in eine Domain-Entity um.
+   * Wandelt das projizierte Objekt (assetData) in eine Domain-Entity um.
+   * @param data - Das Ergebnis der Neo4j Query (bereits inkl. COALESCE Werten)
+   * @param locale - Die angeforderte Sprache (für Parsing der komplexen JSON-Felder)
    */
-  static toDomain(nodeProps: any): AssetBlock {
-    if (!nodeProps) {
-      throw new Error('AssetMapper: Node properties cannot be null/undefined');
+  static toDomain(data: any, locale: string): AssetBlock {
+    if (!data) {
+      throw new Error('AssetMapper: Data properties cannot be null/undefined');
     }
 
     // 1. Gemeinsame Basis-Daten mappen
+    // HINWEIS: data.name und data.shortDescription sind dank der Query
+    // bereits in der korrekten Sprache (String).
     const baseProps: AssetBlockProps = {
-      id: nodeProps.id,
-      slug: nodeProps.slug,
-      name: nodeProps.name,
-      type: nodeProps.type as AssetType,
-      status: (nodeProps.status as AssetStatus) || AssetStatus.DRAFT, // Fallback
-      version: nodeProps.version || '0.0.1',
-      language: nodeProps.language || 'en',
-      license: nodeProps.license,
+      id: data.id,
+      slug: data.slug,
+      name: data.name,
+      type: data.type as AssetType,
+      status: (data.status as AssetStatus) || AssetStatus.DRAFT,
+      version: data.version || '1.0.0',
+      language: locale, // Wir setzen hier die angeforderte Sprache
+      license: data.license,
 
-      // Neo4j speichert Dates oft als ISO-Strings oder Neo4j-DateTime-Objekte.
-      // Wir erzwingen hier JS-Dates.
-      createdAt: new Date(nodeProps.createdAt || Date.now()),
-      updatedAt: new Date(nodeProps.updatedAt || Date.now()),
+      createdAt: new Date(data.createdAt || Date.now()),
+      updatedAt: new Date(data.updatedAt || Date.now()),
 
-      author: nodeProps.author || 'Unknown',
-      contributor: AssetMapper.parseArray(nodeProps.contributor),
+      author: data.author || 'Unknown',
+      contributor: AssetMapper.parseArray(data.contributor),
 
-      shortDescription: nodeProps.shortDescription || '',
-      longDescription: nodeProps.longDescription || '',
-      tags: AssetMapper.parseArray(nodeProps.tags),
-      abbreviation: nodeProps.abbreviation,
+      shortDescription: data.shortDescription || '',
+      longDescription: data.longDescription || '',
 
-      organizationalLevel: AssetMapper.parseArray(
-        nodeProps.organizationalLevel,
-      ),
-      customFields: AssetMapper.parseJson(nodeProps.customFields, {}),
+      // Tags bleiben (vorerst) Map oder Array, je nach Definition.
+      // Hier nutzen wir parseArray als Fallback, falls die Logik komplexer ist.
+      tags: LocalizationHelper.parseMapAndLocalize(data.tags, locale),
+      abbreviation: data.abbreviation,
 
-      icon: nodeProps.icon,
-      image: nodeProps.image,
+      organizationalLevel: AssetMapper.parseArray(data.organizationalLevel),
+
+      icon: data.icon,
+      image: data.image,
     };
 
-    // 2. Unterscheidung nach Typ (Polymorphismus)
+    // 2. Unterscheidung nach Typ
     switch (baseProps.type) {
-      // --- A) Structural Assets ---
       case AssetType.MACRO_CLUSTER:
       case AssetType.CLUSTER:
       case AssetType.SEGMENT:
       case AssetType.CLUSTER_VIEW:
-        return AssetMapper.toStructuralAsset(baseProps, nodeProps);
+        return AssetMapper.toStructuralAsset(baseProps, data);
 
-      // --- B) Content Assets ---
       case AssetType.CONCEPT:
       case AssetType.METHOD:
       case AssetType.TOOL:
       case AssetType.TECHNOLOGY:
-        return AssetMapper.toContentAsset(baseProps, nodeProps);
+        return AssetMapper.toContentAsset(baseProps, data, locale);
 
-      // --- C) Context Assets (Roles) ---
       case AssetType.ROLE:
         return new ContextAsset(baseProps);
 
       default:
-        // Fallback für unbekannte Typen (damit die App nicht crasht)
         console.warn(
           `Unknown AssetType '${baseProps.type}' for ID ${baseProps.id}. Returning plain ContextAsset.`,
         );
         return new ContextAsset(baseProps);
     }
   }
-
-  // --- Helper für spezifische Typen ---
 
   private static toStructuralAsset(
     base: AssetBlockProps,
@@ -97,7 +95,7 @@ export class AssetMapper {
       category: props.category,
       clusterSlug: props.clusterSlug,
       framework: props.framework,
-      parentId: props.parentId, // Falls in den Node-Props gespeichert
+      parentId: props.parentId,
     };
     return new StructuralAsset(structProps);
   }
@@ -105,17 +103,23 @@ export class AssetMapper {
   private static toContentAsset(
     base: AssetBlockProps,
     props: any,
+    locale: string,
   ): ContentAsset {
     const contentProps: ContentAssetProps = {
       ...base,
 
-      // Komplexe JSON-Objekte parsen (Neo4j speichert keine Nested Objects)
-      useCases: AssetMapper.parseJson(props.useCases, []),
-      scenarios: AssetMapper.parseJson(props.scenarios, []),
-      examples: AssetMapper.parseJson(props.examples, []),
-      resources: AssetMapper.parseJson(props.resources, []),
-      tradeoffMatrix: AssetMapper.parseJson(props.tradeoffMatrix, []),
-      metrics: AssetMapper.parseJson(props.metrics, []),
+      // --- KOMPLEXE JSON FELDER ---
+      // Diese sind in der DB als JSON-String gespeichert und müssen
+      // geparst UND lokalisiert werden.
+      useCases: LocalizationHelper.parseAndLocalize(props.useCases, locale),
+      scenarios: LocalizationHelper.parseAndLocalize(props.scenarios, locale),
+      examples: LocalizationHelper.parseAndLocalize(props.examples, locale),
+      resources: LocalizationHelper.parseAndLocalize(props.resources, locale),
+      tradeoffMatrix: LocalizationHelper.parseAndLocalize(
+        props.tradeoffMatrix,
+        locale,
+      ),
+      metrics: LocalizationHelper.parseAndLocalize(props.metrics, locale),
 
       // Klassifizierungen
       maturityLevel: props.maturityLevel,
@@ -126,7 +130,11 @@ export class AssetMapper {
       valueStreamStage: props.valueStreamStage,
       cognitiveLoad: props.cognitiveLoad,
 
-      // Listen (Arrays)
+      // --- FLAT I18N LISTEN ---
+      // Dank "getI18nProjection" in der Query sind diese Felder hier bereits
+      // echte Arrays in der korrekten Sprache (z.B. ["Vorteil A", "Vorteil B"]).
+      // Wir müssen sie also nicht mehr parsen oder lokalisieren, nur zuweisen.
+      // Wir nutzen dennoch parseArray zur Sicherheit (falls null).
       principles: AssetMapper.parseArray(props.principles),
       inputs: AssetMapper.parseArray(props.inputs),
       outputs: AssetMapper.parseArray(props.outputs),
@@ -147,7 +155,6 @@ export class AssetMapper {
       traps: AssetMapper.parseArray(props.traps),
       constraints: AssetMapper.parseArray(props.constraints),
 
-      // Tool Specifics
       vendor: props.vendor,
     };
     return new ContentAsset(contentProps);
@@ -155,37 +162,29 @@ export class AssetMapper {
 
   // --- Utility Helper ---
 
-  /**
-   * Versucht einen JSON-String zu parsen.
-   * Gibt den Fallback-Wert zurück, wenn es kein String ist oder Fehler wirft.
-   */
-  private static parseJson(value: any, fallback: any): any {
-    if (typeof value === 'string') {
-      try {
-        return JSON.parse(value);
-      } catch (e) {
-        console.error('Failed to parse JSON property:', value);
-        return fallback;
-      }
-    }
-    // Falls es schon ein Objekt ist (z.B. durch Driver-Konvertierung)
-    return value || fallback;
-  }
-
-  /**
-   * Stellt sicher, dass wir ein Array zurückbekommen.
-   */
   private static parseArray(value: any): any[] {
     if (Array.isArray(value)) {
       return value;
     }
     if (typeof value === 'string') {
-      // Versuch, Strings wie "['a','b']" zu parsen, falls nötig
       try {
         const parsed = JSON.parse(value);
         if (Array.isArray(parsed)) return parsed;
       } catch {}
     }
     return [];
+  }
+
+  // parseJson wird hier nicht mehr für die i18n Felder benötigt,
+  // da LocalizationHelper das übernimmt.
+  private static parseJson(value: any, fallback: any): any {
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return fallback;
+      }
+    }
+    return value || fallback;
   }
 }

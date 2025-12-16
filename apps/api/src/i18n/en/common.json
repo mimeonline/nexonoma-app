@@ -1,0 +1,6 @@
+{
+  "hello": "Hello",
+  "asset": {
+    "not_found": "Asset not found"
+  }
+}
