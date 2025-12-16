@@ -6,10 +6,10 @@ import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-reposi
 export class GetGridClustersUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(lang: string, macroSlug: string): Promise<StructuralAsset> {
+  async execute(locale: string, macroSlug: string): Promise<StructuralAsset> {
     // 1. Hole das MacroCluster selbst (für den Titel/Header der Page)
     const macroCluster = await this.assetRepo.findStructuralBySlug(
-      lang,
+      locale,
       macroSlug,
     );
 
@@ -20,7 +20,7 @@ export class GetGridClustersUseCase {
     }
 
     // 2. Hole die Kinder (Cluster)
-    const clusters = await this.assetRepo.findChildren(lang, macroCluster.id);
+    const clusters = await this.assetRepo.findChildren(locale, macroCluster.id);
 
     // 3. Wir hängen die Kinder an das Eltern-Objekt
     // Da wir in Typescript sind, müssen wir sicherstellen, dass wir children pushen können

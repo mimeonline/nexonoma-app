@@ -4,7 +4,7 @@ export enum AssetType {
   MACRO_CLUSTER = 'MACRO_CLUSTER',
   CLUSTER = 'CLUSTER',
   SEGMENT = 'SEGMENT',
-  CLUSTER_VIEW = 'SEGMENT', // Optional, falls Views als Assets gespeichert werden
+  CLUSTER_VIEW = 'CLUSTER_VIEW', // Optional, falls Views als Assets gespeichert werden
 
   // --- CONTENT TYPES ---
   // Das eigentliche Wissen (mit Tradeoffs, Metrics, UseCases)

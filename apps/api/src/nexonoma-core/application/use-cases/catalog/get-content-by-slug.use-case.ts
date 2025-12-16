@@ -11,12 +11,12 @@ export class GetContentBySlugUseCase {
    * Z.B. type="tool", slug="nestjs"
    */
   async execute(
-    lang: string,
+    locale: string,
     type: string,
     slug: string,
   ): Promise<ContentAsset> {
     const asset = await this.assetRepo.findContentBySlug(
-      lang,
+      locale,
       type.toUpperCase(),
       slug,
     );

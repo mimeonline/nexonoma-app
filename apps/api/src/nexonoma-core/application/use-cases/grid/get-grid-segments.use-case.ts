@@ -7,10 +7,10 @@ import { AssetType } from '../../../domain/types/asset-enums';
 export class GetGridSegmentsUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(lang: string, clusterSlug: string): Promise<StructuralAsset> {
+  async execute(locale: string, clusterSlug: string): Promise<StructuralAsset> {
     // 1) Cluster holen
     const cluster = await this.assetRepo.findStructuralBySlug(
-      lang,
+      locale,
       clusterSlug,
     );
 
@@ -22,7 +22,7 @@ export class GetGridSegmentsUseCase {
 
     // 2) ClusterView finden (wir überspringen bewusst nur 1 Ebene)
     const firstLevelChildren = await this.assetRepo.findChildren(
-      lang,
+      locale,
       cluster.id,
     );
 
@@ -40,7 +40,7 @@ export class GetGridSegmentsUseCase {
 
     // 3) Segmente aus dem ClusterView holen
     const viewChildren = await this.assetRepo.findChildren(
-      lang,
+      locale,
       clusterView.id,
     );
 
@@ -51,7 +51,7 @@ export class GetGridSegmentsUseCase {
 
     // 4) Inhalte der Segmente laden
     for (const segment of segments) {
-      const contents = await this.assetRepo.findChildren(lang, segment.id);
+      const contents = await this.assetRepo.findChildren(locale, segment.id);
 
       segment.children = contents.filter((c) =>
         [

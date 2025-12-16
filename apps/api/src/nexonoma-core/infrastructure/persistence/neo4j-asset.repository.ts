@@ -19,7 +19,7 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
   /**
    * Page 1: Holt alle MacroClusters
    */
-  async findMacroClusters(lang: string = 'en'): Promise<StructuralAsset[]> {
+  async findMacroClusters(locale: string = 'en'): Promise<StructuralAsset[]> {
     const i18n = getI18nProjection('n');
 
     // Wir nutzen Map Projection: n { .*, name: ... }
@@ -36,12 +36,12 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
 
     const result = await this.neo4j.read(query, {
       type: AssetType.MACRO_CLUSTER,
-      lang: lang,
+      lang: locale,
     });
 
     return result.map((record) => {
       const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, lang) as StructuralAsset;
+      return AssetMapper.toDomain(assetData, locale) as StructuralAsset;
     });
   }
 
@@ -49,7 +49,7 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
    * Page 2 & 3: Findet ein Strukturelement (Macro, Cluster, Segment) anhand des Slugs.
    */
   async findStructuralBySlug(
-    lang: string = 'en',
+    locale: string = 'en',
     slug: string,
   ): Promise<StructuralAsset | null> {
     const i18n = getI18nProjection('n');
@@ -65,13 +65,13 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
 
     const params = {
       slug,
-      lang: lang,
+      lang: locale,
       mc: AssetType.MACRO_CLUSTER,
       c: AssetType.CLUSTER,
       s: AssetType.SEGMENT,
       cv: AssetType.CLUSTER_VIEW,
     };
-    console.log(query);
+
     const result = await this.neo4j.read(query, params);
 
     if (result.length === 0) {
@@ -79,14 +79,14 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     }
 
     const assetData = result[0].get('assetData');
-    return AssetMapper.toDomain(assetData, lang) as StructuralAsset;
+    return AssetMapper.toDomain(assetData, locale) as StructuralAsset;
   }
 
   /**
    * Findet alle Kinder eines Parents.
    */
   async findChildren(
-    lang: string = 'en',
+    locale: string = 'en',
     parentId: string,
   ): Promise<AssetBlock[]> {
     // Hier ist der Alias 'c' für Child
@@ -102,18 +102,18 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
       ORDER BY assetData.name ASC
     `;
 
-    const result = await this.neo4j.read(query, { parentId, lang: lang });
+    const result = await this.neo4j.read(query, { parentId, lang: locale });
 
     return result.map((record) => {
       const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, lang);
+      return AssetMapper.toDomain(assetData, locale);
     });
   }
 
   /**
    * Page 4: Katalog Liste (Alle Content Types)
    */
-  async findAllContent(lang: string = 'en'): Promise<ContentAsset[]> {
+  async findAllContent(locale: string = 'en'): Promise<ContentAsset[]> {
     const i18n = getI18nProjection('n');
 
     const query = `
@@ -127,7 +127,7 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     `;
 
     const params = {
-      lang: lang,
+      lang: locale,
       t1: AssetType.TOOL,
       t2: AssetType.METHOD,
       t3: AssetType.CONCEPT,
@@ -138,7 +138,7 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
 
     return result.map((record) => {
       const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, lang) as ContentAsset;
+      return AssetMapper.toDomain(assetData, locale) as ContentAsset;
     });
   }
 
@@ -146,7 +146,7 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
    * Page 5: Detailansicht (Find by ID)
    */
   async findById(
-    lang: string = 'en',
+    locale: string = 'en',
     id: string,
   ): Promise<ContentAsset | ContextAsset | null> {
     const i18n = getI18nProjection('n');
@@ -159,18 +159,20 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
       } AS assetData
     `;
 
-    const result = await this.neo4j.read(query, { id, lang: lang });
+    const result = await this.neo4j.read(query, { id, lang: locale });
 
     if (result.length === 0) {
       return null;
     }
 
     const assetData = result[0].get('assetData');
-    return AssetMapper.toDomain(assetData, lang) as ContentAsset | ContextAsset;
+    return AssetMapper.toDomain(assetData, locale) as
+      | ContentAsset
+      | ContextAsset;
   }
 
   async findContentBySlug(
-    lang: string = 'en',
+    locale: string = 'en',
     type: string,
     slug: string,
   ): Promise<ContentAsset | null> {
@@ -188,12 +190,12 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     const result = await this.neo4j.read(query, {
       slug,
       type,
-      lang: lang,
+      lang: locale,
     });
 
     if (result.length === 0) return null;
 
     const assetData = result[0].get('assetData');
-    return AssetMapper.toDomain(assetData, lang) as ContentAsset;
+    return AssetMapper.toDomain(assetData, locale) as ContentAsset;
   }
 }

@@ -6,9 +6,9 @@ import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-reposi
 export class GetContentDetailUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(lang: string, id: string): Promise<AssetBlock> {
+  async execute(locale: string, id: string): Promise<AssetBlock> {
     // Wir nutzen findById, das sowohl Content als auch Context (Role) finden kann
-    const asset = await this.assetRepo.findById(lang, id);
+    const asset = await this.assetRepo.findById(locale, id);
 
     if (!asset) {
       throw new NotFoundException(`Asset with ID '${id}' not found`);

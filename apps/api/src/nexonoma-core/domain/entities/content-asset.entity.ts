@@ -51,7 +51,7 @@ export interface ContentAssetProps extends AssetBlockProps {
   // Klassifizierungen (Enums im Schema als Strings)
   maturityLevel?: string; // 'exploratory' | 'emerging' | 'established' | 'deprecated'
   complexityLevel?: string; // 'low' | 'medium' | 'high'
-  impact?: string; // 'technical' | 'business' | 'organizational'
+  impacts?: string; // 'technical' | 'business' | 'organizational'
   decisionType?: string; // 'pattern-selection' | 'architecture-style' | 'org-structure'
   organizationalMaturity?: string; // 'foundation' | 'intermediate' | 'advanced'
   valueStreamStage?: string; // 'discovery' | 'build' | 'run' | 'iterate'
@@ -61,7 +61,7 @@ export interface ContentAssetProps extends AssetBlockProps {
   principles?: string[];
   inputs?: string[];
   outputs?: string[];
-  integration?: string[];
+  integrations?: string[];
   architecturalDrivers?: string[]; // 'availability', 'scalability' etc.
   bottleneckTags?: string[];
   benefits?: string[];
@@ -98,7 +98,7 @@ export class ContentAsset extends AssetBlock {
   // --- Klassifizierungen ---
   public maturityLevel?: string;
   public complexityLevel?: string;
-  public impact?: string;
+  public impacts?: string;
   public decisionType?: string;
   public organizationalMaturity?: string;
   public valueStreamStage?: string;
@@ -108,7 +108,7 @@ export class ContentAsset extends AssetBlock {
   public principles: string[];
   public inputs: string[];
   public outputs: string[];
-  public integration: string[];
+  public integrations: string[];
   public architecturalDrivers: string[];
   public bottleneckTags: string[];
   public benefits: string[];
@@ -143,7 +143,7 @@ export class ContentAsset extends AssetBlock {
 
     this.maturityLevel = props.maturityLevel;
     this.complexityLevel = props.complexityLevel;
-    this.impact = props.impact;
+    this.impacts = props.impacts;
     this.decisionType = props.decisionType;
     this.organizationalMaturity = props.organizationalMaturity;
     this.valueStreamStage = props.valueStreamStage;
@@ -152,7 +152,7 @@ export class ContentAsset extends AssetBlock {
     this.principles = props.principles || [];
     this.inputs = props.inputs || [];
     this.outputs = props.outputs || [];
-    this.integration = props.integration || [];
+    this.integrations = props.integrations || [];
     this.architecturalDrivers = props.architecturalDrivers || [];
     this.bottleneckTags = props.bottleneckTags || [];
     this.benefits = props.benefits || [];

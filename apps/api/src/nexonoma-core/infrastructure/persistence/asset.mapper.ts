@@ -91,8 +91,6 @@ export class AssetMapper {
   ): StructuralAsset {
     const structProps: StructuralAssetProps = {
       ...base,
-      category: props.category,
-      clusterSlug: props.clusterSlug,
       framework: props.framework,
       parentId: props.parentId,
     };
@@ -123,7 +121,7 @@ export class AssetMapper {
       // Klassifizierungen
       maturityLevel: props.maturityLevel,
       complexityLevel: props.complexityLevel,
-      impact: props.impact,
+      impacts: props.impacts,
       decisionType: props.decisionType,
       organizationalMaturity: props.organizationalMaturity,
       valueStreamStage: props.valueStreamStage,
@@ -137,7 +135,7 @@ export class AssetMapper {
       principles: AssetMapper.parseArray(props.principles),
       inputs: AssetMapper.parseArray(props.inputs),
       outputs: AssetMapper.parseArray(props.outputs),
-      integration: AssetMapper.parseArray(props.integration),
+      integrations: AssetMapper.parseArray(props.integrations),
       architecturalDrivers: AssetMapper.parseArray(props.architecturalDrivers),
       bottleneckTags: AssetMapper.parseArray(props.bottleneckTags),
       benefits: AssetMapper.parseArray(props.benefits),

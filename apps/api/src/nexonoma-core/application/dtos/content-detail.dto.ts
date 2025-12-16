@@ -62,7 +62,7 @@ export class ContentDetailDto {
   // --- Metadaten (Klassifizierung) ---
   maturityLevel?: string;
   complexityLevel?: string;
-  impact?: string;
+  impacts?: string;
   decisionType?: string;
   organizationalMaturity?: string;
   valueStreamStage?: string;
@@ -84,7 +84,7 @@ export class ContentDetailDto {
   // --- Implementierung ---
   implementationSteps: string[];
   requiredSkills: string[];
-  integration: string[]; // APIs etc.
+  integrations: string[]; // APIs etc.
 
   // --- Komplexe Objekte (Sub-DTOs) ---
   useCases: UseCaseDto[];
