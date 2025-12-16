@@ -50,9 +50,8 @@ export class AssetMapper {
       shortDescription: data.shortDescription || '',
       longDescription: data.longDescription || '',
 
-      // Tags bleiben (vorerst) Map oder Array, je nach Definition.
-      // Hier nutzen wir parseArray als Fallback, falls die Logik komplexer ist.
-      tags: LocalizationHelper.parseMapAndLocalize(data.tags, locale),
+      tags: LocalizationHelper.localizeTags(data.tags, locale),
+
       abbreviation: data.abbreviation,
 
       organizationalLevel: AssetMapper.parseArray(data.organizationalLevel),

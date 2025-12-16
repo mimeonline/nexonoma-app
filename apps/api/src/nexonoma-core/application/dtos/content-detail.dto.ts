@@ -1,5 +1,5 @@
+import { LocalizedTag } from '../../domain/entities/asset.entity';
 import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
-
 // --- Sub-DTOs für komplexe Objekte ---
 
 export class UseCaseDto {
@@ -56,7 +56,7 @@ export class ContentDetailDto {
   // --- Basis Info ---
   shortDescription: string;
   longDescription: string;
-  tags: string[];
+  tags: LocalizedTag[];
   organizationalLevel: string[];
 
   // --- Metadaten (Klassifizierung) ---

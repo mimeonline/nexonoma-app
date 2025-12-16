@@ -1,5 +1,10 @@
 import { AssetStatus, AssetType } from '../types/asset-enums';
 
+export interface LocalizedTag {
+  slug: string;
+  label: string;
+}
+
 // 1. Das Interface definiert alle Felder, die rein müssen
 export interface AssetBlockProps {
   id: string;
@@ -16,7 +21,7 @@ export interface AssetBlockProps {
   contributor?: string[];
   shortDescription: string;
   longDescription: string;
-  tags?: string[];
+  tags?: LocalizedTag[];
   abbreviation?: string;
   organizationalLevel?: string[];
   icon?: string;
@@ -39,7 +44,7 @@ export abstract class AssetBlock {
   public readonly contributor: string[];
   public readonly shortDescription: string;
   public readonly longDescription: string;
-  public readonly tags: string[];
+  public readonly tags: LocalizedTag[];
   public readonly abbreviation?: string;
   public readonly organizationalLevel: string[];
   public readonly icon?: string;

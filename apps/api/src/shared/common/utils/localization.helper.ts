@@ -1,5 +1,5 @@
 // utils/localization.helper.ts
-
+import { LocalizedTag } from '../../../nexonoma-core/domain/entities/asset.entity';
 export class LocalizationHelper {
   /**
    * Parst einen JSON-String und extrahiert die gewünschte Sprache.
@@ -101,5 +101,61 @@ export class LocalizationHelper {
       console.error('Failed to parse tags map', e);
       return [];
     }
+  }
+
+  /**
+   * Wandelt Tags (Map oder Array) in das Frontend-Format um.
+   * Unterstützt nun explizit dein Map-Format: {"slug": {de: "...", en: "..."}}
+   */
+  static localizeTags(
+    tags: string | any[] | Record<string, any>,
+    locale: string,
+  ): LocalizedTag[] {
+    if (!tags) return [];
+
+    let parsedTags = tags;
+
+    // 1. String parsen (falls nötig)
+    if (typeof tags === 'string') {
+      try {
+        parsedTags = JSON.parse(tags);
+      } catch (e) {
+        console.warn('LocalizationHelper: Could not parse tags JSON', tags);
+        return [];
+      }
+    }
+
+    // 2. FALL A: Die Daten kommen als Array (Legacy oder anderes Format)
+    // Format: [{ slug: "x", label: { de: "..." } }]
+    if (Array.isArray(parsedTags)) {
+      return parsedTags.map((tag: any) => {
+        const label = tag.label?.[locale] || tag.label?.['en'] || tag.slug;
+        return { slug: tag.slug, label };
+      });
+    }
+
+    // 3. FALL B (Dein aktueller Fall): Die Daten sind ein Objekt (Map)
+    // Format: { "mein-slug": { "de": "...", "en": "..." } }
+    if (typeof parsedTags === 'object' && parsedTags !== null) {
+      // Wir iterieren über die Keys (Slugs) und Values (Translations)
+      return Object.entries(parsedTags).map(
+        ([slug, translations]: [string, any]) => {
+          // Prüfen, ob translations wirklich ein Objekt ist (Schutz vor fehlerhaften Daten)
+          const safeTranslations = translations || {};
+
+          // Übersetzung holen
+          const label =
+            safeTranslations[locale] || safeTranslations['en'] || slug;
+
+          return {
+            slug: slug,
+            label: label,
+          };
+        },
+      );
+    }
+
+    // Fallback, wenn es weder Array noch Objekt ist
+    return [];
   }
 }
