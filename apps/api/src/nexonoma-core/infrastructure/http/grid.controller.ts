@@ -19,7 +19,6 @@ export class GridController {
    */
   @Get('macros')
   async getMacrosPage(@I18nLang() lang: string) {
-    console.log('Detected Language:', lang);
     return this.getMacros.execute(lang);
   }
 

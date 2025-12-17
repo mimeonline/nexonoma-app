@@ -1,4 +1,5 @@
 import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
+import { AssetType } from "@/types/nexonoma";
 import { toArray } from "@/utils/data-normalization";
 
 /**
@@ -15,7 +16,7 @@ export function createParentContext(slug: string): MacroCluster {
     id: "context-only",
     slug,
     name, // Fallback Name
-    type: "macroCluster",
+    type: AssetType.MACRO_CLUSTER,
     shortDescription: "",
     longDescription: "",
     clusters: [],
@@ -62,10 +63,10 @@ export function mapToClusterDetail(item: any): Cluster {
       shortDescription: seg.shortDescription || "",
       longDescription: seg.longDescription || "",
       content: {
-        methods: getContentByType("method"),
-        concepts: getContentByType("concept"),
-        tools: getContentByType("tool"),
-        technologies: getContentByType("technology"),
+        methods: getContentByType(AssetType.METHOD),
+        concepts: getContentByType(AssetType.CONCEPT),
+        tools: getContentByType(AssetType.TOOL),
+        technologies: getContentByType(AssetType.TECHNOLOGY),
       },
     };
   });
@@ -74,7 +75,7 @@ export function mapToClusterDetail(item: any): Cluster {
     id: item.id || "",
     name: item.name || "Unbenanntes Cluster",
     slug: item.slug || "",
-    type: "cluster",
+    type: AssetType.CLUSTER,
     shortDescription: item.shortDescription || "",
     longDescription: item.longDescription || "",
     segments,

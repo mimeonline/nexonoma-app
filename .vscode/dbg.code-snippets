@@ -1,0 +1,9 @@
+{
+  "Debug Block": {
+    "prefix": "dbg",
+    "body": [
+      "<Debug label=\"${3:Rohdaten API}\" value={${1:macroCluster}} open={${2:true}} />"
+    ],
+    "description": "DEV ONLY: Inline Debug Block for visualizing runtime state"
+  }
+}

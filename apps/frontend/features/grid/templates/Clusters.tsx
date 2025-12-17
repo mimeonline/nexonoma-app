@@ -9,7 +9,7 @@ interface ClustersTemplateProps {
 
 export function ClustersTemplate({ macroCluster }: ClustersTemplateProps) {
   // Zugriff auf 'clusters' statt 'children'
-  const clusters = macroCluster.clusters ?? [];
+  const clusters = macroCluster.children ?? [];
 
   return (
     <div className="space-y-10">

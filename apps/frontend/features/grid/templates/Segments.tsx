@@ -8,7 +8,7 @@ import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
-
+import { ChevronDown } from "lucide-react";
 // --- Internal Types ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -62,7 +62,7 @@ interface SegmentsTemplateProps {
 
 // --- Main Component ---
 export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("pipeline");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");
 
@@ -100,29 +100,56 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
           </div>
 
           {/* Controls */}
-          <div className="flex flex-col gap-3 shrink-0 md:items-end">
-            <select
-              value={activeType}
-              onChange={(e) => setActiveType(e.target.value as FilterType)}
-              className="w-full md:w-48 h-10 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 transition-all cursor-pointer shadow-sm"
-            >
-              <option value="all">Alle Typen</option>
-              <option value="concept">Konzepte</option>
-              <option value="method">Methoden</option>
-              <option value="tool">Tools</option>
-              <option value="technology">Technologien</option>
-            </select>
+          <div className="flex flex-col gap-3 shrink-0 md:items-end w-full md:w-auto">
+            {/* 1. SELECT WRAPPER */}
+            {/* Änderung: 'md:w-52' statt 'md:w-48' für eine angenehme Breite */}
+            <div className="relative w-full md:w-52">
+              <select
+                value={activeType}
+                onChange={(e) => setActiveType(e.target.value as FilterType)}
+                className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
+              >
+                <option value="all" className="bg-slate-900 text-slate-200">
+                  Alle Typen
+                </option>
+                <option value="CONCEPT" className="bg-slate-900 text-slate-200">
+                  Konzepte
+                </option>
+                <option value="METHOD" className="bg-slate-900 text-slate-200">
+                  Methoden
+                </option>
+                <option value="TOOL" className="bg-slate-900 text-slate-200">
+                  Tools
+                </option>
+                <option value="TECHNOLOGY" className="bg-slate-900 text-slate-200">
+                  Technologien
+                </option>
+              </select>
 
-            <div className="flex h-10 items-center rounded-xl border border-white/10 bg-white/5 p-1">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </div>
+
+            {/* 2. VIEW MODE TOGGLE */}
+            {/* Änderung: Ebenfalls 'md:w-52' und 'w-full'. */}
+            <div className="flex h-10 w-full md:w-52 items-center rounded-xl border border-white/10 bg-white/5 p-1">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`flex h-full items-center gap-2 rounded-lg px-3 text-xs font-medium transition-all ${viewMode === "grid" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm " : "text-slate-400 hover:text-white"}`}
+                // Änderung: 'flex-1' und 'justify-center' hinzugefügt, damit der Button 50% der Breite füllt
+                className={`flex-1 flex h-full items-center justify-center gap-2 rounded-lg text-xs font-medium transition-all ${
+                  viewMode === "grid" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
+                }`}
               >
                 <LayoutGrid className="h-3.5 w-3.5" /> Grid
               </button>
+
               <button
                 onClick={() => setViewMode("pipeline")}
-                className={`flex h-full items-center gap-2 rounded-lg px-3 text-xs font-medium transition-all ${viewMode === "pipeline" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm " : "text-slate-400 hover:text-white"}`}
+                // Änderung: Ebenfalls 'flex-1' und 'justify-center'
+                className={`flex-1 flex h-full items-center justify-center gap-2 rounded-lg text-xs font-medium transition-all ${
+                  viewMode === "pipeline" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
+                }`}
               >
                 <List className="h-3.5 w-3.5" /> Pipeline
               </button>
@@ -182,7 +209,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
             // Nein, in Pipeline Ansicht zeigen wir meist leere Lanes an, damit die Struktur bleibt.
 
             return (
-              <div key={segment.slug} className="flex flex-col h-full rounded-2xl border border-white/5 overflow-hidden bg-white/[0.02]">
+              <div key={segment.slug} className="flex flex-col h-full rounded-2xl border border-white/5 overflow-hidden bg-white/2">
                 <div className={`px-4 py-3 bg-[#151e2e]/80 flex justify-between items-center border-b ${borderColor}`}>
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">{segment.name}</h3>
                   <span className="text-[10px] text-slate-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{items.length}</span>
