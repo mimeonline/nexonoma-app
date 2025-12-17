@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
-import type { GridNode } from "@/types/nexonoma";
+import type { MacroCluster } from "@/types/grid";
 import Link from "next/link";
 
 type Props = {
-  macroClusters: GridNode[];
+  macroClusters: MacroCluster[];
 };
 
 export function MacroClusterList({ macroClusters }: Props) {
@@ -20,17 +20,17 @@ export function MacroClusterList({ macroClusters }: Props) {
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {macroClusters.map((cluster) => {
-        const clusterCount = cluster.children?.length || 0;
+      {macroClusters.map((macro) => {
+        // WICHTIG: Im Typ 'MacroCluster' heißt das Array 'clusters', nicht 'children'
+        const clusterCount = macro.clusters?.length || 0;
 
         return (
-          <Link key={cluster.slug} href={`/grid/${cluster.slug}`} className="block">
+          <Link key={macro.slug} href={`/grid/${macro.slug}`} className="block group">
             <Card variant="interactive" className="h-full min-h-[180px] flex flex-col">
               <CardHeader className="space-y-0 pb-3">
                 <div className="flex items-start justify-between gap-4">
-                  {/* Title: min-h ensures alignment, line-clamp limits rows */}
                   <CardTitle className="text-xl group-hover:text-nexo-ocean transition-colors duration-300 min-h-14 flex items-start leading-tight">
-                    <span className="line-clamp-2">{cluster.name}</span>
+                    <span className="line-clamp-2">{macro.name}</span>
                   </CardTitle>
 
                   <Badge variant="ocean" size="md">
@@ -40,7 +40,7 @@ export function MacroClusterList({ macroClusters }: Props) {
               </CardHeader>
 
               <CardContent className="mt-auto">
-                <p className="text-sm text-nexo-muted leading-relaxed line-clamp-3">{cluster.shortDescription || "Keine Beschreibung verfügbar."}</p>
+                <p className="text-sm text-nexo-muted leading-relaxed line-clamp-3">{macro.shortDescription || "Keine Beschreibung verfügbar."}</p>
               </CardContent>
             </Card>
           </Link>

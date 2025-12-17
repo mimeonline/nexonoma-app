@@ -1,0 +1,9 @@
+{
+  "Console log debug with context": {
+    "prefix": "clgc",
+    "body": [
+      "console.log('[DEBUG:${TM_FILENAME_BASE}:${TM_LINE_NUMBER}]', ${1});"
+    ],
+    "description": "Console log with file and line context"
+  }
+}

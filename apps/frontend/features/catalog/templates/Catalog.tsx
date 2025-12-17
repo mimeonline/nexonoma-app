@@ -21,7 +21,7 @@ interface CatalogTemplateProps {
   items: CatalogItem[];
 }
 
-export function Catalog({ items }: CatalogTemplateProps) {
+export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const loading = false;
   const error: string | null = null;
   const [search, setSearch] = useState("");

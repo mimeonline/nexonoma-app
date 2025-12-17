@@ -1,35 +1,33 @@
-// frontend/types/nexonoma.ts
+// src/types/nexonoma.ts
 
-// --- ENUMS (müssen exakt zum Backend passen) ---
+// ... (Enums und Interfaces wie oben bleiben gleich) ...
 
 export enum AssetType {
-  // Structure
-  MACRO_CLUSTER = "macroCluster",
-  CLUSTER = "cluster",
-  SEGMENT = "segment",
-  CLUSTER_VIEW = "clusterView",
-
-  // Content
-  CONCEPT = "concept",
-  METHOD = "method",
-  TOOL = "tool",
-  TECHNOLOGY = "technology",
-
-  // Context
-  ROLE = "role",
+  MACRO_CLUSTER = "MACRO_CLUSTER",
+  CLUSTER = "CLUSTER",
+  SEGMENT = "SEGMENT",
+  CONCEPT = "CONCEPT",
+  METHOD = "METHOD",
+  TOOL = "TOOL",
+  TECHNOLOGY = "TECHNOLOGY",
+  ROLE = "ROLE",
 }
 
 export enum AssetStatus {
-  DRAFT = "draft",
-  REVIEW = "review",
-  PUBLISHED = "published",
-  DEPRECATED = "deprecated",
-  ARCHIVED = "archived",
+  DRAFT = "DRAFT",
+  REVIEW = "REVIEW",
+  PUBLISHED = "PUBLISHED",
+  DEPRECATED = "DEPRECATED",
+  ARCHIVED = "ARCHIVED",
 }
 
-// --- SUB-INTERFACES (Value Objects für Content) ---
+export interface LocalizedTag {
+  slug: string;
+  label: string;
+}
 
 export interface UseCase {
+  name?: string;
   description: string;
   inputs?: string[];
   outputs?: string[];
@@ -37,19 +35,19 @@ export interface UseCase {
 
 export interface Scenario {
   name: string;
-  context: string;
-  steps: string[];
+  context?: string;
+  steps?: string[];
 }
 
 export interface Example {
   name: string;
   description: string;
-  benefits?: string[];
   assets?: string[];
 }
 
-export interface TradeoffFactor {
-  factor: string;
+export interface TradeoffMatrix {
+  // Umbenannt von TradeoffMatrix für Klarheit im Mapper
+  dimension: string;
   pros: string[];
   cons: string[];
 }
@@ -60,75 +58,44 @@ export interface Metric {
 }
 
 export interface ExternalResource {
+  // Umbenannt von Resource für Klarheit
   name: string;
   url: string;
 }
 
-// --- HAUPTTYPEN ---
+// --- CORE ASSET DEFINITIONS ---
 
-/**
- * GridNode: Wird für die Navigation (Pages 1, 2, 3) verwendet.
- * Enthält die rekursive "children"-Struktur.
- */
-export interface GridNode {
-  // Identifikation
+export interface AssetBase {
   id: string;
   slug: string;
   name: string;
   type: AssetType;
-
-  // Visuelles & Status
+  status: AssetStatus;
   shortDescription: string;
   longDescription: string;
   icon?: string;
+  license?: string;
+  version: string;
+  updatedAt: string;
+  createdAt: string;
+  author?: string;
   image?: string;
-  status: AssetStatus;
-
-  // Struktur-Spezifisches (nur bei manchen Typen vorhanden)
-  category?: string; // Nur bei Clustern
-  framework?: string; // Nur bei ClusterViews
-
-  // Die Rekursion: Das Backend liefert hier die Unter-Elemente
-  children: GridNode[];
+  organizationalLevel: string[];
+  segmentName?: string;
+  clusterName?: string;
+  macroClusterName?: string;
+  tags?: LocalizedTag[];
 }
 
-/**
- * ContentDetail: Das volle Objekt für die Detail-Seite (Page 5).
- * Enthält ALLE Felder aus dem Content-Schema.
- */
-export interface ContentDetail {
-  // Header
-  id: string;
-  slug: string;
-  name: string;
-  type: AssetType;
-  status: AssetStatus;
-  version: string;
-  updatedAt: string; // JSON Dates sind Strings im Frontend
-
-  // Visuals
-  icon?: string;
-  image?: string;
-
-  // Basis
-  shortDescription: string;
-  longDescription: string;
-  tags: string[];
-  organizationalLevel: string[];
-
-  // Klassifizierung
-  maturityLevel?: string;
-  complexityLevel?: string;
-  impact?: string;
-  decisionType?: string;
-  organizationalMaturity?: string;
+export interface FullAsset extends AssetBase {
+  impacts?: string; // Singular im UI, Plural im Type? Mapper regelt das.
+  decisionType?: string[];
+  organizationalMaturity?: string[];
   valueStreamStage?: string;
   cognitiveLoad?: string;
-
-  // Tool Specifics
+  maturityLevel?: string;
+  complexityLevel?: string;
   vendor?: string;
-
-  // Listen & Arrays
   principles: string[];
   architecturalDrivers: string[];
   bottleneckTags: string[];
@@ -137,21 +104,21 @@ export interface ContentDetail {
   alternatives: string[];
   risks: string[];
   techDebts: string[];
-
-  // Implementation
+  constraints: string[];
+  bestPractices: string[];
   implementationSteps: string[];
   requiredSkills: string[];
-  integration: string[];
-
-  // Komplexe Objekte
+  integrations: string[]; // Mapper achtet auf 'integration' vs 'integrations'
+  technologies?: string[];
+  platforms?: string[];
+  inputs?: string[];
+  outputs?: string[];
   useCases: UseCase[];
   scenarios: Scenario[];
   examples: Example[];
-  tradeoffMatrix: TradeoffFactor[];
+  tradeoffMatrix: TradeoffMatrix[];
   metrics: Metric[];
   resources: ExternalResource[];
-
-  // Anti-Patterns
   antiPatterns: string[];
   misuseExamples: string[];
   traps: string[];

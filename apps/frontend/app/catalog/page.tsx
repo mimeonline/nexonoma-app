@@ -1,33 +1,21 @@
-import { Catalog } from "@/features/catalog/templates/Catalog";
+import { CatalogTemplate } from "@/features/catalog/templates/Catalog";
+import { mapToCatalogItem } from "@/features/catalog/utils/catalogMapper";
 import { NexonomaApi } from "@/services/api";
 import type { CatalogItem } from "@/types/catalog";
-import type { ContentDetail } from "@/types/nexonoma";
 
-function mapContentToCatalogItem(content: ContentDetail): CatalogItem {
-  return {
-    id: content.id,
-    name: content.name,
-    slug: content.slug,
-    type: content.type,
-    shortDescription: content.shortDescription,
-    longDescription: content.longDescription,
-    tags: content.tags,
-    maturityLevel: content.maturityLevel,
-    complexityLevel: content.complexityLevel,
-    cognitiveLoad: content.cognitiveLoad,
-    status: content.status,
-    impact: content.impact,
-    decisionType: content.decisionType,
-    organizationalMaturity: content.organizationalMaturity,
-    valueStreamStage: content.valueStreamStage,
-    principles: content.principles,
-    organizationalLevel: content.organizationalLevel,
-  };
-}
+// Optional: Metadata für SEO
+export const metadata = {
+  title: "Katalog | Nexonoma",
+  description: "Entdecke Technologien, Methoden und Tools im Nexonoma Katalog.",
+};
 
 export default async function CatalogPage() {
-  const catalog = await NexonomaApi.getCatalog();
-  const items = catalog.map(mapContentToCatalogItem);
+  // 1. Daten holen (Typ: any[] oder CatalogItem[], aber wir trauen der API nicht)
+  const rawData = await NexonomaApi.getCatalog();
 
-  return <Catalog items={items} />;
+  // 2. Daten bereinigen
+  const items: CatalogItem[] = rawData.map(mapToCatalogItem);
+
+  // 3. Rendern
+  return <CatalogTemplate items={items} />;
 }

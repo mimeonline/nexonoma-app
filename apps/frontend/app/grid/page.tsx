@@ -1,9 +1,8 @@
-import { MacroCluster } from "@/features/grid/templates/MacroCluster";
+import { MacroClusterTemplate } from "@/features/grid/templates/MacroCluster"; // Umbenannt für Konsistenz (s.u.)
 import { NexonomaApi } from "@/services/api";
-import type { GridNode } from "@/types/nexonoma";
 
 export default async function GridPage() {
-  const macroClusters: GridNode[] = await NexonomaApi.getMacroClusters();
+  const macroClusters = await NexonomaApi.getMacroClusters();
 
-  return <MacroCluster macroClusters={macroClusters} />;
+  return <MacroClusterTemplate macroClusters={macroClusters} />;
 }

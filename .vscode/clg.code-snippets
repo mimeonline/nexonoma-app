@@ -1,0 +1,9 @@
+{
+  "Console log debug": {
+    "prefix": "clg",
+    "body": [
+      "console.log('[DEBUG]', ${1});"
+    ],
+    "description": "Quick console.log debug output"
+  }
+}

@@ -1,60 +1,17 @@
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
-import type { CatalogContentType } from "@/types/catalog";
-import type { Example, ExternalResource, Metric, Scenario, TradeoffFactor, UseCase } from "@/types/nexonoma";
+import { ContentDetail } from "@/types/catalog";
+import { LocalizedTag } from "@/types/nexonoma";
 import { ReferrerNav } from "../organisms/ReferrerNav";
+interface ContentDetailsTemplateProps {
+  // Wir nutzen FullAsset.
+  // Da die API vielleicht nicht 100% matcht, können wir Partial nutzen
+  // oder sicherstellen, dass der Mapper das korrekte Objekt baut.
+  content: ContentDetail;
 
-// --- Types (Vollständig übernommen) ---
-export type ContentDetailsData = {
-  segmentName?: string;
-  clusterName?: string;
-  macroClusterName?: string;
-  name: string;
-  maturityLevel: string;
-  tags: string[];
-  principles: string[];
-  goals: string[];
-  organizationalLevel: string[];
-  useCases: UseCase[];
-  scenarios: Scenario[];
-  examples: (Example & { assets?: string[] })[];
-  risks: string[];
-  traps: string[];
-  antiPatterns: string[];
-  bestPractices: string[];
-  inputs: string[];
-  outputs: string[];
-  resources: ExternalResource[];
-  metrics: Metric[];
-  constraints: string[];
-  integration: string[];
-  alternatives: string[];
-  technologies: string[];
-  platforms: string[];
-  valueStreamStage?: string;
-  architecturalDrivers: string[];
-  benefits: string[];
-  limitations: string[];
-  implementationSteps: string[];
-  techDebts: string[];
-  bottleneckTags: string[];
-  misuseExamples: string[];
-  requiredSkills: string[];
-  tradeoffMatrix: TradeoffFactor[];
-  cognitiveLoad?: string;
-  status?: string;
-  impact: string[];
-  decisionType: string[];
-  complexityLevel: string[];
-  organizationalMaturity: string[];
-  shortDescription: string;
-  longDescription: string;
-};
-
-interface ContentDetailsProps {
-  contentType: CatalogContentType;
+  // UI-Overrides falls nötig
   icon?: string;
   heroQuote?: string;
-  content: ContentDetailsData;
+  contentType: string;
 }
 
 // --- HELPER COMPONENT (Für das Bento Grid Design) ---
@@ -81,7 +38,7 @@ const InfoCard = ({
   </div>
 );
 
-export function ContentDetails({ contentType, icon, heroQuote, content }: ContentDetailsProps) {
+export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }: ContentDetailsTemplateProps) {
   return (
     <div className="space-y-8 pb-20">
       {/* 0. Navigation */}
@@ -101,14 +58,14 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
               >
                 {contentType}
               </Badge>
-              {content.tags?.slice(0, 8).map((tag: string, idx: number) => (
+              {content.tags?.slice(0, 8).map((tag: LocalizedTag, idx: number) => (
                 <Badge
                   key={`${tag}-${idx}`}
                   variant="default"
                   size="md"
                   radius="md" // <-- Der Tech-Look
                 >
-                  #{tag}
+                  #{tag.label}
                 </Badge>
               ))}
             </div>
@@ -161,7 +118,7 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Auswirkungsbereich</span>
-              <span className="text-slate-200">{content.impact}</span>
+              <span className="text-slate-200">{content.impacts}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">Entscheidungstyp</span>
@@ -180,7 +137,7 @@ export function ContentDetails({ contentType, icon, heroQuote, content }: Conten
             <div>
               <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">Integrationen</span>
               <div className="flex flex-wrap gap-2">
-                {content.integration?.map((integ: string, idx: number) => (
+                {content.integrations?.map((integ: string, idx: number) => (
                   <Badge key={`${integ}-${idx}`} variant="outline" size="md" radius="md" className="font-normal">
                     {integ}
                   </Badge>
