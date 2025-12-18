@@ -1,26 +1,23 @@
-import { ClustersTemplate } from "@/features/grid/templates/Clusters"; // Suffix Import
-import { NexonomaApi } from "@/services/api";
+import { ClustersTemplate } from "@/features/grid/templates/Clusters";
+import { createNexonomaApi } from "@/services/api";
 import type { MacroCluster } from "@/types/grid";
 import { notFound } from "next/navigation";
 
-type PageProps = {
-  params: Promise<{ macroClusterSlug: string }>;
-};
+export default async function MacroClusterPage({ params }: PageProps<"/[lang]/grid/[macroClusterSlug]">) {
+  const { lang, macroClusterSlug } = await params;
 
-export default async function MacroClusterPage({ params }: PageProps) {
-  const { macroClusterSlug } = await params;
+  const api = createNexonomaApi(lang);
 
-  let macroCluster: MacroCluster | null = null;
+  let macroCluster: MacroCluster;
 
   try {
-    // API gibt jetzt MacroCluster zurück
-    macroCluster = await NexonomaApi.getClusters(macroClusterSlug);
+    macroCluster = await api.getClusters(macroClusterSlug);
   } catch (error) {
     console.error("Failed to load macro cluster:", error);
-    return notFound();
+    notFound();
   }
 
-  if (!macroCluster) return notFound();
+  if (!macroCluster) notFound();
 
   return <ClustersTemplate macroCluster={macroCluster} />;
 }

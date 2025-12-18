@@ -1,0 +1,73 @@
+{
+  "app": {
+    "name": "Nexonoma",
+    "tagline": "Entdecke Konzepte, Methoden, Tools und Architekturen."
+  },
+  "nav": {
+    "grid": "Grid",
+    "matrix": "Matrix",
+    "city": "City",
+    "catalog": "Katalog"
+  },
+  "common": {
+    "loading": "Lädt…",
+    "error": "Etwas ist schiefgelaufen.",
+    "retry": "Erneut versuchen",
+    "close": "Schließen",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert",
+    "openInNewTab": "In neuem Tab öffnen"
+  },
+  "grid": {
+    "title": "Grid Ansicht",
+    "description": "Erkunde die Wissenskarte in einer rasterbasierten Ansicht."
+  },
+  "matrix": {
+    "title": "Matrix Ansicht",
+    "description": "Erkunde die Wissenskarte in einer matrixbasierten Ansicht."
+  },
+  "city": {
+    "title": "City Ansicht",
+    "description": "Erkunde die Wissenskarte in einer stadtähnlichen Ansicht."
+  },
+  "catalog": {
+    "title": "Katalog",
+    "filters": "Filter",
+    "clearFilters": "Filter zurücksetzen",
+    "results": "Ergebnisse",
+    "noResults": "Keine Treffer für deine Filter.",
+    "sortBy": "Sortieren nach",
+    "sort": {
+      "relevance": "Relevanz",
+      "nameAsc": "Name (A–Z)",
+      "nameDesc": "Name (Z–A)",
+      "updatedDesc": "Zuletzt aktualisiert"
+    }
+  },
+  "asset": {
+    "labels": {
+      "concept": "Konzept",
+      "method": "Methode",
+      "tool": "Tool",
+      "technology": "Technologie",
+      "role": "Rolle",
+      "pattern": "Pattern"
+    },
+    "meta": {
+      "maturity": "Reifegrad",
+      "complexity": "Komplexität",
+      "tags": "Tags",
+      "source": "Quelle",
+      "updated": "Aktualisiert"
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Seite nicht gefunden",
+    "notFoundText": "Die Seite, die du suchst, existiert nicht.",
+    "invalidLocale": "Nicht unterstützte Sprache."
+  },
+  "seo": {
+    "defaultTitle": "Nexonoma",
+    "defaultDescription": "Eine visuelle Wissenskarte für Software- und Enterprise-Architektur."
+  }
+}

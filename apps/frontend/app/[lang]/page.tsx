@@ -1,5 +1,5 @@
-import Home from "@/features/home/templates/home";
+import HomeTemplate from "@/features/home/templates/home";
 
 export default function HomePage() {
-  return <Home />;
+  return <HomeTemplate />;
 }

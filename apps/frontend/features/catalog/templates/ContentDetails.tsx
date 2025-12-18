@@ -1,7 +1,8 @@
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { ContentDetail } from "@/types/catalog";
 import { LocalizedTag } from "@/types/nexonoma";
-import { ReferrerNav } from "../organisms/ReferrerNav";
+import ReferrerNavClient from "../organisms/ReferrerNavClient";
+
 interface ContentDetailsTemplateProps {
   // Wir nutzen FullAsset.
   // Da die API vielleicht nicht 100% matcht, können wir Partial nutzen
@@ -42,7 +43,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
   return (
     <div className="space-y-8 pb-20">
       {/* 0. Navigation */}
-      <ReferrerNav segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
+      <ReferrerNavClient segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
 
       {/* 1. HERO SECTION */}
       <section className="relative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">

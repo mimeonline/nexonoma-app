@@ -6,7 +6,8 @@
   /* Fonts aus next/font mappen auf Tailwind-Utilities */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  
+  --font-display: var(--font-space-grotesk);
+
   /* Nexo Farben */ 
   --color-nexo-bg: #020617;       /* bg-nexo-bg */
   --color-nexo-surface: #0B1220;  /* bg-nexo-surface */
@@ -64,4 +65,20 @@
 
 .animate-beam-drop {
   animation: beam-drop 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+h1 {
+  @apply font-display text-3xl sm:text-4xl font-semibold tracking-tight mb-4 ;
+}
+
+h2 {
+  @apply text-2xl sm:text-3xl font-semibold;
+}
+
+h3 {
+  @apply text-xl sm:text-2xl font-medium;
+}
+
+p {
+  @apply leading-relaxed;
 }

@@ -1,0 +1,73 @@
+{
+  "app": {
+    "name": "Nexonoma",
+    "tagline": "Explore concepts, methods, tools, and technologies."
+  },
+  "nav": {
+    "grid": "Grid",
+    "matrix": "Matrix",
+    "city": "City",
+    "catalog": "Catalog"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "close": "Close",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "openInNewTab": "Open in new tab"
+  },
+  "grid": {
+    "title": "Grid View",
+    "description": "Explore the knowledge map in a grid-based view."
+  },
+  "matrix": {
+    "title": "Matrix View",
+    "description": "Explore the knowledge map in a matrix-based view."
+  },
+  "city": {
+    "title": "City View",
+    "description": "Explore the knowledge map in a city-like view."
+  },
+  "catalog": {
+    "title": "Catalog",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "results": "Results",
+    "noResults": "No results for your filters.",
+    "sortBy": "Sort by",
+    "sort": {
+      "relevance": "Relevance",
+      "nameAsc": "Name (A–Z)",
+      "nameDesc": "Name (Z–A)",
+      "updatedDesc": "Recently updated"
+    }
+  },
+  "asset": {
+    "labels": {
+      "concept": "Concept",
+      "method": "Method",
+      "tool": "Tool",
+      "technology": "Technology",
+      "role": "Role",
+      "pattern": "Pattern"
+    },
+    "meta": {
+      "maturity": "Maturity",
+      "complexity": "Complexity",
+      "tags": "Tags",
+      "source": "Source",
+      "updated": "Updated"
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "The page you’re looking for doesn’t exist.",
+    "invalidLocale": "Unsupported language."
+  },
+  "seo": {
+    "defaultTitle": "Nexonoma",
+    "defaultDescription": "A visual knowledge map for software and enterprise architecture."
+  }
+}

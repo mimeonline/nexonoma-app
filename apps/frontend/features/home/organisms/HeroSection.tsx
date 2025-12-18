@@ -1,7 +1,11 @@
+"use client";
 import { Button } from "@/components/ui/atoms/Button";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import { Building2, Table2 } from "lucide-react";
 
 export default function HeroSection() {
+  const { dict } = useI18n();
+  console.log("[DEBUG] dict keys:", Object.keys(dict));
   return (
     <section className="relative pt-10 sm:pt-16">
       {/* Abstract Background Glow */}

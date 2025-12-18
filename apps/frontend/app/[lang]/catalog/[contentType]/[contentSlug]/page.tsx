@@ -1,16 +1,13 @@
 // src/app/.../page.tsx
 import { ContentDetailsTemplate } from "@/features/catalog/templates/ContentDetails";
 import { mapToContentDetails } from "@/features/catalog/utils/contentMapper";
-import { NexonomaApi } from "@/services/api";
+import { createNexonomaApi } from "@/services/api";
 import type { ContentDetail } from "@/types/catalog";
 import { notFound } from "next/navigation";
 
-// Je nachdem wie dein Routing params type definiert ist:
-type PageProps = {
-  params: Promise<{ contentType: string; contentSlug: string }>;
-};
-
-export default async function ContentDetailPage({ params }: PageProps) {
+export default async function ContentDetailPage({ params }: PageProps<"/[lang]/catalog/[contentType]/[contentSlug]">) {
+  const { lang } = await params;
+  const api = createNexonomaApi(lang);
   const { contentType, contentSlug } = await params;
 
   let rawItem: Partial<ContentDetail> | null = null;
@@ -19,7 +16,7 @@ export default async function ContentDetailPage({ params }: PageProps) {
     // 1. Fetch
     // Wir casten zu Partial<ContentDetail>, da wir wissen, dass die API
     // JSON zurückgibt, das wir erst mappen müssen.
-    rawItem = (await NexonomaApi.getContentBySlug(contentType, contentSlug)) as Partial<ContentDetail>;
+    rawItem = (await api.getContentBySlug(contentType, contentSlug)) as Partial<ContentDetail>;
   } catch (error) {
     console.error("Error fetching content:", error);
     return notFound();

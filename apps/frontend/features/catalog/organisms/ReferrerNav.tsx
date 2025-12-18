@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type Props = {
   segmentName?: string;
@@ -43,7 +43,7 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
     });
   }, []);
 
-  const cameFromGrid = state.referrerPath?.startsWith("/grid");
+  const cameFromGrid = !!state.referrerPath?.match(/^\/([a-z]{2})(-[A-Z]{2})?\/grid(\/|$)|^\/grid(\/|$)/);
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-slate-300">
@@ -60,7 +60,7 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
           <span>Aus Grid:</span>
           <Link
-            href={state.referrerPath ?? "/grid"}
+            href={state.referrerPath ?? "./grid"}
             className="rounded-full bg-slate-800/60 px-3 py-1 text-slate-200 transition hover:bg-slate-700/80"
           >
             {segmentName || clusterName || macroClusterName || "Segment"}
