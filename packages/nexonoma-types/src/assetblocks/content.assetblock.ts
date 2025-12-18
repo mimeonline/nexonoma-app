@@ -6,13 +6,20 @@ import { BaseAssetBlock } from "./base.assetblock";
 // Primitive Unions
 // ---------------------------
 
-export type MaturityLevel = "exploratory" | "emerging" | "established" | "deprecated";
+export type MaturityLevel =
+  | "exploratory"
+  | "emerging"
+  | "established"
+  | "deprecated";
 
 export type ComplexityLevel = "low" | "medium" | "high";
 
 export type ImpactLevel = "technical" | "business" | "organizational";
 
-export type DecisionType = "pattern-selection" | "architecture-style" | "org-structure";
+export type DecisionType =
+  | "pattern-selection"
+  | "architecture-style"
+  | "org-structure";
 
 export type ArchitecturalDriver =
   | "availability"
@@ -172,7 +179,6 @@ export interface ContentAssetBlock extends BaseAssetBlock {
   // Benefits & Limits
   benefits?: string[];
   limitations?: string[];
-  alternatives?: string[];
 
   // Skills & Steps
   requiredSkills?: string[];

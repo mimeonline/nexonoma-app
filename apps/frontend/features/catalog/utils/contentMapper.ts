@@ -51,7 +51,6 @@ export function mapToContentDetails(item: Partial<ContentDetail>): MappedContent
     bottleneckTags: toArray(item.bottleneckTags),
     benefits: toArray(item.benefits),
     limitations: toArray(item.limitations),
-    alternatives: toArray(item.alternatives),
     risks: toArray(item.risks),
     techDebts: toArray(item.techDebts),
     constraints: toArray(item.constraints),

@@ -52,7 +52,6 @@
     ],
     "maturityLevel": "established",
     "principles": "[\"Portabilität und Skalierbarkeit\",\"Konfigurationsmanagement über Umgebungsvariablen\",\"Trennung von Build, Release und Run\",\"Logs als Event-Stream behandeln\"]",
-    "alternatives": ["15-Factor App", "Cloud-Native Patterns"],
     "bottleneckTags": [
       "deployment-complexity",
       "integration-sprawl",

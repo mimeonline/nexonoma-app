@@ -101,7 +101,6 @@ export interface FullAsset extends AssetBase {
   bottleneckTags: string[];
   benefits: string[];
   limitations: string[];
-  alternatives: string[];
   risks: string[];
   techDebts: string[];
   constraints: string[];

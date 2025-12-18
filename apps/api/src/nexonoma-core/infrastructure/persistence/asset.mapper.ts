@@ -141,7 +141,6 @@ export class AssetMapper {
       bottleneckTags: AssetMapper.parseArray(props.bottleneckTags),
       benefits: AssetMapper.parseArray(props.benefits),
       limitations: AssetMapper.parseArray(props.limitations),
-      alternatives: AssetMapper.parseArray(props.alternatives),
       requiredSkills: AssetMapper.parseArray(props.requiredSkills),
       implementationSteps: AssetMapper.parseArray(props.implementationSteps),
       preconditions: AssetMapper.parseArray(props.preconditions),

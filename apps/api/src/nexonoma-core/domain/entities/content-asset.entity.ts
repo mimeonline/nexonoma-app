@@ -66,7 +66,6 @@ export interface ContentAssetProps extends AssetBlockProps {
   bottleneckTags?: string[];
   benefits?: string[];
   limitations?: string[];
-  alternatives?: string[];
   requiredSkills?: string[];
   implementationSteps?: string[];
   preconditions?: string[];
@@ -113,7 +112,6 @@ export class ContentAsset extends AssetBlock {
   public bottleneckTags: string[];
   public benefits: string[];
   public limitations: string[];
-  public alternatives: string[];
   public requiredSkills: string[];
   public implementationSteps: string[];
   public preconditions: string[];
@@ -157,7 +155,6 @@ export class ContentAsset extends AssetBlock {
     this.bottleneckTags = props.bottleneckTags || [];
     this.benefits = props.benefits || [];
     this.limitations = props.limitations || [];
-    this.alternatives = props.alternatives || [];
     this.requiredSkills = props.requiredSkills || [];
     this.implementationSteps = props.implementationSteps || [];
     this.preconditions = props.preconditions || [];

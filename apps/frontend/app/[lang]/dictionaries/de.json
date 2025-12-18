@@ -242,8 +242,7 @@
         "technical": {
           "title": "Technischer Kontext",
           "fields": {
-            "integrations": "Integrationen",
-            "alternatives": "Alternativen"
+            "integrations": "Integrationen"
           }
         },
         "principles": {

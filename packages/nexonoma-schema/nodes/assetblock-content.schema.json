@@ -596,12 +596,6 @@
           "description": "Grenzen, Einschränkungen oder Nachteile."
         },
 
-        "alternatives": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "Alternative Bausteine oder Konzepte."
-        },
-
         "requiredSkills": {
           "type": "array",
           "items": { "type": "string" },

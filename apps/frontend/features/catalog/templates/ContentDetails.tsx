@@ -1,7 +1,8 @@
 "use client";
 
-import { useI18n } from "@/features/i18n/I18nProvider";
+import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { LocalizedTag } from "@/types/nexonoma";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
@@ -75,13 +76,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               ))}
             </div>
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                {icon && (
-                  <span className="text-3xl" aria-hidden>
-                    {icon}
-                  </span>
-                )}
-                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">{content.name}</h1>
+              <div className="flex items-center gap-4 mb-2">
+                <DynamicIcon name={icon} fallback="File" className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
+                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-0!">{content.name}</h1>
               </div>
               <p className="text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>
             </div>
@@ -115,7 +112,11 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
       {/* 2. BENTO GRID (Key Information) */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* CARD 1: Klassifikation */}
-        <InfoCard title={t("catalog.detail.cards.classification.title")} iconColor="text-purple-400" stripeColorClass="bg-linear-to-r from-purple-500 to-indigo-500">
+        <InfoCard
+          title={t("catalog.detail.cards.classification.title")}
+          iconColor="text-purple-400"
+          stripeColorClass="bg-linear-to-r from-purple-500 to-indigo-500"
+        >
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.complexity")}</span>
@@ -137,10 +138,16 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         </InfoCard>
 
         {/* CARD 2: Technisch */}
-        <InfoCard title={t("catalog.detail.cards.technical.title")} iconColor="text-nexo-aqua" stripeColorClass="bg-linear-to-r from-nexo-aqua to-nexo-ocean">
+        <InfoCard
+          title={t("catalog.detail.cards.technical.title")}
+          iconColor="text-nexo-aqua"
+          stripeColorClass="bg-linear-to-r from-nexo-aqua to-nexo-ocean"
+        >
           <div className="space-y-4">
             <div>
-              <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">{t("catalog.detail.cards.technical.fields.integrations")}</span>
+              <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">
+                {t("catalog.detail.cards.technical.fields.integrations")}
+              </span>
               <div className="flex flex-wrap gap-2">
                 {content.integrations?.map((integ: string, idx: number) => (
                   <Badge key={`${integ}-${idx}`} variant="outline" size="md" radius="md" className="font-normal">
@@ -148,16 +155,6 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                   </Badge>
                 ))}
               </div>
-            </div>
-            <div>
-              <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">{t("catalog.detail.cards.technical.fields.alternatives")}</span>
-              <ul className="text-sm text-slate-300 list-disc list-inside">
-                {content.alternatives?.map((alt: string, idx: number) => (
-                  <li key={idx} className="mb-1">
-                    {alt}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </InfoCard>
@@ -172,10 +169,8 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 </span>
               ))}
             </div>
-              <p className="text-sm text-nexo-muted leading-relaxed mt-2">
-                <span className="block text-xs text-slate-500 uppercase font-bold mb-1">
-                  {t("catalog.detail.cards.principles.fields.valueStream")}
-                </span>
+            <p className="text-sm text-nexo-muted leading-relaxed mt-2">
+              <span className="block text-xs text-slate-500 uppercase font-bold mb-1">{t("catalog.detail.cards.principles.fields.valueStream")}</span>
               <span className="text-white">{content.valueStreamStage}</span>
             </p>
             <p className="text-sm text-nexo-muted leading-relaxed">
@@ -192,21 +187,17 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <div className="space-y-4">
             {content.useCases?.length > 0 && (
               <div className="space-y-2">
-                <span className="text-[10px] uppercase text-blue-400 font-bold">
-                  {t("catalog.detail.cards.useCases.labels.useCases")}
-                </span>
+                <span className="text-[10px] uppercase text-blue-400 font-bold">{t("catalog.detail.cards.useCases.labels.useCases")}</span>
                 {content.useCases.map((uc: any, idx: number) => (
                   <div key={idx} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
-                    <p>{uc.description}</p>
+                    <p>{uc.name}</p>
                   </div>
                 ))}
               </div>
             )}
             {content.scenarios?.length > 0 && (
               <div className="space-y-2 pt-2 border-t border-white/5">
-                <span className="text-[10px] uppercase text-green-400 font-bold">
-                  {t("catalog.detail.cards.useCases.labels.scenarios")}
-                </span>
+                <span className="text-[10px] uppercase text-green-400 font-bold">{t("catalog.detail.cards.useCases.labels.scenarios")}</span>
                 {content.scenarios.map((sc: any, idx: number) => (
                   <div key={idx} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
                     <p>{sc.name}</p>
@@ -218,7 +209,11 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         </InfoCard>
 
         {/* CARD 5: Kompromisse */}
-        <InfoCard title={t("catalog.detail.cards.compromises.title")} iconColor="text-slate-400" stripeColorClass="bg-linear-to-r from-red-500 to-green-500">
+        <InfoCard
+          title={t("catalog.detail.cards.compromises.title")}
+          iconColor="text-slate-400"
+          stripeColorClass="bg-linear-to-r from-red-500 to-green-500"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div>
               <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">
@@ -248,7 +243,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
               <div>
-              <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.inputs")}</span>
+                <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.inputs")}</span>
                 <div className="text-xs text-slate-300">{content.inputs?.join(", ")}</div>
               </div>
               <div>
@@ -288,9 +283,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         {/* Pros / Cons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
-          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <span className="text-green-400">✔</span> {t("catalog.detail.sections.benefits")}
-          </h3>
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-green-400">✔</span> {t("catalog.detail.sections.benefits")}
+            </h3>
             <ul className="space-y-2">
               {content.benefits?.map((b: string, idx: number) => (
                 <li key={idx} className="flex gap-2 text-sm text-slate-300">
@@ -301,9 +296,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </ul>
           </div>
           <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
-          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <span className="text-red-400">✖</span> {t("catalog.detail.sections.limitations")}
-          </h3>
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span className="text-red-400">✖</span> {t("catalog.detail.sections.limitations")}
+            </h3>
             <ul className="space-y-2">
               {content.limitations?.map((l: string, idx: number) => (
                 <li key={idx} className="flex gap-2 text-sm text-slate-300">

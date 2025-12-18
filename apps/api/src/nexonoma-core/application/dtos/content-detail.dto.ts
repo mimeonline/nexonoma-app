@@ -79,7 +79,6 @@ export class ContentDetailDto {
   bottleneckTags: string[];
   benefits: string[];
   limitations: string[];
-  alternatives: string[];
   risks: string[];
   techDebts: string[];
 
