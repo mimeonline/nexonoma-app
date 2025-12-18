@@ -20,7 +20,7 @@ export class GetContentBySlugUseCase {
       type.toUpperCase(),
       slug,
     );
-    console.log('[DEBUG]', asset?.organizationalLevel);
+
     if (!asset) {
       throw new NotFoundException(
         `Content asset with type '${type.toUpperCase()}' and slug '${slug}' not found`,

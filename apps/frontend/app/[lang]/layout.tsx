@@ -48,7 +48,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
             <Header />
           </header>
 
-          <main className="grow w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">{children}</main>
+          <main className="grow w-full">{children}</main>
 
           <footer role="contentinfo" className="w-full border-t border-white/5 py-6 text-center text-sm text-slate-400/70">
             <Footer />

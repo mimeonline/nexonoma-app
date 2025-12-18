@@ -1,9 +1,9 @@
 "use client";
 
+import { useI18n } from "@/features/i18n/I18nProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useI18n } from "@/features/i18n/I18nProvider";
 
 const navItems = [
   { href: "/", labelKey: "nav.home" },
@@ -17,8 +17,17 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { t } = useI18n();
+  function stripLocale(pathname?: string) {
+    if (!pathname) return "";
 
-  const isActive = (href: string) => pathname === href || (pathname?.startsWith(href + "/") ?? false);
+    return pathname.replace(/^\/(de|en)(\/|$)/, "/");
+  }
+
+  const isActive = (href: string) => {
+    const normalizedPath = stripLocale(pathname);
+
+    return normalizedPath === href || normalizedPath.startsWith(href + "/");
+  };
 
   return (
     <>
@@ -48,6 +57,7 @@ export default function Header() {
         <nav className="hidden items-center gap-3 md:flex">
           {navItems.map((item) => {
             const active = isActive(item.href);
+
             return (
               <Link
                 key={item.href}
