@@ -8,6 +8,7 @@ import { AssetRepositoryPort } from '../../domain/ports/outbound/asset-repositor
 import { AssetType } from '../../domain/types/asset-enums';
 import { AssetMapper } from './asset.mapper';
 // Importiere deinen Helper (Pfad ggf. anpassen)
+import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
 import { getI18nProjection } from '../../../shared/infrastructure/neo4j/cypher-fragments';
 
 @Injectable()
@@ -27,9 +28,12 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.type = $type
+      OPTIONAL MATCH (n)-[:CONTAINS]->(c:AssetBlock)
+      WITH n, count(c) AS childrenCount
       RETURN n {
         .*,
-        ${i18n}
+        ${i18n},
+        childrenCount: childrenCount
       } AS assetData
       ORDER BY assetData.name ASC
     `;
@@ -40,8 +44,15 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     });
 
     return result.map((record) => {
-      const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, locale) as StructuralAsset;
+      const rawAssetData = record.get('assetData');
+
+      // 🔥 HIER ist der Fix
+      const normalizedAssetData = normalizeNeo4j(rawAssetData);
+
+      return AssetMapper.toDomain(
+        normalizedAssetData,
+        locale,
+      ) as StructuralAsset;
     });
   }
 
@@ -93,20 +104,25 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     const i18n = getI18nProjection('c');
 
     const query = `
-      MATCH (p:AssetBlock {id: $parentId})
-      MATCH (p)-[:CONTAINS|RELATED_TO]->(c:AssetBlock)
-      RETURN c {
-        .*,
-        ${i18n}
-      } AS assetData
-      ORDER BY assetData.name ASC
+    MATCH (p:AssetBlock {id: $parentId})
+    MATCH (p)-[:CONTAINS|RELATED_TO]->(c:AssetBlock)
+    OPTIONAL MATCH (c)-[:CONTAINS]->(gc:AssetBlock)
+    WITH c, count(gc) AS childrenCount
+    RETURN c {
+      .*,
+      ${i18n},
+      childrenCount: childrenCount
+    } AS assetData
+    ORDER BY assetData.name ASC
     `;
 
     const result = await this.neo4j.read(query, { parentId, lang: locale });
 
     return result.map((record) => {
-      const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, locale);
+      const rawAssetData = record.get('assetData');
+      const normalized = normalizeNeo4j(rawAssetData);
+
+      return AssetMapper.toDomain(normalized, locale);
     });
   }
 

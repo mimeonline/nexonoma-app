@@ -2,6 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { StructuralAsset } from '../../../domain/entities/structural-asset.entity';
 import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
 
+// TODO: childrenCount zählt aktuell ClusterViews.
+// Da ClusterView im UI noch nicht dargestellt wird,
+// wirkt der Count auf der Cluster-Seite irreführend.
+// Korrekt, sobald ClusterView-Ebene umgesetzt ist.
 @Injectable()
 export class GetGridClustersUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
@@ -25,6 +29,7 @@ export class GetGridClustersUseCase {
     // 3. Wir hängen die Kinder an das Eltern-Objekt
     // Da wir in Typescript sind, müssen wir sicherstellen, dass wir children pushen können
     macroCluster.children = clusters;
+    macroCluster.childrenCount = clusters.length;
 
     return macroCluster;
   }

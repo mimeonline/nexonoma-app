@@ -2,6 +2,8 @@ import { LocalizedTag } from '../../domain/entities/asset.entity';
 import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
 // --- Sub-DTOs für komplexe Objekte ---
 
+// TODO : Wir im Moment nicht genutzt. Später einbinden oder löschen.
+
 export class UseCaseDto {
   description: string;
   inputs?: string[];

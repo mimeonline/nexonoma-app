@@ -3,9 +3,9 @@
 import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
+import type { Cluster } from "@/types/grid";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import type { Cluster } from "@/types/grid";
 
 type Props = {
   clusters: Cluster[];
@@ -27,7 +27,7 @@ export function ClusterList({ clusters, parentSlug }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {clusters.map((cluster) => {
-        const segmentCount = cluster.segments?.length || 0;
+        const segmentCount = cluster.childrenCount || 0;
         const initial = cluster.name.charAt(0).toUpperCase();
 
         return (

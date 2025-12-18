@@ -1,5 +1,6 @@
 import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
 
+// TODO : Wir im Moment nicht genutzt. Später einbinden oder löschen.
 export class GridNodeDto {
   // --- Identifikation ---
   id: string;
@@ -22,6 +23,7 @@ export class GridNodeDto {
 
   // Rekursion: Ein Node kann Kinder haben (Cluster -> Segmente -> Content)
   children: GridNodeDto[];
+  chidrenCount: number;
 
   // Optional: Metadaten für das Grid (z.B. Sortierung)
   order?: number;

@@ -93,6 +93,7 @@ export class AssetMapper {
       ...base,
       framework: props.framework,
       parentId: props.parentId,
+      childrenCount: props.childrenCount || 0,
     };
     return new StructuralAsset(structProps);
   }

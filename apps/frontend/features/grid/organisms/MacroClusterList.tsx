@@ -25,7 +25,7 @@ export function MacroClusterList({ macroClusters }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {macroClusters.map((macro) => {
-        const clusterCount = macro.clusters?.length || 0;
+        const clusterCount = macro.childrenCount || 0;
 
         return (
           <Link key={macro.slug} href={`/grid/${macro.slug}`} className="block group">

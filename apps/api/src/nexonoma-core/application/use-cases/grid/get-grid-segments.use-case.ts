@@ -48,6 +48,7 @@ export class GetGridSegmentsUseCase {
       (child): child is StructuralAsset =>
         child instanceof StructuralAsset && child.type === AssetType.SEGMENT,
     );
+    cluster.childrenCount = segments.length;
 
     // 4) Inhalte der Segmente laden
     for (const segment of segments) {
@@ -61,6 +62,7 @@ export class GetGridSegmentsUseCase {
           AssetType.TECHNOLOGY,
         ].includes((c as StructuralAsset).type as AssetType),
       );
+      segment.childrenCount = segment.children.length;
     }
 
     // 5) Ergebnisstruktur zurückgeben: cluster -> segments -> content
