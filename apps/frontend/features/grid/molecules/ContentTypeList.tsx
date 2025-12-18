@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SegmentContent, SegmentContentType } from "@/types/grid";
+import { AssetType } from "@/types/nexonoma";
 
 type Props = {
   clusterSlug: string;
@@ -11,12 +12,13 @@ type Props = {
 };
 
 const contentMap: Array<{ key: keyof SegmentContent; label: string; type: SegmentContentType }> = [
-  { key: "concepts", label: "Concept", type: "concept" },
-  { key: "methods", label: "Method", type: "method" },
-  { key: "tools", label: "Tool", type: "tool" },
-  { key: "technologies", label: "Technology", type: "technology" },
+  { key: "concepts", label: "Concept", type: AssetType.CONCEPT },
+  { key: "methods", label: "Method", type: AssetType.METHOD },
+  { key: "tools", label: "Tool", type: AssetType.TOOL },
+  { key: "technologies", label: "Technology", type: AssetType.TECHNOLOGY },
 ];
 
+// TODO : Wird augenblicklich niht mehr genutzt. Vielleicht löschen?
 export function ContentTypeList({ clusterSlug, subclusterSlug, segmentSlug, contents }: Props) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -32,7 +34,7 @@ export function ContentTypeList({ clusterSlug, subclusterSlug, segmentSlug, cont
             <CardContent className="pt-1 text-sm text-slate-200/85">
               <p className="mb-3">Öffne die Liste oder direkt ein Detail.</p>
               {first ? (
-                <div className="flex gap-3 text-[#4FF4E0] font-semibold">
+                <div className="flex gap-3 text-nexo-aqua font-semibold">
                   <Link href={`/grid/${clusterSlug}/${subclusterSlug}/${segmentSlug}/${type}/${first.slug}`} className="hover:underline">
                     Erstes Detail öffnen
                   </Link>

@@ -4,9 +4,9 @@ import { LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { useI18n } from "@/features/i18n/I18nProvider";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 import { ChevronDown } from "lucide-react";
@@ -72,10 +72,10 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
     () =>
       [
         { value: "all", label: t("grid.segments.filters.types.all") },
-        { value: "concept", label: t("grid.segments.filters.types.concept") },
-        { value: "method", label: t("grid.segments.filters.types.method") },
-        { value: "tool", label: t("grid.segments.filters.types.tool") },
-        { value: "technology", label: t("grid.segments.filters.types.technology") },
+        { value: AssetType.CONCEPT, label: t("grid.segments.filters.types.concept") },
+        { value: AssetType.METHOD, label: t("grid.segments.filters.types.method") },
+        { value: AssetType.TOOL, label: t("grid.segments.filters.types.tool") },
+        { value: AssetType.TECHNOLOGY, label: t("grid.segments.filters.types.technology") },
       ] as { value: FilterType; label: string }[],
     [t]
   );
@@ -202,9 +202,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
               </Card>
             </Link>
           ))}
-          {filtered.length === 0 && (
-            <p className="col-span-full text-center text-nexo-muted py-10">{t("grid.segments.empty")}</p>
-          )}
+          {filtered.length === 0 && <p className="col-span-full text-center text-nexo-muted py-10">{t("grid.segments.empty")}</p>}
         </div>
       ) : (
         // PIPELINE MODE
@@ -229,9 +227,9 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                     <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
                       <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer bg-nexo-card">
                         <div className="flex items-center justify-between mb-2">
-                        <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">
-                          {translateAssetLabel(item.type)}
-                        </Badge>
+                          <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">
+                            {translateAssetLabel(item.type)}
+                          </Badge>
                         </div>
                         <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
                       </Card>
@@ -239,7 +237,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                   ))}
                   {items.length === 0 && (
                     <div className="flex flex-1 items-center justify-center min-h-[60px] border border-dashed border-white/5 rounded-lg">
-                    <span className="text-[10px] italic text-slate-600">{t("grid.segments.emptyLane")}</span>
+                      <span className="text-[10px] italic text-slate-600">{t("grid.segments.emptyLane")}</span>
                     </div>
                   )}
                 </div>
