@@ -77,7 +77,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </div>
             <div>
               <div className="flex items-center gap-4 mb-2">
-                <DynamicIcon name={icon} fallback="File" className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
+                <DynamicIcon name={icon} className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
                 <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-0!">{content.name}</h1>
               </div>
               <p className="text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>

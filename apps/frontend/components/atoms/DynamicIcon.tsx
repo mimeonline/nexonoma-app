@@ -15,7 +15,7 @@ function toPascalCase(value: string) {
     .join("");
 }
 
-export const DynamicIcon = ({ name, fallback = "File", ...props }: DynamicIconProps) => {
+export const DynamicIcon = ({ name, fallback = "Layers", ...props }: DynamicIconProps) => {
   const candidates = name ? [name, toPascalCase(name)] : [];
 
   const matched = candidates.find((candidate) => candidate in icons) ?? fallback;

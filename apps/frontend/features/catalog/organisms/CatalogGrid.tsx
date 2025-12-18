@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
@@ -33,9 +34,16 @@ export function CatalogGrid({ items }: CatalogGridProps) {
             </CardHeader>
 
             <CardContent>
-              <CardTitle className="text-lg font-bold text-white mb-2 line-clamp-2 leading-tight group-hover:text-nexo-ocean transition-colors">
-                {item.name}
-              </CardTitle>
+              {/* Wrapper regelt den Abstand nach unten (mb-2) */}
+              <div className="flex items-start gap-3 mb-2">
+                {/* Icon auf h-5 w-5 vergrößert für Balance & mt-1 für Ausrichtung an der ersten Zeile */}
+                <DynamicIcon name={item.icon} className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
+
+                <CardTitle className="text-lg font-bold text-white mb-0! line-clamp-2 leading-tight group-hover:text-nexo-ocean transition-colors">
+                  {item.name}
+                </CardTitle>
+              </div>
+
               <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">
                 {item.shortDescription || t("catalog.gridMeta.shortDescriptionFallback")}
               </p>
