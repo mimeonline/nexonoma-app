@@ -1,5 +1,8 @@
+"use client";
+
 import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import type { MacroCluster } from "@/types/grid";
 import Link from "next/link";
 
@@ -8,12 +11,13 @@ type Props = {
 };
 
 export function MacroClusterList({ macroClusters }: Props) {
+  const { t } = useI18n();
   const hasMacroClusters = macroClusters && macroClusters.length > 0;
 
   if (!hasMacroClusters) {
     return (
       <div className="flex h-40 w-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/5">
-        <p className="text-sm text-nexo-muted">Keine Wissensbereiche verfügbar.</p>
+        <p className="text-sm text-nexo-muted">{t("grid.macro.empty")}</p>
       </div>
     );
   }
@@ -21,7 +25,6 @@ export function MacroClusterList({ macroClusters }: Props) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {macroClusters.map((macro) => {
-        // WICHTIG: Im Typ 'MacroCluster' heißt das Array 'clusters', nicht 'children'
         const clusterCount = macro.clusters?.length || 0;
 
         return (
@@ -34,13 +37,15 @@ export function MacroClusterList({ macroClusters }: Props) {
                   </CardTitle>
 
                   <Badge variant="ocean" size="md">
-                    {clusterCount} Cluster
+                    {clusterCount} {clusterCount === 1 ? t("grid.labels.cluster") : t("grid.labels.clusters")}
                   </Badge>
                 </div>
               </CardHeader>
 
               <CardContent className="mt-auto">
-                <p className="text-sm text-nexo-muted leading-relaxed line-clamp-3">{macro.shortDescription || "Keine Beschreibung verfügbar."}</p>
+                <p className="text-sm text-nexo-muted leading-relaxed line-clamp-3">
+                  {macro.shortDescription || t("grid.clusters.descriptionFallback")}
+                </p>
               </CardContent>
             </Card>
           </Link>

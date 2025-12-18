@@ -1,16 +1,58 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+
+type TranslationParams = Record<string, string | number>;
 
 type I18nContextValue = {
   lang: string;
-  dict: any;
+  dict: Dictionary;
+  t: (key: string, params?: TranslationParams) => string;
 };
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
+function interpolate(template: string, params?: TranslationParams) {
+  if (!params) return template;
+  return Object.entries(params).reduce(
+    (value, [param, replacement]) => value.replace(new RegExp(`\\{${param}\\}`, "g"), String(replacement)),
+    template
+  );
+}
+
+function resolveKey(dict: Dictionary, key: string) {
+  const segments = key.split(".").filter(Boolean);
+  let current: unknown = dict;
+
+  for (const segment of segments) {
+    if (typeof current === "object" && current !== null && segment in current) {
+      current = (current as Record<string, unknown>)[segment];
+    } else {
+      return undefined;
+    }
+  }
+
+  return typeof current === "string" ? current : undefined;
+}
+
+function buildTranslator(dict: Dictionary) {
+  return (key: string, params?: TranslationParams) => {
+    const value = resolveKey(dict, key);
+    if (value === undefined) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(`[i18n] missing translation for key "${key}"`);
+      }
+      return key;
+    }
+
+    return interpolate(value, params);
+  };
+}
+
 export function I18nProvider({ lang, dict, children }: React.PropsWithChildren<I18nContextValue>) {
-  return <I18nContext.Provider value={{ lang, dict }}>{children}</I18nContext.Provider>;
+  const t = useMemo(() => buildTranslator(dict), [dict]);
+  return <I18nContext.Provider value={{ lang, dict, t }}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {

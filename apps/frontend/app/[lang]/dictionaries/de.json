@@ -4,10 +4,15 @@
     "tagline": "Entdecke Konzepte, Methoden, Tools und Architekturen."
   },
   "nav": {
+    "home": "Start",
     "grid": "Grid",
     "matrix": "Matrix",
     "city": "City",
-    "catalog": "Katalog"
+    "catalog": "Katalog",
+    "sandbox": "Sandbox"
+  },
+  "a11y": {
+    "menuToggle": "Menü öffnen"
   },
   "common": {
     "loading": "Lädt…",
@@ -18,9 +23,154 @@
     "copied": "Kopiert",
     "openInNewTab": "In neuem Tab öffnen"
   },
+  "home": {
+    "hero": {
+      "badge": "Nexonoma MVP Live",
+      "title": {
+        "main": "Komplexität beherrschen",
+        "highlight": "Zusammenhänge verstehen"
+      },
+      "description": "Dein visueller Guide durch den Dschungel aus Methoden, Tools und Patterns. Nexonoma liefert dir Struktur und Orientierung, genau dort, wo du im Prozess stehst.",
+      "cta": {
+        "primary": "Wissensnetz starten",
+        "secondary": "Wie es funktioniert"
+      },
+      "sdlc": {
+        "label": "Software Development Lifecycle",
+        "status": "LIVE MAPPING",
+        "phases": {
+          "analysis": "Analyse",
+          "design": "Entwurf",
+          "operate": "Betrieb"
+        },
+        "contextMatching": "Kontextabgleich...",
+        "matches": "{count} Treffer"
+      },
+      "cards": {
+        "concept": {
+          "title": "Clean Arch.",
+          "description": "Trennung von Verantwortlichkeiten."
+        },
+        "method": {
+          "badge": "BEST FIT",
+          "title": "C4 Model",
+          "description": "Visualisierung von Architektur auf 4 Ebenen."
+        }
+      }
+    },
+    "valueProps": {
+      "title": "Vom Chaos zur Klarheit",
+      "description": "Nexonoma ist keine Datenbank, sondern ein intelligentes Navigationssystem für komplexe Umgebungen.",
+      "items": {
+        "alternatives": {
+          "title": "Alternativen finden",
+          "description": "Statt isolierter Tools zeigt Nexonoma passende Patterns und Technologien für deinen spezifischen Kontext."
+        },
+        "context": {
+          "title": "Kontext verstehen",
+          "description": "Erkenne, wie Business-Anforderungen, Code-Qualität und Team-Strukturen (Conway's Law) zusammenhängen."
+        },
+        "risks": {
+          "title": "Risiken minimieren",
+          "description": "Vermeide teure Fehlentscheidungen durch Sichtbarkeit von Abhängigkeiten und \"Tech Debt\"-Fallen."
+        }
+      }
+    },
+    "catalogSection": {
+      "badge": "Der Wissens-Katalog",
+      "title": "Der Wissens-Katalog",
+      "description": "Schluss mit veralteten Wikis und Linksammlungen. Nexonoma ist deine Single Source of Truth.",
+      "benefits": {
+        "inventory": {
+          "title": "Zentralisiertes Inventar",
+          "description": "Über 150+ kuratierte Bausteine. Konzepte, Methoden und Tools an einem Ort – immer aktuell und durchsuchbar."
+        },
+        "semantic": {
+          "title": "Semantisch Vernetzt",
+          "description": "Verstehe Beziehungen: Welches Tool passt zu welcher Methode? Welches Tech braucht welches Konzept?"
+        }
+      },
+      "cta": "Zum Katalog"
+    },
+    "catalogVisual": {
+      "searchPlaceholder": "Filtere nach Tags, Phasen...",
+      "cta": "Katalog öffnen"
+    },
+    "navigations": {
+      "badge": "Explorer",
+      "title": "Wähle deine Perspektive",
+      "description": "Drei Ansichten für unterschiedliche Fragestellungen. Tauche tief in dein Wissensnetz ein.",
+      "cards": {
+        "grid": {
+          "title": "Grid-Ansicht",
+          "description": "Der strukturierte Katalog. Alle Bausteine hierarchisch sortiert für den schnellen Zugriff.",
+          "cta": "Zum Grid"
+        },
+        "matrix": {
+          "title": "Matrix-Ansicht",
+          "description": "Die systemische Analyse. Filter & Beziehungen im Kontext von Cluster × Segmenten.",
+          "cta": "Zur Matrix"
+        },
+        "city": {
+          "title": "City-Ansicht",
+          "description": "Die visuelle Entdeckungsreise. Erfasse Zusammenhänge räumlich und intuitiv.",
+          "cta": "Zur City"
+        }
+      }
+    },
+    "ctaBottom": {
+      "title": "Bereit für bessere Entscheidungen?",
+      "description": "Nexonoma ist derzeit im Proof of Concept Status. Dein Feedback hilft uns, das ultimative Werkzeug für Architekten zu bauen.",
+      "button": "Feedback"
+    }
+  },
   "grid": {
-    "title": "Grid Ansicht",
-    "description": "Erkunde die Wissenskarte in einer rasterbasierten Ansicht."
+    "macro": {
+      "badge": "Grid Navigation",
+      "title": "Wissensbereiche",
+      "description": "Die oberste Struktur des Wissensnetzes. Diese Bereiche bündeln verwandte Themen in thematische Räume – von der Strategie über die Architektur bis hin zu User & Kontext.",
+      "empty": "Keine Wissensbereiche verfügbar."
+    },
+    "clusters": {
+      "badge": "Themen-Cluster",
+      "description": "Erkunde die spezifischen Themengebiete innerhalb dieses Wissensbereichs.",
+      "empty": "In diesem Bereich sind aktuell noch keine Cluster hinterlegt.",
+      "descriptionFallback": "Keine Beschreibung verfügbar.",
+      "segmentLabel": "Segment",
+      "segmentsLabel": "Segmente"
+    },
+    "segments": {
+      "breadcrumbs": {
+        "grid": "Grid"
+      },
+      "filters": {
+        "types": {
+          "all": "Alle Typen",
+          "concept": "Konzepte",
+          "method": "Methoden",
+          "tool": "Tools",
+          "technology": "Technologien"
+        }
+      },
+      "viewToggle": {
+        "grid": "Grid",
+        "pipeline": "Pipeline"
+      },
+      "tabs": {
+        "all": "Alles anzeigen"
+      },
+      "empty": "Keine Inhalte für die gewählten Filter gefunden.",
+      "emptyLane": "Leer"
+    },
+    "labels": {
+      "cluster": "Cluster",
+      "clusters": "Cluster",
+      "segment": "Segment",
+      "segments": "Segmente"
+    },
+    "actions": {
+      "explore": "Erkunden"
+    }
   },
   "matrix": {
     "title": "Matrix Ansicht",
@@ -42,6 +192,109 @@
       "nameAsc": "Name (A–Z)",
       "nameDesc": "Name (Z–A)",
       "updatedDesc": "Zuletzt aktualisiert"
+    },
+    "page": {
+      "heading": "Nexonoma Katalog",
+      "description": "Alle Content-Bausteine (Concepts, Methods, Tools, Technologies) in einer kompakten Übersicht. Suche, filtere nach Typ und wechsle direkt in die Detailansicht."
+    },
+    "search": {
+      "placeholder": "Suche nach Namen oder Kurzbeschreibung..."
+    },
+    "filtersMeta": {
+      "typeOptions": {
+        "all": "Alle",
+        "concept": "Konzepte",
+        "method": "Methoden",
+        "tool": "Tools",
+        "technology": "Technologien"
+      },
+      "countLabel": "{count} Einträge"
+    },
+    "messages": {
+      "loading": "Lade Catalog-Daten...",
+      "error": "Catalog-Daten konnten nicht geladen werden: {error}",
+      "empty": "Keine Einträge gefunden. Filter oder Suchbegriff anpassen."
+    },
+    "gridMeta": {
+      "shortDescriptionFallback": "Keine Kurzbeschreibung vorhanden."
+    },
+    "detail": {
+      "referrer": {
+        "back": "Zurück",
+        "fromGrid": "Aus Grid:",
+        "segmentPlaceholder": "Segment"
+      },
+      "metadata": {
+        "maturity": "Reifegrad",
+        "cognitiveLoad": "Kognitive Belastung",
+        "status": "Status"
+      },
+      "cards": {
+        "classification": {
+          "title": "Klassifikation",
+          "fields": {
+            "complexity": "Komplexität",
+            "impact": "Auswirkungsbereich",
+            "decisionType": "Entscheidungstyp",
+            "organizationalMaturity": "Organisationsreife"
+          }
+        },
+        "technical": {
+          "title": "Technischer Kontext",
+          "fields": {
+            "integrations": "Integrationen",
+            "alternatives": "Alternativen"
+          }
+        },
+        "principles": {
+          "title": "Prinzipien & Ziele",
+          "fields": {
+            "valueStream": "Wertstrom",
+            "organizationalLevel": "Organisationsebene"
+          }
+        },
+        "useCases": {
+          "title": "Use Cases & Szenarien",
+          "labels": {
+            "useCases": "Use Cases",
+            "scenarios": "Szenarien"
+          }
+        },
+        "compromises": {
+          "title": "Kompromisse",
+          "fields": {
+            "risks": "Risiken",
+            "bestPractices": "Best Practices"
+          }
+        },
+        "io": {
+          "title": "I/O & Ressourcen",
+          "fields": {
+            "inputs": "Eingaben",
+            "outputs": "Ausgaben",
+            "resources": "Ressourcen"
+          }
+        }
+      },
+      "sections": {
+        "description": {
+          "title": "Beschreibung"
+        },
+        "benefits": "Vorteile",
+        "limitations": "Limitationen",
+        "examples": "Beispiele & Implementierungen",
+        "implementation": "Implementierungsschritte",
+        "techDebt": {
+          "title": "Technische Schulden & Engpässe",
+          "risksLabel": "Risiko-Faktoren",
+          "bottlenecksLabel": "Bekannte Engpässe",
+          "misuse": "Beispiele für Missbrauch"
+        },
+        "skills": "Erforderliche Fähigkeiten",
+        "drivers": "Architektonische Treiber",
+        "constraints": "Einschränkungen"
+      },
+      "emptyDescription": "Keine Kurzbeschreibung vorhanden."
     }
   },
   "asset": {

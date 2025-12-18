@@ -1,14 +1,17 @@
+import { getDictionary, Locale } from "@/app/[lang]/dictionaries";
 import { CatalogTemplate } from "@/features/catalog/templates/Catalog";
 import { mapToCatalogItem } from "@/features/catalog/utils/catalogMapper";
 import { createNexonomaApi } from "@/services/api";
 import type { CatalogItem } from "@/types/catalog";
 
-// FIXME Das passt so wegen i18n nicht mehr. Muss aus dem dictionaries geholt werden.
-// Optional: Metadata für SEO
-export const metadata = {
-  title: "Katalog | Nexonoma",
-  description: "Entdecke Technologien, Methoden und Tools im Nexonoma Katalog.",
-};
+export async function generateMetadata({ params }: PageProps<"/[lang]/catalog">) {
+  const { lang } = await params;
+  const dict = await getDictionary(lang as Locale);
+  return {
+    title: dict.catalog.page.heading,
+    description: dict.catalog.page.description,
+  };
+}
 
 export default async function CatalogPage({ params }: PageProps<"/[lang]/catalog">) {
   const { lang } = await params;

@@ -1,17 +1,17 @@
+"use client";
+
 import { Card, CardContent, CardFooter, CardHeader, CardIcon, CardTitle } from "@/components/ui/atoms/Card";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { ArrowRight, Building2, LayoutGrid, Table2 } from "lucide-react";
 import Link from "next/link";
+import { useI18n } from "@/features/i18n/I18nProvider";
 
 export function Navigations() {
+  const { t } = useI18n();
+
   return (
     <section>
-      <SectionTitle
-        badge="Explorer"
-        title="Wähle deine Perspektive"
-        description="Drei Ansichten für unterschiedliche Fragestellungen. Tauche tief in dein Wissensnetz ein."
-        className="mb-12"
-      />
+      <SectionTitle badge={t("home.navigations.badge")} title={t("home.navigations.title")} description={t("home.navigations.description")} className="mb-12" />
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* --- 1. GRID VIEW (Ocean Blue) --- */}
@@ -30,18 +30,18 @@ export function Navigations() {
               <CardIcon className="bg-nexo-ocean/10 text-nexo-ocean border-nexo-ocean/20">
                 <LayoutGrid className="h-6 w-6" />
               </CardIcon>
-              <CardTitle className="group-hover:text-nexo-ocean">Grid-Ansicht</CardTitle>
+              <CardTitle className="group-hover:text-nexo-ocean">{t("home.navigations.cards.grid.title")}</CardTitle>
             </CardHeader>
 
             <CardContent>
               <p className="text-sm text-slate-400 leading-relaxed max-w-[90%]">
-                Der strukturierte Katalog. Alle Bausteine hierarchisch sortiert für den schnellen Zugriff.
+                {t("home.navigations.cards.grid.description")}
               </p>
             </CardContent>
 
             <CardFooter>
               <span className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 group-hover:text-white transition-colors">
-                Zum Grid
+                {t("home.navigations.cards.grid.cta")}
                 <ArrowRight className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1" />
               </span>
             </CardFooter>
@@ -71,18 +71,18 @@ export function Navigations() {
               <CardIcon className="bg-nexo-aqua/10 text-nexo-aqua border-nexo-aqua/20">
                 <Table2 className="h-6 w-6" />
               </CardIcon>
-              <CardTitle className="group-hover:text-nexo-aqua">Matrix-Ansicht</CardTitle>
+              <CardTitle className="group-hover:text-nexo-aqua">{t("home.navigations.cards.matrix.title")}</CardTitle>
             </CardHeader>
 
             <CardContent>
               <p className="text-sm text-slate-400 leading-relaxed max-w-[90%]">
-                Die systemische Analyse. Filter & Beziehungen im Kontext von Cluster × Segmenten.
+                {t("home.navigations.cards.matrix.description")}
               </p>
             </CardContent>
 
             <CardFooter>
               <span className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 group-hover:text-white transition-colors">
-                Zur Matrix
+                {t("home.navigations.cards.matrix.cta")}
                 <ArrowRight className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1" />
               </span>
             </CardFooter>
@@ -109,18 +109,18 @@ export function Navigations() {
               <CardIcon className="bg-purple-500/10 text-purple-400 border-purple-500/20">
                 <Building2 className="h-6 w-6" />
               </CardIcon>
-              <CardTitle className="group-hover:text-purple-400">City-Ansicht</CardTitle>
+              <CardTitle className="group-hover:text-purple-400">{t("home.navigations.cards.city.title")}</CardTitle>
             </CardHeader>
 
             <CardContent>
               <p className="text-sm text-slate-400 leading-relaxed max-w-[90%]">
-                Die visuelle Entdeckungsreise. Erfasse Zusammenhänge räumlich und intuitiv.
+                {t("home.navigations.cards.city.description")}
               </p>
             </CardContent>
 
             <CardFooter>
               <span className="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 group-hover:text-white transition-colors">
-                Zur City
+                {t("home.navigations.cards.city.cta")}
                 <ArrowRight className="ml-2 h-3 w-3 transition-transform group-hover:translate-x-1" />
               </span>
             </CardFooter>

@@ -4,8 +4,7 @@ import { useI18n } from "@/features/i18n/I18nProvider";
 import { Building2, Table2 } from "lucide-react";
 
 export default function HeroSection() {
-  const { dict } = useI18n();
-  console.log("[DEBUG] dict keys:", Object.keys(dict));
+  const { t } = useI18n();
   return (
     <section className="relative pt-10 sm:pt-16">
       {/* Abstract Background Glow */}
@@ -19,31 +18,28 @@ export default function HeroSection() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-nexo-ocean opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-nexo-ocean"></span>
               </span>
-              Nexonoma MVP Live
+              {t("home.hero.badge")}
             </div>
             <h1 className="font-[--font-space-grotesk] text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Komplexität beherrschen <br />
+              {t("home.hero.title.main")} <br />
               {/* Changes:
                    1. Keine Punkte am Ende der Zeilen für besseren Flow.
                    2. Gradient fokusiert auf 'nexo-ocean' (seriöser).
                    3. 'from-30%' sorgt dafür, dass der Text erst weiß bleibt und dann sanft ins Blaue übergeht.
                 */}
               <span className="inline-block bg-linear-to-r from-white from-30% to-nexo-ocean bg-clip-text text-transparent pb-2">
-                Zusammenhänge verstehen
+                {t("home.hero.title.highlight")}
               </span>
             </h1>
 
-            <p className="max-w-xl text-lg text-nexo-muted leading-relaxed mt-6">
-              Dein visueller Guide durch den Dschungel aus Methoden, Tools und Patterns. Nexonoma liefert dir Struktur und Orientierung, genau dort,
-              wo du im Prozess stehst.
-            </p>
+            <p className="max-w-xl text-lg text-nexo-muted leading-relaxed mt-6">{t("home.hero.description")}</p>
           </div>
 
           <div className="flex flex-wrap gap-4">
             <Button className="h-12 bg-nexo-ocean text-nexo-bg hover:bg-nexo-ocean/90 hover:shadow-[0_0_20px_-5px_#4FF4E0]">
-              Wissensnetz starten
+              {t("home.hero.cta.primary")}
             </Button>
-            <Button className="h-12 border border-white/10 bg-transparent text-white hover:bg-white/5">Wie es funktioniert</Button>
+            <Button className="h-12 border border-white/10 bg-transparent text-white hover:bg-white/5">{t("home.hero.cta.secondary")}</Button>
           </div>
         </div>
 
@@ -76,7 +72,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <div>
-                  <span className="block text-[10px] font-bold uppercase tracking-[0.15em] text-slate-300">Software Development Lifecycle</span>
+                <span className="block text-[10px] font-bold uppercase tracking-[0.15em] text-slate-300">{t("home.hero.sdlc.label")}</span>
                 </div>
               </div>
               {/* Status Badge */}
@@ -85,7 +81,7 @@ export default function HeroSection() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-400">LIVE MAPPING</span>
+                <span className="text-[10px] font-mono text-slate-400">{t("home.hero.sdlc.status")}</span>
               </div>
             </div>
 
@@ -99,7 +95,9 @@ export default function HeroSection() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#131C2E] border border-white/10 z-10">
                   <div className="h-2 w-2 rounded-full bg-slate-500"></div>
                 </div>
-                <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-widest">Analyse</span>
+                <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-widest">
+                  {t("home.hero.sdlc.phases.analysis")}
+                </span>
               </div>
 
               {/* Phase 2: Design/Build (ACTIVE - OCEAN) */}
@@ -112,7 +110,7 @@ export default function HeroSection() {
                   <div className="h-3 w-3 rounded-full bg-nexo-ocean animate-pulse shadow-[0_0_10px_rgba(56,189,248,0.8)]"></div>
                 </div>
                 <span className="text-[11px] font-mono font-bold text-nexo-ocean uppercase tracking-widest drop-shadow-[0_0_10px_rgba(56,189,248,0.5)]">
-                  Entwurf
+                  {t("home.hero.sdlc.phases.design")}
                 </span>
 
                 {/* Vertical Data Stream (The Beam) */}
@@ -126,7 +124,9 @@ export default function HeroSection() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#131C2E] border border-white/10 z-10">
                   <div className="h-2 w-2 rounded-full bg-slate-500"></div>
                 </div>
-                <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-widest">Betrieb</span>
+                <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-widest">
+                  {t("home.hero.sdlc.phases.operate")}
+                </span>
               </div>
             </div>
 
@@ -138,11 +138,11 @@ export default function HeroSection() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-nexo-ocean opacity-75"></span>
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-nexo-ocean"></span>
                   </div>
-                  <span className="text-xs font-medium text-slate-200">Context Matching...</span>
+                  <span className="text-xs font-medium text-slate-200">{t("home.hero.sdlc.contextMatching")}</span>
                 </div>
                 {/* Badge */}
                 <div className="flex items-center rounded bg-nexo-ocean/10 px-2 py-1 text-[10px] font-bold text-nexo-ocean border border-nexo-ocean/20">
-                  2 Matches
+                  {t("home.hero.sdlc.matches", { count: 2 })}
                 </div>
               </div>
             </div>
@@ -177,10 +177,10 @@ export default function HeroSection() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 text-slate-400 group-hover:text-white transition-colors">
                       <Building2 className="h-4 w-4" />
                     </div>
-                    <span className="text-[9px] font-bold uppercase text-slate-500">Concept</span>
+                    <span className="text-[9px] font-bold uppercase text-slate-500">{t("asset.labels.concept")}</span>
                   </div>
-                  <h4 className="text-sm font-bold text-slate-200 group-hover:text-white">Clean Arch.</h4>
-                  <p className="mt-1 text-[11px] text-slate-400 line-clamp-2 leading-relaxed">Trennung von Verantwortlichkeiten.</p>
+                  <h4 className="text-sm font-bold text-slate-200 group-hover:text-white">{t("home.hero.cards.concept.title")}</h4>
+                  <p className="mt-1 text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{t("home.hero.cards.concept.description")}</p>
                 </div>
               </div>
 
@@ -188,7 +188,7 @@ export default function HeroSection() {
               <div className="group relative flex flex-col justify-between rounded-2xl border border-nexo-ocean/40 bg-[#131C2E] p-4 shadow-[0_10px_40px_-10px_rgba(56,189,248,0.15)] transition-all duration-300 hover:-translate-y-1">
                 {/* Best Fit Badge */}
                 <div className="absolute -top-3 right-4 rounded-full bg-nexo-ocean px-2.5 py-0.5 text-[9px] font-bold text-nexo-surface shadow-lg shadow-nexo-ocean/40 tracking-wide">
-                  BEST FIT
+                  {t("home.hero.cards.method.badge")}
                 </div>
 
                 <div>
@@ -196,10 +196,10 @@ export default function HeroSection() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-nexo-ocean/10 text-nexo-ocean">
                       <Table2 className="h-4 w-4" />
                     </div>
-                    <span className="text-[9px] font-bold uppercase text-nexo-ocean">Method</span>
+                    <span className="text-[9px] font-bold uppercase text-nexo-ocean">{t("asset.labels.method")}</span>
                   </div>
-                  <h4 className="text-sm font-bold text-white">C4 Model</h4>
-                  <p className="mt-1 text-[11px] text-slate-400 line-clamp-2 leading-relaxed">Visualisierung von Architektur auf 4 Ebenen.</p>
+                  <h4 className="text-sm font-bold text-white">{t("home.hero.cards.method.title")}</h4>
+                  <p className="mt-1 text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{t("home.hero.cards.method.description")}</p>
                 </div>
 
                 {/* Subtle Glow at bottom */}

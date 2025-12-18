@@ -4,6 +4,7 @@ import { LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { useI18n } from "@/features/i18n/I18nProvider";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
@@ -65,6 +66,24 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");
+  const { t } = useI18n();
+
+  const selectTypeOptions = useMemo(
+    () =>
+      [
+        { value: "all", label: t("grid.segments.filters.types.all") },
+        { value: "concept", label: t("grid.segments.filters.types.concept") },
+        { value: "method", label: t("grid.segments.filters.types.method") },
+        { value: "tool", label: t("grid.segments.filters.types.tool") },
+        { value: "technology", label: t("grid.segments.filters.types.technology") },
+      ] as { value: FilterType; label: string }[],
+    [t]
+  );
+
+  const translateAssetLabel = (value: string) => {
+    const key = `asset.labels.${value.toLowerCase()}`;
+    return t(key);
+  };
 
   const contents = useMemo(() => (cluster ? flattenContents(cluster) : []), [cluster]);
   const filtered = useMemo(() => filterContents(contents, activeSegment, activeType), [contents, activeSegment, activeType]);
@@ -80,7 +99,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
             {/* Breadcrumbs */}
             <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
               <Link href="/grid" className="hover:text-white transition-colors">
-                Grid
+                {t("grid.segments.breadcrumbs.grid")}
               </Link>
               <span className="text-slate-700">/</span>
               <Link href={`/grid/${macroCluster.slug}`} className="hover:text-white transition-colors">
@@ -109,21 +128,11 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                 onChange={(e) => setActiveType(e.target.value as FilterType)}
                 className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
               >
-                <option value="all" className="bg-slate-900 text-slate-200">
-                  Alle Typen
-                </option>
-                <option value="CONCEPT" className="bg-slate-900 text-slate-200">
-                  Konzepte
-                </option>
-                <option value="METHOD" className="bg-slate-900 text-slate-200">
-                  Methoden
-                </option>
-                <option value="TOOL" className="bg-slate-900 text-slate-200">
-                  Tools
-                </option>
-                <option value="TECHNOLOGY" className="bg-slate-900 text-slate-200">
-                  Technologien
-                </option>
+                {selectTypeOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
+                    {opt.label}
+                  </option>
+                ))}
               </select>
 
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
@@ -141,7 +150,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                   viewMode === "grid" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
                 }`}
               >
-                <LayoutGrid className="h-3.5 w-3.5" /> Grid
+                <LayoutGrid className="h-3.5 w-3.5" /> {t("grid.segments.viewToggle.grid")}
               </button>
 
               <button
@@ -151,7 +160,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                   viewMode === "pipeline" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
                 }`}
               >
-                <List className="h-3.5 w-3.5" /> Pipeline
+                <List className="h-3.5 w-3.5" /> {t("grid.segments.viewToggle.pipeline")}
               </button>
             </div>
           </div>
@@ -159,7 +168,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
 
         {/* Segment Tabs */}
         <div className="pt-8 flex items-center gap-6 overflow-x-auto border-b border-white/5 pb-0 scrollbar-hide">
-          <TabButton active={activeSegment === "all"} onClick={() => setActiveSegment("all")} label="Alles anzeigen" />
+          <TabButton active={activeSegment === "all"} onClick={() => setActiveSegment("all")} label={t("grid.segments.tabs.all")} />
           {segments.map((segment) => (
             <TabButton
               key={segment.slug}
@@ -181,7 +190,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                 <CardHeader className="pb-2 space-y-0">
                   <div className="flex items-start justify-between gap-2">
                     <Badge variant={getBadgeVariant(item.type)} size="sm">
-                      {item.type}
+                      {translateAssetLabel(item.type)}
                     </Badge>
                     <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
                   </div>
@@ -194,7 +203,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
             </Link>
           ))}
           {filtered.length === 0 && (
-            <p className="col-span-full text-center text-nexo-muted py-10">Keine Inhalte für die gewählten Filter gefunden.</p>
+            <p className="col-span-full text-center text-nexo-muted py-10">{t("grid.segments.empty")}</p>
           )}
         </div>
       ) : (
@@ -220,9 +229,9 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                     <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
                       <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer bg-nexo-card">
                         <div className="flex items-center justify-between mb-2">
-                          <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">
-                            {item.type}
-                          </Badge>
+                        <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">
+                          {translateAssetLabel(item.type)}
+                        </Badge>
                         </div>
                         <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
                       </Card>
@@ -230,7 +239,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                   ))}
                   {items.length === 0 && (
                     <div className="flex flex-1 items-center justify-center min-h-[60px] border border-dashed border-white/5 rounded-lg">
-                      <span className="text-[10px] italic text-slate-600">Leer</span>
+                    <span className="text-[10px] italic text-slate-600">{t("grid.segments.emptyLane")}</span>
                     </div>
                   )}
                 </div>

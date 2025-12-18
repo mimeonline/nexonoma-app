@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useI18n } from "@/features/i18n/I18nProvider";
 
 type Props = {
   segmentName?: string;
@@ -18,6 +19,7 @@ type ReferrerState = {
 export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Props) {
   const router = useRouter();
   const [state, setState] = useState<ReferrerState>({ canGoBack: false, referrerPath: null });
+  const { t } = useI18n();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -52,18 +54,19 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
           onClick={() => router.back()}
           className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide transition hover:border-white/30 hover:bg-white/10"
         >
-          ← Zurück
+          <span aria-hidden>←</span>
+          {t("catalog.detail.referrer.back")}
         </button>
       )}
 
       {cameFromGrid && (
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-          <span>Aus Grid:</span>
+          <span>{t("catalog.detail.referrer.fromGrid")}</span>
           <Link
             href={state.referrerPath ?? "./grid"}
             className="rounded-full bg-slate-800/60 px-3 py-1 text-slate-200 transition hover:bg-slate-700/80"
           >
-            {segmentName || clusterName || macroClusterName || "Segment"}
+            {segmentName || clusterName || macroClusterName || t("catalog.detail.referrer.segmentPlaceholder")}
           </Link>
         </div>
       )}

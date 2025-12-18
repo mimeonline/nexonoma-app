@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/atoms/Button";
 import { CatalogPreviewCard } from "./CatalogPreviewCard";
+import { useI18n } from "@/features/i18n/I18nProvider";
 
 export function CatalogVisual() {
+  const { t } = useI18n();
+
   return (
     <div className="relative mx-auto w-full max-w-md lg:max-w-full">
       {/* Background Glow */}
@@ -25,7 +30,7 @@ export function CatalogVisual() {
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
-            <span>Filtere nach Tags, Phasen...</span>
+            <span>{t("home.catalogVisual.searchPlaceholder")}</span>
           </div>
           {/* Tiny Window Controls Decoration */}
           <div className="flex gap-1.5 opacity-50">
@@ -36,18 +41,18 @@ export function CatalogVisual() {
 
         {/* Grid Content: 2 Columns for compact look */}
         <div className="grid grid-cols-2 gap-3 p-5 opacity-50 grayscale-20 mask-[linear-gradient(to_bottom,black_40%,transparent_100%)]">
-          <CatalogPreviewCard title="Domain Driven Design" type="Concept" color="text-nexo-ocean" />
-          <CatalogPreviewCard title="Event Storming" type="Method" color="text-nexo-aqua" />
-          <CatalogPreviewCard title="Kubernetes" type="Tech" color="text-orange-400" />
-          <CatalogPreviewCard title="Terraform" type="Tool" color="text-purple-400" />
-          <CatalogPreviewCard title="Clean Architecture" type="Concept" color="text-nexo-ocean" />
-          <CatalogPreviewCard title="Team Topologies" type="Method" color="text-nexo-aqua" />
+          <CatalogPreviewCard title="Domain Driven Design" type={t("asset.labels.concept")} color="text-nexo-ocean" />
+          <CatalogPreviewCard title="Event Storming" type={t("asset.labels.method")} color="text-nexo-aqua" />
+          <CatalogPreviewCard title="Kubernetes" type={t("asset.labels.technology")} color="text-orange-400" />
+          <CatalogPreviewCard title="Terraform" type={t("asset.labels.tool")} color="text-purple-400" />
+          <CatalogPreviewCard title="Clean Architecture" type={t("asset.labels.concept")} color="text-nexo-ocean" />
+          <CatalogPreviewCard title="Team Topologies" type={t("asset.labels.method")} color="text-nexo-aqua" />
         </div>
 
         {/* Overlay CTA */}
         <div className="absolute inset-0 flex items-end justify-center pb-8 z-10">
           <Button variant="outline" className="h-10 border-white/10 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 shadow-xl">
-            Katalog öffnen
+            {t("home.catalogVisual.cta")}
           </Button>
         </div>
       </div>

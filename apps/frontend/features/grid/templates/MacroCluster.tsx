@@ -1,18 +1,20 @@
+"use client";
+
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import type { MacroCluster } from "@/types/grid";
 import { MacroClusterList } from "../organisms/MacroClusterList";
+
 interface MacroClusterTemplateProps {
   macroClusters: MacroCluster[];
 }
 
 export function MacroClusterTemplate({ macroClusters }: MacroClusterTemplateProps) {
+  const { t } = useI18n();
+
   return (
     <div className="space-y-12">
-      <SectionTitle
-        badge="Grid Navigation"
-        title="Wissensbereiche"
-        description="Die oberste Struktur des Wissensnetzes. Diese Bereiche bündeln verwandte Themen in thematische Räume – von der Strategie über die Architektur bis hin zu User & Kontext."
-      />
+      <SectionTitle badge={t("grid.macro.badge")} title={t("grid.macro.title")} description={t("grid.macro.description")} />
       <MacroClusterList macroClusters={macroClusters} />
     </div>
   );

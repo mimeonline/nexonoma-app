@@ -3,18 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useI18n } from "@/features/i18n/I18nProvider";
 
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/grid", label: "Grid" },
-  { href: "/matrix", label: "Matrix" },
-  { href: "/city", label: "City" },
-  { href: "/catalog", label: "Katalog" },
+  { href: "/", labelKey: "nav.home" },
+  { href: "/grid", labelKey: "nav.grid" },
+  { href: "/matrix", labelKey: "nav.matrix" },
+  { href: "/city", labelKey: "nav.city" },
+  { href: "/catalog", labelKey: "nav.catalog" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { t } = useI18n();
 
   const isActive = (href: string) => pathname === href || (pathname?.startsWith(href + "/") ?? false);
 
@@ -40,7 +42,7 @@ export default function Header() {
         </Link>
         {process.env.NODE_ENV === "development" && (
           <Link href="/sandbox" className="text-nexo-muted hover:text-nexo-aqua transition">
-            Sandbox
+            {t("nav.sandbox")}
           </Link>
         )}
         <nav className="hidden items-center gap-3 md:flex">
@@ -56,7 +58,7 @@ export default function Header() {
                     : "text-slate-200 hover:text-blue-300"
                 }`}
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             );
           })}
@@ -65,7 +67,7 @@ export default function Header() {
         <button
           className="flex h-10 w-10 flex-col justify-between rounded-xl border border-white/10 p-2 text-slate-200 transition hover:border-white/30 hover:text-white md:hidden"
           onClick={() => setOpen((prev) => !prev)}
-          aria-label="Menü"
+          aria-label={t("a11y.menuToggle")}
           aria-expanded={open}
           aria-controls="mobileMenu"
         >
@@ -89,7 +91,7 @@ export default function Header() {
                   }`}
                   onClick={() => setOpen(false)}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               );
             })}

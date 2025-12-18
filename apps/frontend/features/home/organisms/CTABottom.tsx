@@ -1,17 +1,20 @@
+"use client";
+
 import { Button } from "@/components/ui/atoms/Button";
 import { ArrowRight } from "lucide-react";
+import { useI18n } from "@/features/i18n/I18nProvider";
 
 export function CTABottom() {
+  const { t } = useI18n();
+
   return (
     <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-nexo-card to-[#0F1522] px-6 py-12 text-center sm:px-12">
       <div className="relative z-10 mx-auto max-w-2xl space-y-6">
-        <h2 className="font-[--font-space-grotesk] text-3xl font-bold text-white">Bereit für bessere Entscheidungen?</h2>
-        <p className="text-nexo-muted">
-          Nexonoma ist derzeit im Proof of Concept Status. Dein Feedback hilft uns, das ultimative Werkzeug für Architekten zu bauen.
-        </p>
+        <h2 className="font-[--font-space-grotesk] text-3xl font-bold text-white">{t("home.ctaBottom.title")}</h2>
+        <p className="text-nexo-muted">{t("home.ctaBottom.description")}</p>
         <div className="flex justify-center pt-2">
           <Button variant="primary" size="lg" className="group gap-2 bg-white text-nexo-bg hover:bg-slate-200">
-            Feedback
+            {t("home.ctaBottom.button")}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>

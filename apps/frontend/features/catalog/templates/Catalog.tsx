@@ -3,19 +3,12 @@
 import { useMemo, useState } from "react";
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { TypeFilterChips } from "../molecules/TypeFilterChips";
 import { CatalogGrid } from "../organisms/CatalogGrid";
 
 type FilterType = "all" | "concept" | "method" | "tool" | "technology";
-
-const typeOptions: { value: FilterType; label: string }[] = [
-  { value: "all", label: "Alle" },
-  { value: "concept", label: "Concepts" },
-  { value: "method", label: "Methods" },
-  { value: "tool", label: "Tools" },
-  { value: "technology", label: "Technologies" },
-];
 
 interface CatalogTemplateProps {
   items: CatalogItem[];
@@ -26,6 +19,24 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const error: string | null = null;
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<FilterType>("all");
+  const { t } = useI18n();
+
+  const filterTypeOptions = useMemo(
+    () =>
+      [
+        { value: "all", label: t("catalog.filtersMeta.typeOptions.all") },
+        { value: "concept", label: t("catalog.filtersMeta.typeOptions.concept") },
+        { value: "method", label: t("catalog.filtersMeta.typeOptions.method") },
+        { value: "tool", label: t("catalog.filtersMeta.typeOptions.tool") },
+        { value: "technology", label: t("catalog.filtersMeta.typeOptions.technology") },
+      ] as { value: FilterType; label: string }[],
+    [t]
+  );
+
+  const translateAssetLabel = (value: string) => {
+    const key = `asset.labels.${value.toLowerCase()}`;
+    return t(key);
+  };
 
   function normalizeCatalogType(type?: string) {
     const normalized = (type ?? "").toLowerCase();
@@ -72,14 +83,11 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   return (
     <>
       <header className="space-y-3">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200/70">Catalog</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200/70">{t("catalog.title")}</p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-2">
-            <h1 className="text-3xl font-semibold sm:text-4xl">Nexonoma Katalog</h1>
-            <p className="max-w-2xl text-base text-slate-200/80">
-              Alle Content-Bausteine (Concepts, Methods, Tools, Technologies) in einer kompakten Übersicht. Suche, filtere nach Typ und wechsle direkt
-              in die Detailansicht.
-            </p>
+            <h1 className="text-3xl font-semibold sm:text-4xl">{t("catalog.page.heading")}</h1>
+            <p className="max-w-2xl text-base text-slate-200/80">{t("catalog.page.description")}</p>
           </div>
         </div>
 
@@ -94,38 +102,43 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Suche nach Namen oder Kurzbeschreibung..."
+            placeholder={t("catalog.search.placeholder")}
               className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 focus:outline-none"
             />
           </div>
 
-          <TypeFilterChips options={typeOptions} activeType={activeType} onSelect={(type) => setActiveType(type as FilterType)} />
+          <TypeFilterChips options={filterTypeOptions} activeType={activeType} onSelect={(type) => setActiveType(type as FilterType)} />
         </div>
 
         {activeType === "all" && (
           <div className="flex flex-wrap items-center gap-3 text-sm text-slate-200/80">
-            {["concept", "method", "tool", "technology"].map((t) => (
-              <button
-                key={t}
-                onClick={() => setActiveType(t as FilterType)}
-                className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 transition hover:border-white/40"
-              >
-                <Badge variant={getBadgeVariant(t)} size="lg">
-                  {t}
-                </Badge>
-                <span className="text-slate-100">{(typeCounts as Record<string, number>)[t] ?? 0} Stück</span>
-              </button>
-            ))}
+            {["concept", "method", "tool", "technology"].map((typeKey) => {
+              const count = (typeCounts as Record<string, number>)[typeKey] ?? 0;
+              return (
+                <button
+                  key={typeKey}
+                  onClick={() => setActiveType(typeKey as FilterType)}
+                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 transition hover:border-white/40"
+                >
+                  <Badge variant={getBadgeVariant(typeKey)} size="lg">
+                    {translateAssetLabel(typeKey)}
+                  </Badge>
+                  <span className="text-slate-100">{t("catalog.filtersMeta.countLabel", { count })}</span>
+                </button>
+              );
+            })}
           </div>
         )}
       </header>
 
-      {loading && <p className="text-sm text-slate-200/80">Lade Catalog-Daten...</p>}
-      {error && <p className="text-sm text-red-300">Catalog-Daten konnten nicht geladen werden: {error}</p>}
+      {loading && <p className="text-sm text-slate-200/80">{t("catalog.messages.loading")}</p>}
+      {error && (
+        <p className="text-sm text-red-300">{t("catalog.messages.error", { error })}</p>
+      )}
 
       {showEmptyState && (
         <div className="rounded-lg border border-white/10 bg-white/5 p-6 text-center text-slate-200">
-          Keine Einträge gefunden. Filter oder Suchbegriff anpassen.
+          {t("catalog.messages.empty")}
         </div>
       )}
 

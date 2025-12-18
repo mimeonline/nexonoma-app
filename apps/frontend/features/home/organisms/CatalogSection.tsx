@@ -1,18 +1,19 @@
+"use client";
+
 import { Button } from "@/components/ui/atoms/Button";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import { ArrowRight } from "lucide-react";
 import { CatalogVisual } from "./CatalogVisual";
 
 export function CatalogSection() {
+  const { t } = useI18n();
+
   return (
     <section className="grid gap-12 lg:grid-cols-2 lg:items-start">
       {/* LEFT COLUMN: Text Content */}
       <div className="space-y-8 pt-2">
-        <SectionTitle
-          title="Der Wissens-Katalog"
-          description="Schluss mit veralteten Wikis und Linksammlungen. Nexonoma ist deine Single Source of Truth."
-          className="mb-0"
-        />
+        <SectionTitle title={t("home.catalogSection.title")} description={t("home.catalogSection.description")} badge={t("home.catalogSection.badge")} className="mb-0" />
 
         <div className="space-y-6">
           {/* Benefit 1 */}
@@ -21,10 +22,8 @@ export function CatalogSection() {
               <div className="h-2 w-2 rounded-full bg-nexo-ocean shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
             </div>
             <div>
-              <h4 className="font-bold text-white text-lg">Zentralisiertes Inventar</h4>
-              <p className="text-sm text-nexo-muted leading-relaxed mt-1">
-                Über 150+ kuratierte Bausteine. Konzepte, Methoden und Tools an einem Ort – immer aktuell und durchsuchbar.
-              </p>
+              <h4 className="font-bold text-white text-lg">{t("home.catalogSection.benefits.inventory.title")}</h4>
+              <p className="text-sm text-nexo-muted leading-relaxed mt-1">{t("home.catalogSection.benefits.inventory.description")}</p>
             </div>
           </div>
 
@@ -34,17 +33,15 @@ export function CatalogSection() {
               <div className="h-2 w-2 rounded-full bg-nexo-aqua shadow-[0_0_10px_rgba(79,244,224,0.5)]"></div>
             </div>
             <div>
-              <h4 className="font-bold text-white text-lg">Semantisch Vernetzt</h4>
-              <p className="text-sm text-nexo-muted leading-relaxed mt-1">
-                Verstehe Beziehungen: Welches Tool passt zu welcher Methode? Welches Tech braucht welches Konzept?
-              </p>
+              <h4 className="font-bold text-white text-lg">{t("home.catalogSection.benefits.semantic.title")}</h4>
+              <p className="text-sm text-nexo-muted leading-relaxed mt-1">{t("home.catalogSection.benefits.semantic.description")}</p>
             </div>
           </div>
         </div>
 
         <div className="pt-2">
           <Button className="h-12 border border-white/10 bg-white/5 px-6 text-white hover:bg-white/10 group">
-            <span className="mr-2">Zum Katalog</span>
+            <span className="mr-2">{t("home.catalogSection.cta")}</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
