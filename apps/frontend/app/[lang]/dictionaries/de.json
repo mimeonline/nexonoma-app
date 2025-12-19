@@ -291,7 +291,9 @@
         },
         "skills": "Erforderliche Fähigkeiten",
         "drivers": "Architektonische Treiber",
-        "constraints": "Einschränkungen"
+        "constraints": "Einschränkungen",
+        "tradeoffs": "Kompromisse",
+        "metrics": "Metriken"
       },
       "emptyDescription": "Keine Kurzbeschreibung vorhanden."
     }
@@ -372,6 +374,42 @@
         "BUILD": "Umsetzung",
         "RUN": "Betrieb",
         "ITERATE": "Iteration"
+      }
+    },
+    "fields": {
+      "useCase": {
+        "name": "Name",
+        "inputs": "Eingaben",
+        "outputs": "Ausgaben"
+      },
+      "scenario": {
+        "name": "Name",
+        "context": "Kontext",
+        "steps": "Schritte"
+      },
+      "examples": {
+        "name": "Name",
+        "description": "Beschreibung"
+      }
+    },
+    "schema": {
+      "cognitiveLoad": {
+        "description": "Wie viel geistige Anstrengung erforderlich ist …",
+        "examples": "Niedrig: Intuitiv\nMittel: Architekturwissen\nHoch: Systemisches Verständnis"
+      },
+      "useCase": {
+        "name": {
+          "description": "Beschreibender Titel des Anwendungsfalls, der den Zweck und den Anwendungskontext zusammenfasst.",
+          "examples": "Benutzer-Authentifizierung\nDaten-Backup"
+        },
+        "inputs": {
+          "description": "Erforderliche Eingaben, Voraussetzungen oder Startartefakte für diesen Anwendungsfall.",
+          "examples": "Benutzername und Passwort\nDatenbank-Zugang"
+        },
+        "outputs": {
+          "description": "Ergebnisse, Artefakte oder Auswirkungen, die durch diesen Anwendungsfall erzielt werden.",
+          "examples": "Authentifizierungs-Token\nBackup-Datei"
+        }
       }
     }
   },

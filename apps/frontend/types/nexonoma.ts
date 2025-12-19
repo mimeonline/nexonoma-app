@@ -27,10 +27,9 @@ export interface LocalizedTag {
 }
 
 export interface UseCase {
-  name?: string;
-  description: string;
-  inputs?: string[];
-  outputs?: string[];
+  name: string;
+  inputs: string[];
+  outputs: string[];
 }
 
 export interface Scenario {

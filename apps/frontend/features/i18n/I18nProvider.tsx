@@ -1,3 +1,4 @@
+// features/i18n/I18nProvider.tsx
 "use client";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -90,22 +91,4 @@ export function useEnumAssetLabels(sep = ", ") {
     if (!values?.length) return t("common.dash");
     return values.map((v) => t(enumAssetKey(enumType, v))).join(sep);
   };
-}
-
-export function enumAssetLabel(
-  enumType:
-    | "types"
-    | "organizationalLevel"
-    | "status"
-    | "maturityLevel"
-    | "organizationalMaturity"
-    | "complexityLevel"
-    | "cognitiveLoad"
-    | "impacts"
-    | "decisionType"
-    | "valueStreamStage",
-  value?: string
-) {
-  if (!value) return "—";
-  return `asset.enums.${enumType}.${value}`;
 }

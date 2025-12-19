@@ -5,7 +5,11 @@ import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { LocalizedTag } from "@/types/nexonoma";
+import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
+import { ScenarioList } from "../organisms/ScenarioList";
+import { TradeoffMatrix } from "../organisms/TradeoffMatrix";
+import { UseCaseList } from "../organisms/UseCaseList";
 
 interface ContentDetailsTemplateProps {
   // Wir nutzen FullAsset.
@@ -99,6 +103,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             {content.cognitiveLoad && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
                 <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.cognitiveLoad")}</span>
+
                 <span className="text-sm text-red-400 font-medium">{t(enumLabel("cognitiveLoad", content.cognitiveLoad))}</span>
               </div>
             )}
@@ -191,21 +196,13 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             {content.useCases?.length > 0 && (
               <div className="space-y-2">
                 <span className="text-[10px] uppercase text-blue-400 font-bold">{t("catalog.detail.cards.useCases.labels.useCases")}</span>
-                {content.useCases.map((uc: any, idx: number) => (
-                  <div key={idx} className="text-sm text-slate-300 border-l-2 border-blue-500/30 pl-3">
-                    <p>{uc.name}</p>
-                  </div>
-                ))}
+                {<UseCaseList useCases={content.useCases} />}
               </div>
             )}
             {content.scenarios?.length > 0 && (
               <div className="space-y-2 pt-2 border-t border-white/5">
                 <span className="text-[10px] uppercase text-green-400 font-bold">{t("catalog.detail.cards.useCases.labels.scenarios")}</span>
-                {content.scenarios.map((sc: any, idx: number) => (
-                  <div key={idx} className="text-sm text-slate-300 border-l-2 border-green-500/30 pl-3">
-                    <p>{sc.name}</p>
-                  </div>
-                ))}
+                <ScenarioList scenarios={content.scenarios} />
               </div>
             )}
           </div>
@@ -222,7 +219,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">
                 {t("catalog.detail.cards.compromises.fields.risks")}
               </span>
-              <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-red-500">
+              <ul className="text-xs text-nexo-muted space-y-2 list-disc list-outside pl-4 marker:text-red-500">
                 {content.risks?.map((risk: string, idx: number) => (
                   <li key={idx}>{risk}</li>
                 ))}
@@ -232,7 +229,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">
                 {t("catalog.detail.cards.compromises.fields.bestPractices")}
               </span>
-              <ul className="text-xs text-nexo-muted space-y-2 list-disc list-inside marker:text-green-500">
+              <ul className="text-xs text-nexo-muted space-y-2 list-disc list-outside pl-4 marker:text-green-500">
                 {content.bestPractices?.map((bp: string, idx: number) => (
                   <li key={idx}>{bp}</li>
                 ))}
@@ -247,20 +244,37 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.inputs")}</span>
-                <div className="text-xs text-slate-300">{content.inputs?.join(", ")}</div>
+
+                <ul className="text-xs text-slate-300 space-y-1 list-disc list-outside pl-4">
+                  {content.inputs?.map((input: string, idx: number) => (
+                    <li key={idx}>{input}</li>
+                  ))}
+                </ul>
               </div>
               <div>
                 <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.outputs")}</span>
-                <div className="text-xs text-slate-300">{content.outputs?.join(", ")}</div>
+
+                <ul className="text-xs text-slate-300 space-y-1 list-disc list-outside pl-4">
+                  {content.outputs?.map((output: string, idx: number) => (
+                    <li key={idx}>{output}</li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <div>
-              <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.resources")}</span>
-              <ul className="space-y-1">
+            <div className="pt-2 border-t border-slate-800">
+              <span className="text-[10px] text-slate-500 font-bold uppercase block mb-2">{t("catalog.detail.cards.io.fields.resources")}</span>
+
+              <ul className="space-y-1.5">
                 {content.resources?.map((res: any, idx: number) => (
                   <li key={idx}>
-                    <a href={res.url} target="_blank" className="text-xs text-nexo-aqua hover:underline flex items-center gap-1">
-                      {res.name} ↗
+                    <a
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-nexo-aqua hover:underline inline-flex items-center gap-1"
+                    >
+                      {res.name}
+                      <span aria-hidden>↗</span>
                     </a>
                   </li>
                 ))}
@@ -273,7 +287,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
       {/* 3. DETAIL CONTENT AREA */}
       <section className="space-y-10 pt-8 border-t border-white/5">
         {/* Description */}
-        <div className="max-w-4xl">
+        <section className="max-w-4xl">
           <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
             <span className="w-1 h-6 bg-nexo-aqua rounded-full"></span>
             {t("catalog.detail.sections.description.title")}
@@ -281,10 +295,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <div className="prose prose-invert prose-slate max-w-none text-nexo-muted text-base leading-relaxed">
             <p>{content.longDescription}</p>
           </div>
-        </div>
+        </section>
 
         {/* Pros / Cons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <span className="text-green-400">✔</span> {t("catalog.detail.sections.benefits")}
@@ -311,10 +325,53 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               ))}
             </ul>
           </div>
+        </section>
+
+        {/* TradeofMatrix */}
+        {/* Abwägungen & Metriken */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* TradeoffMatrix */}
+          <section className="">
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-indigo-500/40 rounded-full"></span>
+              {t("catalog.detail.sections.tradeoffs")}
+            </h2>
+
+            <div className="mt-3">
+              <div className="mt-4 rounded-md bg-slate-900/20 p-4 text-sm text-slate-500">
+                <TradeoffMatrix
+                  items={content.tradeoffMatrix?.map((t) => ({
+                    dimension: t.dimension,
+                    pros: t.pros,
+                    cons: t.cons,
+                  }))}
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Metrics */}
+          <section className="">
+            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-cyan-500/40 rounded-full"></span>
+              {t("catalog.detail.sections.metrics")}
+            </h2>
+
+            <div className="mt-3">
+              <div className="mt-4 rounded-md bg-slate-900/20 p-4 text-sm text-slate-500">
+                <MetricsList
+                  items={content.metrics?.map((m) => ({
+                    name: m.name,
+                    description: m.description,
+                  }))}
+                />
+              </div>
+            </div>
+          </section>
         </div>
 
         {/* Examples */}
-        <div>
+        <section>
           <h2 className="text-xl font-bold text-white mb-4">{t("catalog.detail.sections.examples")}</h2>
           {content.examples?.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -333,10 +390,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               ))}
             </div>
           )}
-        </div>
+        </section>
 
         {/* Implementation Steps */}
-        <div className="bg-slate-900/30 border border-slate-800 rounded-xl p-8">
+        <section className="bg-slate-900/30 border border-slate-800 rounded-xl p-8">
           <h2 className="text-xl font-bold text-white mb-6">{t("catalog.detail.sections.implementation")}</h2>
           <div className="space-y-6">
             {content.implementationSteps?.map((step: string, idx: number) => (
@@ -348,10 +405,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Tech Debt (Warning Section) */}
-        <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-6">
+        <section className="bg-red-500/5 border border-red-500/10 rounded-xl p-6">
           <h2 className="text-lg font-bold text-red-200 mb-4 flex items-center gap-2">
             <span className="p-1 rounded bg-red-500/20">⚠️</span> {t("catalog.detail.sections.techDebt.title")}
           </h2>
@@ -378,21 +435,35 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </div>
             </div>
           </div>
-          {/* Missuse Examples */}
-          {content.misuseExamples?.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-red-500/10">
-              <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.misuse")}</h5>
-              <ul className="text-sm text-slate-400 list-disc list-inside">
-                {content.misuseExamples.map((ex, idx) => (
-                  <li key={idx}>{ex}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Missuse Examples */}
+            {content.misuseExamples?.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-red-500/10">
+                <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.misuse")}</h5>
+                <ul className="text-sm text-slate-400 list-disc list-inside">
+                  {content.misuseExamples.map((ex, idx) => (
+                    <li key={idx}>{ex}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {/* Traps */}
+            {content.misuseExamples?.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-red-500/10">
+                <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Typische Fallen</h5>
+                <ul className="text-sm text-slate-400 list-disc list-inside">
+                  {content.traps.map((trap, idx) => (
+                    <li key={idx}>{trap}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* Additional Info (Skills, Drivers, Constraints) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4 border-t border-slate-800">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4 border-t border-slate-800">
           <div>
             <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("catalog.detail.sections.skills")}</h5>
             <div className="flex flex-wrap gap-2">
@@ -423,7 +494,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               ))}
             </ul>
           </div>
-        </div>
+        </section>
       </section>
     </div>
   );

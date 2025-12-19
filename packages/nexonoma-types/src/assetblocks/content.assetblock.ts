@@ -21,81 +21,6 @@ export type DecisionType =
   | "architecture-style"
   | "org-structure";
 
-export type ArchitecturalDriver =
-  | "availability"
-  | "complexity-reduction"
-  | "cost-efficiency"
-  | "delivery-speed"
-  | "domain-alignment"
-  | "extensibility"
-  | "fault-tolerance"
-  | "interoperability"
-  | "maintainability"
-  | "observability"
-  | "operational-efficiency"
-  | "performance"
-  | "portability"
-  | "reliability"
-  | "scalability"
-  | "security"
-  | "team-cognitive-load"
-  | "testability"
-  | "time-to-market";
-
-export type BottleneckTag =
-  | "latency"
-  | "throughput"
-  | "scalability"
-  | "availability"
-  | "consistency"
-  | "memory-pressure"
-  | "cpu-pressure"
-  | "storage-io"
-  | "network-io"
-  | "db-queries"
-  | "locking-contention"
-  | "performance-degradation"
-  | "observability-gap"
-  | "deployment-complexity"
-  | "domain-coupling"
-  | "boundary-mismatch"
-  | "integration-sprawl"
-  | "event-chaos"
-  | "pattern-misuse"
-  | "microservice-overhead"
-  | "monolith-bloat"
-  | "version-drift"
-  | "legacy-blocker"
-  | "team-dependencies"
-  | "silo-effects"
-  | "unclear-ownership"
-  | "ownership-gaps"
-  | "role-ambiguity"
-  | "handoff-delays"
-  | "review-waiting"
-  | "delivery-bottleneck"
-  | "process-friction"
-  | "low-autonomy"
-  | "governance-gap"
-  | "resistance-to-change"
-  | "low-maturity"
-  | "team-communication"
-  | "organizational-alignment"
-  | "slow-feedback-loop"
-  | "missing-tests"
-  | "manual-process"
-  | "release-complexity"
-  | "lack-of-standards"
-  | "no-shared-language"
-  | "unclear-scope"
-  | "value-stream-break"
-  | "high-cognitive-load"
-  | "ambiguous-domain"
-  | "poor-documentation"
-  | "domain-complexity"
-  | "tooling-limitations"
-  | "skill-gap";
-
 export type OrganizationalMaturity = "foundation" | "intermediate" | "advanced";
 
 export type ValueStreamStage = "discovery" | "build" | "run" | "iterate";
@@ -107,7 +32,7 @@ export type CognitiveLoad = "low" | "medium" | "high";
 // ---------------------------
 
 export interface UseCase {
-  description: string;
+  name: string;
   inputs?: string[];
   outputs?: string[];
 }
@@ -169,8 +94,8 @@ export interface ContentAssetBlock extends BaseAssetBlock {
 
   // Tradeoffs & drivers
   tradeoffMatrix?: Tradeoff[];
-  architecturalDrivers?: ArchitecturalDriver[];
-  bottleneckTags?: BottleneckTag[];
+  architecturalDrivers?: string[];
+  bottleneckTags?: string[];
 
   // Maturity & Lifecycle
   organizationalMaturity?: OrganizationalMaturity;

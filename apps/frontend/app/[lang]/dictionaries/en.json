@@ -291,7 +291,9 @@
         },
         "skills": "Required skills",
         "drivers": "Architectural drivers",
-        "constraints": "Constraints"
+        "constraints": "Constraints",
+        "tradeoffs": "Trade-offs",
+        "metrics": "Metrics"
       },
       "emptyDescription": "No short description available."
     }
