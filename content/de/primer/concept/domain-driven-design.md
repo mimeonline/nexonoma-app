@@ -1,5 +1,6 @@
 ---
 title: Domain Driven Design
+updatedAt: 2025-12-19
 contentType: primer
 assetType: concept
 assetSlug: domain-driven-design
