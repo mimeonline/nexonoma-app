@@ -1,6 +1,7 @@
 "use client";
 
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
+import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
@@ -94,7 +95,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
           <div className="flex flex-row flex-wrap md:flex-col items-start md:items-end gap-3 min-w-[200px]">
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-              <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.maturity")}</span>
+              <ExplainableLabel fieldKey="maturityLevel" value={content.maturityLevel}>
+                <span className="text-xs uppercase font-semibold text-slate-500">{t("asset.properties.maturityLevel.label")}</span>
+              </ExplainableLabel>
               <div className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]"></span>
                 <span className="text-sm text-white font-medium">{t(enumLabel("maturityLevel", content.maturityLevel))}</span>
@@ -102,14 +105,15 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </div>
             {content.cognitiveLoad && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-                <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.cognitiveLoad")}</span>
-
+                <ExplainableLabel fieldKey="cognitiveLoad" value={content.cognitiveLoad}>
+                  <span className="text-xs text-slate-500 uppercase font-semibold">{t("asset.properties.cognitiveLoad.label")}</span>
+                </ExplainableLabel>
                 <span className="text-sm text-red-400 font-medium">{t(enumLabel("cognitiveLoad", content.cognitiveLoad))}</span>
               </div>
             )}
             {content.status && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-                <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.status")}</span>
+                <span className="text-xs text-slate-500 uppercase font-semibold">{t("asset.properties.status.label")}</span>
                 <span className="text-sm text-slate-300 font-medium">{t(enumLabel("status", content.status))}</span>
               </div>
             )}
@@ -127,19 +131,27 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         >
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between border-b border-slate-800 pb-2">
-              <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.complexity")}</span>
+              <ExplainableLabel fieldKey="complexityLevel" value={content.complexityLevel}>
+                <span className="text-slate-500">{t("asset.properties.complexityLevel.label")}</span>
+              </ExplainableLabel>
               <span className="text-red-400">{t(enumLabel("complexityLevel", content.complexityLevel))}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
-              <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.impact")}</span>
+              <ExplainableLabel fieldKey="impacts" value={content.decisionType}>
+                <span className="text-slate-500">{t("asset.properties.impacts.label")}</span>
+              </ExplainableLabel>
               <span className="text-slate-200">{t(enumLabel("impacts", content.impacts))}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
-              <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.decisionType")}</span>
+              <ExplainableLabel fieldKey="decisionType" value={content.decisionType}>
+                <span className="text-slate-500">{t("asset.properties.decisionType.label")}</span>
+              </ExplainableLabel>
               <span className="text-slate-200">{t(enumLabel("decisionType", content.decisionType))}</span>
             </li>
             <li className="flex justify-between pt-1">
-              <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.organizationalMaturity")}</span>
+              <ExplainableLabel fieldKey="organizationalMaturity" value={content.organizationalMaturity}>
+                <span className="text-slate-500">{t("asset.properties.organizationalMaturity.label")}</span>
+              </ExplainableLabel>
               <span className="text-slate-200">{t(enumLabel("organizationalMaturity", content.organizationalMaturity))}</span>
             </li>
           </ul>
@@ -153,10 +165,12 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         >
           <div className="space-y-4">
             <div>
-              <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">
-                {t("catalog.detail.cards.technical.fields.integrations")}
-              </span>
-              <div className="flex flex-wrap gap-2">
+              <ExplainableLabel fieldKey="integrations">
+                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">
+                  {t("asset.properties.integrations.label")}
+                </span>
+              </ExplainableLabel>
+              <div className="flex flex-wrap gap-2 pt-2">
                 {content.integrations?.map((integ: string, idx: number) => (
                   <Badge key={`${integ}-${idx}`} variant="outline" size="md" radius="md" className="font-normal">
                     {integ}
@@ -169,6 +183,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         {/* CARD 3: Prinzipien */}
         <InfoCard title={t("catalog.detail.cards.principles.title")} iconColor="text-slate-400" stripeColorClass="bg-slate-600">
+          <ExplainableLabel fieldKey="principles">
+            <span className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1 block">{t("asset.properties.principles.label")}</span>
+          </ExplainableLabel>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
               {content.principles?.map((principle: string, idx: number) => (
@@ -177,16 +194,22 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 </span>
               ))}
             </div>
-            <p className="text-sm text-nexo-muted leading-relaxed mt-2">
-              <span className="block text-xs text-slate-500 uppercase font-bold mb-1">{t("catalog.detail.cards.principles.fields.valueStream")}</span>
-              <span className="text-white">{t(enumLabel("valueStreamStage", content.valueStreamStage))}</span>
-            </p>
-            <p className="text-sm text-nexo-muted leading-relaxed">
-              <span className="block text-xs text-slate-500 uppercase font-bold mb-1">
-                {t("catalog.detail.cards.principles.fields.organizationalLevel")}
-              </span>
-              <span className="text-white">{t(enumLabels("organizationalLevel", content.organizationalLevel))}</span>
-            </p>
+            <div className="text-sm text-nexo-muted leading-relaxed mt-2">
+              <ExplainableLabel fieldKey="valueStreamStage" value={content.valueStreamStage}>
+                <span className="block text-xs text-slate-500 uppercase font-bold mb-1">{t("asset.properties.valueStreamStage.label")}</span>
+              </ExplainableLabel>
+              <div>
+                <span className="text-white">{t(enumLabel("valueStreamStage", content.valueStreamStage))}</span>
+              </div>
+            </div>
+            <div className="text-sm text-nexo-muted leading-relaxed">
+              <ExplainableLabel fieldKey="organizationalLevel">
+                <span className="block text-xs text-slate-500 uppercase font-bold mb-1">{t("asset.properties.organizationalLevel.label")}</span>
+              </ExplainableLabel>
+              <div>
+                <span className="text-white">{t(enumLabels("organizationalLevel", content.organizationalLevel))}</span>
+              </div>
+            </div>
           </div>
         </InfoCard>
 
@@ -195,13 +218,19 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <div className="space-y-4">
             {content.useCases?.length > 0 && (
               <div className="space-y-2">
-                <span className="text-[10px] uppercase text-blue-400 font-bold">{t("catalog.detail.cards.useCases.labels.useCases")}</span>
+                <ExplainableLabel fieldKey="useCases">
+                  <span className="text-[10px] uppercase text-blue-400 font-bold">{t("asset.properties.useCases.label")}</span>
+                </ExplainableLabel>
+
                 {<UseCaseList useCases={content.useCases} />}
               </div>
             )}
             {content.scenarios?.length > 0 && (
               <div className="space-y-2 pt-2 border-t border-white/5">
-                <span className="text-[10px] uppercase text-green-400 font-bold">{t("catalog.detail.cards.useCases.labels.scenarios")}</span>
+                <ExplainableLabel fieldKey="scenarios">
+                  <span className="text-[10px] uppercase text-green-400 font-bold">{t("asset.properties.scenarios.label")}</span>
+                </ExplainableLabel>
+
                 <ScenarioList scenarios={content.scenarios} />
               </div>
             )}
@@ -216,9 +245,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         >
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">
-                {t("catalog.detail.cards.compromises.fields.risks")}
-              </span>
+              <ExplainableLabel fieldKey="risks">
+                <span className="text-[10px] uppercase text-red-400 font-bold mb-2 block tracking-wider">{t("asset.properties.risks.label")}</span>
+              </ExplainableLabel>
+
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-outside pl-4 marker:text-red-500">
                 {content.risks?.map((risk: string, idx: number) => (
                   <li key={idx}>{risk}</li>
@@ -226,9 +256,11 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </ul>
             </div>
             <div>
-              <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">
-                {t("catalog.detail.cards.compromises.fields.bestPractices")}
-              </span>
+              <ExplainableLabel fieldKey="risks">
+                <span className="text-[10px] uppercase text-green-400 font-bold mb-2 block tracking-wider">
+                  {t("asset.properties.bestPractices.label")}
+                </span>
+              </ExplainableLabel>
               <ul className="text-xs text-nexo-muted space-y-2 list-disc list-outside pl-4 marker:text-green-500">
                 {content.bestPractices?.map((bp: string, idx: number) => (
                   <li key={idx}>{bp}</li>
@@ -243,8 +275,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.inputs")}</span>
-
+                <ExplainableLabel fieldKey="inputs">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("asset.properties.inputs.label")}</span>
+                </ExplainableLabel>
                 <ul className="text-xs text-slate-300 space-y-1 list-disc list-outside pl-4">
                   {content.inputs?.map((input: string, idx: number) => (
                     <li key={idx}>{input}</li>
@@ -252,8 +285,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 </ul>
               </div>
               <div>
-                <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("catalog.detail.cards.io.fields.outputs")}</span>
-
+                <ExplainableLabel fieldKey="outputs">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase block mb-1">{t("asset.properties.outputs.label")}</span>
+                </ExplainableLabel>
                 <ul className="text-xs text-slate-300 space-y-1 list-disc list-outside pl-4">
                   {content.outputs?.map((output: string, idx: number) => (
                     <li key={idx}>{output}</li>
@@ -262,7 +296,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </div>
             </div>
             <div className="pt-2 border-t border-slate-800">
-              <span className="text-[10px] text-slate-500 font-bold uppercase block mb-2">{t("catalog.detail.cards.io.fields.resources")}</span>
+              <ExplainableLabel fieldKey="resources">
+                <span className="text-[10px] text-slate-500 font-bold uppercase block mb-2">{t("asset.properties.resources.label")}</span>
+              </ExplainableLabel>
 
               <ul className="space-y-1.5">
                 {content.resources?.map((res: any, idx: number) => (
@@ -301,7 +337,8 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <span className="text-green-400">✔</span> {t("catalog.detail.sections.benefits")}
+              <span className="text-green-400">✔</span>
+              <ExplainableLabel fieldKey="benefits">{t("asset.properties.benefits.label")}</ExplainableLabel>
             </h3>
             <ul className="space-y-2">
               {content.benefits?.map((b: string, idx: number) => (
@@ -314,7 +351,8 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           </div>
           <div className="bg-slate-900/30 p-6 rounded-xl border border-white/5">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <span className="text-red-400">✖</span> {t("catalog.detail.sections.limitations")}
+              <span className="text-red-400">✖</span>
+              <ExplainableLabel fieldKey="limitations">{t("asset.properties.limitations.label")}</ExplainableLabel>
             </h3>
             <ul className="space-y-2">
               {content.limitations?.map((l: string, idx: number) => (
@@ -334,7 +372,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <section className="">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-indigo-500/40 rounded-full"></span>
-              {t("catalog.detail.sections.tradeoffs")}
+              <ExplainableLabel fieldKey="tradeoffMatrix">{t("asset.properties.tradeoffMatrix.label")}</ExplainableLabel>
             </h2>
 
             <div className="mt-3">
@@ -354,7 +392,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <section className="">
             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-cyan-500/40 rounded-full"></span>
-              {t("catalog.detail.sections.metrics")}
+              <ExplainableLabel fieldKey="metrics">{t("asset.properties.metrics.label")}</ExplainableLabel>
             </h2>
 
             <div className="mt-3">
@@ -372,7 +410,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         {/* Examples */}
         <section>
-          <h2 className="text-xl font-bold text-white mb-4">{t("catalog.detail.sections.examples")}</h2>
+          <ExplainableLabel fieldKey="examples">
+            <h2 className="text-xl font-bold text-white mb-4">{t("catalog.detail.sections.examples")} </h2>
+          </ExplainableLabel>
           {content.examples?.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {content.examples.map((example: any, idx: number) => (
@@ -394,7 +434,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         {/* Implementation Steps */}
         <section className="bg-slate-900/30 border border-slate-800 rounded-xl p-8">
-          <h2 className="text-xl font-bold text-white mb-6">{t("catalog.detail.sections.implementation")}</h2>
+          <ExplainableLabel fieldKey="implementationSteps">
+            <h2 className="text-xl font-bold text-white mb-6">{t("asset.properties.implementationSteps.label")}</h2>
+          </ExplainableLabel>
           <div className="space-y-6">
             {content.implementationSteps?.map((step: string, idx: number) => (
               <div key={idx} className="flex gap-4">
@@ -410,11 +452,14 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         {/* Tech Debt (Warning Section) */}
         <section className="bg-red-500/5 border border-red-500/10 rounded-xl p-6">
           <h2 className="text-lg font-bold text-red-200 mb-4 flex items-center gap-2">
-            <span className="p-1 rounded bg-red-500/20">⚠️</span> {t("catalog.detail.sections.techDebt.title")}
+            <span className="p-1 rounded ">⚠️</span> {t("catalog.detail.sections.techDebt.title")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.risksLabel")}</h5>
+              <ExplainableLabel fieldKey="techDebts">
+                <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("asset.properties.techDebts.label")}</h5>
+              </ExplainableLabel>
+
               <ul className="space-y-2">
                 {content.techDebts?.map((td: string, idx: number) => (
                   <li key={idx} className="flex gap-2 text-sm text-slate-400">
@@ -425,7 +470,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </ul>
             </div>
             <div>
-              <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.bottlenecksLabel")}</h5>
+              <ExplainableLabel fieldKey="bottleneckTags">
+                <h5 className="text-xs uppercase text-orange-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.bottlenecksLabel")}</h5>{" "}
+              </ExplainableLabel>
+
               <div className="flex flex-wrap gap-2">
                 {content.bottleneckTags?.map((tag: string, idx: number) => (
                   <span key={idx} className="px-2 py-1 bg-red-900/30 border border-red-800/50 rounded text-xs text-red-200">
@@ -440,7 +488,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             {/* Missuse Examples */}
             {content.misuseExamples?.length > 0 && (
               <div className="mt-6 pt-4 border-t border-red-500/10">
-                <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.misuse")}</h5>
+                <ExplainableLabel fieldKey="misuseExamples">
+                  <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.misuse")}</h5>
+                </ExplainableLabel>
                 <ul className="text-sm text-slate-400 list-disc list-inside">
                   {content.misuseExamples.map((ex, idx) => (
                     <li key={idx}>{ex}</li>
@@ -451,7 +501,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             {/* Traps */}
             {content.misuseExamples?.length > 0 && (
               <div className="mt-6 pt-4 border-t border-red-500/10">
-                <h5 className="text-xs uppercase text-red-300 font-bold mb-2">Typische Fallen</h5>
+                <ExplainableLabel fieldKey="traps">
+                  <h5 className="text-xs uppercase text-red-300 font-bold mb-2">{t("catalog.detail.sections.techDebt.traps")}</h5>
+                </ExplainableLabel>
                 <ul className="text-sm text-slate-400 list-disc list-inside">
                   {content.traps.map((trap, idx) => (
                     <li key={idx}>{trap}</li>
@@ -465,7 +517,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         {/* Additional Info (Skills, Drivers, Constraints) */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4 border-t border-slate-800">
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("catalog.detail.sections.skills")}</h5>
+            <ExplainableLabel fieldKey="requiredSkills">
+              <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("asset.properties.requiredSkills.label")}</h5>
+            </ExplainableLabel>
+
             <div className="flex flex-wrap gap-2">
               {content.requiredSkills?.map((skill: string, idx: number) => (
                 <Badge key={`${skill}-${idx}`} variant="default" size="md" radius="md" className="font-normal">
@@ -475,7 +530,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </div>
           </div>
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("catalog.detail.sections.drivers")}</h5>
+            <ExplainableLabel fieldKey="architecturalDrivers">
+              <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("asset.properties.architecturalDrivers.label")}</h5>
+            </ExplainableLabel>
+
             <div className="flex flex-wrap gap-2">
               {content.architecturalDrivers?.map((driver: string, idx: number) => (
                 <span key={idx} className="text-xs text-slate-300 bg-slate-800 px-2 py-1 rounded">
@@ -485,7 +543,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </div>
           </div>
           <div>
-            <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("catalog.detail.sections.constraints")}</h5>
+            <ExplainableLabel fieldKey="constraints">
+              <h5 className="text-xs uppercase text-slate-500 font-bold mb-3">{t("asset.properties.constraints.label")}</h5>
+            </ExplainableLabel>
+
             <ul className="text-xs text-nexo-muted space-y-1">
               {content.constraints?.map((constraint: string, idx: number) => (
                 <li key={idx} className="flex gap-2">

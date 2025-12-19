@@ -287,7 +287,8 @@
           "title": "Technische Schulden & Engpässe",
           "risksLabel": "Risiko-Faktoren",
           "bottlenecksLabel": "Bekannte Engpässe",
-          "misuse": "Beispiele für Missbrauch"
+          "misuse": "Beispiele für Missbrauch",
+          "traps": "Typische Fallen"
         },
         "skills": "Erforderliche Fähigkeiten",
         "drivers": "Architektonische Treiber",
@@ -316,85 +317,279 @@
     },
     "enums": {
       "types": {
-        "MACRO_CLUSTER": "Macro Cluster",
-        "CLUSTER": "Cluster",
-        "CLUSTER_VIEW": "Cluster Ansicht",
-        "SEGMENT": "Segmennt",
-        "CONCEPT": "Konzept",
-        "METHOD": "Methode",
-        "TOOL": "Werkzeug",
-        "TECHNOLOGY": "Technologie",
-        "ROLE": "Rolle"
+        "MACRO_CLUSTER": { "label": "Wissensbereich" },
+        "CLUSTER": { "label": "Cluster" },
+        "CLUSTER_VIEW": { "label": "Cluster Ansicht" },
+        "SEGMENT": { "label": "Segment" },
+        "CONCEPT": { "label": "Konzept" },
+        "METHOD": { "label": "Methode" },
+        "TOOL": { "label": "Werkzeug" },
+        "TECHNOLOGY": { "label": "Technologie" },
+        "ROLE": { "label": "Rolle" }
       },
       "organizationalLevel": {
-        "ENTERPRISE": "Unternehmen",
-        "DOMAIN": "Domäne",
-        "TEAM": "Team"
+        "ENTERPRISE": {
+          "label": "Unternehmen",
+          "description": "Unternehmensweit und auf strategischer Ebene. Betrifft unternehmensweite Strukturen, Richtlinien, Governance, Geschäftsmodelle oder Entscheidungen zur Unternehmensarchitektur."
+        },
+        "DOMAIN": {
+          "label": "Domäne",
+          "description": "Auf Geschäfts- oder Produktebene. Bezieht sich auf Geschäftsbereiche, Produktlinien, funktionale Verantwortlichkeiten oder Domänenarchitekturen."
+        },
+        "TEAM": {
+          "label": "Team",
+          "description": "Operative Ebene einzelner Teams oder Abteilungen. Fokus auf konkrete Umsetzung, Entwicklung, Betrieb und tägliche Praxis."
+        }
       },
       "status": {
-        "DRAFT": "Entwurf",
-        "REVIEW": "Überprüfung",
-        "PUBISHED": "Veröffentlicht",
-        "ARCHIVED": "Archiviert"
+        "DRAFT": { "label": "Entwurf", "description": "Ein Entwurf, der noch nicht vollständig oder überprüft wurde." },
+        "REVIEW": { "label": "Überprüfung", "description": "Ein Asset, das zur Überprüfung bereitsteht." },
+        "PUBLISHED": { "label": "Veröffentlicht", "description": "Ein Asset, das veröffentlicht und für die Nutzung freigegeben ist." },
+        "ARCHIVED": { "label": "Archiviert", "description": "Ein Asset, das archiviert wurde und nicht mehr aktiv genutzt wird." }
       },
       "maturityLevel": {
-        "EXPLORATORY": "Explorativ",
-        "EMERGING": "EmAufstrebenderging",
-        "ESTABLISHED": "Etabliert",
-        "DEPRECATED": "Veraltet"
+        "EXPLORATORY": {
+          "label": "Explorativ",
+          "description": "Experimentell, geringe Verbreitung und kaum belastbare Praxiserfahrung. Einsatz mit Vorsicht."
+        },
+        "EMERGING": {
+          "label": "Aufstrebend",
+          "description": "Zunehmende Nutzung mit ersten validierten Erfahrungen aus der Praxis."
+        },
+        "ESTABLISHED": {
+          "label": "Etabliert",
+          "description": "Bewährt, weit verbreitet und mit stabilen Best Practices."
+        },
+        "DEPRECATED": {
+          "label": "Veraltet",
+          "description": "Nicht mehr empfohlen. Ablösung oder Stilllegung ist vorgesehen."
+        }
       },
       "organizationalMaturity": {
-        "FOUNDATION": "Grundlage",
-        "INTERMEDIATE": "Fortgeschritten",
-        "ADVANCED": "Reif"
+        "FOUNDATION": {
+          "label": "Grundlage",
+          "description": "Grundlegende Strukturen und Prozesse sind etabliert."
+        },
+        "INTERMEDIATE": {
+          "label": "Fortgeschritten",
+          "description": "Reife Strukturen mit kontinuierlicher Verbesserung."
+        },
+        "ADVANCED": {
+          "label": "Reif",
+          "description": "Optimierte und agile Strukturen, die sich an Marktveränderungen anpassen."
+        }
       },
       "complexityLevel": {
-        "LOW": "Niedrig",
-        "MEDIUM": "Mittel",
-        "HIGH": "Hoch"
+        "LOW": { "label": "Niedrig", "description": "Einfach zu verstehen und anzuwenden." },
+        "MEDIUM": { "label": "Mittel", "description": "Mittelschwere Komplexität mit moderatem Lernaufwand." },
+        "HIGH": { "label": "Hoch", "description": "Hohe Komplexität, erfordert tiefes Fachwissen." }
       },
       "cognitiveLoad": {
-        "LOW": "Niedrig",
-        "MEDIUM": "Mittel",
-        "HIGH": "Hoch"
+        "LOW": { "label": "Niedrig", "description": "Intuitiv verständlich, minimaler Lernaufwand." },
+        "MEDIUM": { "label": "Mittel", "description": "Erfordert grundlegendes Architekturwissen." },
+        "HIGH": { "label": "Hoch", "description": "Benötigt tiefes systemisches Verständnis." }
       },
       "impacts": {
-        "TECHNICAL": "Technisch",
-        "BUSINESS": "Geschäftlich",
-        "ORGANIZATIONAL": "Organisatorisch"
+        "TECHNICAL": { "label": "Technisch", "description": "Beeinflusst technische Aspekte des Systems." },
+        "BUSINESS": { "label": "Geschäftlich", "description": "Beeinflusst Geschäftsprozesse und -ergebnisse." },
+        "ORGANIZATIONAL": { "label": "Organisatorisch", "description": "Beeinflusst Strukturen und Prozesse innerhalb der Organisation." }
       },
       "decisionType": {
-        "DESIGN_DECISION": "Design",
-        "ARCHITECTURAL_DECISION": "Architektur",
-        "ORGANIZATIONAL_DECISION": "Organisation",
-        "TECHNICAL_DECISION": "Technisch"
+        "DESIGN_DECISION": { "label": "Design", "description": "Beeinflusst Entscheidungen auf Design- oder Musterebene." },
+        "ARCHITECTURAL_DECISION": { "label": "Architektur", "description": "Beeinflusst die Architektur des Systems." },
+        "ORGANIZATIONAL_DECISION": { "label": "Organisation", "description": "Beeinflusst organisatorische Strukturen und Prozesse." },
+        "TECHNICAL_DECISION": { "label": "Technisch", "description": "Beeinflusst technische Implementierungen." }
       },
       "valueStreamStage": {
-        "DISCOVERY": "Entdeckung",
-        "BUILD": "Umsetzung",
-        "RUN": "Betrieb",
-        "ITERATE": "Iteration"
+        "DISCOVERY": { "label": "Erkundung", "description": "Erkundung, Forschung und Problembewusstsein." },
+        "BUILD": { "label": "Umsetzung", "description": "Entwicklung und Implementierung des Assets." },
+        "RUN": { "label": "Betrieb", "description": "Betrieb und Wartung des Assets." },
+        "ITERATE": { "label": "Iteration", "description": "Iteratives Verbessern und Optimieren des Assets." }
       }
     },
-    "fields": {
-      "useCase": {
-        "name": "Name",
-        "inputs": "Eingaben",
-        "outputs": "Ausgaben"
+    "properties": {
+      "maturityLevel": {
+        "label": "Reifegrad",
+        "description": "Der Reifegrad beschreibt, wie etabliert, stabil und praxisbewährt ein AssetBlock im realen Einsatz ist. Er berücksichtigt Marktadoption, Erfahrungswerte und verfügbare Best Practices."
       },
-      "scenario": {
-        "name": "Name",
-        "context": "Kontext",
-        "steps": "Schritte"
+      "cognitiveLoad": {
+        "label": "Kognitive Belastung",
+        "description": "Die kognitive Belastung gibt an, wie viel mentales Verständnis und Wissen erforderlich ist, um den AssetBlock effektiv zu nutzen und anzuwenden. Sie berücksichtigt die Komplexität der Konzepte, die Tiefe des erforderlichen Fachwissens und die Lernkurve."
+      },
+      "complexityLevel": {
+        "label": "Komplexität",
+        "description": "Die Komplexität beschreibt den Schwierigkeitsgrad bei der Implementierung und Nutzung des AssetBlocks. Sie berücksichtigt Faktoren wie die Anzahl der beteiligten Komponenten, die Interaktionen zwischen ihnen und die erforderlichen Fähigkeiten."
+      },
+      "impacts": {
+        "label": "Auswirkungsbereich",
+        "description": "Der Auswirkungsbereich gibt an, welche Bereiche (technisch, geschäftlich, organisatorisch) durch die Einführung und Nutzung des AssetBlocks beeinflusst werden."
+      },
+      "decisionType": {
+        "label": "Entscheidungstyp",
+        "description": "Der Entscheidungstyp beschreibt, welche Art von Entscheidungen (Design, Architektur, Organisation, Technik) durch die Anwendung des AssetBlocks betroffen sind."
+      },
+      "organizationalMaturity": {
+        "label": "Organisationsreife",
+        "description": "Die Organisationsreife gibt an, auf welcher Ebene (Unternehmen, Domäne, Team) der AssetBlock am effektivsten eingesetzt werden kann."
+      },
+      "integrations": {
+        "label": "Integrationen",
+        "description": "Liste der Systeme, Plattformen oder Tools, mit denen dieser AssetBlock integriert werden kann."
+      },
+      "principles": {
+        "label": "Prinzipien",
+        "description": "Grundprinzipien und Heuristiken für die Verwendung, Gestaltung und Bewertung von AssetBlock."
+      },
+      "valueStreamStage": {
+        "label": "Wertstromphase",
+        "description": "Die Phase im Wertstrom (Erkundung, Umsetzung, Betrieb, Iteration), in der der AssetBlock hauptsächlich eingesetzt wird."
+      },
+      "organizationalLevel": {
+        "label": "Organisationsebene",
+        "description": "Die Ebene innerhalb der Organisation (Unternehmen, Domäne, Team), auf der der AssetBlock angewendet wird."
+      },
+      "status": {
+        "label": "Status",
+        "description": "Der aktuelle Lebenszyklusstatus des AssetBlocks, der seinen Entwicklungs- und Einsatzzustand widerspiegelt."
+      },
+      "useCases": {
+        "label": "Anwendungsfälle",
+        "description": "Beschreibt spezifische Szenarien, in denen der AssetBlock angewendet wird, einschließlich der erforderlichen Eingaben und erwarteten Ausgaben.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "Beschreibender Titel des Anwendungsfalls, der den Zweck und den Anwendungskontext zusammenfasst."
+          },
+          "inputs": { "label": "Eingaben", "description": "Erforderliche Eingaben, Voraussetzungen oder Startartefakte für diesen Anwendungsfall." },
+          "outputs": {
+            "label": "Ausgaben",
+            "description": "Ergebnisse, Artefakte oder Auswirkungen, die durch diesen Anwendungsfall erzielt werden."
+          }
+        }
+      },
+      "scenarios": {
+        "label": "Szenarien",
+        "description": "Detaillierte Abläufe oder Geschichten, die die Anwendung des AssetBlocks in realen Situationen veranschaulichen.",
+        "properties": {
+          "name": { "label": "Name", "description": "Titel des Szenarios, der die Situation oder den Kontext beschreibt." },
+          "context": { "label": "Kontext", "description": "Der Kontext, in dem das Szenario stattfindet." },
+          "steps": { "label": "Schritte", "description": "Die Schritte, die im Szenario durchgeführt werden." }
+        }
+      },
+      "risks": {
+        "label": "Risiken",
+        "description": "Liste potenzieller Risiken, Herausforderungen oder Nachteile, die mit der Implementierung oder Nutzung des AssetBlocks verbunden sind."
+      },
+      "bestPractices": {
+        "label": "Best Practices",
+        "description": "Empfohlene Vorgehensweisen, Strategien oder Methoden zur effektiven Nutzung des AssetBlocks."
+      },
+      "inputs": {
+        "label": "Eingaben",
+        "description": "Liste der erforderlichen Eingaben, Voraussetzungen oder Startartefakte für die Nutzung des AssetBlocks."
+      },
+      "outputs": {
+        "label": "Ausgaben",
+        "description": "Liste der Ergebnisse, Artefakte oder Auswirkungen, die durch die Nutzung des AssetBlocks erzielt werden."
+      },
+      "resources": {
+        "label": "Ressourcen",
+        "description": "Verweise auf weiterführende Materialien, Dokumentationen oder Tools zur Unterstützung bei der Nutzung des AssetBlocks.",
+        "properties": {
+          "name": { "label": "Name", "description": "Der Titel oder Name der Ressource." },
+          "url": { "label": "URL", "description": "URL der externen Ressource." }
+        }
+      },
+      "shortDescription": {
+        "label": "Kurzbeschreibung",
+        "description": "Eine prägnante Zusammenfassung des AssetBlocks, die dessen Zweck und Hauptmerkmale hervorhebt."
+      },
+      "longDescription": {
+        "label": "Ausführliche Beschreibung",
+        "description": "Eine detaillierte Erklärung des AssetBlocks, einschließlich seiner Funktionen, Vorteile und Anwendungsbereiche."
+      },
+      "benefits": {
+        "label": "Vorteile",
+        "description": "Liste der wichtigsten Vorteile und Nutzen, die durch die Implementierung und Nutzung des AssetBlocks erzielt werden können."
+      },
+      "limitations": {
+        "label": "Limitationen",
+        "description": "Bekannte Einschränkungen, Grenzen oder Situationen, in denen der AssetBlock möglicherweise nicht optimal funktioniert."
+      },
+      "tradeoffMatrix": {
+        "label": "Kompromisse",
+        "description": "Eine Übersicht über die wichtigsten Kompromisse und Abwägungen, die bei der Nutzung des AssetBlocks berücksichtigt werden müssen.",
+        "properties": {
+          "dimension": {
+            "label": "Dimension",
+            "description": "Entscheidungsdimension, die die Perspektive dieses Kompromisses definiert. Sie beschreibt den Aspekt, unter dem Vor- und Nachteile verglichen werden."
+          },
+          "pros": {
+            "label": "Vorteile",
+            "description": "Liste der konkreten Vorteile, die speziell mit dieser Entscheidungsdimension zusammenhängen. Jeder Punkt beschreibt einen positiven Effekt oder Nutzen."
+          },
+          "cons": {
+            "label": "Nachteile",
+            "description": "Liste konkreter Nachteile, Risiken oder Kompromisse, die speziell mit dieser Entscheidungsdimension zusammenhängen."
+          }
+        }
+      },
+      "metrics": {
+        "label": "Metriken",
+        "description": "Liste der relevanten Metriken und Kennzahlen zur Messung der Leistung, Effektivität oder Auswirkungen des AssetBlocks.",
+        "properties": {
+          "name": { "label": "Name", "description": "Der Name der Metrik." },
+          "description": { "label": "Beschreibung", "description": "Eine kurze Erklärung der Metrik und ihrer Bedeutung." }
+        }
       },
       "examples": {
-        "name": "Name",
-        "description": "Beschreibung"
+        "label": "Beispiele & Implementierungen",
+        "description": "Konkrete Beispiele und Fallstudien, die die Anwendung des AssetBlocks in realen Projekten oder Organisationen veranschaulichen.",
+        "properties": {
+          "name": { "label": "Name", "description": "Der Titel oder Name des Beispiels." },
+          "description": { "label": "Beschreibung", "description": "Eine kurze Erklärung des Beispiels und seines Kontexts." }
+        }
+      },
+      "implementationSteps": {
+        "label": "Implementierungsschritte",
+        "description": "Schritt-für-Schritt-Anleitung zur Implementierung des AssetBlocks in einem Projekt oder einer Organisation."
+      },
+      "techDebts": {
+        "label": "Technische Schulden",
+        "description": "Identifizierte technische Schulden, Engpässe oder potenzielle Probleme im Zusammenhang mit dem AssetBlock."
+      },
+      "bottleneckTags": {
+        "label": "Engpässe",
+        "description": "Bechreibt spezifische Engpässe oder Herausforderungen im Zusammenhang mit dem AssetBlock kennzeichnen."
+      },
+      "misuseExamples": {
+        "label": "Missbrauchsbeispiele",
+        "description": "Beispiele für falsche oder suboptimale Anwendungen des AssetBlocks, die zu Problemen oder unerwünschten Ergebnissen führen können."
+      },
+      "traps": {
+        "label": "Fallen",
+        "description": "Häufige Fallstricke oder Fehler, die bei der Implementierung oder Nutzung des AssetBlocks vermieden werden sollten."
+      },
+      "requiredSkills": {
+        "label": "Erforderliche Fähigkeiten",
+        "description": "Liste der notwendigen Fähigkeiten, Kenntnisse oder Kompetenzen, die erforderlich sind, um den AssetBlock effektiv zu nutzen."
+      },
+      "architecturalDrivers": {
+        "label": "Architektonische Treiber",
+        "description": "Die Hauptfaktoren oder Anforderungen, die die Gestaltung und Nutzung des AssetBlocks beeinflussen."
+      },
+      "constraints": {
+        "label": "Einschränkungen",
+        "description": "Bekannte Einschränkungen, Rahmenbedingungen oder Vorgaben, die bei der Nutzung des AssetBlocks berücksichtigt werden müssen."
       }
     },
     "schema": {
+      "maturity": {
+        "description": "Reife des AssetBlocks in Bezug auf Marktakzeptanz, praktische Nutzung und Stabilität.",
+        "examples": "Explorativ: Experimentell\nAufstrebend: Wachsende Akzeptanz\nEtabliert: Weit verbreitet"
+      },
       "cognitiveLoad": {
-        "description": "Wie viel geistige Anstrengung erforderlich ist …",
+        "description": "Die mentale Anstrengung, die eine Person aufbringen muss, um AssetBlock zu verstehen und anzuwenden.",
         "examples": "Niedrig: Intuitiv\nMittel: Architekturwissen\nHoch: Systemisches Verständnis"
       },
       "useCase": {

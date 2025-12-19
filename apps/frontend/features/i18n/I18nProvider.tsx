@@ -10,6 +10,7 @@ type I18nContextValue = {
   lang: string;
   dict: Dictionary;
   t: (key: string, params?: TranslationParams) => string;
+  tRaw: (key: string) => unknown;
 };
 
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -37,6 +38,21 @@ function resolveKey(dict: Dictionary, key: string) {
   return typeof current === "string" ? current : undefined;
 }
 
+function resolveKeyRaw(dict: Dictionary, key: string) {
+  const segments = key.split(".").filter(Boolean);
+  let current: unknown = dict;
+
+  for (const segment of segments) {
+    if (typeof current === "object" && current !== null && segment in current) {
+      current = (current as Record<string, unknown>)[segment];
+    } else {
+      return undefined;
+    }
+  }
+
+  return current;
+}
+
 function buildTranslator(dict: Dictionary) {
   return (key: string, params?: TranslationParams) => {
     const value = resolveKey(dict, key);
@@ -51,9 +67,15 @@ function buildTranslator(dict: Dictionary) {
   };
 }
 
-export function I18nProvider({ lang, dict, children }: React.PropsWithChildren<I18nContextValue>) {
+type I18nProviderProps = {
+  lang: string;
+  dict: Dictionary;
+};
+
+export function I18nProvider({ lang, dict, children }: React.PropsWithChildren<I18nProviderProps>) {
   const t = useMemo(() => buildTranslator(dict), [dict]);
-  return <I18nContext.Provider value={{ lang, dict, t }}>{children}</I18nContext.Provider>;
+  const tRaw = useMemo(() => (key: string) => resolveKeyRaw(dict, key), [dict]);
+  return <I18nContext.Provider value={{ lang, dict, t, tRaw }}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {
@@ -75,7 +97,8 @@ export type AssetEnumType =
 
 export function enumAssetKey(enumType: AssetEnumType, value?: string): string {
   if (!value) return "common.dash";
-  return `asset.enums.${enumType}.${value}`;
+
+  return `asset.enums.${enumType}.${value}.label`;
 }
 
 export function useEnumAssetLabel() {
