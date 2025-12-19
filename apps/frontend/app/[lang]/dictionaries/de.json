@@ -311,6 +311,68 @@
       "tags": "Tags",
       "source": "Quelle",
       "updated": "Aktualisiert"
+    },
+    "enums": {
+      "types": {
+        "MACRO_CLUSTER": "Macro Cluster",
+        "CLUSTER": "Cluster",
+        "CLUSTER_VIEW": "Cluster Ansicht",
+        "SEGMENT": "Segmennt",
+        "CONCEPT": "Konzept",
+        "METHOD": "Methode",
+        "TOOL": "Werkzeug",
+        "TECHNOLOGY": "Technologie",
+        "ROLE": "Rolle"
+      },
+      "organizationalLevel": {
+        "ENTERPRISE": "Unternehmen",
+        "DOMAIN": "Domäne",
+        "TEAM": "Team"
+      },
+      "status": {
+        "DRAFT": "Entwurf",
+        "REVIEW": "Überprüfung",
+        "PUBISHED": "Veröffentlicht",
+        "ARCHIVED": "Archiviert"
+      },
+      "maturityLevel": {
+        "EXPLORATORY": "Explorativ",
+        "EMERGING": "EmAufstrebenderging",
+        "ESTABLISHED": "Etabliert",
+        "DEPRECATED": "Veraltet"
+      },
+      "organizationalMaturity": {
+        "FOUNDATION": "Grundlage",
+        "INTERMEDIATE": "Fortgeschritten",
+        "ADVANCED": "Reif"
+      },
+      "complexityLevel": {
+        "LOW": "Niedrig",
+        "MEDIUM": "Mittel",
+        "HIGH": "Hoch"
+      },
+      "cognitiveLoad": {
+        "LOW": "Niedrig",
+        "MEDIUM": "Mittel",
+        "HIGH": "Hoch"
+      },
+      "impacts": {
+        "TECHNICAL": "Technisch",
+        "BUSINESS": "Geschäftlich",
+        "ORGANIZATIONAL": "Organisatorisch"
+      },
+      "decisionType": {
+        "DESIGN_DECISION": "Design",
+        "ARCHITECTURAL_DECISION": "Architektur",
+        "ORGANIZATIONAL_DECISION": "Organisation",
+        "TECHNICAL_DECISION": "Technisch"
+      },
+      "valueStreamStage": {
+        "DISCOVERY": "Entdeckung",
+        "BUILD": "Umsetzung",
+        "RUN": "Betrieb",
+        "ITERATE": "Iteration"
+      }
     }
   },
   "errors": {

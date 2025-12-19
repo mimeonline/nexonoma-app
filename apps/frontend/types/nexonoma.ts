@@ -89,8 +89,8 @@ export interface AssetBase {
 
 export interface FullAsset extends AssetBase {
   impacts?: string; // Singular im UI, Plural im Type? Mapper regelt das.
-  decisionType?: string[];
-  organizationalMaturity?: string[];
+  decisionType?: string;
+  organizationalMaturity?: string;
   valueStreamStage?: string;
   cognitiveLoad?: string;
   maturityLevel?: string;

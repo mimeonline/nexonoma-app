@@ -2,7 +2,7 @@
 
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
-import { useI18n } from "@/features/i18n/I18nProvider";
+import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { LocalizedTag } from "@/types/nexonoma";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
@@ -45,6 +45,9 @@ const InfoCard = ({
 
 export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }: ContentDetailsTemplateProps) {
   const { t } = useI18n();
+  const enumLabel = useEnumAssetLabel();
+  const enumLabels = useEnumAssetLabels();
+
   return (
     <div className="space-y-8 pb-20">
       {/* 0. Navigation */}
@@ -90,19 +93,19 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.maturity")}</span>
               <div className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]"></span>
-                <span className="text-sm text-white font-medium">{content.maturityLevel}</span>
+                <span className="text-sm text-white font-medium">{t(enumLabel("maturityLevel", content.maturityLevel))}</span>
               </div>
             </div>
             {content.cognitiveLoad && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
                 <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.cognitiveLoad")}</span>
-                <span className="text-sm text-red-400 font-medium">{content.cognitiveLoad}</span>
+                <span className="text-sm text-red-400 font-medium">{t(enumLabel("cognitiveLoad", content.cognitiveLoad))}</span>
               </div>
             )}
             {content.status && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
                 <span className="text-xs text-slate-500 uppercase font-semibold">{t("catalog.detail.metadata.status")}</span>
-                <span className="text-sm text-slate-300 font-medium">{content.status}</span>
+                <span className="text-sm text-slate-300 font-medium">{t(enumLabel("status", content.status))}</span>
               </div>
             )}
           </div>
@@ -120,19 +123,19 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           <ul className="space-y-3 text-sm">
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.complexity")}</span>
-              <span className="text-red-400">{content.complexityLevel}</span>
+              <span className="text-red-400">{t(enumLabel("complexityLevel", content.complexityLevel))}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.impact")}</span>
-              <span className="text-slate-200">{content.impacts}</span>
+              <span className="text-slate-200">{t(enumLabel("impacts", content.impacts))}</span>
             </li>
             <li className="flex justify-between border-b border-slate-800 pb-2">
               <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.decisionType")}</span>
-              <span className="text-slate-200">{content.decisionType}</span>
+              <span className="text-slate-200">{t(enumLabel("decisionType", content.decisionType))}</span>
             </li>
             <li className="flex justify-between pt-1">
               <span className="text-slate-500">{t("catalog.detail.cards.classification.fields.organizationalMaturity")}</span>
-              <span className="text-slate-200">{content.organizationalMaturity}</span>
+              <span className="text-slate-200">{t(enumLabel("organizationalMaturity", content.organizationalMaturity))}</span>
             </li>
           </ul>
         </InfoCard>
@@ -171,13 +174,13 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
             </div>
             <p className="text-sm text-nexo-muted leading-relaxed mt-2">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">{t("catalog.detail.cards.principles.fields.valueStream")}</span>
-              <span className="text-white">{content.valueStreamStage}</span>
+              <span className="text-white">{t(enumLabel("valueStreamStage", content.valueStreamStage))}</span>
             </p>
             <p className="text-sm text-nexo-muted leading-relaxed">
               <span className="block text-xs text-slate-500 uppercase font-bold mb-1">
                 {t("catalog.detail.cards.principles.fields.organizationalLevel")}
               </span>
-              <span className="text-white">{content.organizationalLevel?.join(", ")}</span>
+              <span className="text-white">{t(enumLabels("organizationalLevel", content.organizationalLevel))}</span>
             </p>
           </div>
         </InfoCard>

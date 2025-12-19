@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useMemo } from "react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import React, { createContext, useContext, useMemo } from "react";
 
 type TranslationParams = Record<string, string | number>;
 
@@ -59,4 +59,53 @@ export function useI18n() {
   const ctx = useContext(I18nContext);
   if (!ctx) throw new Error("useI18n must be used within I18nProvider");
   return ctx;
+}
+export type AssetEnumType =
+  | "types"
+  | "organizationalLevel"
+  | "status"
+  | "maturityLevel"
+  | "organizationalMaturity"
+  | "complexityLevel"
+  | "cognitiveLoad"
+  | "impacts"
+  | "decisionType"
+  | "valueStreamStage";
+
+export function enumAssetKey(enumType: AssetEnumType, value?: string): string {
+  if (!value) return "common.dash";
+  return `asset.enums.${enumType}.${value}`;
+}
+
+export function useEnumAssetLabel() {
+  const { t } = useI18n();
+
+  return (enumType: AssetEnumType, value?: string): string => (value ? t(enumAssetKey(enumType, value)) : t("common.dash"));
+}
+
+export function useEnumAssetLabels(sep = ", ") {
+  const { t } = useI18n();
+
+  return (enumType: AssetEnumType, values?: string[]): string => {
+    if (!values?.length) return t("common.dash");
+    return values.map((v) => t(enumAssetKey(enumType, v))).join(sep);
+  };
+}
+
+export function enumAssetLabel(
+  enumType:
+    | "types"
+    | "organizationalLevel"
+    | "status"
+    | "maturityLevel"
+    | "organizationalMaturity"
+    | "complexityLevel"
+    | "cognitiveLoad"
+    | "impacts"
+    | "decisionType"
+    | "valueStreamStage",
+  value?: string
+) {
+  if (!value) return "—";
+  return `asset.enums.${enumType}.${value}`;
 }
