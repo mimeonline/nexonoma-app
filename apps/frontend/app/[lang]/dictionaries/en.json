@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Nexonoma",
-    "tagline": "Explore concepts, methods, tools, and technologies."
+    "tagline": "Discover concepts, methods, tools, and architectures."
   },
   "nav": {
     "home": "Home",
@@ -12,7 +12,7 @@
     "sandbox": "Sandbox"
   },
   "a11y": {
-    "menuToggle": "Toggle menu"
+    "menuToggle": "Open menu"
   },
   "common": {
     "loading": "Loading…",
@@ -28,12 +28,12 @@
       "badge": "Nexonoma MVP Live",
       "title": {
         "main": "Master complexity",
-        "highlight": "Understand the connections"
+        "highlight": "Understand connections"
       },
-      "description": "Your visual guide through the jungle of methods, tools, and patterns. Nexonoma gives you structure and orientation exactly where you are in the process.",
+      "description": "Your visual guide through the jungle of methods, tools, and patterns. Nexonoma provides structure and orientation exactly where you are in the process.",
       "cta": {
-        "primary": "Launch knowledge map",
-        "secondary": "See how it works"
+        "primary": "Start knowledge network",
+        "secondary": "How it works"
       },
       "sdlc": {
         "label": "Software Development Lifecycle",
@@ -54,43 +54,43 @@
         "method": {
           "badge": "BEST FIT",
           "title": "C4 Model",
-          "description": "Visualizing architecture across four levels."
+          "description": "Visualization of architecture on four levels."
         }
       }
     },
     "valueProps": {
       "title": "From chaos to clarity",
-      "description": "Nexonoma is not a database but an intelligent navigation system for complex environments.",
+      "description": "Nexonoma is not a database, but an intelligent navigation system for complex environments.",
       "items": {
         "alternatives": {
           "title": "Find alternatives",
-          "description": "Instead of isolated tools, Nexonoma highlights suitable patterns and technologies for your specific context."
+          "description": "Instead of isolated tools, Nexonoma shows suitable patterns and technologies for your specific context."
         },
         "context": {
           "title": "Understand context",
-          "description": "See how business requirements, code quality, and team structures (Conway's Law) intersect."
+          "description": "See how business requirements, code quality, and team structures (Conway’s Law) are connected."
         },
         "risks": {
-          "title": "Mitigate risks",
-          "description": "Avoid costly misjudgments by surfacing dependencies and tech debt traps."
+          "title": "Reduce risks",
+          "description": "Avoid costly wrong decisions by making dependencies and tech debt traps visible."
         }
       }
     },
     "catalogSection": {
-      "badge": "Catalog",
-      "title": "The knowledge catalog",
-      "description": "Forget outdated wikis and link dumps. Nexonoma is your single source of truth.",
+      "badge": "The Knowledge Catalog",
+      "title": "The Knowledge Catalog",
+      "description": "No more outdated wikis and link collections. Nexonoma is your single source of truth.",
       "benefits": {
         "inventory": {
           "title": "Centralized inventory",
-          "description": "Over 150 curated building blocks. Concepts, methods, and tools all in one searchable place."
+          "description": "150+ curated building blocks. Concepts, methods, and tools in one place – always up to date and searchable."
         },
         "semantic": {
           "title": "Semantically connected",
-          "description": "Understand how tools align with methods and which technology requires which concept."
+          "description": "Understand relationships: Which tool fits which method? Which technology supports which concept?"
         }
       },
-      "cta": "Open catalog"
+      "cta": "Go to catalog"
     },
     "catalogVisual": {
       "searchPlaceholder": "Filter by tags, phases...",
@@ -103,38 +103,38 @@
       "cards": {
         "grid": {
           "title": "Grid view",
-          "description": "The structured catalog. All building blocks are arranged hierarchically for quick access.",
-          "cta": "To the grid"
+          "description": "The structured catalog. All building blocks hierarchically organized for quick access.",
+          "cta": "Go to grid"
         },
         "matrix": {
           "title": "Matrix view",
-          "description": "The systemic analysis. Filters and relationships in the context of clusters × segments.",
-          "cta": "To the matrix"
+          "description": "Systemic analysis. Filters and relationships in the context of cluster × segments.",
+          "cta": "Go to matrix"
         },
         "city": {
           "title": "City view",
           "description": "The visual exploration journey. Capture relationships spatially and intuitively.",
-          "cta": "To the city"
+          "cta": "Go to city"
         }
       }
     },
     "ctaBottom": {
       "title": "Ready for better decisions?",
-      "description": "Nexonoma is currently in proof of concept status. Your feedback helps us build the ultimate tool for architects.",
-      "button": "Give feedback"
+      "description": "Nexonoma is currently in proof-of-concept status. Your feedback helps us build the ultimate tool for architects.",
+      "button": "Feedback"
     }
   },
   "grid": {
     "macro": {
-      "badge": "Grid navigation",
-      "title": "Knowledge areas",
-      "description": "The top-level structure of the knowledge map. These areas group related topics into thematic spaces – from strategy through architecture to user & context.",
-      "empty": "No knowledge areas available."
+      "badge": "Grid Navigation",
+      "title": "Knowledge domains",
+      "description": "The top-level structure of the knowledge network. These domains bundle related topics into thematic spaces – from strategy and architecture to users and context.",
+      "empty": "No knowledge domains available."
     },
     "clusters": {
       "badge": "Topic clusters",
-      "description": "Explore the specific thematic areas within this knowledge domain.",
-      "empty": "This area currently has no clusters.",
+      "description": "Explore the specific subject areas within this knowledge domain.",
+      "empty": "No clusters are currently defined in this domain.",
       "descriptionFallback": "No description available.",
       "segmentLabel": "Segment",
       "segmentsLabel": "Segments"
@@ -159,7 +159,7 @@
       "tabs": {
         "all": "Show all"
       },
-      "empty": "No content for the selected filters.",
+      "empty": "No content found for the selected filters.",
       "emptyLane": "Empty"
     },
     "labels": {
@@ -173,17 +173,17 @@
     }
   },
   "matrix": {
-    "title": "Matrix View",
+    "title": "Matrix view",
     "description": "Explore the knowledge map in a matrix-based view."
   },
   "city": {
-    "title": "City View",
+    "title": "City view",
     "description": "Explore the knowledge map in a city-like view."
   },
   "catalog": {
     "title": "Catalog",
     "filters": "Filters",
-    "clearFilters": "Clear filters",
+    "clearFilters": "Reset filters",
     "results": "Results",
     "noResults": "No results for your filters.",
     "sortBy": "Sort by",
@@ -194,8 +194,8 @@
       "updatedDesc": "Recently updated"
     },
     "page": {
-      "heading": "Nexonoma catalog",
-      "description": "All content building blocks (Concepts, Methods, Tools, Technologies) in a compact overview. Search, filter by type, and jump directly to the detail view."
+      "heading": "Nexonoma Catalog",
+      "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
     },
     "search": {
       "placeholder": "Search by name or short description..."
@@ -208,11 +208,11 @@
         "tool": "Tools",
         "technology": "Technologies"
       },
-      "countLabel": "{count} items"
+      "countLabel": "{count} entries"
     },
     "messages": {
       "loading": "Loading catalog data...",
-      "error": "Unable to load catalog data: {error}",
+      "error": "Catalog data could not be loaded: {error}",
       "empty": "No entries found. Adjust filters or search term."
     },
     "gridMeta": {
@@ -287,7 +287,8 @@
           "title": "Technical debt & bottlenecks",
           "risksLabel": "Risk factors",
           "bottlenecksLabel": "Known bottlenecks",
-          "misuse": "Examples of misuse"
+          "misuse": "Misuse examples",
+          "traps": "Typical traps"
         },
         "skills": "Required skills",
         "drivers": "Architectural drivers",
@@ -316,70 +317,330 @@
     },
     "enums": {
       "types": {
-        "MACRO_CLUSTER": "MacroCluster",
-        "CLUSTER": "Cluster",
-        "CLUSTER_VIEW": "ClusterView",
-        "SEGMENT": "Segmennt",
-        "CONCEPT": "Concept",
-        "METHOD": "Method",
-        "TOOL": "Tool",
-        "TECHNOLOGY": "Technology",
-        "ROLE": "Role"
+        "MACRO_CLUSTER": { "label": "Knowledge domain" },
+        "CLUSTER": { "label": "Cluster" },
+        "CLUSTER_VIEW": { "label": "Cluster view" },
+        "SEGMENT": { "label": "Segment" },
+        "CONCEPT": { "label": "Concept" },
+        "METHOD": { "label": "Method" },
+        "TOOL": { "label": "Tool" },
+        "TECHNOLOGY": { "label": "Technology" },
+        "ROLE": { "label": "Role" }
       },
       "organizationalLevel": {
-        "ENTERPRISE": "Enterprise",
-        "DOMAIN": "Domain",
-        "TEAM": "Team"
+        "ENTERPRISE": {
+          "label": "Enterprise",
+          "description": "Company-wide and strategic level. Affects enterprise structures, policies, governance, business models, or enterprise architecture decisions."
+        },
+        "DOMAIN": {
+          "label": "Domain",
+          "description": "Business or product level. Refers to business units, product lines, functional responsibilities, or domain architectures."
+        },
+        "TEAM": {
+          "label": "Team",
+          "description": "Operational level of individual teams or departments. Focus on concrete implementation, development, operations, and daily practice."
+        }
       },
       "status": {
-        "DRAFT": "Draft",
-        "REVIEW": "Review",
-        "PUBISHED": "Publised",
-        "ARCHIVED": "Archived"
+        "DRAFT": { "label": "Draft", "description": "A draft that is not yet complete or reviewed." },
+        "REVIEW": { "label": "Review", "description": "An asset that is ready for review." },
+        "PUBLISHED": { "label": "Published", "description": "An asset that is published and available for use." },
+        "ARCHIVED": { "label": "Archived", "description": "An asset that has been archived and is no longer actively used." }
       },
       "maturityLevel": {
-        "EXPLORATORY": "Exploaratory",
-        "EMERGING": "Emerging",
-        "ESTABLISHED": "Established",
-        "DEPRECATED": "Deprecated"
+        "EXPLORATORY": {
+          "label": "Exploratory",
+          "description": "Experimental, low adoption, and limited practical experience. Use with caution."
+        },
+        "EMERGING": {
+          "label": "Emerging",
+          "description": "Growing usage with initial validated practical experience."
+        },
+        "ESTABLISHED": {
+          "label": "Established",
+          "description": "Proven, widely adopted, and supported by stable best practices."
+        },
+        "DEPRECATED": {
+          "label": "Deprecated",
+          "description": "No longer recommended. Replacement or retirement is planned."
+        }
       },
       "organizationalMaturity": {
-        "FOUNDATION": "Foundation",
-        "INTERMEDIATE": "Intermediate",
-        "ADVANCED": "Advanced"
+        "FOUNDATION": {
+          "label": "Foundation",
+          "description": "Basic structures and processes are established."
+        },
+        "INTERMEDIATE": {
+          "label": "Intermediate",
+          "description": "Mature structures with continuous improvement."
+        },
+        "ADVANCED": {
+          "label": "Advanced",
+          "description": "Optimized and agile structures that adapt to market changes."
+        }
       },
       "complexityLevel": {
-        "LOW": "Low",
-        "MEDIUM": "Medium",
-        "HIGH": "High"
+        "LOW": { "label": "Low", "description": "Easy to understand and apply." },
+        "MEDIUM": { "label": "Medium", "description": "Moderate complexity with reasonable learning effort." },
+        "HIGH": { "label": "High", "description": "High complexity requiring deep expertise." }
       },
       "cognitiveLoad": {
-        "LOW": "Low",
-        "MEDIUM": "Medium",
-        "HIGH": "High"
+        "LOW": { "label": "Low", "description": "Intuitive to understand, minimal learning effort." },
+        "MEDIUM": { "label": "Medium", "description": "Requires basic architectural knowledge." },
+        "HIGH": { "label": "High", "description": "Requires deep systemic understanding." }
       },
       "impacts": {
-        "TECHNICAL": "Technical",
-        "BUSINESS": "Business",
-        "ORGANIZATIONAL": "Organizational"
+        "TECHNICAL": { "label": "Technical", "description": "Affects technical aspects of the system." },
+        "BUSINESS": { "label": "Business", "description": "Affects business processes and outcomes." },
+        "ORGANIZATIONAL": { "label": "Organizational", "description": "Affects organizational structures and processes." }
       },
       "decisionType": {
-        "DESIGN_DECISION": "Design",
-        "ARCHITECTURAL_DECISION": "Architectural",
-        "ORGANIZATIONAL_DECISION": "Organizational",
-        "TECHNICAL_DECISION": "Technical"
+        "DESIGN_DECISION": { "label": "Design", "description": "Affects decisions at the design or pattern level." },
+        "ARCHITECTURAL_DECISION": { "label": "Architectural", "description": "Affects the system architecture." },
+        "ORGANIZATIONAL_DECISION": { "label": "Organizational", "description": "Affects organizational structures and processes." },
+        "TECHNICAL_DECISION": { "label": "Technical", "description": "Affects technical implementations." }
       },
       "valueStreamStage": {
-        "DISCOVERY": "Discovery",
-        "BUILD": "Build",
-        "RUN": "Run",
-        "ITERATE": "Iterate"
+        "DISCOVERY": { "label": "Discovery", "description": "Exploration, research, and problem awareness." },
+        "BUILD": { "label": "Build", "description": "Development and implementation of the asset." },
+        "RUN": { "label": "Run", "description": "Operation and maintenance of the asset." },
+        "ITERATE": { "label": "Iterate", "description": "Iterative improvement and optimization of the asset." }
+      }
+    },
+    "properties": {
+      "maturityLevel": {
+        "label": "Maturity",
+        "description": "Maturity describes how established, stable, and practice-proven an AssetBlock is in real-world usage. It considers market adoption, experience, and available best practices."
+      },
+      "cognitiveLoad": {
+        "label": "Cognitive load",
+        "description": "Cognitive load indicates how much mental effort and knowledge is required to effectively understand and apply the AssetBlock. It considers conceptual complexity, required expertise depth, and learning curve."
+      },
+      "complexityLevel": {
+        "label": "Complexity",
+        "description": "Complexity describes the level of difficulty in implementing and using the AssetBlock. It considers factors such as the number of involved components, their interactions, and required skills."
+      },
+      "impacts": {
+        "label": "Impact area",
+        "description": "The impact area indicates which domains (technical, business, organizational) are affected by introducing and using the AssetBlock."
+      },
+      "decisionType": {
+        "label": "Decision type",
+        "description": "Decision type describes which kinds of decisions (design, architectural, organizational, technical) are affected by applying the AssetBlock."
+      },
+      "organizationalMaturity": {
+        "label": "Organizational maturity",
+        "description": "Organizational maturity indicates at which level (enterprise, domain, team) the AssetBlock can be applied most effectively."
+      },
+      "integrations": {
+        "label": "Integrations",
+        "description": "List of systems, platforms, or tools with which this AssetBlock can be integrated."
+      },
+      "principles": {
+        "label": "Principles",
+        "description": "Core principles and heuristics for using, designing, and evaluating the AssetBlock."
+      },
+      "valueStreamStage": {
+        "label": "Value stream stage",
+        "description": "The phase in the value stream (discovery, build, run, iterate) in which the AssetBlock is primarily used."
+      },
+      "organizationalLevel": {
+        "label": "Organizational level",
+        "description": "The level within the organization (enterprise, domain, team) at which the AssetBlock is applied."
+      },
+      "status": {
+        "label": "Status",
+        "description": "The current lifecycle status of the AssetBlock reflecting its development and usage state."
+      },
+      "useCases": {
+        "label": "Use cases",
+        "description": "Describes specific scenarios in which the AssetBlock is applied, including required inputs and expected outputs.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "Descriptive title of the use case summarizing its purpose and context."
+          },
+          "inputs": {
+            "label": "Inputs",
+            "description": "Required inputs, prerequisites, or starting artifacts for this use case."
+          },
+          "outputs": {
+            "label": "Outputs",
+            "description": "Results, artifacts, or outcomes produced by this use case."
+          }
+        }
+      },
+      "scenarios": {
+        "label": "Scenarios",
+        "description": "Detailed flows or stories illustrating how the AssetBlock is applied in real situations.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "Title of the scenario describing the situation or context."
+          },
+          "context": {
+            "label": "Context",
+            "description": "The context in which the scenario takes place."
+          },
+          "steps": {
+            "label": "Steps",
+            "description": "The steps carried out in the scenario."
+          }
+        }
+      },
+      "risks": {
+        "label": "Risks",
+        "description": "List of potential risks, challenges, or downsides associated with implementing or using the AssetBlock."
+      },
+      "bestPractices": {
+        "label": "Best practices",
+        "description": "Recommended approaches, strategies, or methods for effectively using the AssetBlock."
+      },
+      "inputs": {
+        "label": "Inputs",
+        "description": "List of required inputs, prerequisites, or starting artifacts for using the AssetBlock."
+      },
+      "outputs": {
+        "label": "Outputs",
+        "description": "List of results, artifacts, or outcomes produced by using the AssetBlock."
+      },
+      "resources": {
+        "label": "Resources",
+        "description": "References to supporting materials, documentation, or tools for using the AssetBlock.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "The title or name of the resource."
+          },
+          "url": {
+            "label": "URL",
+            "description": "URL of the external resource."
+          }
+        }
+      },
+      "shortDescription": {
+        "label": "Short description",
+        "description": "A concise summary of the AssetBlock highlighting its purpose and key characteristics."
+      },
+      "longDescription": {
+        "label": "Detailed description",
+        "description": "A detailed explanation of the AssetBlock including its functions, benefits, and application areas."
+      },
+      "benefits": {
+        "label": "Benefits",
+        "description": "List of key benefits and value provided by implementing and using the AssetBlock."
+      },
+      "limitations": {
+        "label": "Limitations",
+        "description": "Known constraints, boundaries, or situations where the AssetBlock may not work optimally."
+      },
+      "tradeoffMatrix": {
+        "label": "Trade-offs",
+        "description": "Overview of the main trade-offs and considerations when using the AssetBlock.",
+        "properties": {
+          "dimension": {
+            "label": "Dimension",
+            "description": "Decision dimension defining the perspective of this trade-off."
+          },
+          "pros": {
+            "label": "Pros",
+            "description": "List of concrete advantages related to this decision dimension."
+          },
+          "cons": {
+            "label": "Cons",
+            "description": "List of concrete disadvantages or risks related to this decision dimension."
+          }
+        }
+      },
+      "metrics": {
+        "label": "Metrics",
+        "description": "List of relevant metrics and indicators for measuring performance, effectiveness, or impact of the AssetBlock.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "The name of the metric."
+          },
+          "description": {
+            "label": "Description",
+            "description": "A short explanation of the metric and its meaning."
+          }
+        }
+      },
+      "examples": {
+        "label": "Examples & implementations",
+        "description": "Concrete examples and case studies illustrating the application of the AssetBlock in real projects or organizations.",
+        "properties": {
+          "name": {
+            "label": "Name",
+            "description": "The title or name of the example."
+          },
+          "description": {
+            "label": "Description",
+            "description": "A brief explanation of the example and its context."
+          }
+        }
+      },
+      "implementationSteps": {
+        "label": "Implementation steps",
+        "description": "Step-by-step guidance for implementing the AssetBlock in a project or organization."
+      },
+      "techDebts": {
+        "label": "Technical debt",
+        "description": "Identified technical debts, bottlenecks, or potential issues related to the AssetBlock."
+      },
+      "bottleneckTags": {
+        "label": "Bottlenecks",
+        "description": "Describes specific bottlenecks or challenges related to the AssetBlock."
+      },
+      "misuseExamples": {
+        "label": "Misuse examples",
+        "description": "Examples of incorrect or suboptimal usage of the AssetBlock leading to problems or undesired outcomes."
+      },
+      "traps": {
+        "label": "Traps",
+        "description": "Common pitfalls or mistakes that should be avoided when implementing or using the AssetBlock."
+      },
+      "requiredSkills": {
+        "label": "Required skills",
+        "description": "List of skills, knowledge, or competencies required to effectively use the AssetBlock."
+      },
+      "architecturalDrivers": {
+        "label": "Architectural drivers",
+        "description": "Key factors or requirements influencing the design and use of the AssetBlock."
+      },
+      "constraints": {
+        "label": "Constraints",
+        "description": "Known limitations, conditions, or constraints that must be considered when using the AssetBlock."
+      }
+    },
+    "schema": {
+      "maturity": {
+        "description": "Maturity of the AssetBlock in terms of market adoption, practical usage, and stability.",
+        "examples": "Exploratory: Experimental\nEmerging: Growing adoption\nEstablished: Widely used"
+      },
+      "cognitiveLoad": {
+        "description": "The mental effort required to understand and apply the AssetBlock.",
+        "examples": "Low: Intuitive\nMedium: Architectural knowledge\nHigh: Systemic understanding"
+      },
+      "useCase": {
+        "name": {
+          "description": "Descriptive title of the use case summarizing its purpose and context.",
+          "examples": "User authentication\nData backup"
+        },
+        "inputs": {
+          "description": "Required inputs, prerequisites, or starting artifacts for this use case.",
+          "examples": "Username and password\nDatabase access"
+        },
+        "outputs": {
+          "description": "Results, artifacts, or outcomes produced by this use case.",
+          "examples": "Authentication token\nBackup file"
+        }
       }
     }
   },
   "errors": {
     "notFoundTitle": "Page not found",
-    "notFoundText": "The page you’re looking for doesn’t exist.",
+    "notFoundText": "The page you are looking for does not exist.",
     "invalidLocale": "Unsupported language."
   },
   "seo": {

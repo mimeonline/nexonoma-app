@@ -2,7 +2,6 @@
 
 import { useI18n } from "@/features/i18n/I18nProvider";
 import clsx from "clsx";
-import { Key } from "react";
 
 interface FieldExplainPopoverProps {
   fieldKey: string;
@@ -23,7 +22,6 @@ export function FieldExplainPopover({ fieldKey, value }: FieldExplainPopoverProp
       ? (enums as Record<
           string,
           {
-            key: Key;
             label: string;
             description: string;
           }
@@ -55,11 +53,11 @@ export function FieldExplainPopover({ fieldKey, value }: FieldExplainPopoverProp
           <div className="mb-2 text-[10px] uppercase tracking-wide text-slate-400">Stufen</div>
 
           <ul className="space-y-3 text-xs">
-            {Object.entries(enumEntries).map(([_, e]) => {
-              const isActive = e.key === value;
+            {Object.entries(enumEntries).map(([key, e]) => {
+              const isActive = key === value;
 
               return (
-                <li key={e.key} className="grid grid-cols-[6.5rem_1fr] gap-x-3 items-start">
+                <li key={key} className="grid grid-cols-[6.5rem_1fr] gap-x-3 items-start">
                   <div className="flex items-center gap-2">
                     {isActive && <span className="mt-1 h-2 w-2 rounded-full bg-yellow-400 shrink-0" />}
                     <span className={clsx("font-semibold", isActive ? "text-white" : "text-slate-200")}>{e.label}</span>

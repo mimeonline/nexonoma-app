@@ -413,7 +413,7 @@
         "description": "Der Reifegrad beschreibt, wie etabliert, stabil und praxisbewährt ein AssetBlock im realen Einsatz ist. Er berücksichtigt Marktadoption, Erfahrungswerte und verfügbare Best Practices."
       },
       "cognitiveLoad": {
-        "label": "Kognitive Belastung",
+        "label": "Cognitive Load",
         "description": "Die kognitive Belastung gibt an, wie viel mentales Verständnis und Wissen erforderlich ist, um den AssetBlock effektiv zu nutzen und anzuwenden. Sie berücksichtigt die Komplexität der Konzepte, die Tiefe des erforderlichen Fachwissens und die Lernkurve."
       },
       "complexityLevel": {
@@ -421,7 +421,7 @@
         "description": "Die Komplexität beschreibt den Schwierigkeitsgrad bei der Implementierung und Nutzung des AssetBlocks. Sie berücksichtigt Faktoren wie die Anzahl der beteiligten Komponenten, die Interaktionen zwischen ihnen und die erforderlichen Fähigkeiten."
       },
       "impacts": {
-        "label": "Auswirkungsbereich",
+        "label": "Auswirkung",
         "description": "Der Auswirkungsbereich gibt an, welche Bereiche (technisch, geschäftlich, organisatorisch) durch die Einführung und Nutzung des AssetBlocks beeinflusst werden."
       },
       "decisionType": {
@@ -441,7 +441,7 @@
         "description": "Grundprinzipien und Heuristiken für die Verwendung, Gestaltung und Bewertung von AssetBlock."
       },
       "valueStreamStage": {
-        "label": "Wertstromphase",
+        "label": "Value Stream",
         "description": "Die Phase im Wertstrom (Erkundung, Umsetzung, Betrieb, Iteration), in der der AssetBlock hauptsächlich eingesetzt wird."
       },
       "organizationalLevel": {
@@ -453,7 +453,7 @@
         "description": "Der aktuelle Lebenszyklusstatus des AssetBlocks, der seinen Entwicklungs- und Einsatzzustand widerspiegelt."
       },
       "useCases": {
-        "label": "Anwendungsfälle",
+        "label": "Use Cases",
         "description": "Beschreibt spezifische Szenarien, in denen der AssetBlock angewendet wird, einschließlich der erforderlichen Eingaben und erwarteten Ausgaben.",
         "properties": {
           "name": {
@@ -517,7 +517,7 @@
         "description": "Bekannte Einschränkungen, Grenzen oder Situationen, in denen der AssetBlock möglicherweise nicht optimal funktioniert."
       },
       "tradeoffMatrix": {
-        "label": "Kompromisse",
+        "label": "Trade-offs",
         "description": "Eine Übersicht über die wichtigsten Kompromisse und Abwägungen, die bei der Nutzung des AssetBlocks berücksichtigt werden müssen.",
         "properties": {
           "dimension": {
@@ -555,7 +555,7 @@
         "description": "Schritt-für-Schritt-Anleitung zur Implementierung des AssetBlocks in einem Projekt oder einer Organisation."
       },
       "techDebts": {
-        "label": "Technische Schulden",
+        "label": "Tech Debt",
         "description": "Identifizierte technische Schulden, Engpässe oder potenzielle Probleme im Zusammenhang mit dem AssetBlock."
       },
       "bottleneckTags": {
@@ -575,11 +575,11 @@
         "description": "Liste der notwendigen Fähigkeiten, Kenntnisse oder Kompetenzen, die erforderlich sind, um den AssetBlock effektiv zu nutzen."
       },
       "architecturalDrivers": {
-        "label": "Architektonische Treiber",
+        "label": "Drivers (Architectural Drivers)",
         "description": "Die Hauptfaktoren oder Anforderungen, die die Gestaltung und Nutzung des AssetBlocks beeinflussen."
       },
       "constraints": {
-        "label": "Einschränkungen",
+        "label": "Constraints",
         "description": "Bekannte Einschränkungen, Rahmenbedingungen oder Vorgaben, die bei der Nutzung des AssetBlocks berücksichtigt werden müssen."
       }
     },
