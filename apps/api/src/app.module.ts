@@ -8,6 +8,7 @@ import {
 } from 'nestjs-i18n';
 import * as path from 'path'; // fs wird nicht mehr gebraucht
 import { NexonomaCoreModule } from './nexonoma-core/nexonoma-core.module';
+import { SystemController } from './shared/infrastructure/http/system.controller';
 import { Neo4jModule } from './shared/infrastructure/neo4j/neo4j.module';
 
 @Module({
@@ -35,7 +36,7 @@ import { Neo4jModule } from './shared/infrastructure/neo4j/neo4j.module';
     Neo4jModule,
     NexonomaCoreModule,
   ],
-  controllers: [],
+  controllers: [SystemController],
   providers: [],
 })
 export class AppModule {}
