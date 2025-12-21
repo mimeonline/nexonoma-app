@@ -16,9 +16,7 @@ export interface GridAssetBase extends Pick<AssetBase, "id" | "slug" | "name" | 
  * SegmentContentItem:
  * Das "Blatt" im Baum (z.B. eine Methode oder ein Tool).
  */
-export interface SegmentContentItem extends GridAssetBase {
-  // Hier könnten noch grid-spezifische Felder stehen
-}
+export type SegmentContentItem = GridAssetBase;
 
 /**
  * SegmentContentType:

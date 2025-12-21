@@ -1,7 +1,8 @@
 // features/catalog/organisms/ScenarioList.tsx
 import { ScenarioItem } from "./ScenarioItem";
+import { Scenario } from "@/types/nexonoma";
 
-export function ScenarioList({ scenarios }: { scenarios: any[] }) {
+export function ScenarioList({ scenarios }: { scenarios: Scenario[] }) {
   return (
     <div className="space-y-2">
       {scenarios.map((sc, idx) => (

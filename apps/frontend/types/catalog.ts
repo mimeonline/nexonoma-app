@@ -15,7 +15,7 @@ export interface CatalogItem extends AssetBase {
   decisionType?: string[];
   valueStreamStage?: string;
   principles?: string[];
-  organizationalLevel?: string[];
+  organizationalLevel: string[];
   // Falls du impacts/risks anzeigen willst:
   impacts?: string;
 }

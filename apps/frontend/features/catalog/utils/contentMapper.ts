@@ -1,6 +1,6 @@
 // src/features/catalog/utils/contentMapper.ts
 import type { ContentDetail } from "@/types/catalog";
-import type { Example, ExternalResource, LocalizedTag, Metric, Scenario, TradeoffMatrix, UseCase } from "@/types/nexonoma";
+import type { AssetStatus, AssetType, Example, ExternalResource, LocalizedTag, Metric, Scenario, TradeoffMatrix, UseCase } from "@/types/nexonoma";
 import { toArray, toObjectArray } from "@/utils/data-normalization";
 
 function getFirstSentence(text?: string): string | undefined {
@@ -24,8 +24,8 @@ export function mapToContentDetails(item: Partial<ContentDetail>): MappedContent
     id: item.id || "",
     slug: item.slug || "",
     name: item.name || "Unbenannt",
-    type: item.type as any, // Enum Cast, hier vertrauen wir der API oder setzen Default
-    status: item.status as any,
+    type: item.type as AssetType, // Enum Cast, hier vertrauen wir der API oder setzen Default
+    status: item.status as AssetStatus,
     shortDescription: item.shortDescription || "",
     longDescription: item.longDescription || "",
     icon: item.icon,
@@ -45,8 +45,8 @@ export function mapToContentDetails(item: Partial<ContentDetail>): MappedContent
     tags: toObjectArray<LocalizedTag>(item.tags), // Tags sind Objekte!
     principles: toArray(item.principles),
     organizationalLevel: toArray(item.organizationalLevel),
-    decisionType: toArray(item.decisionType),
-    organizationalMaturity: toArray(item.organizationalMaturity),
+    decisionType: toArray(item.decisionType).join(", "),
+    organizationalMaturity: toArray(item.organizationalMaturity).join(", "),
     architecturalDrivers: toArray(item.architecturalDrivers),
     bottleneckTags: toArray(item.bottleneckTags),
     benefits: toArray(item.benefits),
@@ -82,9 +82,9 @@ export function mapToContentDetails(item: Partial<ContentDetail>): MappedContent
     resources: toObjectArray<ExternalResource>(item.resources),
 
     // Example Special Case (Assets Array fixen)
-    examples: toObjectArray<Example>(item.examples).map((ex) => ({
+    examples: toObjectArray<Example & { assets?: unknown }>(item.examples).map((ex) => ({
       ...ex,
-      assets: toArray((ex as any).assets),
+      assets: toArray(ex.assets),
     })),
   };
 

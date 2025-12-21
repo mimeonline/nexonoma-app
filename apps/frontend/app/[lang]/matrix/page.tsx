@@ -127,10 +127,18 @@ export default function MatrixPage() {
   );
 }
 
+type AssetType = "concept" | "method" | "tool" | "technology";
+
+interface AssetCardProps {
+  type: AssetType;
+  title: string;
+  icon: string;
+}
+
 // --- Helper Component for Asset Cards ---
-const AssetCard = ({ type, title, icon }) => {
+const AssetCard = ({ type, title, icon }: AssetCardProps) => {
   // Mapping types to their specific color stripe
-  const typeColors = {
+  const typeColors: Record<AssetType, string> = {
     concept: "bg-[#60a5fa]",
     method: "bg-[#34d399]",
     tool: "bg-[#fb923c]",

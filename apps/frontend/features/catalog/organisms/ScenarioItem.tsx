@@ -2,11 +2,6 @@
 import { Disclosure } from "@/components/molecules/Disclosure";
 import { Scenario } from "@/types/nexonoma";
 
-interface LocalizedText {
-  de?: string;
-  en?: string;
-}
-
 export function ScenarioItem({ scenario }: { scenario: Scenario }) {
   return (
     <Disclosure

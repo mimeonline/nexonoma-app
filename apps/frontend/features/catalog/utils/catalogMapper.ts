@@ -2,11 +2,21 @@ import type { CatalogItem } from "@/types/catalog";
 import type { AssetStatus, AssetType, LocalizedTag } from "@/types/nexonoma";
 import { toArray, toObjectArray } from "@/utils/data-normalization";
 
+type CatalogItemInput = Partial<CatalogItem> & {
+  tags?: unknown;
+  organizationalMaturity?: unknown;
+  decisionType?: unknown;
+  principles?: unknown;
+  organizationalLevel?: unknown;
+  impacts?: unknown;
+  impact?: unknown;
+};
+
 /**
  * Mapper für die Katalog-Liste.
  * Ignoriert schwere Felder wie 'implementationSteps' oder 'examples'.
  */
-export function mapToCatalogItem(item: any): CatalogItem {
+export function mapToCatalogItem(item: CatalogItemInput): CatalogItem {
   return {
     // 1. AssetBase Props
     id: item.id || "",
@@ -15,8 +25,12 @@ export function mapToCatalogItem(item: any): CatalogItem {
     type: item.type as AssetType,
     status: item.status as AssetStatus,
     shortDescription: item.shortDescription || "",
+    longDescription: item.longDescription || "",
     icon: item.icon,
     license: item.license,
+    version: item.version || "",
+    updatedAt: item.updatedAt || "",
+    createdAt: item.createdAt || "",
 
     // Navigation
     segmentName: item.segmentName,

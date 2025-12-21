@@ -5,7 +5,7 @@ import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
-import { LocalizedTag } from "@/types/nexonoma";
+import { Example, ExternalResource, LocalizedTag } from "@/types/nexonoma";
 import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -301,7 +301,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               </ExplainableLabel>
 
               <ul className="space-y-1.5">
-                {content.resources?.map((res: any, idx: number) => (
+                {content.resources?.map((res: ExternalResource, idx: number) => (
                   <li key={idx}>
                     <a
                       href={res.url}
@@ -415,7 +415,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           </ExplainableLabel>
           {content.examples?.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {content.examples.map((example: any, idx: number) => (
+              {content.examples.map((example: Example, idx: number) => (
                 <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-xl p-5">
                   <h4 className="font-bold text-white mb-1">{example.name}</h4>
                   <p className="text-sm text-slate-400 mb-2">{example.description}</p>

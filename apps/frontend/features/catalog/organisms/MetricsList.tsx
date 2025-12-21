@@ -1,15 +1,11 @@
 "use client";
 
-import { useI18n } from "@/features/i18n/I18nProvider";
-
 interface Metric {
   name: string;
   description: string;
 }
 
 export function MetricsList({ items }: { items?: Metric[] }) {
-  const { t } = useI18n();
-
   if (!items?.length) {
     return <div className="rounded-md bg-slate-900/20 p-4 text-sm text-slate-500">Keine Metriken definiert.</div>;
   }

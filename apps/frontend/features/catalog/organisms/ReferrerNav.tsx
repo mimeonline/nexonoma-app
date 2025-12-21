@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useI18n } from "@/features/i18n/I18nProvider";
 
 type Props = {
@@ -18,11 +18,12 @@ type ReferrerState = {
 
 export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Props) {
   const router = useRouter();
-  const [state, setState] = useState<ReferrerState>({ canGoBack: false, referrerPath: null });
   const { t } = useI18n();
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const state = useMemo<ReferrerState>(() => {
+    if (typeof window === "undefined") {
+      return { canGoBack: false, referrerPath: null };
+    }
 
     const historyBackPossible = window.history.length > 1;
     let refPath: string | null = null;
@@ -39,10 +40,10 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
       // ignore parsing issues
     }
 
-    setState({
+    return {
       canGoBack: historyBackPossible || !!refPath,
       referrerPath: refPath,
-    });
+    };
   }, []);
 
   const cameFromGrid = !!state.referrerPath?.match(/^\/([a-z]{2})(-[A-Z]{2})?\/grid(\/|$)|^\/grid(\/|$)/);

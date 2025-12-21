@@ -16,45 +16,44 @@ type Building = {
   importance: number;
 };
 
+const BUILDINGS: Building[] = [
+  // Core Platform (center)
+  { id: "core", name: "Core Platform", type: "CONCEPT", maturity: "Adopt", x: 0, z: 0, width: 3, depth: 3, height: 2, importance: 95 },
+
+  // Software & Architecture Cluster
+  { id: "k8s", name: "Kubernetes", type: "TECHNOLOGY", maturity: "Adopt", x: -6, z: -6, width: 1.5, depth: 1.5, height: 5, importance: 90 },
+  { id: "kafka", name: "Kafka", type: "TECHNOLOGY", maturity: "Adopt", x: 6, z: -6, width: 1.5, depth: 1.5, height: 5, importance: 85 },
+  { id: "react", name: "React", type: "TECHNOLOGY", maturity: "Adopt", x: -3, z: 3, width: 1.5, depth: 1.5, height: 4, importance: 88 },
+  { id: "spring", name: "Spring Boot", type: "TECHNOLOGY", maturity: "Adopt", x: 3, z: 3, width: 1.5, depth: 1.5, height: 4, importance: 87 },
+
+  // Methods & Tools
+  { id: "ddd", name: "Domain Driven Design", type: "CONCEPT", maturity: "Adopt", x: -6, z: 3, width: 1.2, depth: 1.2, height: 3, importance: 80 },
+  { id: "scrum", name: "Scrum", type: "METHOD", maturity: "Adopt", x: 6, z: 3, width: 1.2, depth: 1.2, height: 3.5, importance: 85 },
+  { id: "terraform", name: "Terraform", type: "TOOL", maturity: "Adopt", x: -3, z: -6, width: 1.3, depth: 1.3, height: 4.5, importance: 82 },
+  { id: "argocd", name: "ArgoCD", type: "TOOL", maturity: "Trial", x: 3, z: -6, width: 1.3, depth: 1.3, height: 3, importance: 70 },
+
+  // Smaller experimental items
+  { id: "eventstore", name: "Event Storming", type: "METHOD", maturity: "Trial", x: -6, z: 0, width: 1, depth: 1, height: 2.5, importance: 65 },
+  { id: "grpc", name: "gRPC", type: "TECHNOLOGY", maturity: "Trial", x: 6, z: 0, width: 1, depth: 1, height: 2.8, importance: 68 },
+  { id: "rust", name: "Rust", type: "TECHNOLOGY", maturity: "Assess", x: 0, z: -3, width: 0.9, depth: 0.9, height: 2, importance: 50 },
+  {
+    id: "microfrontend",
+    name: "Micro Frontends",
+    type: "CONCEPT",
+    maturity: "Trial",
+    x: 0,
+    z: 6,
+    width: 1.1,
+    depth: 1.1,
+    height: 2.7,
+    importance: 72,
+  },
+];
+
 const NexonomaCity = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
   const [hoveredBuilding, setHoveredBuilding] = useState<Building | null>(null);
-
-  // Building data structure
-  const buildings: Building[] = [
-    // Core Platform (center)
-    { id: "core", name: "Core Platform", type: "CONCEPT", maturity: "Adopt", x: 0, z: 0, width: 3, depth: 3, height: 2, importance: 95 },
-
-    // Software & Architecture Cluster
-    { id: "k8s", name: "Kubernetes", type: "TECHNOLOGY", maturity: "Adopt", x: -6, z: -6, width: 1.5, depth: 1.5, height: 5, importance: 90 },
-    { id: "kafka", name: "Kafka", type: "TECHNOLOGY", maturity: "Adopt", x: 6, z: -6, width: 1.5, depth: 1.5, height: 5, importance: 85 },
-    { id: "react", name: "React", type: "TECHNOLOGY", maturity: "Adopt", x: -3, z: 3, width: 1.5, depth: 1.5, height: 4, importance: 88 },
-    { id: "spring", name: "Spring Boot", type: "TECHNOLOGY", maturity: "Adopt", x: 3, z: 3, width: 1.5, depth: 1.5, height: 4, importance: 87 },
-
-    // Methods & Tools
-    { id: "ddd", name: "Domain Driven Design", type: "CONCEPT", maturity: "Adopt", x: -6, z: 3, width: 1.2, depth: 1.2, height: 3, importance: 80 },
-    { id: "scrum", name: "Scrum", type: "METHOD", maturity: "Adopt", x: 6, z: 3, width: 1.2, depth: 1.2, height: 3.5, importance: 85 },
-    { id: "terraform", name: "Terraform", type: "TOOL", maturity: "Adopt", x: -3, z: -6, width: 1.3, depth: 1.3, height: 4.5, importance: 82 },
-    { id: "argocd", name: "ArgoCD", type: "TOOL", maturity: "Trial", x: 3, z: -6, width: 1.3, depth: 1.3, height: 3, importance: 70 },
-
-    // Smaller experimental items
-    { id: "eventstore", name: "Event Storming", type: "METHOD", maturity: "Trial", x: -6, z: 0, width: 1, depth: 1, height: 2.5, importance: 65 },
-    { id: "grpc", name: "gRPC", type: "TECHNOLOGY", maturity: "Trial", x: 6, z: 0, width: 1, depth: 1, height: 2.8, importance: 68 },
-    { id: "rust", name: "Rust", type: "TECHNOLOGY", maturity: "Assess", x: 0, z: -3, width: 0.9, depth: 0.9, height: 2, importance: 50 },
-    {
-      id: "microfrontend",
-      name: "Micro Frontends",
-      type: "CONCEPT",
-      maturity: "Trial",
-      x: 0,
-      z: 6,
-      width: 1.1,
-      depth: 1.1,
-      height: 2.7,
-      importance: 72,
-    },
-  ];
 
   const getColorByType = (type: string) => {
     const colors = {
@@ -92,8 +91,9 @@ const NexonomaCity = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    if (mountRef.current) {
-      mountRef.current.appendChild(renderer.domElement);
+    const mountEl = mountRef.current;
+    if (mountEl) {
+      mountEl.appendChild(renderer.domElement);
     }
 
     // Lighting
@@ -135,7 +135,7 @@ const NexonomaCity = () => {
 
     // Create buildings
     const buildingMeshes: THREE.Object3D<THREE.Object3DEventMap>[] = [];
-    buildings.forEach((building) => {
+    BUILDINGS.forEach((building) => {
       const geometry = new THREE.BoxGeometry(building.width, building.height, building.depth);
       const material = new THREE.MeshStandardMaterial({
         color: getColorByType(building.type),
@@ -188,6 +188,21 @@ const NexonomaCity = () => {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
+    const setEmissive = (mesh: THREE.Mesh, hex: number) => {
+      const { material } = mesh;
+      if (Array.isArray(material)) {
+        material.forEach((mat) => {
+          if (mat instanceof THREE.MeshStandardMaterial) {
+            mat.emissive.setHex(hex);
+          }
+        });
+        return;
+      }
+      if (material instanceof THREE.MeshStandardMaterial) {
+        material.emissive.setHex(hex);
+      }
+    };
+
     const onMouseMove = (event: { clientX: number; clientY: number }) => {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -196,15 +211,15 @@ const NexonomaCity = () => {
       const intersects = raycaster.intersectObjects(buildingMeshes);
 
       buildingMeshes.forEach((mesh) => {
-        if (mesh instanceof THREE.Mesh && "material" in mesh && "emissive" in (mesh.material as any)) {
-          (mesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x000000);
+        if (mesh instanceof THREE.Mesh) {
+          setEmissive(mesh, 0x000000);
         }
       });
 
       if (intersects.length > 0) {
         const obj = intersects[0].object;
-        if (obj instanceof THREE.Mesh && "material" in obj && "emissive" in (obj.material as any)) {
-          (obj.material as THREE.MeshStandardMaterial).emissive.setHex(0x333333);
+        if (obj instanceof THREE.Mesh) {
+          setEmissive(obj, 0x333333);
         }
         setHoveredBuilding(obj.userData as Building);
         document.body.style.cursor = "pointer";
@@ -259,7 +274,7 @@ const NexonomaCity = () => {
       window.removeEventListener("click", onClick);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationId);
-      mountRef.current?.removeChild(renderer.domElement);
+      mountEl?.removeChild(renderer.domElement);
       renderer.dispose();
     };
   }, []);

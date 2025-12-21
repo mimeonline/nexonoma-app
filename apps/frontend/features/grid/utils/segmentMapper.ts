@@ -2,6 +2,20 @@ import type { Cluster, MacroCluster, Segment, SegmentContentItem, SegmentContent
 import { AssetType } from "@/types/nexonoma";
 import { toArray } from "@/utils/data-normalization";
 
+type SegmentInput = Partial<Segment> & {
+  content?: Record<string, unknown> | null;
+  children?: unknown;
+};
+
+type SegmentChildInput = Partial<SegmentContentItem> & {
+  type?: SegmentContentType;
+};
+
+type ClusterInput = Partial<Cluster> & {
+  segments?: unknown;
+  children?: unknown;
+};
+
 /**
  * Erstellt ein minimales MacroCluster Objekt basierend auf dem Slug,
  * damit die Breadcrumbs im Template funktionieren, ohne dass wir
@@ -27,29 +41,29 @@ export function createParentContext(slug: string): MacroCluster {
  * Bereinigt die Cluster-Daten und stellt sicher, dass Segmente und Inhalte
  * korrekt strukturiert sind.
  */
-export function mapToClusterDetail(item: any): Cluster {
+export function mapToClusterDetail(item: ClusterInput): Cluster {
   // Mapping der Segmente
-  const segments: Segment[] = toArray(item.segments || item.children).map((seg: any) => {
+  const segments: Segment[] = toArray<SegmentInput>(item.segments || item.children).map((seg) => {
     // Hilfsfunktion um Content nach Typ zu filtern (falls API generisch 'children' liefert)
     const getContentByType = (type: SegmentContentType): SegmentContentItem[] => {
       // Fall A: API liefert bereits strukturiertes 'content' Objekt
-      if (seg.content && Array.isArray(seg.content[type + "s"])) {
+      if (seg.content && Array.isArray(seg.content[`${type}s`])) {
         // methods -> methods
-        return seg.content[type + "s"];
+        return seg.content[`${type}s`] as SegmentContentItem[];
       }
       if (seg.content && Array.isArray(seg.content[type])) {
-        return seg.content[type];
+        return seg.content[type] as SegmentContentItem[];
       }
 
       // Fall B: API liefert flaches 'children' Array (Legacy GridNode)
-      const children = toArray<any>(seg.children);
+      const children = toArray<SegmentChildInput>(seg.children);
       return children
-        .filter((c) => c.type === type)
+        .filter((c): c is SegmentChildInput & { type: SegmentContentType } => c.type === type)
         .map((c) => ({
-          id: c.id,
-          name: c.name,
-          slug: c.slug,
-          type: c.type,
+          id: c.id || "",
+          name: c.name || "Unbenannt",
+          slug: c.slug || "",
+          type,
           shortDescription: c.shortDescription || "",
           longDescription: c.longDescription || "",
         }));
@@ -59,7 +73,7 @@ export function mapToClusterDetail(item: any): Cluster {
       id: seg.id || "",
       name: seg.name || "Unbenanntes Segment",
       slug: seg.slug || "",
-      type: "segment",
+      type: AssetType.SEGMENT,
       shortDescription: seg.shortDescription || "",
       longDescription: seg.longDescription || "",
       content: {
