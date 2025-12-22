@@ -4,11 +4,11 @@ import en from "./[lang]/dictionaries/en.json";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://app.nexonoma.de";
-  const locales = ["de", "en"] as const;
-  const dictionaries = { de, en } satisfies Record<(typeof locales)[number], unknown>;
+  const dictionaries = { de, en };
+  const locales = Object.keys(dictionaries) as Array<keyof typeof dictionaries>;
   const routes = ["", "/grid", "/matrix", "/city", "/catalog"] as const;
 
-  const makeUrl = (lang: keyof typeof dictionaries, route: (typeof routes)[number]) => `${baseUrl}/${lang}${route}`;
+  const makeUrl = (lang: (typeof locales)[number], route: (typeof routes)[number]) => `${baseUrl}/${lang}${route}`;
 
   return routes.flatMap((route) => {
     const alternates = {

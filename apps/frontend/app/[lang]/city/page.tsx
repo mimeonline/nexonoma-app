@@ -1,12 +1,7 @@
 "use client";
 
 import { useI18n } from "@/features/i18n/I18nProvider";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "City View",
-  description: "Navigate architectural knowledge as a city map with clusters, neighborhoods and contextual paths.",
-};
 export default function CityPage() {
   const { t } = useI18n();
 
