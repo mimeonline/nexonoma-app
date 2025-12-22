@@ -645,6 +645,22 @@
   },
   "seo": {
     "defaultTitle": "Nexonoma",
-    "defaultDescription": "A visual knowledge map for software and enterprise architecture."
+    "defaultDescription": "A visual knowledge map for software and enterprise architecture.",
+    "grid": {
+      "title": "Grid view",
+      "description": "The structured catalog. All building blocks hierarchically organized for quick access."
+    },
+    "matrix": {
+      "title": "Matrix view",
+      "description": "Systemic analysis. Filters and relationships in the context of cluster × segments."
+    },
+    "city": {
+      "title": "City view",
+      "description": "The visual exploration journey. Capture relationships spatially and intuitively."
+    },
+    "catalog": {
+      "title": "Nexonoma Catalog",
+      "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
+    }
   }
 }

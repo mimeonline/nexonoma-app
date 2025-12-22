@@ -1,6 +1,6 @@
-import { serverLogger } from "./lib/server-logger";
+export const runtime = "nodejs";
 
-export function register() {
+export async function register() {
   if (process.env.NEXT_RUNTIME && process.env.NEXT_RUNTIME !== "nodejs") {
     return;
   }
@@ -9,6 +9,7 @@ export function register() {
     return;
   }
 
+  const { serverLogger } = await import("./lib/server-logger");
   serverLogger.info("Frontend server started", { context: "startup" });
 }
 

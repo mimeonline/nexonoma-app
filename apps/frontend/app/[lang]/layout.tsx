@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
+import de from "./dictionaries/de.json";
+import en from "./dictionaries/en.json";
 
 import { I18nProvider } from "@/features/i18n/I18nProvider";
 import Script from "next/script";
@@ -24,13 +26,20 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-export const metadata: Metadata = {
-  title: {
-    template: "%s | Nexonoma",
-    default: "Nexonoma – Knowledge Navigation for Architects",
-  },
-  description: "Ein visuelles Wissenssystem für Software- und Enterprise-Architektur",
-};
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  const dict = lang === "de" ? de : en;
+  const title = dict?.seo?.defaultTitle ?? en.seo.defaultTitle;
+  const description = dict?.seo?.defaultDescription ?? en.seo.defaultDescription;
+
+  return {
+    title: {
+      default: title,
+      template: `%s · ${title}`,
+    },
+    description,
+  };
+}
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;

@@ -615,6 +615,22 @@
   },
   "seo": {
     "defaultTitle": "Nexonoma",
-    "defaultDescription": "Eine visuelle Wissenskarte für Software- und Enterprise-Architektur."
+    "defaultDescription": "Eine visuelle Wissenskarte für Software- und Enterprise-Architektur.",
+    "grid": {
+      "title": "Grid-Ansicht",
+      "description": "Der strukturierte Katalog. Alle Bausteine hierarchisch sortiert für den schnellen Zugriff."
+    },
+    "matrix": {
+      "title": "Matrix-Ansicht",
+      "description": "Die systemische Analyse. Filter & Beziehungen im Kontext von Cluster × Segmenten."
+    },
+    "city": {
+      "title": "City-Ansicht",
+      "description": "Die visuelle Entdeckungsreise. Erfasse Zusammenhänge räumlich und intuitiv."
+    },
+    "catalog": {
+      "title": "Nexonoma Katalog",
+      "description": "Alle Content-Bausteine (Concepts, Methods, Tools, Technologies) in einer kompakten Übersicht. Suche, filtere nach Typ und wechsle direkt in die Detailansicht."
+    }
   }
 }
