@@ -2,11 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
+import { FileLogger } from './shared/infrastructure/logging/file-logger';
 
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new FileLogger({ serviceName: 'api' }),
+  });
   const config = new DocumentBuilder()
     .setTitle('Nexonoma API')
     .setDescription('API description')

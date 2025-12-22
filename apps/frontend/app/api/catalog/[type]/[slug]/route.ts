@@ -1,3 +1,4 @@
+import { serverLogger } from "@/lib/server-logger";
 import { NextResponse } from "next/server";
 
 const BACKEND_CATALOG_ENDPOINT = process.env.CATALOG_API_URL?.trim() || "http://localhost:3001/catalog";
@@ -29,7 +30,7 @@ export async function GET(
     const data = await res.json();
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("Catalog proxy (by slug) error", error);
+    serverLogger.error("Catalog proxy (by slug) error", { error });
     return NextResponse.json({ error: "Catalog proxy request failed" }, { status: 502 });
   }
 }

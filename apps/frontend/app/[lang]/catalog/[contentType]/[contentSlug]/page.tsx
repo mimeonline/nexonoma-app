@@ -1,6 +1,7 @@
 // src/app/.../page.tsx
 import { ContentDetailsTemplate } from "@/features/catalog/templates/ContentDetails";
 import { mapToContentDetails } from "@/features/catalog/utils/contentMapper";
+import { serverLogger } from "@/lib/server-logger";
 import { createNexonomaApi } from "@/services/api";
 import type { ContentDetail } from "@/types/catalog";
 import { notFound } from "next/navigation";
@@ -18,7 +19,7 @@ export default async function ContentDetailPage({ params }: PageProps<"/[lang]/c
     // JSON zurückgibt, das wir erst mappen müssen.
     rawItem = (await api.getContentBySlug(contentType, contentSlug)) as Partial<ContentDetail>;
   } catch (error) {
-    console.error("Error fetching content:", error);
+    serverLogger.error("Error fetching content", { error });
     return notFound();
   }
 

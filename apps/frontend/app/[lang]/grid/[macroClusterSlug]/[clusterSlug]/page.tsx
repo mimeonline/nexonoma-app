@@ -1,5 +1,6 @@
 import { SegmentsTemplate } from "@/features/grid/templates/Segments";
 import { createParentContext, mapToClusterDetail } from "@/features/grid/utils/segmentMapper";
+import { serverLogger } from "@/lib/server-logger";
 import { createNexonomaApi } from "@/services/api";
 import { notFound } from "next/navigation";
 
@@ -13,7 +14,7 @@ export default async function ClusterDetailPage({ params }: PageProps<"/[lang]/g
   try {
     rawData = await api.getSegments(clusterSlug);
   } catch (error) {
-    console.error("Failed to load cluster", error);
+    serverLogger.error("Failed to load cluster", { error });
     notFound();
   }
 

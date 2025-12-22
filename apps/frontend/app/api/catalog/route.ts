@@ -1,3 +1,4 @@
+import { serverLogger } from "@/lib/server-logger";
 import { NextResponse } from "next/server";
 
 const BACKEND_CATALOG_ENDPOINT =
@@ -20,7 +21,7 @@ export async function GET() {
     const data = await res.json();
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("Catalog proxy error", error);
+    serverLogger.error("Catalog proxy error", { error });
     return NextResponse.json({ error: "Catalog proxy request failed" }, { status: 502 });
   }
 }
