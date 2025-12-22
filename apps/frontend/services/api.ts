@@ -2,7 +2,8 @@ import type { CatalogContentType, CatalogItem, ContentDetail } from "@/types/cat
 import type { Cluster, MacroCluster } from "@/types/grid"; // Import aus grid.ts
 
 function getApiBase() {
-  const apiBase = process.env.NEXT_PUBLIC_API_URL;
+  const isServer = typeof window === "undefined";
+  const apiBase = isServer ? process.env.API_INTERNAL_URL : process.env.NEXT_PUBLIC_API_URL;
 
   if (!apiBase) {
     throw new Error("NEXT_PUBLIC_API_URL is not set");

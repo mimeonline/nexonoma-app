@@ -1,7 +1,13 @@
 {
-  "name": "nexonom-app",
+  "name": "nexonoma-app",
   "private": true,
   "version": "0.1.0",
+  "scripts": {
+    "docker:build:app": "docker buildx build --platform linux/amd64 -f ../nexonoma-internal/apps/deployment/app/Dockerfile -t ghcr.io/mimeonline/nexonoma-app:0.1.0 --push .",
+    "docker:build:api": "docker buildx build --platform linux/amd64 -f ../nexonoma-internal/apps/deployment/api/Dockerfile -t ghcr.io/mimeonline/nexonoma-api:0.1.0 --push .",
+    "docker:build:db": "docker buildx build --platform linux/amd64 -f ../nexonoma-internal/apps/deployment/db/Dockerfile -t ghcr.io/mimeonline/nexonoma-db:0.1.0 --push .",
+    "docker:build:all": "pnpm run docker:build:app && pnpm run docker:build:api && pnpm run docker:build:db"
+  },
   "devDependencies": {
     "typescript": "^5.9.3"
   }
