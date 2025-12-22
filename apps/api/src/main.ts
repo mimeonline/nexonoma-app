@@ -7,8 +7,10 @@ import { FileLogger } from './shared/infrastructure/logging/file-logger';
 dotenv.config();
 
 async function bootstrap() {
+  const fileLoggingEnabled = Boolean(process.env.LOG_FILE?.trim() || process.env.LOG_DIR?.trim());
+  const logger = new FileLogger({ serviceName: 'api' });
   const app = await NestFactory.create(AppModule, {
-    logger: new FileLogger({ serviceName: 'api' }),
+    logger,
   });
   const config = new DocumentBuilder()
     .setTitle('Nexonoma API')
@@ -20,6 +22,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3001);
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port);
+  if (fileLoggingEnabled) {
+    logger.log(`API server started on port ${port}`, 'bootstrap');
+  }
 }
 void bootstrap();
