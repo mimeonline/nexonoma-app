@@ -44,7 +44,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} bg-nexo-bg text-nexo-text antialiased min-h-screen flex flex-col font-sans selection:bg-nexo-aqua selection:text-nexo-bg`}
       >
-        <Script src="https://stats.nexonoma.de/api/script.js" data-site-id="nexonoma" strategy="afterInteractive" />
+        <Script src="https://stats.nexonoma.de/api/script.js" data-site-id="3829ae94680e" strategy="afterInteractive" />
         <I18nProvider lang={lang} dict={dict}>
           <header role="banner" className="sticky top-0 z-50 bg-nexo-bg/80 backdrop-blur-md border-b border-nexo-border">
             <Header />
