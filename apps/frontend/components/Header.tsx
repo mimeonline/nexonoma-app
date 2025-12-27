@@ -9,7 +9,7 @@ const navItems = [
   { href: "/", labelKey: "nav.start" },
   { href: "/catalog", labelKey: "nav.catalog" },
   { href: "/grid", labelKey: "nav.structure" },
-  { href: "/matrix", labelKey: "nav.preview" },
+  { href: "/preview", labelKey: "nav.preview" },
   { href: "https://nexonoma.de/about", labelKey: "nav.about" },
 ];
 

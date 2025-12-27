@@ -7,7 +7,6 @@
 # Local Netlify folder
 .netlify
 
-screenshots/
 /sandbox/
 docs/domain/
 node_modules

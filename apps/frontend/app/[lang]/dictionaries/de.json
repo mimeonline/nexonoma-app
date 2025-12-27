@@ -81,25 +81,32 @@
     },
     "start": {
       "intro": {
-        "line1": "Nexonoma zeigt ein systemisches Wissensmodell als navigierbare Struktur.",
-        "line2": "Im MVP kannst du kuratierte Beispiele erkunden oder die Struktur des Modells nachvollziehen."
+        "line1": "Komplexität beherrschen. Zusammenhänge verstehen.",
+        "line2": "Dein visueller Guide durch den Dschungel aus Konzepten, Methoden, Tools und Technologien.",
+        "line3": "Navigiere direkt zu Inhalten oder verschaffe dir erst Überblick über die Struktur."
       },
       "cards": {
         "catalog": {
-          "title": "Im Katalog stöbern",
-          "description": "Konkrete Wissensbausteine entdecken und Zusammenhänge erkennen.",
-          "cta": "Im Katalog stöbern"
+          "title": "Wissens-Katalog",
+          "description": "Der direkte Weg zum Inhalt. Finde Konzepte, Tools, Methoden und Technologien, erkenne Zusammenhänge und entdecke Alternativen.",
+          "cta": "Katalog öffnen"
         },
         "structure": {
-          "title": "Struktur ansehen",
-          "description": "Die Ebenen des Modells von MacroCluster bis Segment nachvollziehen.",
+          "title": "Struktur-Landkarte",
+          "description": "Verstehe das Spielfeld. Sieh dir an, wie Wissensbereiche (Cluster) und Segmente die Ordnung schaffen, bevor du ins Detail gehst.",
           "cta": "Struktur ansehen"
         },
         "preview": {
-          "title": "Preview: Beziehungen & Karte",
-          "description": "Eine Vorschau auf weitere Visualisierungen – im MVP bewusst reduziert.",
-          "cta": "Preview ansehen"
+          "title": "Visualisierungs-Lab",
+          "description": "Ein Blick in die Zukunft: Experimentelle Matrix-Sichten und Graphen-Visualisierungen. Hier testen wir neue Perspektiven auf deine Daten.",
+          "cta": "Preview starten"
         }
+      },
+      "about": {
+        "title": "Orientierung statt Noise",
+        "line1": "Nexonoma ist kein statisches Wiki, sondern ein dynamisches Beziehungs-Modell.",
+        "line2": "Es zeigt nicht nur, DASS eine Technologie existiert, sondern WO sie hingehört und WIE sie wirkt.",
+        "hint": "Tipp: Nutze die Struktur-Ansicht, um das 'Spielfeld' zu verstehen, bevor du ins Detail gehst."
       },
       "meta": {
         "about": "Über Nexonoma",
@@ -174,22 +181,22 @@
   },
   "grid": {
     "macro": {
-      "badge": "Grid Navigation",
+      "badge": "Das Big Picture",
       "title": "Wissensbereiche",
-      "description": "Die oberste Struktur des Wissensnetzes. Diese Bereiche bündeln verwandte Themen in thematische Räume – von der Strategie über die Architektur bis hin zu User & Kontext.",
+      "description": "Wähle deinen Themenraum. Die oberste Ebene der Landkarte ordnet die komplexe Welt der IT in vier klare Dimensionen – von der Strategie bis zur Infrastruktur.",
       "empty": "Keine Wissensbereiche verfügbar."
     },
     "clusters": {
       "badge": "Themen-Cluster",
-      "description": "Erkunde die spezifischen Themengebiete innerhalb dieses Wissensbereichs.",
+      "description": "Verfeinere den Fokus. Tauche tiefer in spezifische Disziplinen ein und wähle den Bereich, der für deine aktuelle Herausforderung relevant ist.",
       "empty": "In diesem Bereich sind aktuell noch keine Cluster hinterlegt.",
-      "descriptionFallback": "Keine Beschreibung verfügbar.",
+      "descriptionFallback": "Erkunde die Bausteine dieses Clusters.",
       "segmentLabel": "Segment",
       "segmentsLabel": "Segmente"
     },
     "segments": {
       "breadcrumbs": {
-        "grid": "Grid"
+        "grid": "Übersicht"
       },
       "filters": {
         "types": {
@@ -201,7 +208,7 @@
         }
       },
       "viewToggle": {
-        "grid": "Grid",
+        "grid": "Kacheln",
         "pipeline": "Pipeline"
       },
       "tabs": {
@@ -229,7 +236,7 @@
     "description": "Erkunde die Wissenskarte in einer stadtähnlichen Ansicht."
   },
   "catalog": {
-    "title": "Katalog",
+    "title": "Wissens-Katalog",
     "filters": "Filter",
     "clearFilters": "Filter zurücksetzen",
     "results": "Ergebnisse",
@@ -242,8 +249,8 @@
       "updatedDesc": "Zuletzt aktualisiert"
     },
     "page": {
-      "heading": "Nexonoma Katalog",
-      "description": "Alle Content-Bausteine (Concepts, Methods, Tools, Technologies) in einer kompakten Übersicht. Suche, filtere nach Typ und wechsle direkt in die Detailansicht."
+      "heading": "Alle Bausteine im Fokus",
+      "description": "Dein zentrales Inventar. Finde Konzepte, Methoden, Tools und Technologien an einem Ort – filterbar, durchsuchbar und der Startpunkt für jede Analyse."
     },
     "search": {
       "placeholder": "Suche nach Namen oder Kurzbeschreibung..."
