@@ -58,6 +58,33 @@
         }
       }
     },
+    "start": {
+      "intro": {
+        "line1": "Nexonoma zeigt ein systemisches Wissensmodell als navigierbare Struktur.",
+        "line2": "Im MVP kannst du kuratierte Beispiele erkunden oder die Struktur des Modells nachvollziehen."
+      },
+      "cards": {
+        "catalog": {
+          "title": "Im Katalog stöbern",
+          "description": "Konkrete Wissensbausteine entdecken und Zusammenhänge erkennen.",
+          "cta": "Im Katalog stöbern"
+        },
+        "structure": {
+          "title": "Struktur ansehen",
+          "description": "Die Ebenen des Modells von MacroCluster bis Segment nachvollziehen.",
+          "cta": "Struktur ansehen"
+        },
+        "preview": {
+          "title": "Preview: Beziehungen & Karte",
+          "description": "Eine Vorschau auf weitere Visualisierungen – im MVP bewusst reduziert.",
+          "cta": "Preview ansehen"
+        }
+      },
+      "meta": {
+        "about": "Über Nexonoma",
+        "feedback": "Feedback"
+      }
+    },
     "valueProps": {
       "title": "Vom Chaos zur Klarheit",
       "description": "Nexonoma ist keine Datenbank, sondern ein intelligentes Navigationssystem für komplexe Umgebungen.",
