@@ -4,11 +4,11 @@
     "tagline": "Entdecke Konzepte, Methoden, Tools und Architekturen."
   },
   "nav": {
-    "home": "Start",
-    "grid": "Grid",
-    "matrix": "Matrix",
-    "city": "City",
+    "start": "Start",
     "catalog": "Katalog",
+    "structure": "Struktur",
+    "preview": "Preview",
+    "about": "Über Nexonoma",
     "sandbox": "Sandbox"
   },
   "a11y": {
