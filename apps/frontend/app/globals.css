@@ -8,24 +8,55 @@
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-space-grotesk);
 
-  /* Nexo Farben */ 
-  --color-nexo-bg: #020617;       /* bg-nexo-bg */
-  --color-nexo-surface: #0B1220;  /* bg-nexo-surface */
-  --color-nexo-card: #111827;     /* bg-nexo-card */
-  --color-nexo-border: #1E293B;   /* border-nexo-border */
-  --color-nexo-text: #E2E8F0;     /* text-nexo-text */
-  --color-nexo-muted: #94A3B8;    /* text-nexo-muted */
-  --color-nexo-aqua: #4FF4E0;     /* text-/bg-nexo-aqua */
-  --color-nexo-ocean: #38bdf8;    /* text-/bg-nexo-ocean */
+  /* Design Tokens (Source of Truth) */
+  --bg-primary: #0B1220;
+  --bg-surface: #121A2E;
+  --bg-card: #111827;
+
+  --text-primary: #E6E9F0;
+  --text-secondary: #A8B0C3;
+  --text-muted: #6E768D;
+
+  --accent-primary: #4FF4E0;
+  --accent-subtle: rgba(79, 244, 224, 0.15);
+
+  --success: #27AE60;
+  --warning: #F2C94C;
+  --error: #EB5757;
+
+  /* Tailwind-Farb-Mapping */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-card: var(--bg-card);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-subtle: var(--accent-subtle);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  /* Nexo Legacy-Token (Alias auf Design Tokens) */
+  --color-nexo-bg: var(--bg-primary);
+  --color-nexo-surface: var(--bg-surface);
+  --color-nexo-card: var(--bg-card);
+  --color-nexo-border: var(--text-muted);
+  --color-nexo-text: var(--text-primary);
+  --color-nexo-muted: var(--text-secondary);
+  --color-nexo-aqua: var(--accent-primary);
+  --color-nexo-ocean: var(--accent-primary);
 
   /* ggf. alte background/foreground-Bridge */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Box-Shadows → shadow-glow, shadow-card  [oai_citation:2‡tailwindcss.com](https://tailwindcss.com/docs/box-shadow?utm_source=chatgpt.com) */
-  --shadow-glow: 0 0 20px -5px rgba(79, 244, 224, 0.15);
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3),
-                 0 2px 4px -1px rgba(0, 0, 0, 0.15);
+  /* Ein Shadow-Level (subtil) */
+  --shadow-glow: 0 4px 12px -6px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 4px 12px -6px rgba(0, 0, 0, 0.45);
 }
 
 /* Custom Scrollbar for a premium feel */
@@ -33,7 +64,7 @@
 /* Für Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #334155 #020617; /* thumb, track */
+  scrollbar-color: var(--text-muted) var(--bg-primary); /* thumb, track */
 }
 
 /* Für WebKit (Chrome, Edge, Safari) */
@@ -43,40 +74,32 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-nexo-bg); /* oder bg-nexo-bg → var(--color-nexo-bg) */
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--text-muted);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-/* Custom Animations für Nexonoma Home */
-@keyframes beam-drop {
-  0% { top: 0; opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
-}
-
-.animate-beam-drop {
-  animation: beam-drop 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--text-secondary);
 }
 
 h1 {
-  @apply font-display text-3xl sm:text-4xl font-semibold tracking-tight mb-4 ;
+  @apply font-display text-[32px] sm:text-[36px] font-semibold tracking-tight mb-4;
 }
 
 h2 {
-  @apply text-2xl sm:text-3xl font-semibold;
+  @apply text-[24px] sm:text-[28px] font-semibold;
 }
 
 h3 {
-  @apply text-xl sm:text-2xl font-medium;
+  @apply text-[20px] sm:text-[22px] font-medium;
+}
+
+h4 {
+  @apply text-[16px] sm:text-[18px] font-medium;
 }
 
 p {

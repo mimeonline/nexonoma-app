@@ -13,20 +13,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, children, variant = "primary", size = "md", ...props }, ref) => {
   // Basis-Styles, die jeder Button hat
   const baseStyles =
-    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean focus-visible:ring-offset-2 focus-visible:ring-offset-nexo-bg disabled:cursor-not-allowed disabled:opacity-50 active:scale-95";
+    "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-nexo-bg disabled:cursor-not-allowed disabled:opacity-50 active:scale-95";
 
   // Varianten-Styles (Farben & Rahmen)
   const variants = {
     primary:
-      "bg-nexo-ocean text-[#020617] shadow-[0_0_20px_-5px_rgba(56,189,248,0.4)] hover:bg-nexo-ocean/90 hover:shadow-[0_0_25px_-5px_rgba(56,189,248,0.6)] border border-transparent",
+      "bg-accent-primary text-nexo-bg shadow-card hover:bg-accent-primary/90 border border-transparent",
 
-    secondary: "bg-[#1F2A40] text-white border border-white/5 hover:bg-[#2A3655] hover:border-white/10 shadow-md shadow-black/20",
+    secondary: "bg-nexo-surface text-text-primary border border-text-muted/30 hover:border-text-muted/50 shadow-card",
 
-    outline: "bg-transparent text-slate-300 border border-white/10 hover:bg-white/5 hover:text-white hover:border-white/20",
+    outline: "bg-transparent text-text-secondary border border-text-muted/30 hover:bg-text-muted/10 hover:text-text-primary",
 
-    ghost: "bg-transparent text-slate-400 hover:text-nexo-ocean hover:bg-nexo-ocean/10",
+    ghost: "bg-transparent text-text-muted hover:text-accent-primary hover:bg-accent-primary/10",
 
-    danger: "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40",
+    danger: "bg-error/10 text-error border border-error/30 hover:bg-error/20 hover:border-error/50",
   };
 
   // Größen-Styles

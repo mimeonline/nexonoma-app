@@ -5,7 +5,7 @@ import * as React from "react";
 export type BadgeVariant = "default" | "outline" | "concept" | "method" | "tool" | "technology" | "ocean" | "aqua";
 
 export type BadgeSize = "sm" | "md" | "lg";
-export type BadgeRadius = "full" | "md" | "sm"; // NEU: Radius Option
+export type BadgeRadius = "full" | "md" | "sm";
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
@@ -15,16 +15,16 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 // --- Styles ---
 const variants: Record<BadgeVariant, string> = {
-  default: "border-transparent bg-slate-800 text-slate-300",
-  outline: "border-slate-700 text-slate-400 bg-transparent",
+  default: "border-transparent bg-nexo-card text-text-secondary",
+  outline: "border-text-muted/40 text-text-muted bg-transparent",
 
-  concept: "border-nexo-ocean/20 bg-nexo-ocean/10 text-nexo-ocean shadow-[0_0_10px_-3px_rgba(56,189,248,0.15)]",
-  method: "border-nexo-aqua/20 bg-nexo-aqua/10 text-nexo-aqua shadow-[0_0_10px_-3px_rgba(79,244,224,0.15)]",
-  tool: "border-purple-500/20 bg-purple-500/10 text-purple-400 shadow-[0_0_10px_-3px_rgba(168,85,247,0.15)]",
-  technology: "border-orange-500/20 bg-orange-500/10 text-orange-400 shadow-[0_0_10px_-3px_rgba(249,115,22,0.15)]",
+  concept: "border-accent-primary/20 bg-accent-primary/10 text-accent-primary shadow-card",
+  method: "border-success/20 bg-success/10 text-success shadow-card",
+  tool: "border-warning/20 bg-warning/10 text-warning shadow-card",
+  technology: "border-error/20 bg-error/10 text-error shadow-card",
 
-  ocean: "border-nexo-ocean/20 bg-nexo-ocean/10 text-nexo-ocean",
-  aqua: "border-nexo-aqua/20 bg-nexo-aqua/10 text-nexo-aqua",
+  ocean: "border-accent-primary/20 bg-accent-primary/10 text-accent-primary",
+  aqua: "border-accent-primary/20 bg-accent-primary/10 text-accent-primary",
 };
 
 const sizes: Record<BadgeSize, string> = {
@@ -33,18 +33,17 @@ const sizes: Record<BadgeSize, string> = {
   lg: "px-3 py-1 text-xs tracking-wider",
 };
 
-// NEU: Radius Styles
 const radii: Record<BadgeRadius, string> = {
-  full: "rounded-full", // Standard (Pille)
-  md: "rounded-md", // Leicht abgerundet (Tech Look)
-  sm: "rounded", // Fast eckig (Tags)
+  full: "rounded-full",
+  md: "rounded-lg",
+  sm: "rounded",
 };
 
 export function Badge({
   className,
   variant = "default",
   size = "sm",
-  radius = "full", // Default bleibt Pille
+  radius = "md",
   children,
   ...props
 }: BadgeProps) {
