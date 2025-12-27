@@ -17,6 +17,8 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { t } = useI18n();
+  const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
+
   function stripLocale(pathname?: string) {
     if (!pathname) return "";
 
@@ -27,6 +29,11 @@ export default function Header() {
     const normalizedPath = stripLocale(pathname);
 
     return normalizedPath === href || normalizedPath.startsWith(href + "/");
+  };
+
+  const withLocale = (href: string) => {
+    if (href.startsWith("http")) return href;
+    return locale ? `/${locale}${href}` : href;
   };
 
   return (
@@ -61,7 +68,7 @@ export default function Header() {
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={withLocale(item.href)}
                 className={`relative rounded-xl px-4 py-2 text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/30 ${
                   active
                     ? "text-blue-300 after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full after:bg-blue-500"
@@ -95,7 +102,7 @@ export default function Header() {
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={withLocale(item.href)}
                   className={`block rounded-xl px-4 py-3 text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/30 ${
                     active ? "bg-white/10 text-blue-300" : "text-gray-300 hover:text-white"
                   }`}

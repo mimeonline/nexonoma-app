@@ -3,11 +3,14 @@
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function HomeTemplate() {
   const { t } = useI18n();
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
+  const localePrefix = locale ? `/${locale}` : "";
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -25,7 +28,7 @@ export default function HomeTemplate() {
             <p className="text-sm text-text-secondary leading-relaxed">{t("home.start.cards.catalog.description")}</p>
           </CardContent>
           <CardFooter>
-            <Button onClick={() => router.push("/catalog")}>{t("home.start.cards.catalog.cta")}</Button>
+            <Button onClick={() => router.push(`${localePrefix}/catalog`)}>{t("home.start.cards.catalog.cta")}</Button>
           </CardFooter>
         </Card>
 
@@ -37,7 +40,7 @@ export default function HomeTemplate() {
             <p className="text-sm text-text-secondary leading-relaxed">{t("home.start.cards.structure.description")}</p>
           </CardContent>
           <CardFooter>
-            <Button variant="secondary" onClick={() => router.push("/grid")}>
+            <Button variant="secondary" onClick={() => router.push(`${localePrefix}/grid`)}>
               {t("home.start.cards.structure.cta")}
             </Button>
           </CardFooter>
@@ -51,7 +54,7 @@ export default function HomeTemplate() {
             <p className="text-sm text-text-secondary leading-relaxed">{t("home.start.cards.preview.description")}</p>
           </CardContent>
           <CardFooter>
-            <Button variant="ghost" onClick={() => router.push("/matrix")}>
+            <Button variant="ghost" onClick={() => router.push(`${localePrefix}/matrix`)}>
               {t("home.start.cards.preview.cta")}
             </Button>
           </CardFooter>
