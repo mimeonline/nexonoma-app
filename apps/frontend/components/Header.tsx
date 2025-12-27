@@ -1,6 +1,8 @@
 "use client";
 
+import { Logo } from "@/components/atoms/Logo"; // Pfad ggf. anpassen
 import { useI18n } from "@/features/i18n/I18nProvider";
+import { Menu, X } from "lucide-react"; // Installiere lucide-react falls nötig
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -21,13 +23,13 @@ export default function Header() {
 
   function stripLocale(pathname?: string) {
     if (!pathname) return "";
-
     return pathname.replace(/^\/(de|en)(\/|$)/, "/");
   }
 
   const isActive = (href: string) => {
     const normalizedPath = stripLocale(pathname);
-
+    // Exakte Übereinstimmung für Home, Prefix für andere
+    if (href === "/") return normalizedPath === "/";
     return normalizedPath === href || normalizedPath.startsWith(href + "/");
   };
 
@@ -38,83 +40,88 @@ export default function Header() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 text-white">
-          <svg
-            className="h-8 w-8 text-blue-400"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6A1.125 1.125 0 012.25 11.25v-4.125zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z"
-            />
-          </svg>
-          <span className="text-blue-300 text-lg font-bold tracking-tight sm:block">Nexonoma</span>
-        </Link>
-        {process.env.NODE_ENV === "development" && (
-          <Link href="/sandbox" className="text-nexo-muted hover:text-nexo-aqua transition">
-            {t("nav.sandbox")}
-          </Link>
-        )}
-        <nav className="hidden items-center gap-3 md:flex">
-          {navItems.map((item) => {
-            const active = isActive(item.href);
+      {/* FIXED HEADER WRAPPER */}
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-[#0B1220]/80 backdrop-blur-md transition-all duration-300">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          {/* 1. LOGO */}
+          <div className="flex items-center gap-4">
+            <Link href={withLocale("/")} className="group transition-opacity hover:opacity-90">
+              {/* Hier nutzen wir deine neue Logo Komponente */}
+              <Logo className="h-8 w-8" withText={true} />
+            </Link>
 
-            return (
+            {/* Sandbox Link (Dev only) */}
+            {process.env.NODE_ENV === "development" && (
               <Link
-                key={item.href}
-                href={withLocale(item.href)}
-                className={`relative rounded-xl px-4 py-2 text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/30 ${
-                  active
-                    ? "text-blue-300 after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full after:bg-blue-500"
-                    : "text-slate-200 hover:text-blue-300"
-                }`}
+                href="/sandbox"
+                className="hidden md:block rounded-full bg-nexo-surface px-3 py-1 text-xs font-mono text-nexo-muted hover:text-nexo-aqua transition border border-white/5"
               >
-                {t(item.labelKey)}
+                {t("nav.sandbox")}
               </Link>
-            );
-          })}
-        </nav>
+            )}
+          </div>
 
-        <button
-          className="flex h-10 w-10 flex-col justify-between rounded-xl border border-white/10 p-2 text-slate-200 transition hover:border-white/30 hover:text-white md:hidden"
-          onClick={() => setOpen((prev) => !prev)}
-          aria-label={t("a11y.menuToggle")}
-          aria-expanded={open}
-          aria-controls="mobileMenu"
-        >
-          <span className="block h-0.5 w-full rounded-full bg-slate-200" />
-          <span className="block h-0.5 w-full rounded-full bg-slate-200" />
-          <span className="block h-0.5 w-full rounded-full bg-slate-200" />
-        </button>
-      </div>
-
-      {open && (
-        <div className="md:hidden">
-          <div className="mx-4 mb-4 rounded-2xl border border-white/10 bg-nexo-surface/95 p-2 shadow-xl shadow-black/40">
+          {/* 2. DESKTOP NAV */}
+          <nav className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => {
               const active = isActive(item.href);
+
               return (
                 <Link
                   key={item.href}
                   href={withLocale(item.href)}
-                  className={`block rounded-xl px-4 py-3 text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/30 ${
-                    active ? "bg-white/10 text-blue-300" : "text-gray-300 hover:text-white"
-                  }`}
-                  onClick={() => setOpen(false)}
+                  className={`text-sm font-medium transition-colors ${active ? "text-blue-300" : "text-gray-400 hover:text-white"}`}
                 >
                   {t(item.labelKey)}
                 </Link>
               );
             })}
-          </div>
+          </nav>
+
+          {/* 3. MOBILE MENU TOGGLE */}
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-300 transition hover:bg-white/5 hover:text-white md:hidden"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-label={t("a11y.menuToggle")}
+            aria-expanded={open}
+            aria-controls="mobileMenu"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
-      )}
+
+        {/* 4. MOBILE MENU DROPDOWN */}
+        {open && (
+          <div className="border-t border-white/5 bg-[#0B1220] px-4 pt-4 pb-8 md:hidden shadow-2xl">
+            <nav className="flex flex-col gap-2">
+              {navItems.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={withLocale(item.href)}
+                    className={`block rounded-lg px-4 py-3 text-base font-medium transition-colors ${
+                      active ? "bg-blue-500/10 text-blue-300" : "text-gray-400 hover:bg-white/5 hover:text-white"
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {t(item.labelKey)}
+                  </Link>
+                );
+              })}
+              {/* Mobile Sandbox Link */}
+              {process.env.NODE_ENV === "development" && (
+                <Link href="/sandbox" className="mt-4 block text-center text-xs font-mono text-gray-500" onClick={() => setOpen(false)}>
+                  [ Dev Sandbox ]
+                </Link>
+              )}
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {/* PLATZHALTER: Verhindert, dass Content unter den Header rutscht */}
+      <div className="h-[72px]" aria-hidden="true" />
     </>
   );
 }
