@@ -3,10 +3,12 @@
 import { useMemo, useState } from "react";
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { Button } from "@/components/ui/atoms/Button";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { TypeFilterChips } from "../molecules/TypeFilterChips";
 import { CatalogGrid } from "../organisms/CatalogGrid";
+import { usePathname, useRouter } from "next/navigation";
 
 type FilterType = "all" | "concept" | "method" | "tool" | "technology";
 
@@ -20,6 +22,10 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<FilterType>("all");
   const { t } = useI18n();
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
+  const localePrefix = locale ? `/${locale}` : "";
 
   const filterTypeOptions = useMemo(
     () =>
@@ -78,7 +84,9 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
     );
   }, [items]);
 
-  const showEmptyState = !loading && !error && filteredItems.length === 0;
+  const hasItems = items.length > 0;
+  const showFilteredEmptyState = !loading && !error && hasItems && filteredItems.length === 0;
+  const showCuratedEmptyState = !loading && !error && !hasItems;
 
   return (
     <>
@@ -136,13 +144,39 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
         <p className="text-sm text-red-300">{t("catalog.messages.error", { error })}</p>
       )}
 
-      {showEmptyState && (
+      {showCuratedEmptyState && (
         <div className="rounded-lg border border-white/10 bg-white/5 p-6 text-center text-slate-200">
-          {t("catalog.messages.empty")}
+          <p className="text-sm font-semibold text-slate-100">{t("emptyStates.curated.title")}</p>
+          <p className="mt-2 text-sm text-slate-200/80">{t("emptyStates.curated.line1")}</p>
+          <p className="text-sm text-slate-200/80">{t("emptyStates.curated.line2")}</p>
+          <div className="mt-4 flex justify-center">
+            <Button variant="secondary" onClick={() => router.push(`${localePrefix}/grid`)}>
+              {t("emptyStates.curated.actionStructure")}
+            </Button>
+          </div>
         </div>
       )}
 
-      {!showEmptyState && <CatalogGrid items={filteredItems} />}
+      {showFilteredEmptyState && (
+        <div className="rounded-lg border border-white/10 bg-white/5 p-6 text-center text-slate-200">
+          <p className="text-sm font-semibold text-slate-100">{t("emptyStates.filtered.title")}</p>
+          <p className="mt-2 text-sm text-slate-200/80">{t("emptyStates.filtered.line1")}</p>
+          <p className="text-sm text-slate-200/80">{t("emptyStates.filtered.line2")}</p>
+          <div className="mt-4 flex justify-center">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setSearch("");
+                setActiveType("all");
+              }}
+            >
+              {t("emptyStates.filtered.actionReset")}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {!showCuratedEmptyState && !showFilteredEmptyState && <CatalogGrid items={filteredItems} />}
     </>
   );
 }

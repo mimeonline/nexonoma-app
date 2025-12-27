@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 import { ChevronDown } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 // --- Internal Types ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -67,6 +69,10 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");
   const { t } = useI18n();
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
+  const localePrefix = locale ? `/${locale}` : "";
 
   const selectTypeOptions = useMemo(
     () =>
@@ -87,6 +93,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
 
   const contents = useMemo(() => (cluster ? flattenContents(cluster) : []), [cluster]);
   const filtered = useMemo(() => filterContents(contents, activeSegment, activeType), [contents, activeSegment, activeType]);
+  const hasAnyContent = contents.length > 0;
 
   const segments = cluster.segments ?? [];
 
@@ -184,25 +191,55 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
       {viewMode === "grid" ? (
         // GRID MODE
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((item) => (
-            <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
-              <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
-                <CardHeader className="pb-2 space-y-0">
-                  <div className="flex items-start justify-between gap-2">
-                    <Badge variant={getBadgeVariant(item.type)} size="sm">
-                      {translateAssetLabel(item.type)}
-                    </Badge>
-                    <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardTitle className="text-base group-hover:text-nexo-ocean transition-colors mb-2">{item.name}</CardTitle>
-                  {item.shortDescription && <p className="text-xs text-nexo-muted line-clamp-2 leading-relaxed">{item.shortDescription}</p>}
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-          {filtered.length === 0 && <p className="col-span-full text-center text-nexo-muted py-10">{t("grid.segments.empty")}</p>}
+          {filtered.length > 0 &&
+            filtered.map((item) => (
+              <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
+                <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
+                  <CardHeader className="pb-2 space-y-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <Badge variant={getBadgeVariant(item.type)} size="sm">
+                        {translateAssetLabel(item.type)}
+                      </Badge>
+                      <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CardTitle className="text-base group-hover:text-nexo-ocean transition-colors mb-2">{item.name}</CardTitle>
+                    {item.shortDescription && <p className="text-xs text-nexo-muted line-clamp-2 leading-relaxed">{item.shortDescription}</p>}
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          {filtered.length === 0 && (
+            <div className="col-span-full rounded-2xl border border-dashed border-white/10 bg-white/5 px-6 py-8 text-center">
+              <p className="text-sm font-semibold text-slate-100">
+                {t(hasAnyContent ? "emptyStates.filtered.title" : "emptyStates.curated.title")}
+              </p>
+              <p className="mt-2 text-sm text-nexo-muted">
+                {t(hasAnyContent ? "emptyStates.filtered.line1" : "emptyStates.curated.line1")}
+              </p>
+              <p className="text-sm text-nexo-muted">
+                {t(hasAnyContent ? "emptyStates.filtered.line2" : "emptyStates.curated.line2")}
+              </p>
+              <div className="mt-4 flex justify-center">
+                {hasAnyContent ? (
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setActiveSegment("all");
+                      setActiveType("all");
+                    }}
+                  >
+                    {t("emptyStates.filtered.actionReset")}
+                  </Button>
+                ) : (
+                  <Button variant="secondary" onClick={() => router.push(`${localePrefix}/catalog`)}>
+                    {t("emptyStates.curated.actionCatalog")}
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         // PIPELINE MODE

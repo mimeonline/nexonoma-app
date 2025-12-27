@@ -1,10 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/ui/atoms/Badge";
+import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { MacroCluster } from "@/types/grid";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   macroClusters: MacroCluster[];
@@ -12,12 +14,21 @@ type Props = {
 
 export function MacroClusterList({ macroClusters }: Props) {
   const { t } = useI18n();
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
+  const localePrefix = locale ? `/${locale}` : "";
   const hasMacroClusters = macroClusters && macroClusters.length > 0;
 
   if (!hasMacroClusters) {
     return (
-      <div className="flex h-40 w-full items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/5">
-        <p className="text-sm text-nexo-muted">{t("grid.macro.empty")}</p>
+      <div className="flex w-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/10 bg-white/5 px-6 py-8 text-center">
+        <p className="text-sm font-semibold text-slate-100">{t("emptyStates.curated.title")}</p>
+        <p className="text-sm text-nexo-muted">{t("emptyStates.curated.line1")}</p>
+        <p className="text-sm text-nexo-muted">{t("emptyStates.curated.line2")}</p>
+        <Button variant="secondary" onClick={() => router.push(`${localePrefix}/catalog`)}>
+          {t("emptyStates.curated.actionCatalog")}
+        </Button>
       </div>
     );
   }

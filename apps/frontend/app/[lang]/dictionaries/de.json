@@ -14,6 +14,27 @@
   "a11y": {
     "menuToggle": "Menü öffnen"
   },
+  "emptyStates": {
+    "curated": {
+      "title": "Kuratiert leer",
+      "line1": "Im MVP zeigen wir kuratierte Beispiele, nicht Vollständigkeit.",
+      "line2": "Die Struktur ist real, der Inhalt wächst schrittweise.",
+      "actionCatalog": "Zum Katalog",
+      "actionStructure": "Struktur ansehen"
+    },
+    "filtered": {
+      "title": "Kein Treffer (Filter)",
+      "line1": "Mit diesen Filtern gibt es im MVP keine Treffer.",
+      "line2": "Entferne Filter oder wechsle zu kuratierten Beispielen.",
+      "actionReset": "Filter zurücksetzen"
+    }
+  },
+  "preview": {
+    "label": "Preview",
+    "title": "Preview",
+    "description": "Diese Ansicht zeigt Beziehungen/Mapping als Visualisierung. Im MVP ist sie als Preview enthalten; Fokus liegt auf Struktur und kuratierten Inhalten.",
+    "actionCatalog": "Zum Katalog"
+  },
   "common": {
     "loading": "Lädt…",
     "error": "Etwas ist schiefgelaufen.",
