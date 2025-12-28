@@ -1,8 +1,4 @@
 {
-  "app": {
-    "name": "Nexonoma",
-    "tagline": "Discover concepts, methods, tools, and architectures."
-  },
   "nav": {
     "start": "Start",
     "catalog": "Catalog",
@@ -74,15 +70,6 @@
       }
     }
   },
-  "common": {
-    "loading": "Loading…",
-    "error": "Something went wrong.",
-    "retry": "Try again",
-    "close": "Close",
-    "copyLink": "Copy link",
-    "copied": "Copied",
-    "openInNewTab": "Open in new tab"
-  },
   "home": {
     "hero": {
       "badge": "Nexonoma MVP Live",
@@ -146,10 +133,6 @@
         "line1": "Nexonoma is neither a wiki nor a tool catalog.",
         "line2": "It is an orientation model that makes structure, context, and relevance visible.",
         "hint": "New here? Start with the structure—or jump straight into the catalog."
-      },
-      "meta": {
-        "about": "Über Nexonoma",
-        "feedback": "Feedback"
       }
     },
     "valueProps": {
@@ -222,16 +205,11 @@
     "macro": {
       "badge": "Grid Navigation",
       "title": "Knowledge domains",
-      "description": "The top-level structure of the knowledge network. These domains bundle related topics into thematic spaces – from strategy and architecture to users and context.",
-      "empty": "No knowledge domains available."
+      "description": "The top-level structure of the knowledge network. These domains bundle related topics into thematic spaces – from strategy and architecture to users and context."
     },
     "clusters": {
       "badge": "Topic clusters",
-      "description": "Explore the specific subject areas within this knowledge domain.",
-      "empty": "No clusters are currently defined in this domain.",
-      "descriptionFallback": "No description available.",
-      "segmentLabel": "Segment",
-      "segmentsLabel": "Segments"
+      "descriptionFallback": "No description available."
     },
     "segments": {
       "breadcrumbs": {
@@ -253,7 +231,6 @@
       "tabs": {
         "all": "Show all"
       },
-      "empty": "No content found for the selected filters.",
       "emptyLane": "Empty"
     },
     "labels": {
@@ -276,17 +253,7 @@
   },
   "catalog": {
     "title": "Catalog",
-    "filters": "Filters",
-    "clearFilters": "Reset filters",
-    "results": "Results",
-    "noResults": "No results for your filters.",
     "sortBy": "Sort by",
-    "sort": {
-      "relevance": "Relevance",
-      "nameAsc": "Name (A–Z)",
-      "nameDesc": "Name (Z–A)",
-      "updatedDesc": "Recently updated"
-    },
     "page": {
       "heading": "Nexonoma Catalog",
       "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
@@ -306,8 +273,7 @@
     },
     "messages": {
       "loading": "Loading catalog data...",
-      "error": "Catalog data could not be loaded: {error}",
-      "empty": "No entries found. Adjust filters or search term."
+      "error": "Catalog data could not be loaded: {error}"
     },
     "gridMeta": {
       "shortDescriptionFallback": "No short description available."
@@ -318,68 +284,32 @@
         "fromGrid": "From grid:",
         "segmentPlaceholder": "Segment"
       },
-      "metadata": {
-        "maturity": "Maturity",
-        "cognitiveLoad": "Cognitive load",
-        "status": "Status"
-      },
       "cards": {
         "classification": {
-          "title": "Classification",
-          "fields": {
-            "complexity": "Complexity",
-            "impact": "Impact area",
-            "decisionType": "Decision type",
-            "organizationalMaturity": "Organizational maturity"
-          }
+          "title": "Classification"
         },
         "technical": {
-          "title": "Technical context",
-          "fields": {
-            "integrations": "Integrations"
-          }
+          "title": "Technical context"
         },
         "principles": {
-          "title": "Principles & goals",
-          "fields": {
-            "valueStream": "Value stream",
-            "organizationalLevel": "Organizational level"
-          }
+          "title": "Principles & goals"
         },
         "useCases": {
-          "title": "Use cases & scenarios",
-          "labels": {
-            "useCases": "Use cases",
-            "scenarios": "Scenarios"
-          }
+          "title": "Use cases & scenarios"
         },
         "compromises": {
-          "title": "Compromises",
-          "fields": {
-            "risks": "Risks",
-            "bestPractices": "Best practices"
-          }
+          "title": "Compromises"
         },
         "io": {
-          "title": "I/O & resources",
-          "fields": {
-            "inputs": "Inputs",
-            "outputs": "Outputs",
-            "resources": "Resources"
-          }
+          "title": "I/O & resources"
         }
       },
       "sections": {
         "description": {
           "title": "Description"
         },
-        "benefits": "Benefits",
-        "limitations": "Limitations",
-        "examples": "Examples & implementations",
-        "implementation": "Implementation steps",
         "techDebt": {
           "title": "Technical debt & bottlenecks",
-          "risksLabel": "Risk factors",
           "bottlenecksLabel": "Known bottlenecks",
           "misuse": "Misuse examples",
           "traps": "Typical traps"
@@ -389,8 +319,7 @@
         "constraints": "Constraints",
         "tradeoffs": "Trade-offs",
         "metrics": "Metrics"
-      },
-      "emptyDescription": "No short description available."
+      }
     }
   },
   "asset": {
@@ -399,27 +328,37 @@
       "method": "Method",
       "tool": "Tool",
       "technology": "Technology",
-      "role": "Role",
-      "pattern": "Pattern"
-    },
-    "meta": {
-      "maturity": "Maturity",
-      "complexity": "Complexity",
-      "tags": "Tags",
-      "source": "Source",
-      "updated": "Updated"
+      "role": "Role"
     },
     "enums": {
       "types": {
-        "MACRO_CLUSTER": { "label": "Knowledge domain" },
-        "CLUSTER": { "label": "Cluster" },
-        "CLUSTER_VIEW": { "label": "Cluster view" },
-        "SEGMENT": { "label": "Segment" },
-        "CONCEPT": { "label": "Concept" },
-        "METHOD": { "label": "Method" },
-        "TOOL": { "label": "Tool" },
-        "TECHNOLOGY": { "label": "Technology" },
-        "ROLE": { "label": "Role" }
+        "MACRO_CLUSTER": {
+          "label": "Knowledge domain"
+        },
+        "CLUSTER": {
+          "label": "Cluster"
+        },
+        "CLUSTER_VIEW": {
+          "label": "Cluster view"
+        },
+        "SEGMENT": {
+          "label": "Segment"
+        },
+        "CONCEPT": {
+          "label": "Concept"
+        },
+        "METHOD": {
+          "label": "Method"
+        },
+        "TOOL": {
+          "label": "Tool"
+        },
+        "TECHNOLOGY": {
+          "label": "Technology"
+        },
+        "ROLE": {
+          "label": "Role"
+        }
       },
       "organizationalLevel": {
         "ENTERPRISE": {
@@ -436,10 +375,22 @@
         }
       },
       "status": {
-        "DRAFT": { "label": "Draft", "description": "A draft that is not yet complete or reviewed." },
-        "REVIEW": { "label": "Review", "description": "An asset that is ready for review." },
-        "PUBLISHED": { "label": "Published", "description": "An asset that is published and available for use." },
-        "ARCHIVED": { "label": "Archived", "description": "An asset that has been archived and is no longer actively used." }
+        "DRAFT": {
+          "label": "Draft",
+          "description": "A draft that is not yet complete or reviewed."
+        },
+        "REVIEW": {
+          "label": "Review",
+          "description": "An asset that is ready for review."
+        },
+        "PUBLISHED": {
+          "label": "Published",
+          "description": "An asset that is published and available for use."
+        },
+        "ARCHIVED": {
+          "label": "Archived",
+          "description": "An asset that has been archived and is no longer actively used."
+        }
       },
       "maturityLevel": {
         "EXPLORATORY": {
@@ -474,31 +425,82 @@
         }
       },
       "complexityLevel": {
-        "LOW": { "label": "Low", "description": "Easy to understand and apply." },
-        "MEDIUM": { "label": "Medium", "description": "Moderate complexity with reasonable learning effort." },
-        "HIGH": { "label": "High", "description": "High complexity requiring deep expertise." }
+        "LOW": {
+          "label": "Low",
+          "description": "Easy to understand and apply."
+        },
+        "MEDIUM": {
+          "label": "Medium",
+          "description": "Moderate complexity with reasonable learning effort."
+        },
+        "HIGH": {
+          "label": "High",
+          "description": "High complexity requiring deep expertise."
+        }
       },
       "cognitiveLoad": {
-        "LOW": { "label": "Low", "description": "Intuitive to understand, minimal learning effort." },
-        "MEDIUM": { "label": "Medium", "description": "Requires basic architectural knowledge." },
-        "HIGH": { "label": "High", "description": "Requires deep systemic understanding." }
+        "LOW": {
+          "label": "Low",
+          "description": "Intuitive to understand, minimal learning effort."
+        },
+        "MEDIUM": {
+          "label": "Medium",
+          "description": "Requires basic architectural knowledge."
+        },
+        "HIGH": {
+          "label": "High",
+          "description": "Requires deep systemic understanding."
+        }
       },
       "impacts": {
-        "TECHNICAL": { "label": "Technical", "description": "Affects technical aspects of the system." },
-        "BUSINESS": { "label": "Business", "description": "Affects business processes and outcomes." },
-        "ORGANIZATIONAL": { "label": "Organizational", "description": "Affects organizational structures and processes." }
+        "TECHNICAL": {
+          "label": "Technical",
+          "description": "Affects technical aspects of the system."
+        },
+        "BUSINESS": {
+          "label": "Business",
+          "description": "Affects business processes and outcomes."
+        },
+        "ORGANIZATIONAL": {
+          "label": "Organizational",
+          "description": "Affects organizational structures and processes."
+        }
       },
       "decisionType": {
-        "DESIGN_DECISION": { "label": "Design", "description": "Affects decisions at the design or pattern level." },
-        "ARCHITECTURAL_DECISION": { "label": "Architectural", "description": "Affects the system architecture." },
-        "ORGANIZATIONAL_DECISION": { "label": "Organizational", "description": "Affects organizational structures and processes." },
-        "TECHNICAL_DECISION": { "label": "Technical", "description": "Affects technical implementations." }
+        "DESIGN_DECISION": {
+          "label": "Design",
+          "description": "Affects decisions at the design or pattern level."
+        },
+        "ARCHITECTURAL_DECISION": {
+          "label": "Architectural",
+          "description": "Affects the system architecture."
+        },
+        "ORGANIZATIONAL_DECISION": {
+          "label": "Organizational",
+          "description": "Affects organizational structures and processes."
+        },
+        "TECHNICAL_DECISION": {
+          "label": "Technical",
+          "description": "Affects technical implementations."
+        }
       },
       "valueStreamStage": {
-        "DISCOVERY": { "label": "Discovery", "description": "Exploration, research, and problem awareness." },
-        "BUILD": { "label": "Build", "description": "Development and implementation of the asset." },
-        "RUN": { "label": "Run", "description": "Operation and maintenance of the asset." },
-        "ITERATE": { "label": "Iterate", "description": "Iterative improvement and optimization of the asset." }
+        "DISCOVERY": {
+          "label": "Discovery",
+          "description": "Exploration, research, and problem awareness."
+        },
+        "BUILD": {
+          "label": "Build",
+          "description": "Development and implementation of the asset."
+        },
+        "RUN": {
+          "label": "Run",
+          "description": "Operation and maintenance of the asset."
+        },
+        "ITERATE": {
+          "label": "Iterate",
+          "description": "Iterative improvement and optimization of the asset."
+        }
       }
     },
     "properties": {
@@ -706,36 +708,7 @@
         "label": "Constraints",
         "description": "Known limitations, conditions, or constraints that must be considered when using the AssetBlock."
       }
-    },
-    "schema": {
-      "maturity": {
-        "description": "Maturity of the AssetBlock in terms of market adoption, practical usage, and stability.",
-        "examples": "Exploratory: Experimental\nEmerging: Growing adoption\nEstablished: Widely used"
-      },
-      "cognitiveLoad": {
-        "description": "The mental effort required to understand and apply the AssetBlock.",
-        "examples": "Low: Intuitive\nMedium: Architectural knowledge\nHigh: Systemic understanding"
-      },
-      "useCase": {
-        "name": {
-          "description": "Descriptive title of the use case summarizing its purpose and context.",
-          "examples": "User authentication\nData backup"
-        },
-        "inputs": {
-          "description": "Required inputs, prerequisites, or starting artifacts for this use case.",
-          "examples": "Username and password\nDatabase access"
-        },
-        "outputs": {
-          "description": "Results, artifacts, or outcomes produced by this use case.",
-          "examples": "Authentication token\nBackup file"
-        }
-      }
     }
-  },
-  "errors": {
-    "notFoundTitle": "Page not found",
-    "notFoundText": "The page you are looking for does not exist.",
-    "invalidLocale": "Unsupported language."
   },
   "seo": {
     "defaultTitle": "Nexonoma",
