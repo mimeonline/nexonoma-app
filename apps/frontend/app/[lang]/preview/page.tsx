@@ -2,28 +2,28 @@
 
 import { Badge } from "@/components/ui/atoms/Badge"; // Falls vorhanden, sonst HTML fallback
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { useI18n } from "@/features/i18n/I18nProvider";
 import { ArrowRight, Construction, Info, LayoutGrid, Map } from "lucide-react";
 
 export default function PreviewTemplate() {
+  const { t } = useI18n();
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
       {/* --- HEADER --- */}
       <header className="max-w-3xl space-y-4">
         <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
           <Construction className="w-3 h-3" />
-          <span>Labs / In Entwicklung</span>
+          <span>{t("preview.page.header.badge")}</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">Preview: Matrix & City</h1>
-        <p className="text-lg text-gray-400 leading-relaxed">
-          Zwei Perspektiven auf dasselbe Wissen. Nexonoma wird Wissen nicht nur strukturieren, sondern erlebbar machen. Diese Ansichten zeigen, wohin
-          sich das System nach dem MVP entwickelt.
-        </p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">{t("preview.page.header.title")}</h1>
+        <p className="text-lg text-gray-400 leading-relaxed">{t("preview.page.header.lead")}</p>
       </header>
 
       {/* --- MAIN GRID --- */}
       <div className="grid gap-8 lg:grid-cols-2">
         {/* 1. MATRIX CARD (Analytical) */}
-        <Card className="group relative overflow-hidden border-teal-500/20 bg-gradient-to-b from-[#101A2E] to-[#0B1220]">
+        <Card className="group relative overflow-hidden border-teal-500/20 bg-linear-to-b from-[#101A2E] to-[#0B1220]">
           {/* Abstract Visual: The Matrix Grid */}
           <div className="relative h-48 w-full border-b border-white/5 bg-[#0F1623] overflow-hidden flex items-center justify-center">
             {/* Background Grid Pattern */}
@@ -44,39 +44,38 @@ export default function PreviewTemplate() {
             </div>
 
             {/* Label */}
-            <div className="absolute bottom-3 right-3 text-[10px] font-mono text-teal-400/60 uppercase tracking-widest">System View</div>
+            <div className="absolute bottom-3 right-3 text-[10px] font-mono text-teal-400/60 uppercase tracking-widest">
+              {t("preview.page.matrix.systemLabel")}
+            </div>
           </div>
 
           <CardHeader>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-teal-400">
                 <LayoutGrid className="w-5 h-5" />
-                <span className="text-xs font-bold uppercase tracking-wider">Analyse</span>
+                <span className="text-xs font-bold uppercase tracking-wider">{t("preview.page.matrix.label")}</span>
               </div>
               <Badge variant="outline" className="border-teal-500/20 text-teal-300 text-[10px]">
-                Konzept
+                {t("preview.page.matrix.badge")}
               </Badge>
             </div>
-            <CardTitle className="text-2xl text-white">Matrix – Zusammenhänge analysieren</CardTitle>
+            <CardTitle className="text-2xl text-white">{t("preview.page.matrix.title")}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Die Matrix bietet eine analytische Sicht auf das Wissensmodell. Sie ordnet Bausteine entlang klarer Dimensionen und macht
-              Abhängigkeiten, Überschneidungen und Vergleichbarkeit sichtbar.
-            </p>
+            <p className="text-gray-400 leading-relaxed text-sm">{t("preview.page.matrix.body")}</p>
 
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase text-gray-500 tracking-wider">Ideal für:</p>
+              <p className="text-xs font-semibold uppercase text-gray-500 tracking-wider">{t("preview.page.matrix.idealFor.label")}</p>
               <ul className="space-y-2">
                 <ListItem icon="check" color="text-teal-400">
-                  Systematische Analyse von Portfolios
+                  {t("preview.page.matrix.idealFor.item1")}
                 </ListItem>
                 <ListItem icon="check" color="text-teal-400">
-                  Architektur- und Technologieentscheidungen
+                  {t("preview.page.matrix.idealFor.item2")}
                 </ListItem>
                 <ListItem icon="check" color="text-teal-400">
-                  Erkennen von Mustern und Lücken (White Spots)
+                  {t("preview.page.matrix.idealFor.item3")}
                 </ListItem>
               </ul>
             </div>
@@ -84,14 +83,14 @@ export default function PreviewTemplate() {
             <div className="pt-4 border-t border-white/5">
               <p className="text-xs text-gray-500 flex items-center gap-2">
                 <Info className="w-3 h-3" />
-                <span>Status: Interaktion folgt nach MVP.</span>
+                <span>{t("preview.page.matrix.status")}</span>
               </p>
             </div>
           </CardContent>
         </Card>
 
         {/* 2. CITY CARD (Explorative) */}
-        <Card className="group relative overflow-hidden border-indigo-500/20 bg-gradient-to-b from-[#101A2E] to-[#0B1220]">
+        <Card className="group relative overflow-hidden border-indigo-500/20 bg-linear-to-b from-[#101A2E] to-[#0B1220]">
           {/* Abstract Visual: The City Map */}
           <div className="relative h-48 w-full border-b border-white/5 bg-[#0F1623] overflow-hidden flex items-center justify-center">
             {/* Radial Glow */}
@@ -120,39 +119,38 @@ export default function PreviewTemplate() {
             </svg>
 
             {/* Label */}
-            <div className="absolute bottom-3 right-3 text-[10px] font-mono text-indigo-400/60 uppercase tracking-widest">Spatial View</div>
+            <div className="absolute bottom-3 right-3 text-[10px] font-mono text-indigo-400/60 uppercase tracking-widest">
+              {t("preview.page.city.spatialLabel")}
+            </div>
           </div>
 
           <CardHeader>
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-indigo-400">
                 <Map className="w-5 h-5" />
-                <span className="text-xs font-bold uppercase tracking-wider">Entdeckung</span>
+                <span className="text-xs font-bold uppercase tracking-wider">{t("preview.page.city.label")}</span>
               </div>
               <Badge variant="outline" className="border-indigo-500/20 text-indigo-300 text-[10px]">
-                Vision
+                {t("preview.page.city.badge")}
               </Badge>
             </div>
-            <CardTitle className="text-2xl text-white">City – Wissen entdecken</CardTitle>
+            <CardTitle className="text-2xl text-white">{t("preview.page.city.title")}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <p className="text-gray-400 leading-relaxed text-sm">
-              Die City ist eine visuelle Entdeckungsreise. Cluster werden zu Bezirken, Konzepte zu Orten, Beziehungen zu Wegen. Zusammenhänge werden
-              räumlich erfahrbar, statt nur logisch erklärt.
-            </p>
+            <p className="text-gray-400 leading-relaxed text-sm">{t("preview.page.city.body")}</p>
 
             <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase text-gray-500 tracking-wider">Ideal für:</p>
+              <p className="text-xs font-semibold uppercase text-gray-500 tracking-wider">{t("preview.page.city.idealFor.label")}</p>
               <ul className="space-y-2">
                 <ListItem icon="arrow" color="text-indigo-400">
-                  Orientierung in komplexen Themenfeldern
+                  {t("preview.page.city.idealFor.item1")}
                 </ListItem>
                 <ListItem icon="arrow" color="text-indigo-400">
-                  Intuitives Verständnis von Zusammenhängen
+                  {t("preview.page.city.idealFor.item2")}
                 </ListItem>
                 <ListItem icon="arrow" color="text-indigo-400">
-                  Lernen durch Erkunden (Exploration)
+                  {t("preview.page.city.idealFor.item3")}
                 </ListItem>
               </ul>
             </div>
@@ -160,7 +158,7 @@ export default function PreviewTemplate() {
             <div className="pt-4 border-t border-white/5">
               <p className="text-xs text-gray-500 flex items-center gap-2">
                 <Info className="w-3 h-3" />
-                <span>Status: Fokus aktuell auf Struktur & Katalog.</span>
+                <span>{t("preview.page.city.status")}</span>
               </p>
             </div>
           </CardContent>
@@ -173,11 +171,8 @@ export default function PreviewTemplate() {
           <Info className="w-6 h-6" />
         </div>
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold text-white">Einordnung & Erwartung</h3>
-          <p className="text-sm text-gray-400 leading-relaxed max-w-3xl">
-            Diese Ansichten sind funktionale Previews. Im MVP liegt der Fokus bewusst auf Struktur, Klarheit und kuratierten Inhalten (Katalog &
-            Grid). Matrix und City zeigen die Richtung für zukünftige Ausbaustufen, sind aber noch kein aktiver Arbeitsmodus.
-          </p>
+          <h3 className="text-lg font-semibold text-white">{t("preview.page.note.title")}</h3>
+          <p className="text-sm text-gray-400 leading-relaxed max-w-3xl">{t("preview.page.note.body")}</p>
         </div>
       </div>
     </div>

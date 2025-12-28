@@ -29,7 +29,46 @@
     "label": "Preview",
     "title": "Preview",
     "description": "Diese Ansicht zeigt Beziehungen/Mapping als Visualisierung. Im MVP ist sie als Preview enthalten; Fokus liegt auf Struktur und kuratierten Inhalten.",
-    "actionCatalog": "Zum Katalog"
+    "actionCatalog": "Zum Katalog",
+    "page": {
+      "header": {
+        "badge": "Labs / In Entwicklung",
+        "title": "Preview: Matrix & City",
+        "lead": "Zwei Perspektiven auf dasselbe Wissen. Nexonoma wird Wissen nicht nur strukturieren, sondern erlebbar machen. Diese Ansichten zeigen, wohin sich das System nach dem MVP entwickelt."
+      },
+      "matrix": {
+        "systemLabel": "System View",
+        "label": "Analyse",
+        "badge": "Konzept",
+        "title": "Matrix – Zusammenhänge analysieren",
+        "body": "Die Matrix bietet eine analytische Sicht auf das Wissensmodell. Sie ordnet Bausteine entlang klarer Dimensionen und macht Abhängigkeiten, Überschneidungen und Vergleichbarkeit sichtbar.",
+        "idealFor": {
+          "label": "Ideal für:",
+          "item1": "Systematische Analyse von Portfolios",
+          "item2": "Architektur- und Technologieentscheidungen",
+          "item3": "Erkennen von Mustern und Lücken (White Spots)"
+        },
+        "status": "Status: Interaktion folgt nach MVP."
+      },
+      "city": {
+        "spatialLabel": "Spatial View",
+        "label": "Entdeckung",
+        "badge": "Vision",
+        "title": "City – Wissen entdecken",
+        "body": "Die City ist eine visuelle Entdeckungsreise. Cluster werden zu Bezirken, Konzepte zu Orten, Beziehungen zu Wegen. Zusammenhänge werden räumlich erfahrbar, statt nur logisch erklärt.",
+        "idealFor": {
+          "label": "Ideal für:",
+          "item1": "Orientierung in komplexen Themenfeldern",
+          "item2": "Intuitives Verständnis von Zusammenhängen",
+          "item3": "Lernen durch Erkunden (Exploration)"
+        },
+        "status": "Status: Fokus aktuell auf Struktur & Katalog."
+      },
+      "note": {
+        "title": "Einordnung & Erwartung",
+        "body": "Diese Ansichten sind funktionale Previews. Im MVP liegt der Fokus bewusst auf Struktur, Klarheit und kuratierten Inhalten (Katalog & Grid). Matrix und City zeigen die Richtung für zukünftige Ausbaustufen, sind aber noch kein aktiver Arbeitsmodus."
+      }
+    }
   },
   "home": {
     "hero": {
