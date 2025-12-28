@@ -1,39 +1,37 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Monorepo managed via `pnpm-workspace.yaml`.
-- Apps: Next.js frontend in `apps/frontend`, NestJS API in `apps/api`.
-- Shared domain types in `packages/nexonoma-types`; JSON schemas in `packages/nexonoma-schema`.
-- Public assets live in `apps/frontend/public`; routes/components under `apps/frontend/app`.
-- Keep data JSON-only under `content/json/`; schemas stay unchanged unless explicitly approved.
+- `apps/frontend/`: Next.js app (App Router) with `app/`, `components/`, `features/`, `services/`, `utils/`, and `public/` assets.
+- `apps/api/`: NestJS API with `src/` for application code and `test/` for e2e tests; `api.http` and `bruno/` hold API request definitions.
+- `content/`: JSON content data.
+- `mocks/` and `sandbox/`: local fixtures/experiments.
+- Workspace layout is defined in `pnpm-workspace.yaml`.
 
 ## Build, Test, and Development Commands
-- Install all deps: `pnpm install`.
-- Frontend: `pnpm --filter frontend dev` (http://localhost:3000), `pnpm --filter frontend build`, `pnpm --filter frontend start`.
-- API: `pnpm --filter api start:dev` for hot reload, `pnpm --filter api build`, `pnpm --filter api start:prod`.
-- Lint: `pnpm --filter frontend lint` (ESLint 9 + Next), API lint via `pnpm --filter api lint`.
+- `pnpm install`: install workspace dependencies.
+- `pnpm --filter frontend dev`: run the frontend locally (Next.js dev server).
+- `pnpm --filter api start:dev`: run the API with hot reload (NestJS).
+- `pnpm --filter frontend build` / `pnpm --filter api build`: production builds.
+- `pnpm --filter frontend lint`: ESLint for the frontend.
+- `pnpm --filter api lint`: ESLint (with `--fix`) for the API.
+- `pnpm --filter api test` / `pnpm --filter api test:e2e`: Jest unit/e2e tests.
+- `pnpm docker:build:app|api|db` (root): build and push Docker images.
 
 ## Coding Style & Naming Conventions
-- TypeScript-first, ES modules. Prefer React Server Components unless client hooks needed.
-- TailwindCSS v4 utility-first; avoid ad-hoc inline styles when utilities exist.
-- File naming: kebab-case for routes, PascalCase for React components, camelCase for vars/functions.
-- Formatting: Prettier 3 with Tailwind plugin; run `pnpm exec prettier --write` as needed.
+- Primary languages are TypeScript/React (frontend) and TypeScript/NestJS (API).
+- Formatting is handled via Prettier in both apps; prefer running the provided `lint`/`format` scripts instead of manual formatting.
+- Follow existing file naming patterns: `*.spec.ts` for tests, React components in PascalCase, utilities in camelCase.
 
 ## Testing Guidelines
-- API uses Jest (`pnpm --filter api test`, coverage via `pnpm --filter api test:cov`).
-- Frontend has no formal suite yet; add Vitest/RTL near features when logic grows (`__tests__` co-located).
-- Keep tests deterministic; name test files `*.spec.ts` or `*.test.ts`.
+- API tests use Jest; unit tests live in `apps/api/src/**/**.spec.ts` and e2e tests in `apps/api/test/`.
+- Run `pnpm --filter api test:cov` to generate coverage when needed.
+- The frontend currently exposes linting only; add tests in a way that aligns with existing structure.
 
 ## Commit & Pull Request Guidelines
-- Commit format: `<type>(<scope>): <summary>` e.g., `feat(frontend): add matrix legend`.
-- Scope examples: docs, data, frontend, api, infra, schemas, config.
-- PRs: state purpose, link issue, include screenshots for UI changes (desktop + mobile) and note tests run.
+- Commit history follows Conventional Commits with scopes, e.g. `feat(frontend): ...`, `fix(api): ...`, `chore(ui): ...`.
+- Keep commits focused and scoped; include a brief, imperative summary.
+- PRs should describe intent, note user-facing changes, and include screenshots for UI changes when relevant.
 
-## Security & Configuration Tips
-- Never commit secrets; use local `.env` (not tracked). Mirror required keys in docs, not in code.
-- Respect schema IDs/keys; no breaking changes to data models without explicit approval.
-- Do not delete fields; prefer additive changes and document architecture shifts in `docs/adr/` when applicable.
-
-## Agent-Specific Notes
-- Preserve existing folder structure; avoid sweeping refactors unless requested.
-- Favor minimal, reversible changes; ask when data is missing rather than guessing.
+## Security & Configuration
+- Environment files exist at `apps/api/.env`, `apps/api/.env.local`, and `apps/frontend/.env`.
+- Do not add or rotate secrets without explicit instruction; treat config changes as coordinated updates.

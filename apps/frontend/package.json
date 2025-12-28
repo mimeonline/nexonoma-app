@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.7.2",
-    "@nexonoma/types": "workspace:*",
     "@radix-ui/react-popover": "^1.1.15",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",
