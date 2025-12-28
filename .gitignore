@@ -8,5 +8,6 @@
 .netlify
 
 /sandbox/
-docs/domain/
 node_modules
+AGENTS.md 
+.vscode
