@@ -1,8 +1,4 @@
 {
-  "app": {
-    "name": "Nexonoma",
-    "tagline": "Entdecke Konzepte, Methoden, Tools und Architekturen."
-  },
   "nav": {
     "start": "Start",
     "catalog": "Katalog",
@@ -34,15 +30,6 @@
     "title": "Preview",
     "description": "Diese Ansicht zeigt Beziehungen/Mapping als Visualisierung. Im MVP ist sie als Preview enthalten; Fokus liegt auf Struktur und kuratierten Inhalten.",
     "actionCatalog": "Zum Katalog"
-  },
-  "common": {
-    "loading": "Lädt…",
-    "error": "Etwas ist schiefgelaufen.",
-    "retry": "Erneut versuchen",
-    "close": "Schließen",
-    "copyLink": "Link kopieren",
-    "copied": "Kopiert",
-    "openInNewTab": "In neuem Tab öffnen"
   },
   "home": {
     "hero": {
@@ -107,10 +94,6 @@
         "line1": "Nexonoma ist kein statisches Wiki, sondern ein dynamisches Beziehungs-Modell.",
         "line2": "Es zeigt nicht nur, DASS eine Technologie existiert, sondern WO sie hingehört und WIE sie wirkt.",
         "hint": "Tipp: Nutze die Struktur-Ansicht, um das 'Spielfeld' zu verstehen, bevor du ins Detail gehst."
-      },
-      "meta": {
-        "about": "Über Nexonoma",
-        "feedback": "Feedback"
       }
     },
     "valueProps": {
@@ -183,16 +166,11 @@
     "macro": {
       "badge": "Das Big Picture",
       "title": "Wissensbereiche",
-      "description": "Wähle deinen Themenraum. Die oberste Ebene der Landkarte ordnet die komplexe Welt der IT in vier klare Dimensionen – von der Strategie bis zur Infrastruktur.",
-      "empty": "Keine Wissensbereiche verfügbar."
+      "description": "Wähle deinen Themenraum. Die oberste Ebene der Landkarte ordnet die komplexe Welt der IT in vier klare Dimensionen – von der Strategie bis zur Infrastruktur."
     },
     "clusters": {
       "badge": "Themen-Cluster",
-      "description": "Verfeinere den Fokus. Tauche tiefer in spezifische Disziplinen ein und wähle den Bereich, der für deine aktuelle Herausforderung relevant ist.",
-      "empty": "In diesem Bereich sind aktuell noch keine Cluster hinterlegt.",
-      "descriptionFallback": "Erkunde die Bausteine dieses Clusters.",
-      "segmentLabel": "Segment",
-      "segmentsLabel": "Segmente"
+      "descriptionFallback": "Erkunde die Bausteine dieses Clusters."
     },
     "segments": {
       "breadcrumbs": {
@@ -214,7 +192,6 @@
       "tabs": {
         "all": "Alles anzeigen"
       },
-      "empty": "Keine Inhalte für die gewählten Filter gefunden.",
       "emptyLane": "Leer"
     },
     "labels": {
@@ -237,17 +214,7 @@
   },
   "catalog": {
     "title": "Wissens-Katalog",
-    "filters": "Filter",
-    "clearFilters": "Filter zurücksetzen",
-    "results": "Ergebnisse",
-    "noResults": "Keine Treffer für deine Filter.",
     "sortBy": "Sortieren nach",
-    "sort": {
-      "relevance": "Relevanz",
-      "nameAsc": "Name (A–Z)",
-      "nameDesc": "Name (Z–A)",
-      "updatedDesc": "Zuletzt aktualisiert"
-    },
     "page": {
       "heading": "Alle Bausteine im Fokus",
       "description": "Dein zentrales Inventar. Finde Konzepte, Methoden, Tools und Technologien an einem Ort – filterbar, durchsuchbar und der Startpunkt für jede Analyse."
@@ -267,8 +234,7 @@
     },
     "messages": {
       "loading": "Lade Catalog-Daten...",
-      "error": "Catalog-Daten konnten nicht geladen werden: {error}",
-      "empty": "Keine Einträge gefunden. Filter oder Suchbegriff anpassen."
+      "error": "Catalog-Daten konnten nicht geladen werden: {error}"
     },
     "gridMeta": {
       "shortDescriptionFallback": "Keine Kurzbeschreibung vorhanden."
@@ -279,68 +245,32 @@
         "fromGrid": "Aus Grid:",
         "segmentPlaceholder": "Segment"
       },
-      "metadata": {
-        "maturity": "Reifegrad",
-        "cognitiveLoad": "Kognitive Belastung",
-        "status": "Status"
-      },
       "cards": {
         "classification": {
-          "title": "Klassifikation",
-          "fields": {
-            "complexity": "Komplexität",
-            "impact": "Auswirkungsbereich",
-            "decisionType": "Entscheidungstyp",
-            "organizationalMaturity": "Organisationsreife"
-          }
+          "title": "Klassifikation"
         },
         "technical": {
-          "title": "Technischer Kontext",
-          "fields": {
-            "integrations": "Integrationen"
-          }
+          "title": "Technischer Kontext"
         },
         "principles": {
-          "title": "Prinzipien & Ziele",
-          "fields": {
-            "valueStream": "Wertstrom",
-            "organizationalLevel": "Organisationsebene"
-          }
+          "title": "Prinzipien & Ziele"
         },
         "useCases": {
-          "title": "Use Cases & Szenarien",
-          "labels": {
-            "useCases": "Use Cases",
-            "scenarios": "Szenarien"
-          }
+          "title": "Use Cases & Szenarien"
         },
         "compromises": {
-          "title": "Kompromisse",
-          "fields": {
-            "risks": "Risiken",
-            "bestPractices": "Best Practices"
-          }
+          "title": "Kompromisse"
         },
         "io": {
-          "title": "I/O & Ressourcen",
-          "fields": {
-            "inputs": "Eingaben",
-            "outputs": "Ausgaben",
-            "resources": "Ressourcen"
-          }
+          "title": "I/O & Ressourcen"
         }
       },
       "sections": {
         "description": {
           "title": "Beschreibung"
         },
-        "benefits": "Vorteile",
-        "limitations": "Limitationen",
-        "examples": "Beispiele & Implementierungen",
-        "implementation": "Implementierungsschritte",
         "techDebt": {
           "title": "Technische Schulden & Engpässe",
-          "risksLabel": "Risiko-Faktoren",
           "bottlenecksLabel": "Bekannte Engpässe",
           "misuse": "Beispiele für Missbrauch",
           "traps": "Typische Fallen"
@@ -350,8 +280,7 @@
         "constraints": "Einschränkungen",
         "tradeoffs": "Kompromisse",
         "metrics": "Metriken"
-      },
-      "emptyDescription": "Keine Kurzbeschreibung vorhanden."
+      }
     }
   },
   "asset": {
@@ -360,19 +289,11 @@
       "method": "Methode",
       "tool": "Tool",
       "technology": "Technologie",
-      "role": "Rolle",
-      "pattern": "Pattern"
-    },
-    "meta": {
-      "maturity": "Reifegrad",
-      "complexity": "Komplexität",
-      "tags": "Tags",
-      "source": "Quelle",
-      "updated": "Aktualisiert"
+      "role": "Rolle"
     },
     "enums": {
       "types": {
-        "MACRO_CLUSTER": { "label": "Wissensbereich" },
+        "MACRO_CLUSTER": { "label": "Macro Cluster" },
         "CLUSTER": { "label": "Cluster" },
         "CLUSTER_VIEW": { "label": "Cluster Ansicht" },
         "SEGMENT": { "label": "Segment" },
@@ -637,36 +558,7 @@
         "label": "Constraints",
         "description": "Bekannte Einschränkungen, Rahmenbedingungen oder Vorgaben, die bei der Nutzung des AssetBlocks berücksichtigt werden müssen."
       }
-    },
-    "schema": {
-      "maturity": {
-        "description": "Reife des AssetBlocks in Bezug auf Marktakzeptanz, praktische Nutzung und Stabilität.",
-        "examples": "Explorativ: Experimentell\nAufstrebend: Wachsende Akzeptanz\nEtabliert: Weit verbreitet"
-      },
-      "cognitiveLoad": {
-        "description": "Die mentale Anstrengung, die eine Person aufbringen muss, um AssetBlock zu verstehen und anzuwenden.",
-        "examples": "Niedrig: Intuitiv\nMittel: Architekturwissen\nHoch: Systemisches Verständnis"
-      },
-      "useCase": {
-        "name": {
-          "description": "Beschreibender Titel des Anwendungsfalls, der den Zweck und den Anwendungskontext zusammenfasst.",
-          "examples": "Benutzer-Authentifizierung\nDaten-Backup"
-        },
-        "inputs": {
-          "description": "Erforderliche Eingaben, Voraussetzungen oder Startartefakte für diesen Anwendungsfall.",
-          "examples": "Benutzername und Passwort\nDatenbank-Zugang"
-        },
-        "outputs": {
-          "description": "Ergebnisse, Artefakte oder Auswirkungen, die durch diesen Anwendungsfall erzielt werden.",
-          "examples": "Authentifizierungs-Token\nBackup-Datei"
-        }
-      }
     }
-  },
-  "errors": {
-    "notFoundTitle": "Seite nicht gefunden",
-    "notFoundText": "Die Seite, die du suchst, existiert nicht.",
-    "invalidLocale": "Nicht unterstützte Sprache."
   },
   "seo": {
     "defaultTitle": "Nexonoma",
