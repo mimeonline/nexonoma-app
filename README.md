@@ -1,60 +1,123 @@
 # Nexonoma App
 
-Monorepo fuer die Nexonoma-Webanwendung mit Next.js-Frontend und NestJS-API.
+Monorepo for the **Nexonoma web application**, consisting of a **Next.js frontend** and a **NestJS API**.
 
-## Struktur
+**Nexonoma** is a system-oriented knowledge and navigation platform for software architecture, engineering practices, and complex systems.
+It focuses on making structures, relationships, and decision spaces explicit rather than hiding them behind abstractions.
 
-- `apps/frontend/`: Next.js App Router (UI)
-- `apps/api/`: NestJS API
-- `content/`: JSON-Inhalte
-- `mocks/` und `sandbox/`: lokale Fixtures/Experimente
-- `pnpm-workspace.yaml`: Workspace-Definition
+- Website: <https://nexonoma.de>
+- App: <https://app.nexonoma.de>
 
-## Schnellstart
+This repository represents the **application layer** of Nexonoma and is intentionally published as a **public reference**.
+
+---
+
+## Purpose & Scope
+
+This repository is **not** a complete, standalone system.
+
+Its purpose is to provide insight into:
+
+- application architecture and structure
+- monorepo setup using pnpm workspaces
+- separation of frontend, API, and content
+- code organization and build discipline
+
+The focus is on **clarity, structure, and reasoning**, not on feature completeness or turnkey execution.
+
+---
+
+## Repository Structure
+
+- `apps/frontend/` – Next.js App Router (UI)
+- `apps/api/` – NestJS API
+- `content/` – JSON-based content
+- `sandbox/` – local experiments
+- `pnpm-workspace.yaml` – workspace definition
+
+---
+
+## Local Development
+
+### Install dependencies
 
 ```bash
 pnpm install
+````
 
-# Frontend (separates Terminal)
+### Frontend (separate terminal)
+
+```bash
 pnpm --filter frontend dev
+```
 
-# API (separates Terminal)
+### API (separate terminal)
+
+```bash
 pnpm --filter api start:dev
 ```
 
-## Wichtige Scripts
+---
+
+## Common Scripts
+
+### Frontend
 
 ```bash
-# Frontend
 pnpm --filter frontend dev
 pnpm --filter frontend build
 pnpm --filter frontend start
 pnpm --filter frontend lint
+```
 
-# API
+### API
+
+```bash
 pnpm --filter api start:dev
 pnpm --filter api build
 pnpm --filter api start:prod
 pnpm --filter api lint
+```
 
-# Tests (API)
+### Tests (API)
+
+```bash
 pnpm --filter api test
 pnpm --filter api test:e2e
 pnpm --filter api test:cov
 ```
 
-## Docker
+---
 
-```bash
-pnpm run docker:build:app
-pnpm run docker:build:api
-pnpm run docker:build:db
-pnpm run docker:build:all
-```
+## Configuration
 
-## Konfiguration
+Local configuration is provided via:
 
-- `apps/api/.env` und `apps/api/.env.local`
+- `apps/api/.env`
+- `apps/api/.env.local`
 - `apps/frontend/.env`
 
-Die konkreten Werte sind projektspezifisch und werden nicht im Repo hinterlegt.
+Concrete values are **project-specific** and are intentionally **not committed** to this repository.
+
+---
+
+## What this is / What this is not
+
+**This is:**
+
+- a public reference for application architecture and structure
+- an example of how Nexonoma is organized at the app level
+- a codebase meant to be read and understood
+
+**This is not:**
+
+- a full open-source product
+- a self-contained demo with data
+- a deployment or infrastructure repository
+
+---
+
+## Status
+
+Active development.
+The overall structure is stable; details evolve iteratively.
