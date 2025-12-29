@@ -411,7 +411,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
         {/* Examples */}
         <section>
           <ExplainableLabel fieldKey="examples">
-            <h2 className="text-xl font-bold text-white mb-4">{t("catalog.detail.sections.examples")} </h2>
+            <h2 className="text-xl font-bold text-white mb-4">{t("asset.properties.examples.label")} </h2>
           </ExplainableLabel>
           {content.examples?.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
