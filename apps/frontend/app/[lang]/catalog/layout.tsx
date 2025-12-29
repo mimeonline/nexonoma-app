@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import de from "../dictionaries/de.json";
 import en from "../dictionaries/en.json";
+import { buildSeoMetadata, SeoLocale } from "../seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -8,7 +9,12 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const title = dict?.seo?.catalog?.title ?? en.seo.catalog.title;
   const description = dict?.seo?.catalog?.description ?? en.seo.catalog.description;
 
-  return { title, description };
+  return buildSeoMetadata({
+    lang: lang as SeoLocale,
+    path: "/catalog",
+    title,
+    description,
+  });
 }
 
 export default function CatalogLayout({ children }: { children: React.ReactNode }) {

@@ -6,17 +6,18 @@ import { buildSeoMetadata, SeoLocale } from "../seo";
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
   const dict = lang === "de" ? de : en;
-  const title = dict?.seo?.grid?.title ?? en.seo.grid.title;
-  const description = dict?.seo?.grid?.description ?? en.seo.grid.description;
+  const title = dict?.preview?.page?.header?.title ?? dict?.preview?.title ?? en.preview.title;
+  const description = dict?.preview?.description ?? en.preview.description;
 
   return buildSeoMetadata({
     lang: lang as SeoLocale,
-    path: "/grid",
+    path: "/preview",
     title,
     description,
+    indexable: false,
   });
 }
 
-export default function GridLayout({ children }: { children: React.ReactNode }) {
-  return <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">{children}</div>;
+export default function PreviewLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

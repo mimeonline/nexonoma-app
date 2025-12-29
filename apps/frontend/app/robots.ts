@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { SEO_BASE_URL } from "./[lang]/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/sandbox"],
     },
-    sitemap: "https://app.nexonoma.de/sitemap.xml",
+    sitemap: `${SEO_BASE_URL}/sitemap.xml`,
   };
 }

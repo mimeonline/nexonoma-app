@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import de from "../dictionaries/de.json";
 import en from "../dictionaries/en.json";
+import { buildSeoMetadata, SeoLocale } from "../seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -8,7 +9,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const title = dict?.seo?.matrix?.title ?? en.seo.matrix.title;
   const description = dict?.seo?.matrix?.description ?? en.seo.matrix.description;
 
-  return { title, description };
+  return buildSeoMetadata({
+    lang: lang as SeoLocale,
+    path: "/matrix",
+    title,
+    description,
+    indexable: false,
+  });
 }
 
 export default function GridLayout({ children }: { children: React.ReactNode }) {

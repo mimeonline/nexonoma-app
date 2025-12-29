@@ -1,11 +1,13 @@
 import { ReadingProgress } from "@/components/molecules/ReadingProgress";
-import { readFile } from "fs/promises";
+import type { Metadata } from "next";
+import { access, readFile } from "fs/promises";
 import matter from "gray-matter";
 import { notFound } from "next/navigation";
 import path from "path";
 import readingTime from "reading-time";
 import { remark } from "remark";
 import html from "remark-html";
+import { buildSeoMetadata, SEO_SUPPORTED_LOCALES, SeoLocale } from "../../../../seo";
 
 type PageParams = {
   lang: string;
@@ -18,26 +20,114 @@ type PageProps = {
   params: Promise<PageParams>;
 };
 
-export default async function ContentPage({ params }: PageProps) {
+type ContentFrontmatter = {
+  title?: string;
+  description?: string;
+  contentType?: string;
+  assetType?: string;
+  updatedAt?: string;
+  locale?: string;
+  version?: string;
+};
+
+const resolveFilePath = (lang: string, contentType: string, assetType: string, slug: string) =>
+  path.join(process.cwd(), "../../content", lang, contentType, assetType, `${slug}.md`);
+
+const loadContent = async (lang: string, contentType: string, assetType: string, slug: string) => {
+  const filePath = resolveFilePath(lang, contentType, assetType, slug);
+
+  const fileContents = await readFile(filePath, "utf8");
+  const { content, data } = matter(fileContents);
+  const stats = readingTime(content);
+  const processed = await remark().use(html).process(content);
+
+  return {
+    content,
+    data: data as ContentFrontmatter,
+    stats,
+    contentHtml: processed.toString(),
+  };
+};
+
+const toPlainText = (value: string) =>
+  value
+    .replace(/`+/g, "")
+    .replace(/!\[.*?\]\(.*?\)/g, "")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .replace(/[#>*_~-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const toStringValue = (value?: string) => (typeof value === "string" ? value : "");
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang, contentType, assetType, slug } = await params;
 
-  if (!lang || !contentType || !assetType || !slug) {
+  if (!lang || !contentType || !assetType || !slug || !SEO_SUPPORTED_LOCALES.includes(lang as SeoLocale)) {
     notFound();
   }
 
-  const filePath = path.join(process.cwd(), "../../content", lang, contentType, assetType, `${slug}.md`);
-
-  let fileContents: string;
+  let data: ContentFrontmatter;
+  let content: string;
   try {
-    fileContents = await readFile(filePath, "utf8");
+    const loaded = await loadContent(lang, contentType, assetType, slug);
+    data = loaded.data;
+    content = loaded.content;
   } catch {
     notFound();
   }
 
-  const { content, data } = matter(fileContents);
-  const stats = readingTime(content);
-  const processed = await remark().use(html).process(content);
-  const contentHtml = processed.toString();
+  const title = toStringValue(data.title).trim().length > 0 ? toStringValue(data.title) : slug.replace(/-/g, " ");
+  const description =
+    toStringValue(data.description).trim().length > 0 ? toStringValue(data.description) : toPlainText(content).slice(0, 160);
+
+  const pathSuffix = `/content/${contentType}/${assetType}/${slug}`;
+  const alternateLocales = await Promise.all(
+    SEO_SUPPORTED_LOCALES.filter((locale) => locale !== lang).map(async (locale) => {
+      try {
+        await access(resolveFilePath(locale, contentType, assetType, slug));
+        return locale;
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  const includeAlternates = alternateLocales.some(Boolean);
+
+  return buildSeoMetadata({
+    lang: lang as SeoLocale,
+    path: pathSuffix,
+    title,
+    description,
+    includeAlternates,
+  });
+}
+
+export default async function ContentPage({ params }: PageProps) {
+  const { lang, contentType, assetType, slug } = await params;
+
+  if (!lang || !contentType || !assetType || !slug || !SEO_SUPPORTED_LOCALES.includes(lang as SeoLocale)) {
+    notFound();
+  }
+
+  let data: ContentFrontmatter;
+  let stats: ReturnType<typeof readingTime>;
+  let contentHtml: string;
+  try {
+    const loaded = await loadContent(lang, contentType, assetType, slug);
+    data = loaded.data;
+    stats = loaded.stats;
+    contentHtml = loaded.contentHtml;
+  } catch {
+    notFound();
+  }
+
+  const contentTypeLabel = toStringValue(data.contentType);
+  const assetTypeLabel = toStringValue(data.assetType);
+  const updatedAt = toStringValue(data.updatedAt);
+  const locale = toStringValue(data.locale) || "de";
+  const version = toStringValue(data.version);
 
   return (
     <>
@@ -48,18 +138,18 @@ export default async function ContentPage({ params }: PageProps) {
             {/* META HEADER */}
             <header className="px-6 pt-6 sm:px-10 lg:px-14 text-[12.5px] text-white/55 flex flex-wrap items-center gap-x-3 gap-y-2">
               <span className="font-medium text-white/70">
-                {data.contentType} • {data.assetType}
+                {contentTypeLabel} • {assetTypeLabel}
               </span>
 
               <span>•</span>
               <span>~{Math.ceil(stats.minutes)} min read</span>
 
-              {data.updatedAt && (
+              {updatedAt && (
                 <>
                   <span>•</span>
                   <span>
                     Updated{" "}
-                    {new Date(data.updatedAt).toLocaleDateString(data.locale || "de", {
+                    {new Date(updatedAt).toLocaleDateString(locale, {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
@@ -68,10 +158,10 @@ export default async function ContentPage({ params }: PageProps) {
                 </>
               )}
 
-              {data.version && (
+              {version && (
                 <>
                   <span>•</span>
-                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-[11px]">v{data.version}</span>
+                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-[11px]">v{version}</span>
                 </>
               )}
             </header>

@@ -1,12 +1,10 @@
 import { MetadataRoute } from "next";
-import de from "./[lang]/dictionaries/de.json";
-import en from "./[lang]/dictionaries/en.json";
+import { SEO_BASE_URL, SEO_SUPPORTED_LOCALES } from "./[lang]/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://app.nexonoma.de";
-  const dictionaries = { de, en };
-  const locales = Object.keys(dictionaries) as Array<keyof typeof dictionaries>;
-  const routes = ["", "/grid", "/matrix", "/city", "/catalog"] as const;
+  const baseUrl = SEO_BASE_URL;
+  const locales = SEO_SUPPORTED_LOCALES;
+  const routes = ["", "/catalog", "/grid"] as const;
 
   const makeUrl = (lang: (typeof locales)[number], route: (typeof routes)[number]) => `${baseUrl}/${lang}${route}`;
 
