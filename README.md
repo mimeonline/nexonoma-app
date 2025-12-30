@@ -35,7 +35,6 @@ Issues are welcome for:
 
 It is not intended for:
 
-- feature requests
 - pull requests
 - usage support
 
