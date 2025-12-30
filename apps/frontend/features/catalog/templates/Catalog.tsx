@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
@@ -21,6 +21,8 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const error: string | null = null;
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<FilterType>("all");
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [page, setPage] = useState(1);
   const { t } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
@@ -67,6 +69,23 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
     });
   }, [items, activeType, search]);
 
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
+
+  const pagedItems = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return filteredItems.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredItems, itemsPerPage, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [activeType, itemsPerPage, search]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
   const typeCounts = useMemo(() => {
     return items.reduce(
       (acc, item) => {
@@ -110,12 +129,30 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-            placeholder={t("catalog.search.placeholder")}
+              placeholder={t("catalog.search.placeholder")}
               className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 focus:outline-none"
             />
           </div>
 
           <TypeFilterChips options={filterTypeOptions} activeType={activeType} onSelect={(type) => setActiveType(type as FilterType)} />
+
+          <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-300">
+              {t("catalog.pagination.itemsPerPage")}
+            </span>
+            <select
+              value={itemsPerPage}
+              onChange={(event) => setItemsPerPage(Number(event.target.value))}
+              className="bg-transparent text-sm text-white focus:outline-none"
+              aria-label={t("catalog.pagination.itemsPerPage")}
+            >
+              {[12, 24, 36, 48].map((value) => (
+                <option key={value} value={value} className="bg-slate-900 text-white">
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {activeType === "all" && (
@@ -176,7 +213,29 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
         </div>
       )}
 
-      {!showCuratedEmptyState && !showFilteredEmptyState && <CatalogGrid items={filteredItems} />}
+      {!showCuratedEmptyState && !showFilteredEmptyState && (
+        <>
+          <CatalogGrid items={pagedItems} />
+
+          {filteredItems.length > 0 && totalPages > 1 && (
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Button variant="secondary" onClick={() => setPage(1)} disabled={page === 1}>
+                {t("catalog.pagination.first")}
+              </Button>
+              <Button variant="secondary" onClick={() => setPage((prev) => Math.max(1, prev - 1))} disabled={page === 1}>
+                {t("catalog.pagination.previous")}
+              </Button>
+              <span className="text-sm text-slate-200/80">{t("catalog.pagination.pageLabel", { page, total: totalPages })}</span>
+              <Button variant="secondary" onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))} disabled={page === totalPages}>
+                {t("catalog.pagination.next")}
+              </Button>
+              <Button variant="secondary" onClick={() => setPage(totalPages)} disabled={page === totalPages}>
+                {t("catalog.pagination.last")}
+              </Button>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }

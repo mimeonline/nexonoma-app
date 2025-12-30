@@ -278,6 +278,14 @@
     "gridMeta": {
       "shortDescriptionFallback": "Keine Kurzbeschreibung vorhanden."
     },
+    "pagination": {
+      "itemsPerPage": "Karten pro Seite",
+      "first": "Erste",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "last": "Letzte",
+      "pageLabel": "Seite {page} von {total}"
+    },
     "detail": {
       "referrer": {
         "back": "Zurück",

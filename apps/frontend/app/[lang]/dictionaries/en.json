@@ -278,6 +278,14 @@
     "gridMeta": {
       "shortDescriptionFallback": "No short description available."
     },
+    "pagination": {
+      "itemsPerPage": "Cards per page",
+      "first": "First",
+      "previous": "Previous",
+      "next": "Next",
+      "last": "Last",
+      "pageLabel": "Page {page} of {total}"
+    },
     "detail": {
       "referrer": {
         "back": "Back",
