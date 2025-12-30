@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/features/i18n/I18nProvider";
 
 type Props = {
@@ -20,11 +20,9 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
   const router = useRouter();
   const { t } = useI18n();
 
-  const state = useMemo<ReferrerState>(() => {
-    if (typeof window === "undefined") {
-      return { canGoBack: false, referrerPath: null };
-    }
+  const [state, setState] = useState<ReferrerState>({ canGoBack: false, referrerPath: null });
 
+  useEffect(() => {
     const historyBackPossible = window.history.length > 1;
     let refPath: string | null = null;
 
@@ -40,13 +38,16 @@ export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Prop
       // ignore parsing issues
     }
 
-    return {
+    setState({
       canGoBack: historyBackPossible || !!refPath,
       referrerPath: refPath,
-    };
+    });
   }, []);
 
-  const cameFromGrid = !!state.referrerPath?.match(/^\/([a-z]{2})(-[A-Z]{2})?\/grid(\/|$)|^\/grid(\/|$)/);
+  const cameFromGrid = useMemo(
+    () => !!state.referrerPath?.match(/^\/([a-z]{2})(-[A-Z]{2})?\/grid(\/|$)|^\/grid(\/|$)/),
+    [state.referrerPath]
+  );
 
   return (
     <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-slate-300">
