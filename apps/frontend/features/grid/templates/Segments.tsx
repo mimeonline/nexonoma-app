@@ -91,6 +91,8 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
     return t(key);
   };
 
+  const toCatalogTypeSlug = (value: string) => value.toLowerCase();
+
   const contents = useMemo(() => (cluster ? flattenContents(cluster) : []), [cluster]);
   const filtered = useMemo(() => filterContents(contents, activeSegment, activeType), [contents, activeSegment, activeType]);
   const hasAnyContent = contents.length > 0;
@@ -193,7 +195,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.length > 0 &&
             filtered.map((item) => (
-              <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
+              <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
                 <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
                   <CardHeader className="pb-2 space-y-0">
                     <div className="flex items-start justify-between gap-2">
@@ -261,7 +263,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
 
                 <div className="flex flex-col gap-3 p-4 flex-1">
                   {items.map((item) => (
-                    <Link key={item.slug} href={`/catalog/${item.type}/${item.slug}`}>
+                    <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
                       <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer bg-nexo-card">
                         <div className="flex items-center justify-between mb-2">
                           <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">

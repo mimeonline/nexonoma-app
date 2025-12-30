@@ -20,10 +20,12 @@ export function CatalogGrid({ items }: CatalogGridProps) {
     return t(key);
   };
 
+  const toCatalogTypeSlug = (value: string) => value.toLowerCase();
+
   return (
     <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {items.map((item) => (
-        <Link key={`${item.id}-${item.slug}`} href={`/catalog/${item.type}/${item.slug}`} className="block">
+        <Link key={`${item.id}-${item.slug}`} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`} className="block">
           <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
             <CardHeader className="pb-2 space-y-0">
               <div className="flex items-start">
