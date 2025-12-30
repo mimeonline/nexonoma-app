@@ -219,17 +219,19 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
           {filteredItems.length > 0 && totalPages > 1 && (
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Button variant="secondary" onClick={() => setPage(1)} disabled={page === 1}>
+              <Button variant="ghost" onClick={() => setPage(1)} disabled={page === 1}>
                 {t("catalog.pagination.first")}
               </Button>
               <Button variant="secondary" onClick={() => setPage((prev) => Math.max(1, prev - 1))} disabled={page === 1}>
                 {t("catalog.pagination.previous")}
               </Button>
-              <span className="text-sm text-slate-200/80">{t("catalog.pagination.pageLabel", { page, total: totalPages })}</span>
-              <Button variant="secondary" onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))} disabled={page === totalPages}>
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">
+                {t("catalog.pagination.pageLabel", { page, total: totalPages })}
+              </span>
+              <Button variant="primary" onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))} disabled={page === totalPages}>
                 {t("catalog.pagination.next")}
               </Button>
-              <Button variant="secondary" onClick={() => setPage(totalPages)} disabled={page === totalPages}>
+              <Button variant="ghost" onClick={() => setPage(totalPages)} disabled={page === totalPages}>
                 {t("catalog.pagination.last")}
               </Button>
             </div>
