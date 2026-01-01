@@ -461,7 +461,7 @@
       },
       "principles": {
         "label": "Prinzipien",
-        "description": "Grundprinzipien und Heuristiken für die Verwendung, Gestaltung und Bewertung von AssetBlock."
+        "description": "Normative Regeln, Leitlinien oder Heuristiken, die für die Anwendung oder Bewertung dieses Assets maßgeblich sind."
       },
       "valueStreamStage": {
         "label": "Value Stream",

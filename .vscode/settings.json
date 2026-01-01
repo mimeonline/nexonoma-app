@@ -1,8 +1,15 @@
 {
-    "i18n-ally.localesPaths": [
-        "apps/api/src/i18n",
-        "apps/frontend/components/i18n",
-        "apps/frontend/features/i18n",
-        "apps/frontend/lib/i18n"
-    ]
+  "i18n-ally.localesPaths": [
+    "apps/api/src/i18n",
+    "apps/frontend/app/**/dictionaries",
+    "apps/frontend/components/i18n",
+    "apps/frontend/features/i18n",
+    "apps/frontend/lib/i18n"
+  ],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.displayLanguage": "de",
+  "i18n-ally.enabledFrameworks": ["next-intl"],
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.autoDetection": true
 }

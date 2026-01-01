@@ -542,7 +542,7 @@
       },
       "principles": {
         "label": "Principles",
-        "description": "Core principles and heuristics for using, designing, and evaluating the AssetBlock."
+        "description": "Normative rules, guidelines, or heuristics that are essential for applying or evaluating this asset."
       },
       "valueStreamStage": {
         "label": "Value stream stage",
