@@ -111,12 +111,6 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 <span className="text-sm text-red-400 font-medium">{t(enumLabel("cognitiveLoad", content.cognitiveLoad))}</span>
               </div>
             )}
-            {content.status && (
-              <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
-                <span className="text-xs text-slate-500 uppercase font-semibold">{t("asset.properties.status.label")}</span>
-                <span className="text-sm text-slate-300 font-medium">{t(enumLabel("status", content.status))}</span>
-              </div>
-            )}
           </div>
         </div>
       </section>
