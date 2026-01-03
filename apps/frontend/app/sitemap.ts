@@ -3,6 +3,7 @@ import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 import path from "path";
 import { SEO_BASE_URL, SEO_SUPPORTED_LOCALES } from "./[lang]/seo";
+import { getIndexableCatalogEntries } from "@/services/catalogIndex";
 
 type ContentIndexEntry = {
   locales: Set<(typeof SEO_SUPPORTED_LOCALES)[number]>;
@@ -11,6 +12,12 @@ type ContentIndexEntry = {
 
 const CONTENT_ROOT = path.join(process.cwd(), "../../content");
 const ROUTES = ["", "/catalog", "/grid"] as const;
+const CATALOG_TYPE_ROUTE_MAP: Record<string, string> = {
+  CONCEPT: "concept",
+  METHOD: "method",
+  TOOL: "tool",
+  TECHNOLOGY: "technology",
+};
 
 const isValidDate = (value: unknown) => {
   if (typeof value !== "string") return false;
@@ -97,6 +104,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const locales = SEO_SUPPORTED_LOCALES;
 
   const makeUrl = (lang: (typeof locales)[number], route: string) => `${baseUrl}/${lang}${route}`;
+  const normalizeUpdatedAt = (value?: string) => (isValidDate(value) ? new Date(value as string) : undefined);
 
   const staticEntries = ROUTES.flatMap((route) => {
     const alternates = {
@@ -124,5 +132,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
   });
 
-  return [...staticEntries, ...dynamicEntries];
+  const catalogEntries = await getIndexableCatalogEntries(locales);
+  const detailEntries = catalogEntries.flatMap((entry) => {
+    const routeType = CATALOG_TYPE_ROUTE_MAP[entry.type?.toString().toUpperCase()];
+    if (!routeType) return [];
+
+    const route = `/catalog/${routeType}/${entry.slug}`;
+    const localesForRoute = entry.availableLanguages.length > 0 ? entry.availableLanguages : locales;
+    const alternates = {
+      languages: Object.fromEntries(localesForRoute.map((lang) => [lang, makeUrl(lang, route)])),
+    };
+    const lastModified = normalizeUpdatedAt(entry.updatedAt);
+
+    return localesForRoute.map((lang) => ({
+      url: makeUrl(lang, route),
+      ...(lastModified ? { lastModified } : {}),
+      alternates,
+    }));
+  });
+
+  const deduped = new Map<string, MetadataRoute.Sitemap[number]>();
+  [...staticEntries, ...dynamicEntries, ...detailEntries].forEach((entry) => {
+    deduped.set(entry.url, entry);
+  });
+
+  return Array.from(deduped.values());
 }

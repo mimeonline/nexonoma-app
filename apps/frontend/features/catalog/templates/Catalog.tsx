@@ -104,7 +104,6 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
     );
   }, [items]);
 
-  const totalCount = items.length;
   const hasItems = items.length > 0;
   const showFilteredEmptyState = !loading && !error && hasItems && filteredItems.length === 0;
   const showCuratedEmptyState = !loading && !error && !hasItems;
