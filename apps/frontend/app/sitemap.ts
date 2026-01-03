@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { readdir, readFile } from "fs/promises";
 import matter from "gray-matter";
 import path from "path";
-import { SEO_BASE_URL, SEO_SUPPORTED_LOCALES } from "./[lang]/seo";
+import { SEO_BASE_URL, SEO_SUPPORTED_LOCALES, type SeoLocale } from "./[lang]/seo";
 import { getIndexableCatalogEntries } from "@/services/catalogIndex";
 
 type ContentIndexEntry = {
@@ -139,12 +139,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const route = `/catalog/${routeType}/${entry.slug}`;
     const localesForRoute = entry.availableLanguages.length > 0 ? entry.availableLanguages : locales;
+    const safeLocales = localesForRoute.filter((lang): lang is SeoLocale => locales.includes(lang as SeoLocale));
     const alternates = {
-      languages: Object.fromEntries(localesForRoute.map((lang) => [lang, makeUrl(lang, route)])),
+      languages: Object.fromEntries(safeLocales.map((lang) => [lang, makeUrl(lang, route)])),
     };
     const lastModified = normalizeUpdatedAt(entry.updatedAt);
 
-    return localesForRoute.map((lang) => ({
+    return safeLocales.map((lang) => ({
       url: makeUrl(lang, route),
       ...(lastModified ? { lastModified } : {}),
       alternates,

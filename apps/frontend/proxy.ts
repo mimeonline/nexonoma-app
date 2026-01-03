@@ -40,7 +40,7 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const locale = defaultLocale;
+  const locale = getLocale(request);
   const url = request.nextUrl.clone();
   url.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
   return NextResponse.redirect(url, 308);
