@@ -421,7 +421,7 @@
         "DESIGN_DECISION": { "label": "Design", "description": "Beeinflusst Entscheidungen auf Design- oder Musterebene." },
         "ARCHITECTURAL_DECISION": { "label": "Architektur", "description": "Beeinflusst die Architektur des Systems." },
         "ORGANIZATIONAL_DECISION": { "label": "Organisation", "description": "Beeinflusst organisatorische Strukturen und Prozesse." },
-        "TECHNICAL_DECISION": { "label": "Technisch", "description": "Beeinflusst technische Implementierungen." }
+        "TECHNOLOGY_DECISION": { "label": "Technisch", "description": "Beeinflusst technische Implementierungen." }
       },
       "valueStreamStage": {
         "DISCOVERY": { "label": "Erkundung", "description": "Erkundung, Forschung und Problembewusstsein." },
