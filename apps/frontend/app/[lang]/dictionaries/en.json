@@ -256,6 +256,7 @@
     "sortBy": "Sort by",
     "page": {
       "heading": "Nexonoma Catalog",
+      "totalCountSuffix": "building blocks · concepts, methods, tools & technologies",
       "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
     },
     "search": {

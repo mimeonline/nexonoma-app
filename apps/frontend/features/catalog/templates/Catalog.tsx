@@ -28,6 +28,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const router = useRouter();
   const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
   const localePrefix = locale ? `/${locale}` : "";
+  const formattedTotalCount = useMemo(() => new Intl.NumberFormat(locale ?? "en").format(items.length), [items.length, locale]);
 
   const filterTypeOptions = useMemo(
     () =>
@@ -103,6 +104,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
     );
   }, [items]);
 
+  const totalCount = items.length;
   const hasItems = items.length > 0;
   const showFilteredEmptyState = !loading && !error && hasItems && filteredItems.length === 0;
   const showCuratedEmptyState = !loading && !error && !hasItems;
@@ -114,6 +116,10 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold sm:text-4xl">{t("catalog.page.heading")}</h1>
+            <p className="text-sm text-slate-200/70">
+              <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
+              <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
+            </p>
             <p className="max-w-2xl text-base text-slate-200/80">{t("catalog.page.description")}</p>
           </div>
         </div>

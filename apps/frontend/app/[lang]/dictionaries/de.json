@@ -256,6 +256,7 @@
     "sortBy": "Sortieren nach",
     "page": {
       "heading": "Alle Bausteine im Fokus",
+      "totalCountSuffix": "Bausteine · Konzepte, Methoden, Tools & Technologien",
       "description": "Dein zentrales Inventar. Finde Konzepte, Methoden, Tools und Technologien an einem Ort – filterbar, durchsuchbar und der Startpunkt für jede Analyse."
     },
     "search": {
