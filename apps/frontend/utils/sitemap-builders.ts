@@ -1,87 +1,87 @@
-import { SEO_SUPPORTED_LOCALES, type SeoLocale } from "@/app/[lang]/seo";
-import { getIndexableCatalogEntries } from "@/services/catalogIndex";
+import { SEO_SUPPORTED_LOCALES, type SeoLocale } from "../app/[lang]/seo";
+import { fetchSitemapNodesPage, type SitemapNode } from "../services/sitemapNodes";
 import {
-  CONTENT_TYPE_ORDER,
   CONTENT_TYPE_ROUTE_MAP,
   dedupeEntries,
   formatLastmod,
   isValidSlug,
   resolveSitemapLocales,
   sortEntriesByTypeSlugIdLang,
-  sortEntriesByTypeThenSlug,
   type SitemapEntry,
   type SortableSitemapEntry,
-  type SitemapVariant,
   urlForAsset,
-} from "@/utils/sitemap";
-import { fetchSitemapNodesPage, type SitemapNode } from "@/services/sitemapNodes";
+} from "./sitemap";
+
+const STATIC_SITEMAP_PAGES = [
+  "/de/",
+  "/en/",
+  "/de/catalog",
+  "/en/catalog",
+  "/de/grid",
+  "/en/grid",
+  "/de/preview",
+  "/en/preview",
+] as const;
 
 const toTypeKey = (value?: string) => (value ? value.toString().toUpperCase() : "");
 
 const resolveLocales = (available: string[] | undefined, fallback: readonly SeoLocale[]) =>
   resolveSitemapLocales(available, fallback).filter((locale): locale is SeoLocale => fallback.includes(locale as SeoLocale));
 
-const buildCatalogEntriesForTypes = async (
+const buildUrl = (baseUrl: string, path: string) => {
+  const normalizedBase = baseUrl.replace(/\/$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${normalizedBase}${normalizedPath}`;
+};
+
+export const buildSitemapPagesEntries = (baseUrl: string, now: Date = new Date()): SitemapEntry[] => {
+  const lastmod = formatLastmod(now);
+  return STATIC_SITEMAP_PAGES.map((path) => ({
+    loc: buildUrl(baseUrl, path),
+    lastmod,
+  }));
+};
+
+export const mapAssetsToSitemapEntries = (
+  assets: SitemapNode[],
   baseUrl: string,
-  variant: SitemapVariant,
-  types: string[],
-  includeReview = false
-) => {
-  const catalogEntries = await getIndexableCatalogEntries(SEO_SUPPORTED_LOCALES, { includeReview });
+  locales: readonly SeoLocale[]
+): SitemapEntry[] => {
   const entries: SortableSitemapEntry[] = [];
 
-  catalogEntries.forEach((entry) => {
-    const typeKey = toTypeKey(entry.type);
-    if (!types.includes(typeKey)) return;
-    if (!isValidSlug(entry.slug)) return;
+  assets.forEach((asset) => {
+    const typeKey = toTypeKey(asset.type);
+    if (!CONTENT_TYPE_ROUTE_MAP[typeKey]) return;
+    if (!isValidSlug(asset.slug)) return;
 
-    const lastmod = formatLastmod(entry.updatedAt) ?? formatLastmod(entry.createdAt);
-    if (!lastmod) return;
+    const assetLastmod = formatLastmod(asset.updatedAt) ?? formatLastmod(asset.createdAt);
+    const resolvedLocales = resolveLocales(asset.availableLanguages, locales);
+    if (resolvedLocales.length === 0) return;
 
-    const locales = resolveLocales(entry.availableLanguages, SEO_SUPPORTED_LOCALES);
-    locales.forEach((locale) => {
-      const loc = urlForAsset({ type: typeKey, slug: entry.slug }, { baseUrl, locale, variant });
+    resolvedLocales.forEach((locale) => {
+      const loc = urlForAsset({ type: typeKey, slug: asset.slug }, { baseUrl, locale });
       if (!loc) return;
-      entries.push({ loc, lastmod, type: typeKey, slug: entry.slug, id: entry.id, locale });
+      entries.push({
+        loc,
+        lastmod: assetLastmod,
+        type: typeKey,
+        slug: asset.slug,
+        id: asset.id,
+        locale,
+      });
     });
   });
 
-  const ordered = sortEntriesByTypeThenSlug(entries, CONTENT_TYPE_ORDER);
+  const ordered = sortEntriesByTypeSlugIdLang(entries);
   return dedupeEntries(ordered).map(({ loc, lastmod }) => ({ loc, lastmod }));
 };
 
-export const buildCatalogTypeSitemapEntries = async (baseUrl: string, variant: SitemapVariant, type: string) => {
+export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<SitemapEntry[]> => {
   const includeReview = process.env.INCLUDE_REVIEW_IN_SITEMAP === "true";
-  return buildCatalogEntriesForTypes(baseUrl, variant, [toTypeKey(type)], includeReview);
-};
-
-export type NodeSitemapStats = {
-  loaded: number;
-  included: number;
-  skipped: number;
-  reasonBreakdown: Record<string, number>;
-};
-
-export const buildCatalogNodeSitemapPayload = async (
-  baseUrl: string,
-  variant: SitemapVariant
-): Promise<{ entries: SitemapEntry[]; stats: NodeSitemapStats }> => {
-  const includeReview = process.env.INCLUDE_REVIEW_IN_SITEMAP === "true";
-  const stats: NodeSitemapStats = {
-    loaded: 0,
-    included: 0,
-    skipped: 0,
-    reasonBreakdown: {},
-  };
-  const entries: SortableSitemapEntry[] = [];
-
-  const bump = (reason: string) => {
-    stats.reasonBreakdown[reason] = (stats.reasonBreakdown[reason] ?? 0) + 1;
-  };
-
   const limit = 1000;
   let page = 1;
   let nodes: SitemapNode[] = [];
+  const all: SitemapNode[] = [];
 
   do {
     nodes = await fetchSitemapNodesPage({
@@ -90,66 +90,9 @@ export const buildCatalogNodeSitemapPayload = async (
       includeReview,
       langs: SEO_SUPPORTED_LOCALES,
     });
-    stats.loaded += nodes.length;
-
-    nodes.forEach((entry) => {
-      const typeKey = toTypeKey(entry.type);
-    if (!CONTENT_TYPE_ROUTE_MAP[typeKey]) {
-      bump("missingTypeMapping");
-      return;
-    }
-    if (!isValidSlug(entry.slug)) {
-      bump("invalidSlug");
-      return;
-    }
-
-    const lastmod = formatLastmod(entry.updatedAt) ?? formatLastmod(entry.createdAt);
-    if (!lastmod) {
-      bump("missingLastmod");
-      return;
-    }
-
-    const locales = resolveLocales(entry.availableLanguages, SEO_SUPPORTED_LOCALES);
-    if (locales.length === 0) {
-      bump("noLocales");
-      return;
-    }
-
-    locales.forEach((locale) => {
-      const loc = urlForAsset({ type: typeKey, slug: entry.slug }, { baseUrl, locale, variant });
-      if (!loc) return;
-      entries.push({ loc, lastmod, type: typeKey, slug: entry.slug, id: entry.id, locale });
-    });
-    });
-
+    all.push(...nodes);
     page += 1;
   } while (nodes.length === limit);
 
-  const ordered = sortEntriesByTypeSlugIdLang(entries, CONTENT_TYPE_ORDER);
-  const deduped = dedupeEntries(ordered).map(({ loc, lastmod }) => ({ loc, lastmod }));
-  stats.included = deduped.length;
-  stats.skipped = Object.values(stats.reasonBreakdown).reduce((sum, value) => sum + value, 0);
-
-  return { entries: deduped, stats };
+  return mapAssetsToSitemapEntries(all, baseUrl, SEO_SUPPORTED_LOCALES);
 };
-
-export const buildCatalogNodeSitemapEntries = async (baseUrl: string, variant: SitemapVariant): Promise<SitemapEntry[]> => {
-  const payload = await buildCatalogNodeSitemapPayload(baseUrl, variant);
-  return payload.entries;
-};
-
-export const buildCatalogListSitemapEntries = (baseUrl: string, _variant: SitemapVariant): SitemapEntry[] => {
-  const lastmod = formatLastmod(new Date());
-  const entries: SortableSitemapEntry[] = SEO_SUPPORTED_LOCALES.map((locale) => ({
-    loc: `${baseUrl}/${locale}/catalog`,
-    lastmod,
-    type: "CATALOG",
-    slug: locale,
-    locale,
-  }));
-
-  const ordered = sortEntriesByTypeThenSlug(entries, ["CATALOG"]);
-  return dedupeEntries(ordered).map(({ loc, lastmod: entryLastmod }) => ({ loc, lastmod: entryLastmod }));
-};
-
-export const isCatalogType = (value: string) => !!CONTENT_TYPE_ROUTE_MAP[value];

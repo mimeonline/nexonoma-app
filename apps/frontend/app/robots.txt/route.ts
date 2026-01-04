@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { resolveBaseUrl, resolveSitemapVariant } from "@/utils/sitemap-server";
+import { getPublicBaseUrl } from "@/utils/sitemap-server";
 
 const buildRobots = (baseUrl: string) => {
   return [
@@ -17,8 +17,7 @@ const buildRobots = (baseUrl: string) => {
 };
 
 export async function GET(request: NextRequest) {
-  const variant = resolveSitemapVariant(request);
-  const baseUrl = resolveBaseUrl(request, variant);
+  const baseUrl = getPublicBaseUrl(request);
   const body = buildRobots(baseUrl);
 
   return new NextResponse(body, {

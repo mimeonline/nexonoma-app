@@ -3,6 +3,7 @@ import {
   dedupeEntries,
   formatLastmod,
   isValidSlug,
+  renderSitemapIndexXml,
   renderSitemapXml,
   resolveSitemapLocales,
   sortEntriesByTypeSlugIdLang,
@@ -12,7 +13,7 @@ import {
 
 describe("sitemap utils", () => {
   it("maps catalog types to catalog detail routes", () => {
-    const context = { baseUrl: "https://app.nexonoma.de", locale: "de", variant: "app" } as const;
+    const context = { baseUrl: "https://app.nexonoma.de", locale: "de" } as const;
 
     expect(urlForAsset({ type: "CONCEPT", slug: "event-storming" }, context)).toBe(
       "https://app.nexonoma.de/de/catalog/concept/event-storming"
@@ -27,7 +28,7 @@ describe("sitemap utils", () => {
   });
 
   it("maps core grid assets and segments", () => {
-    const context = { baseUrl: "https://nexonoma.de", locale: "en", variant: "site" } as const;
+    const context = { baseUrl: "https://nexonoma.de", locale: "en" } as const;
 
     expect(urlForAsset({ type: "MACRO_CLUSTER", slug: "architecture" }, context)).toBe(
       "https://nexonoma.de/en/grid/architecture"
@@ -41,7 +42,7 @@ describe("sitemap utils", () => {
   });
 
   it("returns null for invalid slugs or unknown types", () => {
-    const context = { baseUrl: "https://app.nexonoma.de", locale: "de", variant: "app" } as const;
+    const context = { baseUrl: "https://app.nexonoma.de", locale: "de" } as const;
 
     expect(urlForAsset({ type: "UNKNOWN", slug: "test" }, context)).toBeNull();
     expect(urlForAsset({ type: "CONCEPT", slug: "bad/slug" }, context)).toBeNull();
@@ -80,8 +81,21 @@ describe("sitemap utils", () => {
     ]);
 
     expect(xml.startsWith("<?xml")).toBe(true);
-    expect(xml.includes("<urlset")).toBe(true);
+    expect(xml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')).toBe(true);
+    expect(xml.includes("<loc>https://nexonoma.de/a</loc>")).toBe(true);
     expect(xml.match(/<url>/g)?.length).toBe(2);
+  });
+
+  it("renders basic sitemap index xml", () => {
+    const xml = renderSitemapIndexXml([
+      { loc: "https://nexonoma.de/sitemap-pages.xml" },
+      { loc: "https://nexonoma.de/sitemap-catalog.xml" },
+    ]);
+
+    expect(xml.startsWith("<?xml")).toBe(true);
+    expect(xml.includes('<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')).toBe(true);
+    expect(xml.includes("<loc>https://nexonoma.de/sitemap-pages.xml</loc>")).toBe(true);
+    expect(xml.match(/<sitemap>/g)?.length).toBe(2);
   });
 
   it("sorts deterministically by type, slug, id, lang", () => {
@@ -92,7 +106,7 @@ describe("sitemap utils", () => {
       { loc: "d", type: "METHOD", slug: "alpha", id: "1", locale: "en" },
     ];
 
-    const ordered = sortEntriesByTypeSlugIdLang(entries, ["CONCEPT", "METHOD"]);
+    const ordered = sortEntriesByTypeSlugIdLang(entries);
     expect(ordered.map((entry) => entry.loc)).toEqual(["a", "c", "d", "b"]);
   });
 });

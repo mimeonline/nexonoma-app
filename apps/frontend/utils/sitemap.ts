@@ -10,12 +10,9 @@ export type SortableSitemapEntry = SitemapEntry & {
   locale?: string;
 };
 
-export type SitemapVariant = "site" | "app";
-
 export type UrlForAssetContext = {
   baseUrl: string;
   locale: string;
-  variant: SitemapVariant;
 };
 
 export type UrlForAssetInput = {
@@ -31,9 +28,6 @@ export const CONTENT_TYPE_ROUTE_MAP: Record<string, string> = {
   TOOL: "tool",
   TECHNOLOGY: "technology",
 };
-
-export const CORE_TYPE_ORDER = ["MACRO_CLUSTER", "CLUSTER", "CLUSTER_VIEW", "SEGMENT"] as const;
-export const CONTENT_TYPE_ORDER = ["CONCEPT", "METHOD", "TOOL", "TECHNOLOGY"] as const;
 
 const normalizeBaseUrl = (value: string) => value.replace(/\/$/, "");
 
@@ -62,32 +56,10 @@ export const formatLastmod = (value?: string | Date): string | undefined => {
   return date.toISOString();
 };
 
-export const sortEntriesByTypeThenSlug = (
-  entries: SortableSitemapEntry[],
-  typeOrder: readonly string[]
-): SortableSitemapEntry[] => {
-  const orderMap = new Map(typeOrder.map((type, index) => [type, index]));
+export const sortEntriesByTypeSlugIdLang = (entries: SortableSitemapEntry[]): SortableSitemapEntry[] => {
   return [...entries].sort((a, b) => {
-    const typeA = orderMap.get(a.type) ?? Number.MAX_SAFE_INTEGER;
-    const typeB = orderMap.get(b.type) ?? Number.MAX_SAFE_INTEGER;
-    if (typeA !== typeB) return typeA - typeB;
-    const slugCompare = a.slug.localeCompare(b.slug);
-    if (slugCompare !== 0) return slugCompare;
-    const localeA = a.locale ?? "";
-    const localeB = b.locale ?? "";
-    return localeA.localeCompare(localeB);
-  });
-};
-
-export const sortEntriesByTypeSlugIdLang = (
-  entries: SortableSitemapEntry[],
-  typeOrder: readonly string[]
-): SortableSitemapEntry[] => {
-  const orderMap = new Map(typeOrder.map((type, index) => [type, index]));
-  return [...entries].sort((a, b) => {
-    const typeA = orderMap.get(a.type) ?? Number.MAX_SAFE_INTEGER;
-    const typeB = orderMap.get(b.type) ?? Number.MAX_SAFE_INTEGER;
-    if (typeA !== typeB) return typeA - typeB;
+    const typeCompare = a.type.localeCompare(b.type);
+    if (typeCompare !== 0) return typeCompare;
 
     const slugCompare = a.slug.localeCompare(b.slug);
     if (slugCompare !== 0) return slugCompare;

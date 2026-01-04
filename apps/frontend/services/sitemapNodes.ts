@@ -22,12 +22,7 @@ const getApiBase = () => {
   return apiBase;
 };
 
-export const fetchSitemapNodesPage = async ({
-  page,
-  limit,
-  includeReview,
-  langs,
-}: SitemapNodePageParams): Promise<SitemapNode[]> => {
+export const fetchSitemapNodesPage = async ({ page, limit, includeReview, langs }: SitemapNodePageParams): Promise<SitemapNode[]> => {
   const searchParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),

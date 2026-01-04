@@ -3,13 +3,20 @@ import { getPublicBaseUrl } from "../sitemap-server";
 
 type MockRequest = {
   url: string;
-  headers: Map<string, string>;
+  headers: {
+    get: (key: string) => string | null;
+  };
 };
 
 const makeRequest = (url: string, headers?: Record<string, string>): MockRequest => {
-  const map = new Map<string, string>();
-  Object.entries(headers ?? {}).forEach(([key, value]) => map.set(key, value));
-  return { url, headers: map };
+  const headerMap = new Map<string, string>();
+  Object.entries(headers ?? {}).forEach(([key, value]) => headerMap.set(key.toLowerCase(), value));
+  return {
+    url,
+    headers: {
+      get: (key: string) => headerMap.get(key.toLowerCase()) ?? null,
+    },
+  };
 };
 
 describe("getPublicBaseUrl", () => {
@@ -18,7 +25,7 @@ describe("getPublicBaseUrl", () => {
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://app.nexonoma.de");
 
     const request = makeRequest("http://e4fe240c1154:3000/sitemap.xml");
-    const result = getPublicBaseUrl(request as any, "app");
+    const result = getPublicBaseUrl(request);
 
     expect(result).toBe("https://app.nexonoma.de");
   });
@@ -28,7 +35,7 @@ describe("getPublicBaseUrl", () => {
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "");
 
     const request = makeRequest("http://localhost:3000/sitemap.xml");
-    const result = getPublicBaseUrl(request as any, "app");
+    const result = getPublicBaseUrl(request);
 
     expect(result).toBe("http://localhost:3000");
   });
@@ -41,7 +48,7 @@ describe("getPublicBaseUrl", () => {
       "x-forwarded-proto": "https",
       "x-forwarded-host": "app.nexonoma.de",
     });
-    const result = getPublicBaseUrl(request as any, "app");
+    const result = getPublicBaseUrl(request);
 
     expect(result).toBe("https://app.nexonoma.de");
   });
