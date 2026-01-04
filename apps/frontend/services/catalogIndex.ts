@@ -3,9 +3,11 @@ import type { CatalogItem } from "@/types/catalog";
 import { AssetStatus } from "@/types/nexonoma";
 
 export type IndexableCatalogEntry = {
+  id: string;
   slug: string;
   type: string;
   updatedAt?: string;
+  createdAt?: string;
   availableLanguages: string[];
 };
 
@@ -32,29 +34,40 @@ const fetchCatalogForLocale = async (lang: string): Promise<CatalogItem[]> => {
       return [];
     }
 
-    return rawData.map(mapToCatalogItem).filter((item) => item.status === AssetStatus.PUBLISHED && item.slug && item.type);
+    return rawData.map(mapToCatalogItem).filter((item) => item.slug && item.type);
   } catch {
     return [];
   }
 };
 
-export const getIndexableCatalogEntries = async (locales: readonly string[]): Promise<IndexableCatalogEntry[]> => {
+export const getIndexableCatalogEntries = async (
+  locales: readonly string[],
+  options?: { includeReview?: boolean }
+): Promise<IndexableCatalogEntry[]> => {
+  const includeReview = options?.includeReview ?? false;
   const entries = new Map<string, { entry: IndexableCatalogEntry; locales: Set<string> }>();
 
   await Promise.all(
     locales.map(async (lang) => {
       const items = await fetchCatalogForLocale(lang);
       items.forEach((item) => {
+        const isPublished = item.status === AssetStatus.PUBLISHED;
+        const isReview = includeReview && item.status === AssetStatus.REVIEW;
+        if (!isPublished && !isReview) return;
+
         const key = `${item.type}::${item.slug}`;
         const existing = entries.get(key);
         const updatedAt = item.updatedAt;
+        const createdAt = item.createdAt;
 
         if (!existing) {
           entries.set(key, {
             entry: {
+              id: item.id,
               slug: item.slug,
               type: item.type?.toString() ?? "",
               updatedAt,
+              createdAt,
               availableLanguages: [],
             },
             locales: new Set([lang]),
@@ -65,6 +78,9 @@ export const getIndexableCatalogEntries = async (locales: readonly string[]): Pr
         existing.locales.add(lang);
         if (updatedAt && (!existing.entry.updatedAt || new Date(updatedAt) > new Date(existing.entry.updatedAt))) {
           existing.entry.updatedAt = updatedAt;
+        }
+        if (createdAt && (!existing.entry.createdAt || new Date(createdAt) > new Date(existing.entry.createdAt))) {
+          existing.entry.createdAt = createdAt;
         }
       });
     })

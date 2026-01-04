@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 // 1. Controller (Infrastructure -> Driving Adapter)
 import { CatalogController } from './infrastructure/http/catalog.controller';
 import { GridController } from './infrastructure/http/grid.controller';
+import { PublicSitemapController } from './infrastructure/http/public-sitemap.controller';
 
 // 2. Use Cases (Application Layer)
 import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-content.use-case';
@@ -21,7 +22,7 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer
-  controllers: [GridController, CatalogController],
+  controllers: [GridController, CatalogController, PublicSitemapController],
   providers: [
     // A) Hilfsklassen
     AssetMapper,

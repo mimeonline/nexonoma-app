@@ -22,13 +22,16 @@ function shouldRedirect(pathname: string) {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  const isSitemap =
+    pathname === "/sitemap.xml" || (pathname.startsWith("/sitemap-") && pathname.endsWith(".xml"));
+
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname === "/favicon.ico" ||
     pathname === "/robots.txt" ||
-    pathname === "/sitemap.xml" ||
-    /\.[a-zA-Z0-9]+$/.test(pathname)
+    isSitemap ||
+    /\\.[a-zA-Z0-9]+$/.test(pathname)
   ) {
     return NextResponse.next();
   }

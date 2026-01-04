@@ -39,6 +39,32 @@ pnpm --filter frontend lint
 
 ---
 
+## SEO: Sitemaps
+
+Local verification (dev server):
+
+```bash
+pnpm --filter frontend dev
+```
+
+App sitemap index:
+
+```bash
+curl -H "Host: app.nexonoma.de" http://localhost:3000/sitemap.xml
+```
+
+Site sitemap index:
+
+```bash
+curl -H "Host: nexonoma.de" http://localhost:3000/sitemap.xml
+```
+
+Google Search Console:
+
+Submit **only** the sitemap index: `/sitemap.xml` (per host).
+
+---
+
 ## Configuration
 
 Local configuration is provided via:
