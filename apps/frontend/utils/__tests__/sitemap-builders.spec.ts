@@ -59,13 +59,15 @@ describe("sitemap builders", () => {
       },
     ];
 
-    const entries = mapAssetsToSitemapEntries(assets, "https://app.nexonoma.de", ["de", "en"]);
+    const result = mapAssetsToSitemapEntries(assets, "https://app.nexonoma.de", ["de", "en"]);
 
-    expect(entries.map((entry) => entry.loc)).toEqual([
+    expect(result.entries.map((entry) => entry.loc)).toEqual([
       "https://app.nexonoma.de/de/catalog/concept/alpha",
       "https://app.nexonoma.de/en/catalog/concept/alpha",
       "https://app.nexonoma.de/de/catalog/method/beta",
       "https://app.nexonoma.de/en/catalog/method/beta",
     ]);
+    expect(result.skipped).toBe(1);
+    expect(result.total).toBe(5);
   });
 });

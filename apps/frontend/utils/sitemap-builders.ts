@@ -46,22 +46,35 @@ export const mapAssetsToSitemapEntries = (
   assets: SitemapNode[],
   baseUrl: string,
   locales: readonly SeoLocale[]
-): SitemapEntry[] => {
-  const entries: SortableSitemapEntry[] = [];
+): { entries: SitemapEntry[]; skipped: number; total: number } => {
+  const sortable: SortableSitemapEntry[] = [];
+  let skipped = 0;
 
   assets.forEach((asset) => {
     const typeKey = toTypeKey(asset.type);
-    if (!CONTENT_TYPE_ROUTE_MAP[typeKey]) return;
-    if (!isValidSlug(asset.slug)) return;
+    if (!CONTENT_TYPE_ROUTE_MAP[typeKey]) {
+      skipped += 1;
+      return;
+    }
+    if (!isValidSlug(asset.slug)) {
+      skipped += 1;
+      return;
+    }
 
     const assetLastmod = formatLastmod(asset.updatedAt) ?? formatLastmod(asset.createdAt);
     const resolvedLocales = resolveLocales(asset.availableLanguages, locales);
-    if (resolvedLocales.length === 0) return;
+    if (resolvedLocales.length === 0) {
+      skipped += 1;
+      return;
+    }
 
     resolvedLocales.forEach((locale) => {
       const loc = urlForAsset({ type: typeKey, slug: asset.slug }, { baseUrl, locale });
-      if (!loc) return;
-      entries.push({
+      if (!loc) {
+        skipped += 1;
+        return;
+      }
+      sortable.push({
         loc,
         lastmod: assetLastmod,
         type: typeKey,
@@ -72,27 +85,19 @@ export const mapAssetsToSitemapEntries = (
     });
   });
 
-  const ordered = sortEntriesByTypeSlugIdLang(entries);
-  return dedupeEntries(ordered).map(({ loc, lastmod }) => ({ loc, lastmod }));
+  const ordered = sortEntriesByTypeSlugIdLang(sortable);
+  const deduped = dedupeEntries(ordered).map(({ loc, lastmod }) => ({ loc, lastmod }));
+  return { entries: deduped, skipped, total: assets.length };
 };
 
-export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<SitemapEntry[]> => {
-  const includeReview = process.env.INCLUDE_REVIEW_IN_SITEMAP === "true";
-  const limit = 1000;
-  let page = 1;
-  let nodes: SitemapNode[] = [];
-  const all: SitemapNode[] = [];
+export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<{ entries: SitemapEntry[]; skipped: number; total: number }> => {
+  const limit = 2000;
+  const page = 1;
 
-  do {
-    nodes = await fetchSitemapNodesPage({
-      page,
-      limit,
-      includeReview,
-      langs: SEO_SUPPORTED_LOCALES,
-    });
-    all.push(...nodes);
-    page += 1;
-  } while (nodes.length === limit);
+  const nodes = await fetchSitemapNodesPage({
+    page,
+    limit,
+  });
 
-  return mapAssetsToSitemapEntries(all, baseUrl, SEO_SUPPORTED_LOCALES);
+  return mapAssetsToSitemapEntries(nodes, baseUrl, SEO_SUPPORTED_LOCALES);
 };

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getPublicBaseUrl } from "@/utils/sitemap-server";
+import { getPublicBaseUrl } from "../../utils/sitemap-server";
 
 const buildRobots = (baseUrl: string) => {
   return [

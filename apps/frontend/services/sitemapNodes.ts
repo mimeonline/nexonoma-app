@@ -10,31 +10,26 @@ export type SitemapNode = {
 export type SitemapNodePageParams = {
   page: number;
   limit: number;
-  includeReview?: boolean;
-  langs: readonly string[];
 };
 
 const getApiBase = () => {
-  const apiBase = process.env.API_INTERNAL_URL ?? process.env.NEXT_PUBLIC_API_URL;
+  const apiBase = process.env.API_INTERNAL_URL;
   if (!apiBase) {
-    throw new Error("NEXT_PUBLIC_API_URL is not set");
+    throw new Error("API_INTERNAL_URL is not set");
   }
   return apiBase;
 };
 
-export const fetchSitemapNodesPage = async ({ page, limit, includeReview, langs }: SitemapNodePageParams): Promise<SitemapNode[]> => {
+export const fetchSitemapNodesPage = async ({ page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> => {
   const searchParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),
-    langs: langs.join(","),
+    status: "published",
+    types: "concept,method,tool,technology",
   });
 
-  if (includeReview) {
-    searchParams.set("includeReview", "true");
-  }
-
-  const res = await fetch(`${getApiBase()}/public/sitemap/nodes?${searchParams.toString()}`, {
-    next: { revalidate: 3600 },
+  const res = await fetch(`${getApiBase()}/system/catalog/index?${searchParams.toString()}`, {
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -42,9 +37,14 @@ export const fetchSitemapNodesPage = async ({ page, limit, includeReview, langs 
   }
 
   const data: unknown = await res.json();
-  if (!Array.isArray(data)) {
+  if (!data || typeof data !== "object") {
     return [];
   }
 
-  return data as SitemapNode[];
+  const items = (data as { items?: unknown }).items;
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items as SitemapNode[];
 };

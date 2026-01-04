@@ -20,9 +20,10 @@ const makeRequest = (url: string, headers?: Record<string, string>): MockRequest
 };
 
 describe("getPublicBaseUrl", () => {
-  it("uses env var in production even if request host is internal", () => {
+  it("uses site env var in production even if request host is internal", () => {
     vi.stubEnv("NODE_ENV", "production");
-    vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://app.nexonoma.de");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://app.nexonoma.de");
+    vi.stubEnv("NEXT_PUBLIC_APP_URL", "https://legacy.example.com");
 
     const request = makeRequest("http://e4fe240c1154:3000/sitemap.xml");
     const result = getPublicBaseUrl(request);
@@ -33,6 +34,7 @@ describe("getPublicBaseUrl", () => {
   it("uses request origin in development when env missing", () => {
     vi.stubEnv("NODE_ENV", "development");
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
 
     const request = makeRequest("http://localhost:3000/sitemap.xml");
     const result = getPublicBaseUrl(request);
@@ -43,6 +45,7 @@ describe("getPublicBaseUrl", () => {
   it("uses forwarded headers when env missing", () => {
     vi.stubEnv("NODE_ENV", "production");
     vi.stubEnv("NEXT_PUBLIC_APP_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "");
 
     const request = makeRequest("http://internal:3000/sitemap.xml", {
       "x-forwarded-proto": "https",

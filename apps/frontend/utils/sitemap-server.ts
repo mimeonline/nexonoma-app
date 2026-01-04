@@ -13,7 +13,7 @@ export const getPublicBaseUrl = (
   request: Pick<NextRequest, "url" | "headers">
 ): string => {
   const isProd = process.env.NODE_ENV === "production";
-  const envUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL;
 
   if (isProd && envUrl) {
     return normalizeUrl(envUrl);
