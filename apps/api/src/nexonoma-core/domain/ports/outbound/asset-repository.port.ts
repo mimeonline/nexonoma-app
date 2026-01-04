@@ -1,4 +1,5 @@
 import { AssetBlock } from '../../entities/asset.entity';
+import { CatalogIndexRecord } from '../../entities/catalog-index-record.entity';
 import { ContentAsset } from '../../entities/content-asset.entity';
 import { ContextAsset } from '../../entities/context-asset.entity';
 import { StructuralAsset } from '../../entities/structural-asset.entity';
@@ -34,4 +35,7 @@ export abstract class AssetRepositoryPort {
 
   // Page 4: Katalog Liste (Optional mit Filter)
   abstract findAllContent(locale: string): Promise<ContentAsset[]>;
+
+  // System: minimaler Index für Sitemap/Indexing
+  abstract findContentIndex(locale: string): Promise<CatalogIndexRecord[]>;
 }

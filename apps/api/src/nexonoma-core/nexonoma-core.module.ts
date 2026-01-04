@@ -4,11 +4,13 @@ import { Module } from '@nestjs/common';
 import { CatalogController } from './infrastructure/http/catalog.controller';
 import { GridController } from './infrastructure/http/grid.controller';
 import { PublicSitemapController } from './infrastructure/http/public-sitemap.controller';
+import { SystemCatalogController } from './infrastructure/http/system-catalog.controller';
 
 // 2. Use Cases (Application Layer)
 import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-content.use-case';
 import { GetContentBySlugUseCase } from './application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from './application/use-cases/catalog/get-content-detail.use-case';
+import { GetSystemCatalogIndexUseCase } from './application/use-cases/system/get-system-catalog-index.use-case';
 import { GetGridClustersUseCase } from './application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from './application/use-cases/grid/get-grid-macros.use-case';
 import { GetGridSegmentsUseCase } from './application/use-cases/grid/get-grid-segments.use-case';
@@ -22,7 +24,12 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer
-  controllers: [GridController, CatalogController, PublicSitemapController],
+  controllers: [
+    GridController,
+    CatalogController,
+    PublicSitemapController,
+    SystemCatalogController,
+  ],
   providers: [
     // A) Hilfsklassen
     AssetMapper,
@@ -34,6 +41,7 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
     GetAllContentUseCase,
     GetContentDetailUseCase,
     GetContentBySlugUseCase,
+    GetSystemCatalogIndexUseCase,
 
     // C) Der Hexagonal-Trick (Dependency Inversion):
     // Wir sagen NestJS: "Wann immer jemand (z.B. ein UseCase) den 'AssetRepositoryPort' anfordert,

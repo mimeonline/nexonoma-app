@@ -5,6 +5,7 @@ import { ContentAsset } from '../../domain/entities/content-asset.entity';
 import { ContextAsset } from '../../domain/entities/context-asset.entity';
 import { StructuralAsset } from '../../domain/entities/structural-asset.entity';
 import { AssetRepositoryPort } from '../../domain/ports/outbound/asset-repository.port';
+import type { CatalogIndexRecord } from '../../domain/entities/catalog-index-record.entity';
 import { AssetType } from '../../domain/types/asset-enums';
 import { AssetMapper } from './asset.mapper';
 // Importiere deinen Helper (Pfad ggf. anpassen)
@@ -155,6 +156,49 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
     return result.map((record) => {
       const assetData = record.get('assetData');
       return AssetMapper.toDomain(assetData, locale) as ContentAsset;
+    });
+  }
+
+  async findContentIndex(locale: string = 'en'): Promise<CatalogIndexRecord[]> {
+    const query = `
+      MATCH (n:AssetBlock)
+      WHERE n.type IN [$t1, $t2, $t3, $t4]
+        AND n['name_' + $lang] IS NOT NULL
+        AND n['name_' + $lang] <> ''
+      RETURN n {
+        .id,
+        .type,
+        .slug,
+        .status,
+        .createdAt,
+        .updatedAt
+      } AS assetData
+      ORDER BY assetData.type ASC, assetData.slug ASC, assetData.id ASC
+    `;
+
+    const params = {
+      lang: locale,
+      t1: AssetType.TOOL,
+      t2: AssetType.METHOD,
+      t3: AssetType.CONCEPT,
+      t4: AssetType.TECHNOLOGY,
+    };
+
+    const result = await this.neo4j.read(query, params);
+
+    return result.map((record) => {
+      const rawAssetData = record.get('assetData');
+      const normalized = normalizeNeo4j(rawAssetData);
+
+      return {
+        id: normalized.id,
+        type: normalized.type,
+        slug: normalized.slug,
+        status: normalized.status,
+        createdAt: normalized.createdAt,
+        updatedAt: normalized.updatedAt,
+        language: locale,
+      };
     });
   }
 
