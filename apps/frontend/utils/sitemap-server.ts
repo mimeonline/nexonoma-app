@@ -35,14 +35,36 @@ export const resolveSitemapVariant = (request: NextRequest): SitemapVariant => {
   return "app";
 };
 
-export const resolveBaseUrl = (request: NextRequest, variant: SitemapVariant): string => {
-  const fallbackOrigin = new URL(request.url).origin;
+const normalizeUrl = (value: string) => value.replace(/\/$/, "");
 
-  if (variant === "site") {
-    return process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? fallbackOrigin.replace(/\/$/, "");
+const getForwardedOrigin = (request: Pick<NextRequest, "headers">) => {
+  const proto = request.headers.get("x-forwarded-proto");
+  const host = request.headers.get("x-forwarded-host");
+  if (!proto || !host) return null;
+  return `${proto}://${host}`;
+};
+
+export const getPublicBaseUrl = (
+  request: Pick<NextRequest, "url" | "headers">,
+  variant: SitemapVariant
+): string => {
+  const isProd = process.env.NODE_ENV === "production";
+  const envUrl = variant === "site" ? process.env.NEXT_PUBLIC_SITE_URL : process.env.NEXT_PUBLIC_APP_URL;
+
+  if (isProd && envUrl) {
+    return normalizeUrl(envUrl);
   }
 
-  return process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? fallbackOrigin.replace(/\/$/, "");
+  const forwardedOrigin = getForwardedOrigin(request);
+  if (forwardedOrigin) {
+    return normalizeUrl(forwardedOrigin);
+  }
+
+  return normalizeUrl(new URL(request.url).origin);
+};
+
+export const resolveBaseUrl = (request: NextRequest, variant: SitemapVariant): string => {
+  return getPublicBaseUrl(request, variant);
 };
 
 export const SITEMAP_CACHE_CONTROL = "public, s-maxage=3600, stale-while-revalidate=86400";
