@@ -98,6 +98,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
   const hasAnyContent = contents.length > 0;
 
   const segments = cluster.segments ?? [];
+  const hasSegments = segments.length > 0;
 
   return (
     <div className="space-y-8 pb-20">
@@ -128,7 +129,8 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
           </div>
 
           {/* Controls */}
-          <div className="flex flex-col gap-3 shrink-0 md:items-end w-full md:w-auto">
+          {hasSegments && (
+            <div className="flex flex-col gap-3 shrink-0 md:items-end w-full md:w-auto">
             {/* 1. SELECT WRAPPER */}
             {/* Änderung: 'md:w-52' statt 'md:w-48' für eine angenehme Breite */}
             <div className="relative w-full md:w-52">
@@ -173,24 +175,36 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
               </button>
             </div>
           </div>
+          )}
         </div>
 
         {/* Segment Tabs */}
-        <div className="pt-8 flex items-center gap-6 overflow-x-auto border-b border-white/5 pb-0 scrollbar-hide">
-          <TabButton active={activeSegment === "all"} onClick={() => setActiveSegment("all")} label={t("grid.segments.tabs.all")} />
-          {segments.map((segment) => (
-            <TabButton
-              key={segment.slug}
-              active={activeSegment === segment.slug}
-              onClick={() => setActiveSegment(segment.slug)}
-              label={segment.name}
-            />
-          ))}
-        </div>
+        {hasSegments && (
+          <div className="pt-8 flex items-center gap-6 overflow-x-auto border-b border-white/5 pb-0 scrollbar-hide">
+            <TabButton active={activeSegment === "all"} onClick={() => setActiveSegment("all")} label={t("grid.segments.tabs.all")} />
+            {segments.map((segment) => (
+              <TabButton
+                key={segment.slug}
+                active={activeSegment === segment.slug}
+                onClick={() => setActiveSegment(segment.slug)}
+                label={segment.name}
+              />
+            ))}
+          </div>
+        )}
       </Card>
 
       {/* --- CONTENT AREA --- */}
-      {viewMode === "grid" ? (
+      {!hasSegments ? (
+        <div className="col-span-full flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/10 bg-white/5 px-6 py-8 text-center">
+          <p className="text-sm font-semibold text-slate-100">{t("emptyStates.curated.title")}</p>
+          <p className="text-sm text-nexo-muted">{t("emptyStates.curated.line1")}</p>
+          <p className="text-sm text-nexo-muted">{t("emptyStates.curated.line2")}</p>
+          <Button variant="secondary" onClick={() => router.push(`${localePrefix}/catalog`)}>
+            {t("emptyStates.curated.actionCatalog")}
+          </Button>
+        </div>
+      ) : viewMode === "grid" ? (
         // GRID MODE
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.length > 0 &&
