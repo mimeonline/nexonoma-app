@@ -9,6 +9,21 @@ import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
 
+const LONG_LABEL_OVERRIDES: Record<string, string> = {
+  "Software Engineering": "Software Eng.",
+  "Maschinelles Lernen": "ML",
+  "Access Control": "Access Ctrl",
+};
+
+const baseTagClasses =
+  "px-2 py-0.5 rounded-sm bg-slate-800/60 border border-slate-700/60 " +
+  "text-slate-300 text-[11px] leading-none truncate " +
+  "transition-colors hover:bg-slate-700/60";
+
+const getCardLabel = (label: string) => {
+  return LONG_LABEL_OVERRIDES[label] || label;
+};
+
 interface CatalogGridProps {
   items: CatalogItem[];
 }
@@ -46,19 +61,18 @@ export function CatalogGrid({ items }: CatalogGridProps) {
                   </CardTitle>
                 </div>
 
-                <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">
-                  {item.shortDescription || t("catalog.gridMeta.shortDescriptionFallback")}
-                </p>
+                <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">{item.shortDescription}</p>
 
                 {tagKeys.length > 0 && (
-                  <div className="mt-auto pt-3 flex items-center gap-2 text-[11px] leading-snug text-slate-500 tracking-wide">
-                    <span className="truncate">#{getCardTagLabel(item, tagKeys[0], lang)}</span>
-                    {tagKeys[1] && (
-                      <>
-                        <span className="text-slate-600">·</span>
-                        <span className="truncate">#{getCardTagLabel(item, tagKeys[1], lang)}</span>
-                      </>
-                    )}
+                  <div className="mt-auto pt-3 flex items-center gap-2 text-[11px] leading-snug text-slate-500 whitespace-nowrap overflow-hidden">
+                    {tagKeys.map((key, index) => (
+                      <span key={key} className="flex items-center gap-1">
+                        <span className={baseTagClasses} title={getCardLabel(getCardTagLabel(item, key, lang))}>
+                          #{getCardLabel(getCardTagLabel(item, key, lang))}
+                        </span>
+                        {index < tagKeys.length - 1 && <span className="text-slate-500/70">·</span>}
+                      </span>
+                    ))}
                   </div>
                 )}
               </CardContent>
