@@ -26,6 +26,8 @@ export interface LocalizedTag {
   label: string;
 }
 
+export type TagMap = Record<string, { de: string; en: string }>;
+
 export interface UseCase {
   name: string;
   inputs: string[];
@@ -84,6 +86,8 @@ export interface AssetBase {
   clusterName?: string;
   macroClusterName?: string;
   tags?: LocalizedTag[];
+  tagsMap?: TagMap;
+  tagOrder?: string[];
 }
 
 export interface FullAsset extends AssetBase {

@@ -51,6 +51,7 @@ export class AssetMapper {
       longDescription: data.longDescription || '',
 
       tags: LocalizationHelper.localizeTags(data.tags, locale),
+      tagOrder: data.tagOrder,
 
       abbreviation: data.abbreviation,
 

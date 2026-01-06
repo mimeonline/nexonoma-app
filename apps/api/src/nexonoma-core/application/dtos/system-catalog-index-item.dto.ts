@@ -5,4 +5,6 @@ export type SystemCatalogIndexItemDto = {
   updatedAt?: string;
   createdAt?: string;
   availableLanguages?: string[];
+  tags?: Record<string, { de: string; en: string }>;
+  tagOrder?: string[];
 };

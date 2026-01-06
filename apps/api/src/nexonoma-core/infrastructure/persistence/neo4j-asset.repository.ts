@@ -171,7 +171,9 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
         .slug,
         .status,
         .createdAt,
-        .updatedAt
+        .updatedAt,
+        .tags,
+        .tagOrder
       } AS assetData
       ORDER BY assetData.type ASC, assetData.slug ASC, assetData.id ASC
     `;
@@ -198,6 +200,8 @@ export class Neo4jAssetRepository implements AssetRepositoryPort {
         createdAt: normalized.createdAt,
         updatedAt: normalized.updatedAt,
         language: locale,
+        tags: normalized.tags,
+        tagOrder: normalized.tagOrder,
       };
     });
   }

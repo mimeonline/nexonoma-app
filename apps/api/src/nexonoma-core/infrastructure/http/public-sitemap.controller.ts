@@ -14,6 +14,8 @@ type SitemapNodeDto = {
   updatedAt?: string;
   createdAt?: string;
   availableLanguages: string[];
+  tags?: { slug: string; label: string }[];
+  tagOrder?: string[];
 };
 
 const toIso = (value?: Date | string | null) => {
@@ -82,6 +84,8 @@ export class PublicSitemapController {
               updatedAt,
               createdAt,
               availableLanguages: [],
+              tags: asset.tags,
+              tagOrder: asset.tagOrder,
             },
             locales: new Set([lang]),
           });

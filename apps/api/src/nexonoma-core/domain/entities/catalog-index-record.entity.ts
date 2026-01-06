@@ -8,4 +8,6 @@ export type CatalogIndexRecord = {
   createdAt?: string | Date | null;
   updatedAt?: string | Date | null;
   language: string;
+  tags?: Record<string, { de: string; en: string }>;
+  tagOrder?: string[];
 };

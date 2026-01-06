@@ -29,6 +29,8 @@ type IndexEntry = {
   updatedAt?: string;
   createdAt?: string;
   availableLanguages: Set<string>;
+  tags?: Record<string, { de: string; en: string }>;
+  tagOrder?: string[];
 };
 
 @Injectable()
@@ -71,11 +73,19 @@ export class GetSystemCatalogIndexUseCase {
             updatedAt,
             createdAt,
             availableLanguages: new Set([lang]),
+            tags: asset.tags,
+            tagOrder: asset.tagOrder,
           });
           return;
         }
 
         existing.availableLanguages.add(lang);
+        if (!existing.tags && asset.tags) {
+          existing.tags = asset.tags;
+        }
+        if (!existing.tagOrder && asset.tagOrder) {
+          existing.tagOrder = asset.tagOrder;
+        }
 
         if (
           updatedAt &&
@@ -103,6 +113,8 @@ export class GetSystemCatalogIndexUseCase {
         updatedAt: entry.updatedAt,
         createdAt: entry.createdAt,
         availableLanguages: Array.from(entry.availableLanguages).sort(),
+        tags: entry.tags,
+        tagOrder: entry.tagOrder,
       }))
       .sort((a, b) => {
         const typeCompare = a.type.localeCompare(b.type);

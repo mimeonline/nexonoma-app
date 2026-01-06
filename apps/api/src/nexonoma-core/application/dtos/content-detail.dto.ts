@@ -59,6 +59,7 @@ export class ContentDetailDto {
   shortDescription: string;
   longDescription: string;
   tags: LocalizedTag[];
+  tagOrder?: string[];
   organizationalLevel: string[];
 
   // --- Metadaten (Klassifizierung) ---

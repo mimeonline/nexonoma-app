@@ -22,6 +22,7 @@ export interface AssetBlockProps {
   shortDescription: string;
   longDescription: string;
   tags?: LocalizedTag[];
+  tagOrder?: string[];
   abbreviation?: string;
   organizationalLevel?: string[];
   icon?: string;
@@ -45,6 +46,7 @@ export abstract class AssetBlock {
   public readonly shortDescription: string;
   public readonly longDescription: string;
   public readonly tags: LocalizedTag[];
+  public readonly tagOrder?: string[];
   public readonly abbreviation?: string;
   public readonly organizationalLevel: string[];
   public readonly icon?: string;
@@ -67,6 +69,7 @@ export abstract class AssetBlock {
     this.shortDescription = props.shortDescription;
     this.longDescription = props.longDescription;
     this.tags = props.tags || [];
+    this.tagOrder = props.tagOrder;
     this.abbreviation = props.abbreviation;
     this.organizationalLevel = props.organizationalLevel || [];
     this.icon = props.icon;

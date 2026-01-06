@@ -13,6 +13,8 @@ export class GridNodeDto {
   icon?: string; // URL oder Icon-Name
   image?: string; // Vorschaubild (falls vorhanden)
   status: AssetStatus; // Für Badges (z.B. "DRAFT")
+  tags?: { slug: string; label: string }[];
+  tagOrder?: string[];
 
   // --- Struktur & Hierarchie ---
   // Optional, da nur Cluster eine Category haben

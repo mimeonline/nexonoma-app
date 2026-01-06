@@ -1,9 +1,10 @@
 import type { CatalogItem } from "@/types/catalog";
 import type { AssetStatus, AssetType, LocalizedTag } from "@/types/nexonoma";
-import { toArray, toObjectArray } from "@/utils/data-normalization";
+import { toArray, toObjectArray, toTagMap } from "@/utils/data-normalization";
 
 type CatalogItemInput = Partial<CatalogItem> & {
   tags?: unknown;
+  tagOrder?: unknown;
   organizationalMaturity?: unknown;
   decisionType?: unknown;
   principles?: unknown;
@@ -39,6 +40,8 @@ export function mapToCatalogItem(item: CatalogItemInput): CatalogItem {
 
     // Tags sicher parsen
     tags: toObjectArray<LocalizedTag>(item.tags),
+    tagsMap: toTagMap(item.tags),
+    tagOrder: toArray(item.tagOrder),
 
     // 2. Extended Props für die Karten-Vorschau
     maturityLevel: item.maturityLevel,

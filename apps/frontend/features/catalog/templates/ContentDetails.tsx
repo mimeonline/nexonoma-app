@@ -5,7 +5,8 @@ import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
-import { Example, ExternalResource, LocalizedTag } from "@/types/nexonoma";
+import { Example, ExternalResource } from "@/types/nexonoma";
+import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
 import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -49,9 +50,10 @@ const InfoCard = ({
 );
 
 export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }: ContentDetailsTemplateProps) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const enumLabel = useEnumAssetLabel();
   const enumLabels = useEnumAssetLabels();
+  const tagKeys = getCardTagKeys(content);
 
   return (
     <div className="space-y-8 pb-20">
@@ -64,7 +66,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 flex-nowrap overflow-hidden">
               <Badge
                 variant={getBadgeVariant(contentType)}
                 size="md"
@@ -72,14 +74,9 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               >
                 {contentType}
               </Badge>
-              {content.tags?.slice(0, 8).map((tag: LocalizedTag, idx: number) => (
-                <Badge
-                  key={`${tag}-${idx}`}
-                  variant="default"
-                  size="md"
-                  radius="md" // <-- Der Tech-Look
-                >
-                  #{tag.label}
+              {tagKeys.map((key) => (
+                <Badge key={key} variant="default" size="md" radius="md" className="max-w-[140px] truncate">
+                  #{getCardTagLabel(content, key, lang)}
                 </Badge>
               ))}
             </div>

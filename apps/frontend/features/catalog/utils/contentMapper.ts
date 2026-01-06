@@ -1,7 +1,7 @@
 // src/features/catalog/utils/contentMapper.ts
 import type { ContentDetail } from "@/types/catalog";
 import type { AssetStatus, AssetType, Example, ExternalResource, LocalizedTag, Metric, Scenario, TradeoffMatrix, UseCase } from "@/types/nexonoma";
-import { toArray, toObjectArray } from "@/utils/data-normalization";
+import { toArray, toObjectArray, toTagMap } from "@/utils/data-normalization";
 
 function getFirstSentence(text?: string): string | undefined {
   if (!text) return undefined;
@@ -43,6 +43,8 @@ export function mapToContentDetails(item: Partial<ContentDetail>): MappedContent
 
     // 3. String Arrays (Sicherheitsnetz gegen Strings aus der DB)
     tags: toObjectArray<LocalizedTag>(item.tags), // Tags sind Objekte!
+    tagsMap: toTagMap(item.tags),
+    tagOrder: toArray(item.tagOrder),
     principles: toArray(item.principles),
     organizationalLevel: toArray(item.organizationalLevel),
     decisionType: toArray(item.decisionType).join(", "),
