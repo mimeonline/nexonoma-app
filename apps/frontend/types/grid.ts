@@ -10,6 +10,9 @@ import { AssetBase, AssetType } from "./nexonoma";
 export interface GridAssetBase extends Pick<AssetBase, "id" | "slug" | "name" | "shortDescription" | "longDescription" | "icon"> {
   // Type ist hier explizit, damit wir es überschreiben können
   type: AssetType | string;
+  tags?: unknown;
+  tagsMap?: Record<string, { de: string; en: string }>;
+  tagOrder?: string[];
 }
 
 /**

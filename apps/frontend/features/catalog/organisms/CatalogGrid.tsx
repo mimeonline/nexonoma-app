@@ -5,24 +5,11 @@ import Link from "next/link";
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { TagChip } from "@/components/atoms/TagChip";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
-
-const LONG_LABEL_OVERRIDES: Record<string, string> = {
-  "Software Engineering": "Software Eng.",
-  "Maschinelles Lernen": "ML",
-  "Access Control": "Access Ctrl",
-};
-
-const baseTagClasses =
-  "px-2 py-0.5 rounded-sm bg-slate-800/60 border border-slate-700/60 " +
-  "text-slate-300 text-[11px] leading-none truncate " +
-  "transition-colors hover:bg-slate-700/60";
-
-const getCardLabel = (label: string) => {
-  return LONG_LABEL_OVERRIDES[label] || label;
-};
+import { formatTagLabel } from "@/utils/tag-labels";
 
 interface CatalogGridProps {
   items: CatalogItem[];
@@ -61,18 +48,17 @@ export function CatalogGrid({ items }: CatalogGridProps) {
                   </CardTitle>
                 </div>
 
-                <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">{item.shortDescription}</p>
+                <p className="text-sm text-slate-400 line-clamp-3 leading-relaxed">
+                  {item.shortDescription || t("catalog.gridMeta.shortDescriptionFallback")}
+                </p>
 
                 {tagKeys.length > 0 && (
                   <div className="mt-auto pt-3 flex items-center gap-2 text-[11px] leading-snug text-slate-500 whitespace-nowrap overflow-hidden">
-                    {tagKeys.map((key, index) => (
-                      <span key={key} className="flex items-center gap-1">
-                        <span className={baseTagClasses} title={getCardLabel(getCardTagLabel(item, key, lang))}>
-                          #{getCardLabel(getCardTagLabel(item, key, lang))}
-                        </span>
-                        {index < tagKeys.length - 1 && <span className="text-slate-500/70">·</span>}
-                      </span>
-                    ))}
+                    {tagKeys.map((key) => {
+                      const fullLabel = getCardTagLabel(item, key, lang);
+                      const displayLabel = formatTagLabel(fullLabel, "card");
+                      return <TagChip key={key} label={`#${displayLabel}`} title={fullLabel} variant="card" />;
+                    })}
                   </div>
                 )}
               </CardContent>

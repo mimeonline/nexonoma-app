@@ -3,10 +3,11 @@
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { TagChip } from "@/components/atoms/TagChip";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { Example, ExternalResource } from "@/types/nexonoma";
-import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
+import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
 import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -53,7 +54,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
   const { t, lang } = useI18n();
   const enumLabel = useEnumAssetLabel();
   const enumLabels = useEnumAssetLabels();
-  const tagKeys = getCardTagKeys(content);
+  const tagKeys = getOrderedTagKeys(content);
 
   return (
     <div className="space-y-8 pb-20">
@@ -66,7 +67,7 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
           <div className="space-y-4 max-w-3xl">
-            <div className="flex items-center gap-2 flex-nowrap overflow-hidden">
+            <div className="flex flex-wrap items-center gap-2">
               <Badge
                 variant={getBadgeVariant(contentType)}
                 size="md"
@@ -74,11 +75,10 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
               >
                 {contentType}
               </Badge>
-              {tagKeys.map((key) => (
-                <Badge key={key} variant="default" size="md" radius="md" className="max-w-[140px] truncate">
-                  #{getCardTagLabel(content, key, lang)}
-                </Badge>
-              ))}
+              {tagKeys.map((key) => {
+                const label = getCardTagLabel(content, key, lang);
+                return <TagChip key={key} variant="detail" label={`#${label}`} title={label} />;
+              })}
             </div>
             <div>
               <div className="flex items-center gap-4 mb-2">

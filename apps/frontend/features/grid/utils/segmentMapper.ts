@@ -41,32 +41,41 @@ export function createParentContext(slug: string): MacroCluster {
  * Bereinigt die Cluster-Daten und stellt sicher, dass Segmente und Inhalte
  * korrekt strukturiert sind.
  */
+function mapContentItem(input: SegmentChildInput, type: SegmentContentType): SegmentContentItem {
+  return {
+    id: input.id || "",
+    name: input.name || "Unbenannt",
+    slug: input.slug || "",
+    type,
+    shortDescription: input.shortDescription || "",
+    longDescription: input.longDescription || "",
+    icon: input.icon,
+    tags: input.tags,
+    tagsMap: input.tagsMap,
+    tagOrder: input.tagOrder,
+  };
+}
+
 export function mapToClusterDetail(item: ClusterInput): Cluster {
   // Mapping der Segmente
   const segments: Segment[] = toArray<SegmentInput>(item.segments || item.children).map((seg) => {
     // Hilfsfunktion um Content nach Typ zu filtern (falls API generisch 'children' liefert)
     const getContentByType = (type: SegmentContentType): SegmentContentItem[] => {
-      // Fall A: API liefert bereits strukturiertes 'content' Objekt
-      if (seg.content && Array.isArray(seg.content[`${type}s`])) {
-        // methods -> methods
-        return seg.content[`${type}s`] as SegmentContentItem[];
-      }
-      if (seg.content && Array.isArray(seg.content[type])) {
-        return seg.content[type] as SegmentContentItem[];
-      }
+        // Fall A: API liefert bereits strukturiertes 'content' Objekt
+        if (seg.content && Array.isArray(seg.content[`${type}s`])) {
+          const entries = seg.content[`${type}s`] as SegmentChildInput[];
+          return entries.map((entry) => mapContentItem(entry, type));
+        }
+        if (seg.content && Array.isArray(seg.content[type])) {
+          const entries = seg.content[type] as SegmentChildInput[];
+          return entries.map((entry) => mapContentItem(entry, type));
+        }
 
-      // Fall B: API liefert flaches 'children' Array (Legacy GridNode)
-      const children = toArray<SegmentChildInput>(seg.children);
-      return children
-        .filter((c): c is SegmentChildInput & { type: SegmentContentType } => c.type === type)
-        .map((c) => ({
-          id: c.id || "",
-          name: c.name || "Unbenannt",
-          slug: c.slug || "",
-          type,
-          shortDescription: c.shortDescription || "",
-          longDescription: c.longDescription || "",
-        }));
+        // Fall B: API liefert flaches 'children' Array (Legacy GridNode)
+        const children = toArray<SegmentChildInput>(seg.children);
+        return children
+          .filter((c): c is SegmentChildInput & { type: SegmentContentType } => c.type === type)
+          .map((c) => mapContentItem(c, type));
     };
 
     return {

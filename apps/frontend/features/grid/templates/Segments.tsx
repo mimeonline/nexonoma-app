@@ -7,11 +7,14 @@ import { useMemo, useState } from "react";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { TagChip } from "@/components/atoms/TagChip";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
+import { formatTagLabel } from "@/utils/tag-labels";
 // --- Internal Types ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -68,7 +71,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeSegment, setActiveSegment] = useState<"all" | string>("all");
   const [activeType, setActiveType] = useState<FilterType>("all");
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
   const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
@@ -208,9 +211,11 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
         // GRID MODE
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.length > 0 &&
-            filtered.map((item) => (
-              <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
-                <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
+            filtered.map((item) => {
+              const tagKeys = getCardTagKeys(item);
+              return (
+                <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
+                  <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
                   <CardHeader className="pb-2 space-y-0">
                     <div className="flex items-start justify-between gap-2">
                       <Badge variant={getBadgeVariant(item.type)} size="sm">
@@ -219,13 +224,23 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                       <span className="text-[10px] text-slate-500 font-mono truncate max-w-[50%]">{item.segmentName}</span>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex flex-col flex-1">
                     <CardTitle className="text-base group-hover:text-nexo-ocean transition-colors mb-2">{item.name}</CardTitle>
                     {item.shortDescription && <p className="text-xs text-nexo-muted line-clamp-2 leading-relaxed">{item.shortDescription}</p>}
+                    {tagKeys.length > 0 && (
+                      <div className="mt-auto pt-3 flex items-center gap-2 text-[11px] leading-snug text-slate-500 whitespace-nowrap overflow-hidden">
+                        {tagKeys.map((key) => {
+                          const fullLabel = getCardTagLabel(item, key, lang);
+                          const displayLabel = formatTagLabel(fullLabel, "card");
+                          return <TagChip key={key} label={`#${displayLabel}`} title={fullLabel} />;
+                        })}
+                      </div>
+                    )}
                   </CardContent>
-                </Card>
-              </Link>
-            ))}
+                  </Card>
+                </Link>
+              );
+            })}
           {filtered.length === 0 && (
             <div className="col-span-full rounded-2xl border border-dashed border-white/10 bg-white/5 px-6 py-8 text-center">
               <p className="text-sm font-semibold text-slate-100">
@@ -276,18 +291,35 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                 </div>
 
                 <div className="flex flex-col gap-3 p-4 flex-1">
-                  {items.map((item) => (
-                    <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
-                      <Card variant="interactive" className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer bg-nexo-card">
+                  {items.map((item) => {
+                    const tagKeys = getCardTagKeys(item);
+                    return (
+                      <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
+                        <Card
+                        variant="interactive"
+                        className="p-3 shadow-sm hover:shadow-md border-white/5 cursor-pointer bg-nexo-card flex flex-col h-full"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">
                             {translateAssetLabel(item.type)}
                           </Badge>
                         </div>
-                        <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
-                      </Card>
-                    </Link>
-                  ))}
+                        <div className="flex flex-col flex-1">
+                          <div className="text-sm font-bold text-white mb-1 group-hover:text-nexo-ocean transition-colors">{item.name}</div>
+                          {tagKeys.length > 0 && (
+                            <div className="mt-auto flex items-center gap-2 text-[11px] leading-snug text-slate-500 whitespace-nowrap overflow-hidden">
+                              {tagKeys.map((key) => {
+                                const fullLabel = getCardTagLabel(item, key, lang);
+                                const displayLabel = formatTagLabel(fullLabel, "card");
+                                return <TagChip key={key} label={`#${displayLabel}`} title={fullLabel} />;
+                              })}
+                            </div>
+                          )}
+                        </div>
+                        </Card>
+                      </Link>
+                    );
+                  })}
                   {items.length === 0 && (
                     <div className="flex flex-1 items-center justify-center min-h-[60px] border border-dashed border-white/5 rounded-lg">
                       <span className="text-[10px] italic text-slate-600">{t("grid.segments.emptyLane")}</span>
