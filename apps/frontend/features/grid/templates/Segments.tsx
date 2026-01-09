@@ -1,6 +1,5 @@
 "use client";
 
-import { LayoutGrid, LayoutPanelTop } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -13,9 +12,9 @@ import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } fr
 import { AssetType } from "@/types/nexonoma";
 import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
 import { formatTagLabel } from "@/utils/tag-labels";
-import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { SegmentBoard } from "@/features/grid/components/SegmentBoard";
+import { SegmentControlBar } from "@/features/grid/components/SegmentControlBar";
 // --- Internal Types ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -107,7 +106,6 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
   const activeSegmentData = activeSegment === "all" ? null : segments.find((segment) => segment.slug === activeSegment);
   const segmentDescription =
     activeSegmentData?.longDescription || activeSegmentData?.shortDescription || t("grid.segments.segmentDescriptionFallback");
-  const typePrefix = t("grid.segments.filters.typePrefix");
   const segmentOptions = useMemo(
     () =>
       [
@@ -157,87 +155,32 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
         </div>
       </Card>
 
-      {/* --- VIEW TOGGLE --- */}
+      {/* --- CONTROL BAR --- */}
       {hasSegments && (
-        <div className="flex h-10 w-full items-center rounded-xl border border-white/10 bg-white/5 p-1 md:w-56">
-          <button
-            onClick={() => setViewMode("grid")}
-            className={`flex-1 flex h-full items-center justify-center gap-2 rounded-lg text-xs font-medium transition-all ${
-              viewMode === "grid" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            <LayoutGrid className="h-3.5 w-3.5" /> {t("grid.segments.viewToggle.tiles")}
-          </button>
-
-          <button
-            onClick={() => setViewMode("board")}
-            className={`flex-1 flex h-full items-center justify-center gap-2 rounded-lg text-xs font-medium transition-all ${
-              viewMode === "board" ? "bg-nexo-ocean/10 text-nexo-ocean shadow-sm" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            <LayoutPanelTop className="h-3.5 w-3.5" /> {t("grid.segments.viewToggle.board")}
-          </button>
-        </div>
-      )}
-
-      {/* --- FILTER BAR --- */}
-      {hasSegments && viewMode === "grid" && (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-              <div className="space-y-1">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  {t("grid.segments.filters.segmentLabel")}
-                </div>
-                <div className="relative w-full md:w-56">
-                  <select
-                    value={activeSegment}
-                    onChange={(e) => {
-                      setActiveSegment(e.target.value as SegmentFilter);
-                      setPage(1);
-                    }}
-                    className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
-                  >
-                    {segmentOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                  {t("grid.segments.filters.typeLabel")}
-                </div>
-                <div className="relative w-full md:w-56">
-                  <select
-                    value={activeType}
-                    onChange={(e) => {
-                      setActiveType(e.target.value as FilterType);
-                      setPage(1);
-                    }}
-                    className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
-                  >
-                    {selectTypeOptions.map((opt) => (
-                      <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
-                        {`${typePrefix}: ${opt.label}`}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-                    <ChevronDown className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        <SegmentControlBar
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          viewLabel={t("grid.segments.controls.viewLabel")}
+          activeType={activeType}
+          onTypeChange={(nextType) => {
+            setActiveType(nextType as FilterType);
+            setPage(1);
+          }}
+          typeOptions={selectTypeOptions}
+          typeLabel={t("grid.segments.filters.typeLabel")}
+          showSegmentFilter={viewMode === "grid"}
+          segmentLabel={t("grid.segments.filters.segmentLabel")}
+          activeSegment={activeSegment}
+          onSegmentChange={(nextSegment) => {
+            setActiveSegment(nextSegment as SegmentFilter);
+            setPage(1);
+          }}
+          segmentOptions={segmentOptions}
+          labels={{
+            tiles: t("grid.segments.viewToggle.tiles"),
+            board: t("grid.segments.viewToggle.board"),
+          }}
+        />
       )}
 
       {/* --- CONTENT AREA --- */}
@@ -254,12 +197,6 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
         <SegmentBoard
           segments={segments}
           activeType={activeType}
-          onTypeChange={(nextType) => {
-            setActiveType(nextType);
-            setPage(1);
-          }}
-          typeOptions={selectTypeOptions}
-          typePrefix={typePrefix}
         />
       ) : (
         <div className="space-y-6">

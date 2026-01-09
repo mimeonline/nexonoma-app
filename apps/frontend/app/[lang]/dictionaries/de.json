@@ -212,6 +212,9 @@
       "descriptionFallback": "Diese Ansicht zeigt die thematischen Bereiche innerhalb dieses Wissensbereichs. Sie hilft dir, den Raum in sinnvolle Teilbereiche zu gliedern und einen passenden Einstieg zu finden.\n\nJede Kachel führt zu einem eigenen Abschnitt mit Segmenteinstieg und weiteren Bausteinen."
     },
     "segments": {
+      "controls": {
+        "viewLabel": "Ansicht"
+      },
       "breadcrumbs": {
         "grid": "Übersicht"
       },

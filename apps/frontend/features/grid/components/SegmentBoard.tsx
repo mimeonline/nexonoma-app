@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
@@ -7,14 +7,9 @@ import { useI18n } from "@/features/i18n/I18nProvider";
 import type { Segment, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 
-type SegmentFilterType = "all" | SegmentContentType;
-
 type SegmentBoardProps = {
   segments: Segment[];
-  activeType: SegmentFilterType;
-  onTypeChange: (type: SegmentFilterType) => void;
-  typeOptions: { value: SegmentFilterType; label: string }[];
-  typePrefix: string;
+  activeType: "all" | SegmentContentType;
 };
 
 type BoardItem = SegmentContentItem & {
@@ -198,7 +193,7 @@ function useDragToPan(containerRef: React.RefObject<HTMLDivElement>) {
   return { isDragging };
 }
 
-export function SegmentBoard({ segments, activeType, onTypeChange, typeOptions, typePrefix }: SegmentBoardProps) {
+export function SegmentBoard({ segments, activeType }: SegmentBoardProps) {
   const { t } = useI18n();
   const { proxyRef, contentRef, spacerRef, hasOverflow } = useSyncedHorizontalScroll();
   const { isDragging } = useDragToPan(contentRef);
@@ -210,32 +205,6 @@ export function SegmentBoard({ segments, activeType, onTypeChange, typeOptions, 
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-1">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-            {t("grid.segments.filters.typeLabel")}
-          </div>
-          <div className="relative w-full md:w-56">
-            <select
-              value={activeType}
-              onChange={(e) => onTypeChange(e.target.value as SegmentFilterType)}
-              className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
-            >
-              {typeOptions.map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
-                  {`${typePrefix}: ${opt.label}`}
-                </option>
-              ))}
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="m7 10 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div
         ref={proxyRef}
         className={`overflow-x-auto overflow-y-hidden rounded-full bg-white/5 transition-all ${

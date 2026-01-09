@@ -212,6 +212,9 @@
       "descriptionFallback": "This view shows the thematic areas within this knowledge domain. It makes visible how the topic space is structured and which focal areas are distinguished.\n\nEach tile represents an entry point into a dedicated section with further segments and content."
     },
     "segments": {
+      "controls": {
+        "viewLabel": "View"
+      },
       "breadcrumbs": {
         "grid": "Grid"
       },
