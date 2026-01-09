@@ -3,10 +3,11 @@
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/atoms/Button";
+import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
-import { CatalogGrid } from "../organisms/CatalogGrid";
 import { usePathname, useRouter } from "next/navigation";
+import { CatalogGrid } from "../organisms/CatalogGrid";
 
 type FilterType = "all" | "concept" | "method" | "tool" | "technology";
 
@@ -91,10 +92,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const typeTabs = useMemo(
     () =>
       filterTypeOptions.map((option) => {
-        const count =
-          option.value === "all"
-            ? items.length
-            : typeCounts[option.value as Exclude<FilterType, "all">] ?? 0;
+        const count = option.value === "all" ? items.length : (typeCounts[option.value as Exclude<FilterType, "all">] ?? 0);
         return { ...option, count };
       }),
     [filterTypeOptions, items.length, typeCounts]
@@ -106,19 +104,12 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
   return (
     <>
-      <header className="space-y-3">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200/70">{t("catalog.title")}</p>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-semibold sm:text-4xl">{t("catalog.page.heading")}</h1>
-            <p className="text-sm text-slate-200/70">
-              <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
-              <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
-            </p>
-            <p className="max-w-2xl text-base text-slate-200/80">{t("catalog.page.description")}</p>
-          </div>
-        </div>
-
+      <header className="space-y-4">
+        <SectionTitle badge={t("catalog.title")} title={t("catalog.page.heading")} description={t("catalog.page.description")} className="mb-0" />
+        <p className="text-sm text-slate-200/70 pt-4">
+          <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
+          <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
+        </p>
         <div className="h-px w-full bg-white/10" />
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
@@ -177,7 +168,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
                 >
                   <span className="whitespace-nowrap">{tab.label}</span>
                   <span
-                    className={`min-w-[2.25rem] rounded-full px-2 py-0.5 text-xs font-semibold leading-none ${
+                    className={`min-w-9 rounded-full px-2 py-0.5 text-xs font-semibold leading-none ${
                       isActive ? "bg-white/90 text-slate-900" : "bg-white/10 text-slate-100"
                     }`}
                   >
@@ -188,13 +179,10 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
             })}
           </div>
         </div>
-
       </header>
 
       {loading && <p className="text-sm text-slate-200/80">{t("catalog.messages.loading")}</p>}
-      {error && (
-        <p className="text-sm text-red-300">{t("catalog.messages.error", { error })}</p>
-      )}
+      {error && <p className="text-sm text-red-300">{t("catalog.messages.error", { error })}</p>}
 
       {showCuratedEmptyState && (
         <div className="rounded-lg border border-white/10 bg-white/5 p-6 text-center text-slate-200">
@@ -259,7 +247,6 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
                   {t("catalog.pagination.last")}
                 </Button>
               </div>
-
             </div>
           )}
         </>

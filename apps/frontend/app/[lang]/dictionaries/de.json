@@ -274,9 +274,9 @@
     "title": "Wissens-Katalog",
     "sortBy": "Sortieren nach",
     "page": {
-      "heading": "Alle Bausteine im Fokus",
+      "heading": "Wissensbausteine des Modells",
       "totalCountSuffix": "Bausteine · Konzepte, Methoden, Tools & Technologien",
-      "description": "Dein zentrales Inventar. Finde Konzepte, Methoden, Tools und Technologien an einem Ort – filterbar, durchsuchbar und der Startpunkt für jede Analyse."
+      "description": "Diese Ansicht bündelt alle Wissensbausteine des Modells. Sie macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.\n\nDer Katalog dient als zentraler Zugriffspunkt auf alle Bausteine und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg."
     },
     "search": {
       "placeholder": "Suche nach Namen oder Kurzbeschreibung..."

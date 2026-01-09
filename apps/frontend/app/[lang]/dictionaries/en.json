@@ -274,9 +274,9 @@
     "title": "Catalog",
     "sortBy": "Sort by",
     "page": {
-      "heading": "Nexonoma Catalog",
+      "heading": "Model Knowledge Building Blocks",
       "totalCountSuffix": "building blocks · concepts, methods, tools & technologies",
-      "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
+      "description": "This view brings together all knowledge building blocks of the model. It provides access to concepts, methods, tools, and technologies independently of their structural placement.\n\nThe catalog serves as a central access point to all building blocks and supports search, filtering, and comparison across thematic boundaries."
     },
     "search": {
       "placeholder": "Search by name or short description..."
