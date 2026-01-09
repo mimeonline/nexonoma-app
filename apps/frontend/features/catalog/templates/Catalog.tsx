@@ -105,20 +105,15 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   return (
     <>
       <header className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 p-6 md:p-8">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
-            <div className="absolute inset-0 opacity-40 bg-[radial-gradient(120%_80%_at_80%_20%,rgba(255,255,255,0.12),transparent_65%),radial-gradient(110%_70%_at_60%_65%,rgba(255,255,255,0.08),transparent_70%),linear-gradient(135deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_45%)]" />
-            <div className="absolute left-[78%] top-[26%] h-[3px] w-[3px] rounded-full bg-white/16" />
-            <div className="absolute left-[66%] top-[52%] h-[3px] w-[3px] rounded-full bg-white/14" />
-            <div className="absolute left-[58%] top-[36%] h-0.5 w-0.5 rounded-full bg-white/12" />
+        <div className="relative overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden select-none md:block">
+            <div
+              className="absolute inset-0 opacity-25 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:linear-gradient(90deg,transparent_0%,transparent_20%,rgba(0,0,0,0.5)_45%,rgba(0,0,0,1)_70%,rgba(0,0,0,1)_100%)]"
+            />
+            <div className="absolute inset-0 opacity-18 bg-[radial-gradient(110%_75%_at_85%_22%,rgba(255,255,255,0.09),transparent_60%),radial-gradient(95%_65%_at_70%_58%,rgba(255,255,255,0.07),transparent_68%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_55%)]" />
           </div>
           <div className="relative z-10 space-y-3">
-            <SectionTitle
-              badge={t("catalog.title")}
-              title={t("catalog.page.heading")}
-              description={t("catalog.page.description")}
-              className="mb-0"
-            />
+            <SectionTitle badge={t("catalog.title")} title={t("catalog.page.heading")} description={t("catalog.page.description")} className="mb-0" />
             <p className="text-sm text-slate-200/70">
               <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
               <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
