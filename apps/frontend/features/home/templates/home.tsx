@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/atoms/Button";
 import { useI18n } from "@/features/i18n/I18nProvider";
-import { ArrowRight, BookOpen, GitGraph, LayoutGrid } from "lucide-react"; // Installiere lucide-react falls nicht vorhanden, oder nutze FA
+import { ArrowRight, BookOpen, GitGraph, LayoutGrid } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function HomeTemplate() {
@@ -17,16 +17,22 @@ export default function HomeTemplate() {
 
   return (
     <div className="min-h-full w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* HEADER: Willkommen & Kontext */}
-      <header className="mb-12 text-center sm:text-left max-w-3xl">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">{t("home.start.intro.line1")}</h1>
-        <p className="text-gray-400 max-w-2xl text-lg leading-relaxed">
-          {t("home.start.intro.line2")}
-          <span className="block sm:inline sm:ml-1 opacity-70">{t("home.start.intro.line3")}</span>
-        </p>
+      {/* HERO */}
+      <header className="mb-12 sm:mb-14 text-center sm:text-left max-w-3xl">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-slate-100 to-slate-300">{t("home.start.intro.line1")}</span>
+        </h1>
+
+        {/* slightly narrower + calmer rhythm */}
+        <div className="max-w-2xl">
+          <p className="text-gray-400 text-lg leading-relaxed">
+            {t("home.start.intro.line2")}
+            <span className="block sm:inline sm:ml-1 opacity-70">{t("home.start.intro.line3")}</span>
+          </p>
+        </div>
       </header>
 
-      {/* MAIN GRID: Die 3 Einstiege (Bento Style) */}
+      {/* MAIN GRID: keep cards exactly as-is */}
       <div className="grid gap-6 md:grid-cols-3">
         {/* CARD 1: KATALOG (Primary Action) */}
         <div
@@ -37,7 +43,6 @@ export default function HomeTemplate() {
           <div className="absolute inset-0 bg-teal-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
 
           <div className="relative z-10 mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 group-hover:scale-110 transition-transform">
-            {/* Icon placeholder or Lucide Icon */}
             <BookOpen className="w-7 h-7" />
           </div>
 
@@ -105,19 +110,20 @@ export default function HomeTemplate() {
         </div>
       </div>
 
-      {/* FOOTER AREA: Quick Context */}
-      <section className="mt-16 border-t border-white/5 pt-8">
+      {/* CONTEXT SECTION: stronger separation + calmer typography */}
+      <section className="mt-16 border-t border-white/10 pt-10">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-1 max-w-xl">
+          <div className="max-w-xl">
             <h4 className="text-sm font-semibold text-white">{t("home.start.about.title")}</h4>
-            <p className="text-xs text-gray-500 leading-relaxed">
-              {t("home.start.about.line1")} {t("home.start.about.line2")}
-              <br />
-              {t("home.start.about.hint")}
-            </p>
+
+            <div className="mt-2 space-y-2 text-sm leading-relaxed text-slate-400">
+              <p>{t("home.start.about.line1")}</p>
+              <p>{t("home.start.about.line2")}</p>
+              <p className="text-slate-500">{t("home.start.about.hint")}</p>
+            </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
             <a
               href="https://nexonoma.de/wissensmodell"
               target="_blank"
@@ -125,6 +131,7 @@ export default function HomeTemplate() {
             >
               Modell-Erklärung <ArrowRight className="w-3 h-3" />
             </a>
+            <span className="text-white/10">•</span>
             <a href="https://nexonoma.de/feedback" target="_blank" className="text-xs font-medium text-gray-400 hover:text-white transition-colors">
               Feedback geben
             </a>
