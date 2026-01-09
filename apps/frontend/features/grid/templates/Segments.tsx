@@ -251,7 +251,16 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
           </Button>
         </div>
       ) : viewMode === "board" ? (
-        <SegmentBoard segments={segments} />
+        <SegmentBoard
+          segments={segments}
+          activeType={activeType}
+          onTypeChange={(nextType) => {
+            setActiveType(nextType);
+            setPage(1);
+          }}
+          typeOptions={selectTypeOptions}
+          typePrefix={typePrefix}
+        />
       ) : (
         <div className="space-y-6">
           {activeSegmentData && (
