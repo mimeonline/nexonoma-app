@@ -107,10 +107,8 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
       <header className="space-y-6">
         <div className="relative overflow-hidden">
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden select-none md:block">
-            <div
-              className="absolute inset-0 opacity-25 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:linear-gradient(90deg,transparent_0%,transparent_20%,rgba(0,0,0,0.5)_45%,rgba(0,0,0,1)_70%,rgba(0,0,0,1)_100%)]"
-            />
-            <div className="absolute inset-0 opacity-18 bg-[radial-gradient(110%_75%_at_85%_22%,rgba(255,255,255,0.09),transparent_60%),radial-gradient(95%_65%_at_70%_58%,rgba(255,255,255,0.07),transparent_68%),linear-gradient(145deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_55%)]" />
+            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle,rgba(255,255,255,0.10)_1px,transparent_1px),radial-gradient(120%_80%_at_85%_20%,rgba(255,255,255,0.10),transparent_60%),radial-gradient(110%_70%_at_70%_55%,rgba(255,255,255,0.07),transparent_75%)] [background-size:26px_26px] mask-[linear-gradient(90deg,transparent_0%,transparent_18%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,1)_70%,rgba(0,0,0,1)_100%)]" />
+            <div className="absolute inset-0 opacity-22 bg-[linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_55%)]" />
           </div>
           <div className="relative z-10 space-y-3">
             <SectionTitle badge={t("catalog.title")} title={t("catalog.page.heading")} description={t("catalog.page.description")} className="mb-0" />
