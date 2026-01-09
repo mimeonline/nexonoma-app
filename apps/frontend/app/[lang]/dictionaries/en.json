@@ -112,22 +112,20 @@
         "line3": "Instead of presenting content in isolation, Nexonoma makes structures, layers, and relationships visible. The focus is on orientation, context, and understanding — not on completeness."
       },
       "cards": {
-        "cards": {
-          "catalog": {
-            "title": "Knowledge Catalog",
-            "description": "Curated knowledge building blocks from software, architecture, and organizations. Explore concepts, methods, tools, and technologies and see how they are positioned within the model.",
-            "cta": "Open catalog"
-          },
-          "structure": {
-            "title": "Structure Map",
-            "description": "The structural foundation behind Nexonoma. Explore thematic domains, clusters, and segments to understand the model before going into detail.",
-            "cta": "View structure"
-          },
-          "preview": {
-            "title": "Visualization Lab",
-            "description": "A preview of additional perspectives. Experimental visualizations of relationships and structures — intentionally presented as a preview in the MVP.",
-            "cta": "Start preview"
-          }
+        "catalog": {
+          "title": "Knowledge Catalog",
+          "description": "Curated knowledge building blocks from software, architecture, and organizations. Explore concepts, methods, tools, and technologies and see how they are positioned within the model.",
+          "cta": "Open catalog"
+        },
+        "structure": {
+          "title": "Structure Map",
+          "description": "The structural foundation behind Nexonoma. Explore thematic domains, clusters, and segments to understand the model before going into detail.",
+          "cta": "View structure"
+        },
+        "preview": {
+          "title": "Visualization Lab",
+          "description": "A preview of additional perspectives. Experimental visualizations of relationships and structures — intentionally presented as a preview in the MVP.",
+          "cta": "Start preview"
         }
       },
       "about": {

@@ -87,7 +87,7 @@ function useSyncedHorizontalScroll() {
   return { proxyRef, contentRef, spacerRef, hasOverflow };
 }
 
-function useDragToPan(containerRef: React.RefObject<HTMLDivElement>) {
+function useDragToPan(containerRef: React.RefObject<HTMLDivElement | null>) {
   const [isDragging, setIsDragging] = useState(false);
   const stateRef = useRef({
     pointerId: -1,

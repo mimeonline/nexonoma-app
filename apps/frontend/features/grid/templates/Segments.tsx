@@ -102,7 +102,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
 
   const contents = useMemo(() => (cluster ? flattenContents(cluster) : []), [cluster]);
 
-  const segments = cluster.segments ?? [];
+  const segments = useMemo(() => cluster.segments ?? [], [cluster.segments]);
   const hasSegments = segments.length > 0;
   const activeSegmentData = activeSegment === "all" ? null : segments.find((segment) => segment.slug === activeSegment);
   const segmentDescription =

@@ -8,17 +8,17 @@ export async function GET(request: NextRequest) {
   let skipped = 0;
   let total = 0;
   let xml = renderSitemapXml([]);
-  let error = false;
+  let hasError = false;
 
   try {
     const result = await buildSitemapCatalogEntries(baseUrl);
     skipped = result.skipped;
     total = result.total;
     xml = renderSitemapXml(result.entries);
-  } catch (error) {
-    error = true;
+  } catch (err) {
+    hasError = true;
     if (process.env.NODE_ENV !== "production") {
-      console.error("sitemap-catalog: error", error);
+      console.error("sitemap-catalog: error", err);
     }
   }
 
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         "X-Sitemap-Asset-Total": total.toString(),
         "X-Sitemap-Url-Count": urlCount.toString(),
         "X-Sitemap-Skipped": skipped.toString(),
-        ...(error ? { "X-Sitemap-Error": "1" } : {}),
+        ...(hasError ? { "X-Sitemap-Error": "1" } : {}),
       },
     });
   }

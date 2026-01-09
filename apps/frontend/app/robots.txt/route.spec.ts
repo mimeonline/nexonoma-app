@@ -1,7 +1,14 @@
 import { describe, expect, it, vi } from "vitest";
 import { GET } from "./route";
 
-const makeRequest = (url: string, headers: Record<string, string> = {}) => {
+type MockRequest = {
+  url: string;
+  headers: {
+    get: (key: string) => string | null;
+  };
+};
+
+const makeRequest = (url: string, headers: Record<string, string> = {}): MockRequest => {
   const headerMap = new Map<string, string>();
   Object.entries(headers).forEach(([key, value]) => headerMap.set(key.toLowerCase(), value));
   return {
@@ -9,7 +16,7 @@ const makeRequest = (url: string, headers: Record<string, string> = {}) => {
     headers: {
       get: (key: string) => headerMap.get(key.toLowerCase()) ?? null,
     },
-  } as any;
+  };
 };
 
 describe("robots.txt route", () => {
