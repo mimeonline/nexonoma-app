@@ -104,13 +104,27 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
   return (
     <>
-      <header className="space-y-4">
-        <SectionTitle badge={t("catalog.title")} title={t("catalog.page.heading")} description={t("catalog.page.description")} className="mb-0" />
-        <p className="text-sm text-slate-200/70 pt-4">
-          <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
-          <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
-        </p>
-        <div className="h-px w-full bg-white/10" />
+      <header className="space-y-6">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 p-6 md:p-8">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
+            <div className="absolute inset-0 opacity-40 bg-[radial-gradient(120%_80%_at_80%_20%,rgba(255,255,255,0.12),transparent_65%),radial-gradient(110%_70%_at_60%_65%,rgba(255,255,255,0.08),transparent_70%),linear-gradient(135deg,rgba(255,255,255,0.04)_0%,rgba(255,255,255,0)_45%)]" />
+            <div className="absolute left-[78%] top-[26%] h-[3px] w-[3px] rounded-full bg-white/16" />
+            <div className="absolute left-[66%] top-[52%] h-[3px] w-[3px] rounded-full bg-white/14" />
+            <div className="absolute left-[58%] top-[36%] h-0.5 w-0.5 rounded-full bg-white/12" />
+          </div>
+          <div className="relative z-10 space-y-3">
+            <SectionTitle
+              badge={t("catalog.title")}
+              title={t("catalog.page.heading")}
+              description={t("catalog.page.description")}
+              className="mb-0"
+            />
+            <p className="text-sm text-slate-200/70">
+              <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
+              <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
+            </p>
+          </div>
+        </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">

@@ -276,7 +276,7 @@
     "page": {
       "heading": "Wissensbausteine des Modells",
       "totalCountSuffix": "Bausteine · Konzepte, Methoden, Tools & Technologien",
-      "description": "Diese Ansicht bündelt alle Wissensbausteine des Modells. Sie macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.\n\nDer Katalog dient als zentraler Zugriffspunkt auf alle Bausteine und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg."
+      "description": "Diese Ansicht bündelt alle Wissensbausteine des Modells und macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.\n\nDer Katalog fungiert als zentraler Zugriffspunkt und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg."
     },
     "search": {
       "placeholder": "Suche nach Namen oder Kurzbeschreibung..."
