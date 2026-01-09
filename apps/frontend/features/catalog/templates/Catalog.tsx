@@ -2,11 +2,9 @@
 
 import { useMemo, useState } from "react";
 
-import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
-import { TypeFilterChips } from "../molecules/TypeFilterChips";
 import { CatalogGrid } from "../organisms/CatalogGrid";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -41,11 +39,6 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
       ] as { value: FilterType; label: string }[],
     [t]
   );
-
-  const translateAssetLabel = (value: string) => {
-    const key = `asset.labels.${value.toLowerCase()}`;
-    return t(key);
-  };
 
   function normalizeCatalogType(type?: string) {
     const normalized = (type ?? "").toLowerCase();
@@ -95,6 +88,18 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
     );
   }, [items]);
 
+  const typeTabs = useMemo(
+    () =>
+      filterTypeOptions.map((option) => {
+        const count =
+          option.value === "all"
+            ? items.length
+            : typeCounts[option.value as Exclude<FilterType, "all">] ?? 0;
+        return { ...option, count };
+      }),
+    [filterTypeOptions, items.length, typeCounts]
+  );
+
   const hasItems = items.length > 0;
   const showFilteredEmptyState = !loading && !error && hasItems && filteredItems.length === 0;
   const showCuratedEmptyState = !loading && !error && !hasItems;
@@ -116,73 +121,74 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
         <div className="h-px w-full bg-white/10" />
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <div className="flex flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4 text-slate-300">
-              <circle cx="11" cy="11" r="7" strokeWidth="1.5" />
-              <path strokeWidth="1.5" d="m16.5 16.5 3 3" />
-            </svg>
-            <input
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              placeholder={t("catalog.search.placeholder")}
-              className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 focus:outline-none"
-            />
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4 text-slate-300">
+                <circle cx="11" cy="11" r="7" strokeWidth="1.5" />
+                <path strokeWidth="1.5" d="m16.5 16.5 3 3" />
+              </svg>
+              <input
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                placeholder={t("catalog.search.placeholder")}
+                className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 focus:outline-none"
+              />
+            </div>
+
+            <div className="flex w-full shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11 sm:w-[200px]">
+              <span className="sr-only">{t("catalog.pagination.itemsPerPage")}</span>
+              <select
+                value={itemsPerPage}
+                onChange={(event) => {
+                  setItemsPerPage(Number(event.target.value));
+                  setPage(1);
+                }}
+                className="w-full bg-transparent text-sm text-white focus:outline-none h-full whitespace-nowrap"
+                aria-label={t("catalog.pagination.itemsPerPage")}
+              >
+                {[12, 24, 36, 48].map((value) => (
+                  <option key={value} value={value} className="bg-slate-900 text-white">
+                    {`${value} ${t("catalog.pagination.perPageSuffix") ?? "pro Seite"}`}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <TypeFilterChips
-            options={filterTypeOptions}
-            activeType={activeType}
-            onSelect={(type) => {
-              setActiveType(type as FilterType);
-              setPage(1);
-            }}
-          />
-
-          <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-300">
-              {t("catalog.pagination.itemsPerPage")}
-            </span>
-            <select
-              value={itemsPerPage}
-              onChange={(event) => {
-                setItemsPerPage(Number(event.target.value));
-                setPage(1);
-              }}
-              className="bg-transparent text-sm text-white focus:outline-none"
-              aria-label={t("catalog.pagination.itemsPerPage")}
-            >
-              {[12, 24, 36, 48].map((value) => (
-                <option key={value} value={value} className="bg-slate-900 text-white">
-                  {value}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {activeType === "all" && (
-          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-200/80">
-            {["concept", "method", "tool", "technology"].map((typeKey) => {
-              const count = (typeCounts as Record<string, number>)[typeKey] ?? 0;
+          <div className="flex flex-nowrap items-center gap-2 px-1 md:gap-3 md:px-0">
+            {typeTabs.map((tab) => {
+              const isActive = activeType === tab.value;
               return (
                 <button
-                  key={typeKey}
-                  onClick={() => setActiveType(typeKey as FilterType)}
-                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 transition hover:border-white/40"
+                  key={tab.value}
+                  onClick={() => {
+                    setActiveType(tab.value as FilterType);
+                    setPage(1);
+                  }}
+                  className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition ${
+                    isActive
+                      ? "border-nexo-ocean/60 bg-nexo-ocean/10 text-white"
+                      : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30 hover:text-white"
+                  }`}
                 >
-                  <Badge variant={getBadgeVariant(typeKey)} size="lg">
-                    {translateAssetLabel(typeKey)}
-                  </Badge>
-                  <span className="text-slate-100">{t("catalog.filtersMeta.countLabel", { count })}</span>
+                  <span className="whitespace-nowrap">{tab.label}</span>
+                  <span
+                    className={`min-w-[2.25rem] rounded-full px-2 py-0.5 text-xs font-semibold leading-none ${
+                      isActive ? "bg-white/90 text-slate-900" : "bg-white/10 text-slate-100"
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
                 </button>
               );
             })}
           </div>
-        )}
+        </div>
+
       </header>
 
       {loading && <p className="text-sm text-slate-200/80">{t("catalog.messages.loading")}</p>}
@@ -227,30 +233,33 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
           <CatalogGrid items={pagedItems} />
 
           {filteredItems.length > 0 && totalPages > 1 && (
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Button variant="ghost" onClick={() => setPage(1)} disabled={currentPage === 1}>
-                {t("catalog.pagination.first")}
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))}
-                disabled={currentPage === 1}
-              >
-                {t("catalog.pagination.previous")}
-              </Button>
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">
-                {t("catalog.pagination.pageLabel", { page: currentPage, total: totalPages })}
-              </span>
-              <Button
-                variant="primary"
-                onClick={() => setPage((prev) => Math.min(totalPages, Math.min(totalPages, prev) + 1))}
-                disabled={currentPage === totalPages}
-              >
-                {t("catalog.pagination.next")}
-              </Button>
-              <Button variant="ghost" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages}>
-                {t("catalog.pagination.last")}
-              </Button>
+            <div className="mt-6 space-y-3">
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Button variant="ghost" onClick={() => setPage(1)} disabled={currentPage === 1}>
+                  {t("catalog.pagination.first")}
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))}
+                  disabled={currentPage === 1}
+                >
+                  {t("catalog.pagination.previous")}
+                </Button>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">
+                  {t("catalog.pagination.pageLabel", { page: currentPage, total: totalPages })}
+                </span>
+                <Button
+                  variant="primary"
+                  onClick={() => setPage((prev) => Math.min(totalPages, Math.min(totalPages, prev) + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  {t("catalog.pagination.next")}
+                </Button>
+                <Button variant="ghost" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages}>
+                  {t("catalog.pagination.last")}
+                </Button>
+              </div>
+
             </div>
           )}
         </>

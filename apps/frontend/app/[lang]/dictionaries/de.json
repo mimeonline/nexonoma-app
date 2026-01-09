@@ -300,6 +300,7 @@
     },
     "pagination": {
       "itemsPerPage": "Karten pro Seite",
+      "perPageSuffix": "pro Seite",
       "first": "Erste",
       "previous": "Zurück",
       "next": "Weiter",
