@@ -107,32 +107,32 @@
     },
     "start": {
       "intro": {
-        "line1": "Komplexität beherrschen. Zusammenhänge verstehen.",
-        "line2": "Dein visueller Guide durch den Dschungel aus Konzepten, Methoden, Tools und Technologien.",
-        "line3": "Navigiere direkt zu Inhalten oder verschaffe dir erst Überblick über die Struktur."
+        "line1": "Komplexes Wissen als strukturierte Zusammenhänge",
+        "line2": "Nexonoma ist eine visuelle Wissens- und Navigationsplattform für komplexe Themen aus Software, Architektur und Organisation.",
+        "line3": "Statt Inhalte isoliert darzustellen, macht Nexonoma Strukturen, Ebenen und Zusammenhänge sichtbar. Der Fokus liegt auf Orientierung, Einordnung und Verständnis – nicht auf Vollständigkeit."
       },
       "cards": {
         "catalog": {
           "title": "Wissens-Katalog",
-          "description": "Der direkte Weg zum Inhalt. Finde Konzepte, Tools, Methoden und Technologien, erkenne Zusammenhänge und entdecke Alternativen.",
+          "description": "Kuratierte Wissensbausteine aus Software, Architektur und Organisation. Entdecke Konzepte, Methoden, Tools und Technologien und sieh, wie sie eingeordnet sind.",
           "cta": "Katalog öffnen"
         },
         "structure": {
           "title": "Struktur-Landkarte",
-          "description": "Verstehe das Spielfeld. Sieh dir an, wie Wissensbereiche (Cluster) und Segmente die Ordnung schaffen, bevor du ins Detail gehst.",
+          "description": "Die strukturelle Ordnung hinter Nexonoma. Erkunde thematische Domänen, Cluster und Segmente und verstehe das Modell, bevor du ins Detail gehst.",
           "cta": "Struktur ansehen"
         },
         "preview": {
           "title": "Visualisierungs-Lab",
-          "description": "Ein Blick in die Zukunft: Experimentelle Matrix-Sichten und Graphen-Visualisierungen. Hier testen wir neue Perspektiven auf deine Daten.",
+          "description": "Eine Vorschau auf weiterführende Perspektiven. Experimentelle Visualisierungen von Beziehungen und Strukturen – im MVP bewusst als Preview.",
           "cta": "Preview starten"
         }
       },
       "about": {
-        "title": "Orientierung statt Noise",
-        "line1": "Nexonoma ist kein statisches Wiki, sondern ein dynamisches Beziehungs-Modell.",
-        "line2": "Es zeigt nicht nur, DASS eine Technologie existiert, sondern WO sie hingehört und WIE sie wirkt.",
-        "hint": "Tipp: Nutze die Struktur-Ansicht, um das 'Spielfeld' zu verstehen, bevor du ins Detail gehst."
+        "title": "Nexonoma ist kein Wiki und kein Lernportal.",
+        "line1": "Es zeigt nicht alles, sondern macht sichtbar, wie Wissen strukturiert ist und wo ein Thema verortet werden kann.",
+        "line2": "Der MVP enthält bewusst nur ausgewählte Beispiele – die Struktur ist dabei das eigentliche Produkt.",
+        "hint": "Hinweis: Die Struktur-Ansicht hilft dabei, den thematischen Rahmen zu verstehen, bevor man sich einzelnen Inhalten widmet."
       }
     },
     "valueProps": {

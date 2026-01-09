@@ -107,32 +107,34 @@
     },
     "start": {
       "intro": {
-        "line1": "Nexonoma maps a systemic knowledge model as a navigable structure.",
-        "line2": "In the MVP, you can explore curated examples or follow the model structure.",
-        "line3": "The focus is orientation through relationships, not a loose collection of entries."
+        "line1": "Complex knowledge as structured relationships",
+        "line2": "Nexonoma is a visual knowledge and navigation platform for complex topics in software, architecture, and organizations.",
+        "line3": "Instead of presenting content in isolation, Nexonoma makes structures, layers, and relationships visible. The focus is on orientation, context, and understanding — not on completeness."
       },
       "cards": {
-        "catalog": {
-          "title": "Browse the catalog",
-          "description": "Discover concrete knowledge building blocks and see relationships. If you already have a specific question or want to compare alternatives, start here.",
-          "cta": "Browse the catalog"
-        },
-        "structure": {
-          "title": "View the structure",
-          "description": "Follow the model levels from MacroCluster to Segment. If you want to understand how Nexonoma structures knowledge first (MacroCluster → Cluster → Segment), begin here.",
-          "cta": "View the structure"
-        },
-        "preview": {
-          "title": "Preview: relationships & map",
-          "description": "A preview of additional visualizations, intentionally reduced in the MVP. More visualizations will follow later.",
-          "cta": "View the preview"
+        "cards": {
+          "catalog": {
+            "title": "Knowledge Catalog",
+            "description": "Curated knowledge building blocks from software, architecture, and organizations. Explore concepts, methods, tools, and technologies and see how they are positioned within the model.",
+            "cta": "Open catalog"
+          },
+          "structure": {
+            "title": "Structure Map",
+            "description": "The structural foundation behind Nexonoma. Explore thematic domains, clusters, and segments to understand the model before going into detail.",
+            "cta": "View structure"
+          },
+          "preview": {
+            "title": "Visualization Lab",
+            "description": "A preview of additional perspectives. Experimental visualizations of relationships and structures — intentionally presented as a preview in the MVP.",
+            "cta": "Start preview"
+          }
         }
       },
       "about": {
-        "title": "What is Nexonoma?",
-        "line1": "Nexonoma is neither a wiki nor a tool catalog.",
-        "line2": "It is an orientation model that makes structure, context, and relevance visible.",
-        "hint": "New here? Start with the structure—or jump straight into the catalog."
+        "title": "Nexonoma is not a wiki and not a learning portal.",
+        "line1": "It does not aim to show everything, but to make visible how knowledge is structured and where a topic can be positioned.",
+        "line2": "The MVP deliberately contains only selected examples — the structure itself is the actual product.",
+        "hint": "Note: The structure view helps to understand the thematic context before focusing on individual pieces of content."
       }
     },
     "valueProps": {

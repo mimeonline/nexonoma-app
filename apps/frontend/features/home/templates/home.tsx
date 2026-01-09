@@ -19,10 +19,10 @@ export default function HomeTemplate() {
     <div className="min-h-full w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* HEADER: Willkommen & Kontext */}
       <header className="mb-12 text-center sm:text-left max-w-3xl">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">{t("home.start.intro.line1") || "Willkommen im Cockpit."}</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3 tracking-tight">{t("home.start.intro.line1")}</h1>
         <p className="text-gray-400 max-w-2xl text-lg leading-relaxed">
-          {t("home.start.intro.line2") || "Nexonoma ist dein Navigationssystem."}
-          <span className="block sm:inline sm:ml-1 opacity-70">{t("home.start.intro.line3") || "Wähle deinen Einstiegspunkt."}</span>
+          {t("home.start.intro.line2")}
+          <span className="block sm:inline sm:ml-1 opacity-70">{t("home.start.intro.line3")}</span>
         </p>
       </header>
 
@@ -42,15 +42,13 @@ export default function HomeTemplate() {
           </div>
 
           <h3 className="relative z-10 text-xl font-bold text-white mb-2 group-hover:text-teal-300 transition-colors">
-            {t("home.start.cards.catalog.title") || "Im Katalog stöbern"}
+            {t("home.start.cards.catalog.title")}
           </h3>
-          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">
-            {t("home.start.cards.catalog.description") || "Konkrete Wissensbausteine entdecken. Der direkte Weg zu Tools, Methoden und Konzepten."}
-          </p>
+          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">{t("home.start.cards.catalog.description")}</p>
 
           <div className="relative z-10 mt-auto">
             <Button className="w-full bg-teal-600 hover:bg-teal-500 text-white font-semibold shadow-lg shadow-teal-900/20 group-hover:shadow-teal-500/20 transition-all">
-              {t("home.start.cards.catalog.cta") || "Katalog öffnen"} <ArrowRight className="ml-2 w-4 h-4" />
+              {t("home.start.cards.catalog.cta")} <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -65,15 +63,13 @@ export default function HomeTemplate() {
           </div>
 
           <h3 className="relative z-10 text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
-            {t("home.start.cards.structure.title") || "Struktur verstehen"}
+            {t("home.start.cards.structure.title")}
           </h3>
-          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">
-            {t("home.start.cards.structure.description") || "Die Ebenen des Modells nachvollziehen: Von Cluster über Segment zum Content."}
-          </p>
+          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">{t("home.start.cards.structure.description")}</p>
 
           <div className="relative z-10 mt-auto">
             <Button variant="secondary" className="w-full border-blue-500/10 text-blue-100 hover:text-white hover:bg-blue-500/20">
-              {t("home.start.cards.structure.cta") || "Struktur ansehen"}
+              {t("home.start.cards.structure.cta")}
             </Button>
           </div>
         </div>
@@ -99,13 +95,11 @@ export default function HomeTemplate() {
           <h3 className="relative z-10 text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
             {t("home.start.cards.preview.title") || "Preview & Matrix"}
           </h3>
-          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">
-            {t("home.start.cards.preview.description") || "Eine Vorschau auf weitere Visualisierungen und Zusammenhänge (Beta)."}
-          </p>
+          <p className="relative z-10 text-sm text-gray-400 mb-8 leading-relaxed grow">{t("home.start.cards.preview.description")}</p>
 
           <div className="relative z-10 mt-auto">
             <Button variant="ghost" className="w-full text-gray-400 hover:text-purple-300 hover:bg-purple-500/10">
-              {t("home.start.cards.preview.cta") || "Preview starten"}
+              {t("home.start.cards.preview.cta")}
             </Button>
           </div>
         </div>
@@ -115,11 +109,11 @@ export default function HomeTemplate() {
       <section className="mt-16 border-t border-white/5 pt-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-1 max-w-xl">
-            <h4 className="text-sm font-semibold text-white">{t("home.start.about.title") || "Was ist Nexonoma?"}</h4>
+            <h4 className="text-sm font-semibold text-white">{t("home.start.about.title")}</h4>
             <p className="text-xs text-gray-500 leading-relaxed">
               {t("home.start.about.line1")} {t("home.start.about.line2")}
               <br />
-              {t("home.start.about.hint") || "Es ist ein Orientierungsmodell, das Struktur, Kontext und Relevanz sichtbar macht."}
+              {t("home.start.about.hint")}
             </p>
           </div>
 
