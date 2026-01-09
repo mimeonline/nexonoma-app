@@ -7,14 +7,15 @@ import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
+import { SegmentBoard } from "@/features/grid/components/SegmentBoard";
+import { SegmentControlBar } from "@/features/grid/components/SegmentControlBar";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { Cluster, MacroCluster, SegmentContentItem, SegmentContentType } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 import { getCardTagKeys, getCardTagLabel } from "@/utils/getCardTags";
 import { formatTagLabel } from "@/utils/tag-labels";
 import { usePathname, useRouter } from "next/navigation";
-import { SegmentBoard } from "@/features/grid/components/SegmentBoard";
-import { SegmentControlBar } from "@/features/grid/components/SegmentControlBar";
 // --- Internal Types ---
 type ContentWithSegment = SegmentContentItem & {
   segmentSlug: string;
@@ -127,33 +128,35 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
 
   return (
     <div className="space-y-8 pb-20" id="segments-top">
-      {/* --- HEADER PANEL --- */}
-      <Card variant="panel" className="p-6 md:p-8 bg-nexo-surface border-white/10">
-        <div className="flex flex-col gap-6 md:flex-row md:justify-between md:items-start">
-          <div className="space-y-3 flex-1 min-w-0">
-            {/* Breadcrumbs */}
-            <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
-              <Link href="/grid" className="hover:text-white transition-colors">
-                {t("grid.segments.breadcrumbs.grid")}
-              </Link>
-              <span className="text-slate-700">/</span>
-              <Link href={`/grid/${macroCluster.slug}`} className="hover:text-white transition-colors">
-                {macroCluster.name}
-              </Link>
-              <span className="text-slate-700">/</span>
-              <span className="text-nexo-ocean truncate">{cluster.name}</span>
-            </nav>
-
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-white sm:text-4xl">{cluster.name}</h1>
-              {/* Optional: Live Badge Logic here if needed */}
-            </div>
-            <p className="max-w-2xl text-base text-nexo-muted leading-relaxed">
-              {cluster.longDescription || "Erkunde die Bausteine dieses Clusters."}
-            </p>
-          </div>
+      {/* --- HEADER --- */}
+      <div className="relative">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden select-none md:block">
+          <div className="absolute inset-0 opacity-30 bg-[radial-gradient(140%_90%_at_85%_20%,rgba(255,255,255,0.14),transparent_70%),radial-gradient(120%_70%_at_70%_55%,rgba(255,255,255,0.08),transparent_75%),repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0,rgba(255,255,255,0.08)_1px,transparent_1px,transparent_28px),repeating-linear-gradient(180deg,rgba(255,255,255,0.07)_0,rgba(255,255,255,0.07)_1px,transparent_1px,transparent_28px)] [mask-image:linear-gradient(90deg,transparent_0%,transparent_20%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,1)_75%,rgba(0,0,0,1)_100%)]" />
+          <div className="absolute left-[72%] top-[28%] h-[3px] w-[3px] rounded-full bg-white/18" />
+          <div className="absolute left-[84%] top-[54%] h-[3px] w-[3px] rounded-full bg-white/16" />
+          <div className="absolute left-[66%] top-[40%] h-0.5 w-0.5 rounded-full bg-white/16" />
         </div>
-      </Card>
+        <div className="relative z-10 space-y-4">
+          <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+            <Link href="/grid" className="hover:text-white transition-colors">
+              {t("grid.segments.breadcrumbs.grid")}
+            </Link>
+            <span className="text-slate-700">/</span>
+            <Link href={`/grid/${macroCluster.slug}`} className="hover:text-white transition-colors">
+              {macroCluster.name}
+            </Link>
+            <span className="text-slate-700">/</span>
+            <span className="text-nexo-ocean truncate">{cluster.name}</span>
+          </nav>
+
+          <SectionTitle
+            badge={t("grid.segments.badge")}
+            title={cluster.name}
+            description={cluster.longDescription || t("grid.clusters.descriptionFallback")}
+            className="mb-0"
+          />
+        </div>
+      </div>
 
       {/* --- CONTROL BAR --- */}
       {hasSegments && (
@@ -194,10 +197,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
           </Button>
         </div>
       ) : viewMode === "board" ? (
-        <SegmentBoard
-          segments={segments}
-          activeType={activeType}
-        />
+        <SegmentBoard segments={segments} activeType={activeType} />
       ) : (
         <div className="space-y-6">
           {activeSegmentData && (

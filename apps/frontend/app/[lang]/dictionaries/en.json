@@ -212,6 +212,7 @@
       "descriptionFallback": "This view shows the thematic areas within this knowledge domain. It makes visible how the topic space is structured and which focal areas are distinguished.\n\nEach tile represents an entry point into a dedicated section with further segments and content."
     },
     "segments": {
+      "badge": "Subject Areas",
       "controls": {
         "viewLabel": "View"
       },
@@ -246,14 +247,16 @@
         "next": "Next",
         "label": "Page {current} / {total}"
       },
-      "segmentDescriptionFallback": "No segment description available.",
+      "areaLabel": "Area",
+      "areaAll": "All areas",
+      "segmentDescriptionFallback": "No area description available.",
       "emptyLane": "Empty"
     },
     "labels": {
       "cluster": "Cluster",
       "clusters": "Clusters",
-      "segment": "Segment",
-      "segments": "Segments"
+      "segment": "Area",
+      "segments": "Areas"
     },
     "actions": {
       "explore": "Explore"

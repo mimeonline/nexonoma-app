@@ -212,6 +212,7 @@
       "descriptionFallback": "Diese Ansicht zeigt die thematischen Bereiche innerhalb dieses Wissensbereichs. Sie hilft dir, den Raum in sinnvolle Teilbereiche zu gliedern und einen passenden Einstieg zu finden.\n\nJede Kachel führt zu einem eigenen Abschnitt mit Segmenteinstieg und weiteren Bausteinen."
     },
     "segments": {
+      "badge": "Themenbereiche",
       "controls": {
         "viewLabel": "Ansicht"
       },
@@ -246,14 +247,16 @@
         "next": "Weiter",
         "label": "Seite {current} / {total}"
       },
-      "segmentDescriptionFallback": "Keine Segmentbeschreibung verfügbar.",
+      "areaLabel": "Bereich",
+      "areaAll": "Alle Bereiche",
+      "segmentDescriptionFallback": "Keine Bereichsbeschreibung verfügbar.",
       "emptyLane": "Leer"
     },
     "labels": {
       "cluster": "Cluster",
       "clusters": "Cluster",
-      "segment": "Segment",
-      "segments": "Segmente"
+      "segment": "Bereich",
+      "segments": "Bereiche"
     },
     "actions": {
       "explore": "Erkunden"
