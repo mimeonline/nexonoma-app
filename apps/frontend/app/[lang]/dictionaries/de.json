@@ -215,7 +215,14 @@
       "breadcrumbs": {
         "grid": "Übersicht"
       },
+      "index": {
+        "all": "Alle anzeigen"
+      },
       "filters": {
+        "segmentLabel": "Bereich",
+        "segmentAll": "Alle Bereiche",
+        "typeLabel": "Typ",
+        "typePrefix": "Typ",
         "types": {
           "all": "Alle Typen",
           "concept": "Konzepte",
@@ -225,12 +232,18 @@
         }
       },
       "viewToggle": {
-        "grid": "Kacheln",
-        "pipeline": "Pipeline"
+        "tiles": "Kacheln",
+        "board": "Board"
       },
       "tabs": {
         "all": "Alles anzeigen"
       },
+      "pagination": {
+        "prev": "Zurück",
+        "next": "Weiter",
+        "label": "Seite {current} / {total}"
+      },
+      "segmentDescriptionFallback": "Keine Segmentbeschreibung verfügbar.",
       "emptyLane": "Leer"
     },
     "labels": {

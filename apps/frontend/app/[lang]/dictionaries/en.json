@@ -215,7 +215,14 @@
       "breadcrumbs": {
         "grid": "Grid"
       },
+      "index": {
+        "all": "Show all"
+      },
       "filters": {
+        "segmentLabel": "Area",
+        "segmentAll": "All areas",
+        "typeLabel": "Type",
+        "typePrefix": "Type",
         "types": {
           "all": "All types",
           "concept": "Concepts",
@@ -225,12 +232,18 @@
         }
       },
       "viewToggle": {
-        "grid": "Grid",
-        "pipeline": "Pipeline"
+        "tiles": "Tiles",
+        "board": "Board"
       },
       "tabs": {
         "all": "Show all"
       },
+      "pagination": {
+        "prev": "Prev",
+        "next": "Next",
+        "label": "Page {current} / {total}"
+      },
+      "segmentDescriptionFallback": "No segment description available.",
       "emptyLane": "Empty"
     },
     "labels": {
