@@ -208,8 +208,8 @@
       "description": "Diese Ansicht zeigt die grundlegenden Wissensbereiche. Sie macht sichtbar, welche thematischen Räume das Modell unterscheidet und wie Themen auf dieser obersten Ebene verortet sind.\n\nDie Bereiche sind Teil eines strukturierten Wissensmodells, in dem Begriffe und ihre Beziehungen explizit definiert sind."
     },
     "clusters": {
-      "badge": "Themen-Cluster",
-      "descriptionFallback": "Erkunde die Bausteine dieses Clusters."
+      "badge": "Themenräume",
+      "descriptionFallback": "Diese Ansicht zeigt die thematischen Bereiche innerhalb dieses Wissensbereichs. Sie hilft dir, den Raum in sinnvolle Teilbereiche zu gliedern und einen passenden Einstieg zu finden.\n\nJede Kachel führt zu einem eigenen Abschnitt mit Segmenteinstieg und weiteren Bausteinen."
     },
     "segments": {
       "breadcrumbs": {

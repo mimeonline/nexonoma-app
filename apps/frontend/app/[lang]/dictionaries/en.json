@@ -208,8 +208,8 @@
       "description": "This view shows the fundamental knowledge domains. It makes visible which thematic spaces the model distinguishes and how topics are positioned at this top level.\n\nThese domains are part of a structured knowledge model in which concepts and their relationships are explicitly defined."
     },
     "clusters": {
-      "badge": "Topic clusters",
-      "descriptionFallback": "No description available."
+      "badge": "Thematic Areas",
+      "descriptionFallback": "This view shows the thematic areas within this knowledge domain. It makes visible how the topic space is structured and which focal areas are distinguished.\n\nEach tile represents an entry point into a dedicated section with further segments and content."
     },
     "segments": {
       "breadcrumbs": {
