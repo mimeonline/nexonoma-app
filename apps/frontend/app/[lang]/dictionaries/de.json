@@ -203,9 +203,9 @@
   },
   "grid": {
     "macro": {
-      "badge": "Das Big Picture",
+      "badge": "Wissensmodell",
       "title": "Wissensbereiche",
-      "description": "Wähle deinen Themenraum. Die oberste Ebene der Landkarte ordnet die komplexe Welt der IT in vier klare Dimensionen – von der Strategie bis zur Infrastruktur."
+      "description": "Diese Ansicht zeigt die grundlegenden Wissensbereiche. Sie macht sichtbar, welche thematischen Räume das Modell unterscheidet und wie Themen auf dieser obersten Ebene verortet sind.\n\nDie Bereiche sind Teil eines strukturierten Wissensmodells, in dem Begriffe und ihre Beziehungen explizit definiert sind."
     },
     "clusters": {
       "badge": "Themen-Cluster",

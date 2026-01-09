@@ -16,9 +16,9 @@ export function SectionTitle({ title, description, badge, align = "left", classN
         </Badge>
       )}
 
-      <h2 className="font-[--font-space-grotesk] text-3xl font-bold text-white sm:text-4xl leading-tight">{title}</h2>
+      <h1 className="text-3xl font-bold text-white sm:text-4xl leading-tight">{title}</h1>
 
-      {description && <p className="max-w-2xl text-lg text-nexo-muted leading-relaxed">{description}</p>}
+      {description && <p className="max-w-2xl text-lg text-nexo-muted leading-relaxed whitespace-pre-line">{description}</p>}
     </div>
   );
 }

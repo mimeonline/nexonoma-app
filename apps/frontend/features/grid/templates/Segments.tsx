@@ -127,7 +127,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
               {/* Optional: Live Badge Logic here if needed */}
             </div>
             <p className="max-w-2xl text-base text-nexo-muted leading-relaxed">
-              {cluster.shortDescription || "Erkunde die Bausteine dieses Clusters."}
+              {cluster.longDescription || "Erkunde die Bausteine dieses Clusters."}
             </p>
           </div>
 

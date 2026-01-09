@@ -203,9 +203,9 @@
   },
   "grid": {
     "macro": {
-      "badge": "Grid Navigation",
-      "title": "Knowledge domains",
-      "description": "The top-level structure of the knowledge network. These domains bundle related topics into thematic spaces – from strategy and architecture to users and context."
+      "badge": "Knowledge Model",
+      "title": "Knowledge Domains",
+      "description": "This view shows the fundamental knowledge domains. It makes visible which thematic spaces the model distinguishes and how topics are positioned at this top level.\n\nThese domains are part of a structured knowledge model in which concepts and their relationships are explicitly defined."
     },
     "clusters": {
       "badge": "Topic clusters",
