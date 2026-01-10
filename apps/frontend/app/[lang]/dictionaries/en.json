@@ -276,7 +276,15 @@
     "page": {
       "heading": "Knowledge Building Blocks of the Model",
       "totalCountSuffix": "Building blocks · Concepts, Methods, Tools & Technologies",
-      "description": "This view consolidates all knowledge building blocks of the model and makes concepts, methods, tools, and technologies accessible независимо of their structural classification.\n\nThe catalog serves as a central access point and supports search, filtering, and comparison across thematic boundaries."
+      "description": {
+        "line1": "This view bundles all building blocks of the model and makes concepts, methods, tools, and technologies accessible regardless of their structural placement.",
+        "line2": "The catalog serves as a central access point and supports search, filtering, and comparison across thematic boundaries.",
+        "line3": "Each entry opens a detail view with a 360° perspective: definition, context, placement in the model, and relationships to related building blocks."
+      },
+      "descriptionToggle": {
+        "show": "Show details",
+        "hide": "Hide details"
+      }
     },
     "search": {
       "placeholder": "Search by name or short description..."

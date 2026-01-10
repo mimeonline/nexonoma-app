@@ -276,7 +276,15 @@
     "page": {
       "heading": "Wissensbausteine des Modells",
       "totalCountSuffix": "Bausteine · Konzepte, Methoden, Tools & Technologien",
-      "description": "Diese Ansicht bündelt alle Wissensbausteine des Modells und macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.\n\nDer Katalog fungiert als zentraler Zugriffspunkt und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg."
+      "description": {
+        "line1": "Diese Ansicht bündelt alle Wissensbausteine des Modells und macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.",
+        "line2": "Der Katalog fungiert als zentraler Zugriffspunkt und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg.",
+        "line3": "Jeder Eintrag führt zu einer Detailansicht mit 360°-Einordnung: Definition, Kontext, Einordnung im Modell und Beziehungen zu verwandten Bausteinen."
+      },
+      "descriptionToggle": {
+        "show": "Einordnung anzeigen",
+        "hide": "Einordnung ausblenden"
+      }
     },
     "search": {
       "placeholder": "Suche nach Namen oder Kurzbeschreibung..."

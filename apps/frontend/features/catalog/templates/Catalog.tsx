@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/atoms/Button";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
+import { ExpandableDescription } from "@/components/ui/molecules/ExpandableDescription";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { usePathname, useRouter } from "next/navigation";
@@ -28,6 +29,13 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
   const localePrefix = locale ? `/${locale}` : "";
   const formattedTotalCount = useMemo(() => new Intl.NumberFormat(locale ?? "en").format(items.length), [items.length, locale]);
+  const descriptionLines = useMemo(
+    () =>
+      [t("catalog.page.description.line1"), t("catalog.page.description.line2"), t("catalog.page.description.line3")].filter(
+        (line) => typeof line === "string" && line.trim().length > 0
+      ),
+    [t]
+  );
 
   const filterTypeOptions = useMemo(
     () =>
@@ -105,17 +113,31 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   return (
     <>
       <header className="space-y-6">
-        <div className="relative overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 hidden select-none md:block">
+        <div className="relative">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden hidden select-none md:block">
             <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle,rgba(255,255,255,0.10)_1px,transparent_1px),radial-gradient(120%_80%_at_85%_20%,rgba(255,255,255,0.10),transparent_60%),radial-gradient(110%_70%_at_70%_55%,rgba(255,255,255,0.07),transparent_75%)] [background-size:26px_26px] mask-[linear-gradient(90deg,transparent_0%,transparent_18%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,1)_70%,rgba(0,0,0,1)_100%)]" />
             <div className="absolute inset-0 opacity-22 bg-[linear-gradient(145deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0)_55%)]" />
           </div>
           <div className="relative z-10 space-y-3">
-            <SectionTitle badge={t("catalog.title")} title={t("catalog.page.heading")} description={t("catalog.page.description")} className="mb-0" />
-            <p className="text-sm text-slate-200/70">
-              <span className="text-base font-semibold text-slate-100">{formattedTotalCount}</span>{" "}
-              <span className="text-sm text-slate-200/70">{t("catalog.page.totalCountSuffix")}</span>
-            </p>
+            <SectionTitle
+              badge={t("catalog.title")}
+              title={t("catalog.page.heading")}
+              description={
+                descriptionLines.length > 0 ? (
+                  <ExpandableDescription
+                    lines={descriptionLines}
+                    collapsedLines={1}
+                    labels={{
+                      show: t("catalog.page.descriptionToggle.show"),
+                      hide: t("catalog.page.descriptionToggle.hide"),
+                    }}
+                    storageKey="catalog:introExpanded"
+                    textClassName="text-sm text-slate-200/70"
+                  />
+                ) : undefined
+              }
+              className="mb-0"
+            />
           </div>
         </div>
 
