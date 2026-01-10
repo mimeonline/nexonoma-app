@@ -28,7 +28,6 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
   const router = useRouter();
   const locale = pathname?.match(/^\/(de|en)(\/|$)/)?.[1];
   const localePrefix = locale ? `/${locale}` : "";
-  const formattedTotalCount = useMemo(() => new Intl.NumberFormat(locale ?? "en").format(items.length), [items.length, locale]);
   const descriptionLines = useMemo(
     () =>
       [t("catalog.page.description.line1"), t("catalog.page.description.line2"), t("catalog.page.description.line3")].filter(

@@ -339,11 +339,6 @@
         },
         "io": {
           "title": "I/O & resources"
-        },
-        "explain": {
-          "trigger": "What am I looking at?",
-          "title": "Why this 360° view?",
-          "body": "This page provides a 360° view of a conceptual or technical building block. A 360° view means a holistic perspective where definition, intent, context, dependencies, trade-offs, and practical examples are brought together in one place. In practice, the challenge is rarely a lack of information, but a lack of context and decision support. The 360° view helps you quickly understand a building block, assess its implications, and compare it with alternatives."
         }
       },
       "sections": {
@@ -361,6 +356,11 @@
         "constraints": "Constraints",
         "tradeoffs": "Trade-offs",
         "metrics": "Metrics"
+      },
+      "explain": {
+        "trigger": "What am I looking at?",
+        "title": "Why this 360° view?",
+        "body": "This page provides a 360° view of a conceptual or technical building block. A 360° view means a holistic perspective where definition, intent, context, dependencies, trade-offs, and practical examples are brought together in one place. In practice, the challenge is rarely a lack of information, but a lack of context and decision support. The 360° view helps you quickly understand a building block, assess its implications, and compare it with alternatives."
       }
     }
   },

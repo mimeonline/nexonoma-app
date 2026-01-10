@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useId, useMemo, useState, useSyncExternalStore } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -15,25 +15,51 @@ interface ExpandableDescriptionProps {
   textClassName?: string;
 }
 
+const storageListeners = new Map<string, Set<() => void>>();
+
+function subscribeToStorage(key: string, callback: () => void) {
+  let listeners = storageListeners.get(key);
+  if (!listeners) {
+    listeners = new Set();
+    storageListeners.set(key, listeners);
+  }
+  listeners.add(callback);
+  return () => {
+    listeners?.delete(callback);
+    if (listeners?.size === 0) {
+      storageListeners.delete(key);
+    }
+  };
+}
+
+function emitStorageChange(key: string) {
+  const listeners = storageListeners.get(key);
+  listeners?.forEach((listener) => listener());
+}
+
+function getStoredExpanded(key: string) {
+  if (typeof window === "undefined") return false;
+  return window.sessionStorage.getItem(key) === "true";
+}
+
+function setStoredExpanded(key: string, value: boolean) {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(key, String(value));
+  emitStorageChange(key);
+}
+
 export function ExpandableDescription({ lines, collapsedLines = 1, labels, storageKey, id, className, textClassName }: ExpandableDescriptionProps) {
   const generatedId = useId();
   const controlsId = id ?? generatedId;
   const sanitizedLines = useMemo(() => lines.filter((line) => typeof line === "string" && line.trim().length > 0), [lines]);
   const hasHidden = sanitizedLines.length > collapsedLines;
-  const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    if (!storageKey || typeof window === "undefined") return;
-    const saved = window.sessionStorage.getItem(storageKey);
-    if (saved === "true") {
-      setExpanded(true);
-    }
-  }, [storageKey]);
-
-  useEffect(() => {
-    if (!storageKey || typeof window === "undefined") return;
-    window.sessionStorage.setItem(storageKey, String(expanded));
-  }, [expanded, storageKey]);
+  const storedExpanded = useSyncExternalStore(
+    (callback) => (storageKey ? subscribeToStorage(storageKey, callback) : () => undefined),
+    () => (storageKey ? getStoredExpanded(storageKey) : false),
+    () => false
+  );
+  const [localExpanded, setLocalExpanded] = useState(false);
+  const expanded = storageKey ? storedExpanded : localExpanded;
 
   if (sanitizedLines.length === 0) {
     return null;
@@ -60,7 +86,7 @@ export function ExpandableDescription({ lines, collapsedLines = 1, labels, stora
           type="button"
           aria-expanded={expanded}
           aria-controls={controlsId}
-          onClick={() => setExpanded((prev) => !prev)}
+          onClick={() => (storageKey ? setStoredExpanded(storageKey, !expanded) : setLocalExpanded((prev) => !prev))}
           className="
             inline-flex items-center gap-1 rounded-md px-1.5 py-1 mt-2
             text-sm font-medium text-slate-200/80
