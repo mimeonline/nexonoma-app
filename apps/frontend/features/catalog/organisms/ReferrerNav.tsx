@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import { useI18n } from "@/features/i18n/I18nProvider";
 
 type Props = {
@@ -16,34 +16,46 @@ type ReferrerState = {
   referrerPath: string | null;
 };
 
+function getReferrerSnapshot(): string {
+  if (typeof window === "undefined") {
+    return "0|";
+  }
+
+  const historyBackPossible = window.history.length > 1;
+  let refPath = "";
+
+  try {
+    const ref = document.referrer;
+    if (ref) {
+      const url = new URL(ref);
+      if (url.origin === window.location.origin) {
+        refPath = url.pathname;
+      }
+    }
+  } catch {
+    // ignore parsing issues
+  }
+
+  return `${historyBackPossible || !!refPath ? 1 : 0}|${refPath}`;
+}
+
+function subscribeReferrer(callback: () => void) {
+  if (typeof window === "undefined") {
+    return () => undefined;
+  }
+  window.addEventListener("popstate", callback);
+  return () => window.removeEventListener("popstate", callback);
+}
+
 export function ReferrerNav({ segmentName, clusterName, macroClusterName }: Props) {
   const router = useRouter();
   const { t } = useI18n();
 
-  const [state, setState] = useState<ReferrerState>({ canGoBack: false, referrerPath: null });
-
-  useEffect(() => {
-    const historyBackPossible = window.history.length > 1;
-    let refPath: string | null = null;
-
-    try {
-      const ref = document.referrer;
-      if (ref) {
-        const url = new URL(ref);
-        if (url.origin === window.location.origin) {
-          refPath = url.pathname;
-        }
-      }
-    } catch {
-      // ignore parsing issues
-    }
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setState({
-      canGoBack: historyBackPossible || !!refPath,
-      referrerPath: refPath,
-    });
-  }, []);
+  const snapshot = useSyncExternalStore(subscribeReferrer, getReferrerSnapshot, () => "0|");
+  const state = useMemo<ReferrerState>(() => {
+    const [canGoBackFlag, refPath] = snapshot.split("|");
+    return { canGoBack: canGoBackFlag === "1", referrerPath: refPath || null };
+  }, [snapshot]);
 
   const cameFromGrid = useMemo(
     () => !!state.referrerPath?.match(/^\/([a-z]{2})(-[A-Z]{2})?\/grid(\/|$)|^\/grid(\/|$)/),
