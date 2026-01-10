@@ -61,7 +61,13 @@ export function ExpandableDescription({ lines, collapsedLines = 1, labels, stora
           aria-expanded={expanded}
           aria-controls={controlsId}
           onClick={() => setExpanded((prev) => !prev)}
-          className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-slate-200/70 transition hover:text-slate-100 hover:underline underline-offset-4 decoration-white/20 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60"
+          className="
+            inline-flex items-center gap-1 rounded-md px-1.5 py-1 mt-2
+            text-sm font-medium text-slate-200/80
+            hover:text-slate-100 hover:bg-white/5
+            transition
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70
+            focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/70"
         >
           <span>{expanded ? labels.hide : labels.show}</span>
           {expanded ? <ChevronUp className="h-4 w-4" aria-hidden="true" /> : <ChevronDown className="h-4 w-4" aria-hidden="true" />}

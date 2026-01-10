@@ -282,8 +282,8 @@
         "line3": "Jeder Eintrag führt zu einer Detailansicht mit 360°-Einordnung: Definition, Kontext, Einordnung im Modell und Beziehungen zu verwandten Bausteinen."
       },
       "descriptionToggle": {
-        "show": "Einordnung anzeigen",
-        "hide": "Einordnung ausblenden"
+        "show": "Wie ist der Katalog gedacht?",
+        "hide": "Ausblenden"
       }
     },
     "search": {

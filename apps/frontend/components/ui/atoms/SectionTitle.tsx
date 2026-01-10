@@ -8,9 +8,10 @@ interface SectionTitleProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function SectionTitle({ title, description, badge, align = "left", className, ...props }: SectionTitleProps) {
-  const descriptionLines = Array.isArray(description)
-    ? description.filter((line) => typeof line === "string" && line.trim().length > 0)
+  const descriptionLines: string[] | null = Array.isArray(description)
+    ? description.filter((line): line is string => typeof line === "string" && line.trim().length > 0)
     : null;
+
   const hasDescriptionLines = Boolean(descriptionLines && descriptionLines.length > 0);
 
   return (
