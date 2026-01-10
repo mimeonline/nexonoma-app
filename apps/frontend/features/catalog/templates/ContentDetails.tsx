@@ -3,11 +3,13 @@
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { TagChip } from "@/components/atoms/TagChip";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { Example, ExternalResource } from "@/types/nexonoma";
 import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
+import { Info } from "lucide-react";
 import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -91,6 +93,28 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
           </div>
 
           <div className="flex flex-row flex-wrap md:flex-col items-start md:items-end gap-3 min-w-[200px]">
+            <div className="flex w-full md:justify-end">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-slate-200/80 hover:text-slate-100 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60"
+                  >
+                    <Info className="h-4 w-4" />
+                    <span>{t("contentDetails.explain.trigger")}</span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  className="w-[420px] max-w-[90vw] border border-nexo-border bg-slate-950/90 shadow-lg"
+                >
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-white">{t("contentDetails.explain.title")}</p>
+                    <p className="text-sm text-slate-400">{t("contentDetails.explain.body")}</p>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
               <ExplainableLabel fieldKey="maturityLevel" value={content.maturityLevel}>
                 <span className="text-xs uppercase font-semibold text-slate-500">{t("asset.properties.maturityLevel.label")}</span>
