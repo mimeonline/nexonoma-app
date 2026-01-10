@@ -279,7 +279,7 @@
       "description": {
         "line1": "Diese Ansicht bündelt alle Wissensbausteine des Modells und macht Konzepte, Methoden, Tools und Technologien unabhängig von ihrer strukturellen Einordnung zugänglich.",
         "line2": "Der Katalog fungiert als zentraler Zugriffspunkt und unterstützt Suche, Filterung und Vergleich über thematische Grenzen hinweg.",
-        "line3": "Jeder Eintrag führt zu einer Detailansicht mit 360°-Einordnung: Definition, Kontext, Einordnung im Modell und Beziehungen zu verwandten Bausteinen."
+        "line3": "Jeder Eintrag führt zu einer Detailansicht mit 360°-Einordnung. Eine 360°-Einordnung bedeutet, dass ein Baustein aus mehreren Perspektiven betrachtet wird – einschließlich Definition, fachlichem und technischem Kontext, Einordnung im Modell sowie Beziehungen zu verwandten Bausteinen. Ziel ist es, nicht nur Information bereitzustellen, sondern fundierte Orientierung und Vergleichbarkeit zu ermöglichen."
       },
       "descriptionToggle": {
         "show": "Wie ist der Katalog gedacht?",

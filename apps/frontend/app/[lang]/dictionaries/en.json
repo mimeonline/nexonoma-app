@@ -279,7 +279,7 @@
       "description": {
         "line1": "This view bundles all building blocks of the model and makes concepts, methods, tools, and technologies accessible regardless of their structural placement.",
         "line2": "The catalog serves as a central access point and supports search, filtering, and comparison across thematic boundaries.",
-        "line3": "Each entry opens a detail view with a 360° perspective: definition, context, placement in the model, and relationships to related building blocks."
+        "line3": "Each entry leads to a detail view with a 360° perspective. A 360° perspective means that a building block is examined from multiple angles, including definition, contextual background, placement within the model, and relationships to related building blocks. The goal is not just to provide information, but to support informed understanding and comparison."
       },
       "descriptionToggle": {
         "show": "Show details",
