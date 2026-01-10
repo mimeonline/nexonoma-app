@@ -2,14 +2,15 @@
 
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
+import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { TagChip } from "@/components/atoms/TagChip";
 import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/I18nProvider";
 import { ContentDetail } from "@/types/catalog";
 import { Example, ExternalResource } from "@/types/nexonoma";
 import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
 import { Info } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { MetricsList } from "../organisms/MetricsList";
 import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -57,6 +58,45 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
   const enumLabel = useEnumAssetLabel();
   const enumLabels = useEnumAssetLabels();
   const tagKeys = getOrderedTagKeys(content);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const [isNudged, setIsNudged] = useState(false);
+  const hasNudgedRef = useRef(false);
+
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl || hasNudgedRef.current) {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      hasNudgedRef.current = true;
+      return;
+    }
+
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || hasNudgedRef.current) {
+          return;
+        }
+        hasNudgedRef.current = true;
+        setIsNudged(true);
+        timeoutId = setTimeout(() => setIsNudged(false), 520);
+        observer.disconnect();
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(heroEl);
+
+    return () => {
+      observer.disconnect();
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
 
   return (
     <div className="space-y-8 pb-20">
@@ -64,17 +104,15 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
       <ReferrerNavClient segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
 
       {/* 1. HERO SECTION */}
-      <section className="relative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-nexo-aqua/5 rounded-full blur-3xl pointer-events-none"></div>
+      <section ref={heroRef} className="relative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-nexo-aqua/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
-          <div className="space-y-4 max-w-3xl">
+          {/* LEFT: force real column width so text doesn't behave like shrink-to-content */}
+          <div className="w-full flex-1 min-w-0 space-y-4 max-w-3xl text-left">
+            {/* BADGES + TAGS */}
             <div className="flex flex-wrap items-center gap-2">
-              <Badge
-                variant={getBadgeVariant(contentType)}
-                size="md"
-                radius="md" // <-- Der Tech-Look
-              >
+              <Badge variant={getBadgeVariant(contentType)} size="md" radius="md">
                 {contentType}
               </Badge>
               {tagKeys.map((key) => {
@@ -82,50 +120,67 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 return <TagChip key={key} variant="detail" label={`#${label}`} title={label} />;
               })}
             </div>
-            <div>
-              <div className="flex items-center gap-4 mb-2">
-                <DynamicIcon name={icon} className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
-                <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-0!">{content.name}</h1>
+
+            {/* TITLE + EXPLAIN CHIP + DESCRIPTION */}
+            <div className="flex items-start gap-4 w-full min-w-0">
+              <DynamicIcon name={icon} className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
+
+              <div className="w-full flex-1 min-w-0 space-y-2">
+                {/* Title row only */}
+                <div className="flex flex-wrap items-center justify-start gap-3">
+                  <h1 className="min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight mb-0!">{content.name}</h1>
+
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium
+                    text-slate-200/80 border border-white/10 bg-white/5
+                    hover:bg-white/8 hover:border-white/20 hover:text-slate-100
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60
+                    transition-shadow duration-500 ease-out
+                    ${isNudged ? "shadow-[0_0_16px_rgba(56,189,248,0.25)]" : ""}
+                  `}
+                      >
+                        <Info className="h-4 w-4" />
+                        <span>{t("contentDetails.explain.trigger")}</span>
+                      </button>
+                    </PopoverTrigger>
+
+                    <PopoverContent
+                      align="center"
+                      side="bottom"
+                      sideOffset={12}
+                      className="w-[520px] max-w-[92vw] rounded-xl border border-white/10 bg-slate-950/90 p-5 shadow-lg"
+                    >
+                      <p className="text-sm font-semibold text-white mb-2">{t("contentDetails.explain.title")}</p>
+                      <p className="text-sm leading-relaxed text-slate-200/80">{t("contentDetails.explain.body")}</p>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Short description: now anchored under title */}
+                <p className="block w-full text-lg text-nexo-muted font-light leading-relaxed text-left">{content.shortDescription}</p>
               </div>
-              <p className="text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>
             </div>
+
+            {/* OPTIONAL: HERO QUOTE */}
             {heroQuote && <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div>}
           </div>
 
+          {/* RIGHT: meta badges */}
           <div className="flex flex-row flex-wrap md:flex-col items-start md:items-end gap-3 min-w-[200px]">
-            <div className="flex w-full md:justify-end">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-slate-200/80 border border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60 cursor-pointer"
-                  >
-                    <Info className="h-4 w-4" />
-                    <span>{t("contentDetails.explain.trigger")}</span>
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="center"
-                  side="bottom"
-                  sideOffset={12}
-                  className="w-[520px] max-w-[92vw] border border-white/10 bg-slate-950/90 rounded-xl p-5 shadow-lg"
-                >
-                  <div className="space-y-2">
-                    <p className="text-sm font-semibold text-white mb-2">{t("contentDetails.explain.title")}</p>
-                    <p className="text-sm leading-relaxed text-slate-200/80">{t("contentDetails.explain.body")}</p>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
             <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
               <ExplainableLabel fieldKey="maturityLevel" value={content.maturityLevel}>
                 <span className="text-xs uppercase font-semibold text-slate-500">{t("asset.properties.maturityLevel.label")}</span>
               </ExplainableLabel>
               <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]"></span>
+                <span className="h-2 w-2 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
                 <span className="text-sm text-white font-medium">{t(enumLabel("maturityLevel", content.maturityLevel))}</span>
               </div>
             </div>
+
             {content.cognitiveLoad && (
               <div className="flex items-center gap-2 bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-800">
                 <ExplainableLabel fieldKey="cognitiveLoad" value={content.cognitiveLoad}>
