@@ -638,7 +638,7 @@
   },
   "contentDetails": {
     "explain": {
-      "trigger": "Wozu diese Ansicht?",
+      "trigger": "Was sehe ich hier?",
       "title": "Wozu diese 360°-Ansicht?",
       "body": "In der Praxis ist selten Information das Problem, sondern Einordnung und Entscheidungskontext. Diese Detailseite bündelt Definition, Ziele, Kontext, Trade-offs und Beispiele an einem Ort – damit sich ein Baustein schnell bewerten und mit Alternativen vergleichen lässt."
     }

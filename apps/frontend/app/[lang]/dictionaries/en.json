@@ -749,7 +749,7 @@
   },
   "contentDetails": {
     "explain": {
-      "trigger": "What is this view?",
+      "trigger": "What am I looking at?",
       "title": "Why this 360° view?",
       "body": "In practice, the challenge is rarely information — it’s placement and decision context. This page brings definition, goals, context, trade-offs, and examples together in one place, so you can assess a building block quickly and compare alternatives."
     }

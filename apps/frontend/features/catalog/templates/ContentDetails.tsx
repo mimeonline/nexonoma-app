@@ -98,19 +98,21 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-slate-200/80 hover:text-slate-100 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60"
+                    className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium text-slate-200/80 border border-white/10 bg-white/5 hover:bg-white/8 hover:border-white/20 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60 cursor-pointer"
                   >
                     <Info className="h-4 w-4" />
                     <span>{t("contentDetails.explain.trigger")}</span>
                   </button>
                 </PopoverTrigger>
                 <PopoverContent
-                  align="end"
-                  className="w-[420px] max-w-[90vw] border border-nexo-border bg-slate-950/90 shadow-lg"
+                  align="center"
+                  side="bottom"
+                  sideOffset={12}
+                  className="w-[520px] max-w-[92vw] border border-white/10 bg-slate-950/90 rounded-xl p-5 shadow-lg"
                 >
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-white">{t("contentDetails.explain.title")}</p>
-                    <p className="text-sm text-slate-400">{t("contentDetails.explain.body")}</p>
+                    <p className="text-sm font-semibold text-white mb-2">{t("contentDetails.explain.title")}</p>
+                    <p className="text-sm leading-relaxed text-slate-200/80">{t("contentDetails.explain.body")}</p>
                   </div>
                 </PopoverContent>
               </Popover>
