@@ -109,64 +109,66 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between gap-6">
           {/* LEFT: force real column width so text doesn't behave like shrink-to-content */}
-          <div className="w-full flex-1 min-w-0 space-y-4 max-w-3xl text-left">
-            {/* BADGES + TAGS */}
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={getBadgeVariant(contentType)} size="md" radius="md">
-                {contentType}
-              </Badge>
-              {tagKeys.map((key) => {
-                const label = getCardTagLabel(content, key, lang);
-                return <TagChip key={key} variant="detail" label={`#${label}`} title={label} />;
-              })}
-            </div>
-
-            {/* TITLE + EXPLAIN CHIP + DESCRIPTION */}
-            <div className="flex items-start gap-4 w-full min-w-0">
-              <DynamicIcon name={icon} className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
-
-              <div className="w-full flex-1 min-w-0 space-y-2">
-                {/* Title row only */}
-                <div className="flex flex-wrap items-center justify-start gap-3">
-                  <h1 className="min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight mb-0!">{content.name}</h1>
-
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium
-                    text-slate-200/80 border border-white/10 bg-white/5
-                    hover:bg-white/8 hover:border-white/20 hover:text-slate-100
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70
-                    focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60
-                    transition-shadow duration-500 ease-out
-                    ${isNudged ? "shadow-[0_0_16px_rgba(56,189,248,0.25)]" : ""}
-                  `}
-                      >
-                        <Info className="h-4 w-4" />
-                        <span>{t("contentDetails.explain.trigger")}</span>
-                      </button>
-                    </PopoverTrigger>
-
-                    <PopoverContent
-                      align="center"
-                      side="bottom"
-                      sideOffset={12}
-                      className="w-[520px] max-w-[92vw] rounded-xl border border-white/10 bg-slate-950/90 p-5 shadow-lg"
-                    >
-                      <p className="text-sm font-semibold text-white mb-2">{t("contentDetails.explain.title")}</p>
-                      <p className="text-sm leading-relaxed text-slate-200/80">{t("contentDetails.explain.body")}</p>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                {/* Short description: now anchored under title */}
-                <p className="block w-full text-lg text-nexo-muted font-light leading-relaxed text-left">{content.shortDescription}</p>
+          <div className="w-full flex-1 basis-0 min-w-0 text-left">
+            <div className="w-full max-w-3xl space-y-4">
+              {/* 1) TYPE + TAGS */}
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant={getBadgeVariant(contentType)} size="md" radius="md">
+                  {contentType}
+                </Badge>
+                {tagKeys.map((key) => {
+                  const label = getCardTagLabel(content, key, lang);
+                  return <TagChip key={key} variant="detail" label={`#${label}`} title={label} />;
+                })}
               </div>
-            </div>
 
-            {/* OPTIONAL: HERO QUOTE */}
-            {heroQuote && <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div>}
+              {/* 2) ICON + (TITLE + EXPLAIN CHIP) */}
+              {/* 2) ICON + (TITLE + EXPLAIN CHIP) */}
+              <div className="w-full flex items-start gap-4">
+                <DynamicIcon name={icon} className="h-8 w-8 md:h-10 md:w-10 text-muted-foreground shrink-0" />
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h1 className="min-w-0 text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight m-0">{content.name}</h1>
+
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium
+              text-slate-200/80 border border-white/10 bg-white/5
+              hover:bg-white/8 hover:border-white/20 hover:text-slate-100
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nexo-ocean/70
+              focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950/60
+              transition-shadow duration-500 ease-out
+              ${isNudged ? "shadow-[0_0_16px_rgba(56,189,248,0.25)]" : ""}
+            `}
+                        >
+                          <Info className="h-4 w-4" />
+                          <span>{t("contentDetails.explain.trigger")}</span>
+                        </button>
+                      </PopoverTrigger>
+
+                      <PopoverContent
+                        align="center"
+                        side="bottom"
+                        sideOffset={12}
+                        className="w-[520px] max-w-[92vw] rounded-xl border border-white/10 bg-slate-950/90 p-5 shadow-lg"
+                      >
+                        <p className="text-sm font-semibold text-white mb-2">{t("contentDetails.explain.title")}</p>
+                        <p className="text-sm leading-relaxed text-slate-200/80">{t("contentDetails.explain.body")}</p>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3) SHORT DESCRIPTION (full width, NOT indented) */}
+              <p className="w-full text-lg text-nexo-muted font-light leading-relaxed">{content.shortDescription}</p>
+
+              {/* 4) HERO QUOTE (full width, NOT indented) */}
+              {heroQuote ? <div className="pt-2 text-sm text-slate-400 max-w-2xl border-l-2 border-nexo-aqua/30 pl-4 italic">{heroQuote}</div> : null}
+            </div>
           </div>
 
           {/* RIGHT: meta badges */}
