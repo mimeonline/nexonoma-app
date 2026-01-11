@@ -1,6 +1,6 @@
 import { GetSystemCatalogIndexUseCase } from './get-system-catalog-index.use-case';
 import { CatalogIndexRecord } from '../../../domain/entities/catalog-index-record.entity';
-import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const createRecord = (
@@ -18,12 +18,12 @@ const createRecord = (
 
 describe('GetSystemCatalogIndexUseCase', () => {
   it('returns empty result when no types are provided', async () => {
-    const assetRepo: Partial<AssetRepositoryPort> = {
+    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
       findContentIndex: jest.fn(),
     };
 
     const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as AssetRepositoryPort,
+      assetRepo as SystemCatalogRepositoryPort,
     );
 
     const result = await useCase.execute({
@@ -39,7 +39,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
   });
 
   it('filters invalid slugs, merges languages, and sorts deterministically', async () => {
-    const assetRepo: Partial<AssetRepositoryPort> = {
+    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
       findContentIndex: jest
         .fn()
         .mockResolvedValueOnce([
@@ -56,7 +56,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
     };
 
     const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as AssetRepositoryPort,
+      assetRepo as SystemCatalogRepositoryPort,
     );
 
     const result = await useCase.execute({
@@ -101,7 +101,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
   });
 
   it('paginates after sorting', async () => {
-    const assetRepo: Partial<AssetRepositoryPort> = {
+    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
       findContentIndex: jest.fn().mockResolvedValueOnce([
         createRecord({ id: 'a1', slug: 'alpha', type: AssetType.CONCEPT, language: 'en' }),
         createRecord({ id: 'a2', slug: 'beta', type: AssetType.CONCEPT, language: 'en' }),
@@ -110,7 +110,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
     };
 
     const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as AssetRepositoryPort,
+      assetRepo as SystemCatalogRepositoryPort,
     );
 
     const result = await useCase.execute({

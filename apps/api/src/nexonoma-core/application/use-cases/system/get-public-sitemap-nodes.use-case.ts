@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { PublicSitemapQueryDto } from '../../dtos/system/public-sitemap-query.dto';
 import type { SitemapNodeDto } from '../../dtos/system/sitemap-node.dto';
 import { AssetStatus } from '../../../domain/types/asset-enums';
-import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import { CatalogRepositoryPort } from '../../ports/catalog/catalog-repository.port';
 
 const toIso = (value?: Date | string | null) => {
   if (!value) return undefined;
@@ -13,13 +13,13 @@ const toIso = (value?: Date | string | null) => {
 
 @Injectable()
 export class GetPublicSitemapNodesUseCase {
-  constructor(private readonly assetRepo: AssetRepositoryPort) {}
+  constructor(private readonly catalogRepo: CatalogRepositoryPort) {}
 
   async execute(query: PublicSitemapQueryDto): Promise<SitemapNodeDto[]> {
     const { page, limit, languages, includeReview } = query;
 
     const results = await Promise.all(
-      languages.map((lang) => this.assetRepo.findAllContent(lang)),
+      languages.map((lang) => this.catalogRepo.findAllContent(lang)),
     );
 
     const merged = new Map<

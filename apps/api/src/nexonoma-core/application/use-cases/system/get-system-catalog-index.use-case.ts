@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SystemCatalogIndexResponseDto } from '../../dtos/system/system-catalog-index-response.dto';
 import { SystemCatalogIndexQueryDto } from '../../dtos/system/system-catalog-index-query.dto';
-import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
 import { AssetType } from '../../../domain/types/asset-enums';
 
 const toIso = (value?: Date | string | null) => {
@@ -35,7 +35,7 @@ type IndexEntry = {
 
 @Injectable()
 export class GetSystemCatalogIndexUseCase {
-  constructor(private readonly assetRepo: AssetRepositoryPort) {}
+  constructor(private readonly catalogRepo: SystemCatalogRepositoryPort) {}
 
   async execute(
     query: SystemCatalogIndexQueryDto,
@@ -47,7 +47,7 @@ export class GetSystemCatalogIndexUseCase {
     }
 
     const results = await Promise.all(
-      languages.map((lang) => this.assetRepo.findContentIndex(lang)),
+      languages.map((lang) => this.catalogRepo.findContentIndex(lang)),
     );
 
     const merged = new Map<string, IndexEntry>();

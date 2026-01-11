@@ -21,6 +21,9 @@ import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-
 // 3. Ports (Domain Layer)
 import { AssetRepositoryPort } from './domain/ports/outbound/asset-repository.port';
 import { MatrixRepositoryPort } from './application/ports/matrix/matrix-repository.port';
+import { CatalogRepositoryPort } from './application/ports/catalog/catalog-repository.port';
+import { GridRepositoryPort } from './application/ports/grid/grid-repository.port';
+import { SystemCatalogRepositoryPort } from './application/ports/system/system-catalog-repository.port';
 
 // 4. Repositories & Mapper (Infrastructure -> Driven Adapter)
 import { AssetMapper } from './infrastructure/persistence/neo4j/shared/asset.mapper';
@@ -57,6 +60,18 @@ import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j/matrix
     {
       provide: AssetRepositoryPort, // <-- Das Token (abstrakte Klasse)
       useClass: Neo4jAssetRepository, // <-- Die echte Implementierung
+    },
+    {
+      provide: GridRepositoryPort,
+      useClass: Neo4jAssetRepository,
+    },
+    {
+      provide: CatalogRepositoryPort,
+      useClass: Neo4jAssetRepository,
+    },
+    {
+      provide: SystemCatalogRepositoryPort,
+      useClass: Neo4jAssetRepository,
     },
     {
       provide: MatrixRepositoryPort,

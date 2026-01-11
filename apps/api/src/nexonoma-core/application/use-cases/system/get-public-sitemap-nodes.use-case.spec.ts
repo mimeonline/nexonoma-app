@@ -1,6 +1,6 @@
 import { GetPublicSitemapNodesUseCase } from './get-public-sitemap-nodes.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
-import type { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import type { CatalogRepositoryPort } from '../../ports/catalog/catalog-repository.port';
 
 const createAsset = (overrides: Partial<any>) => ({
   id: 'id-1',
@@ -30,7 +30,7 @@ describe('GetPublicSitemapNodesUseCase', () => {
         .mockResolvedValueOnce([
           createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
         ]),
-    } as unknown as AssetRepositoryPort;
+    } as unknown as CatalogRepositoryPort;
 
     const useCase = new GetPublicSitemapNodesUseCase(assetRepo);
     const result = await useCase.execute({
@@ -65,7 +65,7 @@ describe('GetPublicSitemapNodesUseCase', () => {
             status: AssetStatus.REVIEW,
           }),
         ]),
-    } as unknown as AssetRepositoryPort;
+    } as unknown as CatalogRepositoryPort;
 
     const useCase = new GetPublicSitemapNodesUseCase(assetRepo);
     const result = await useCase.execute({
