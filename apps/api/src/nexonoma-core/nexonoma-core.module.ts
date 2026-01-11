@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 // 1. Controller (Infrastructure -> Driving Adapter)
 import { CatalogController } from './infrastructure/http/catalog.controller';
 import { GridController } from './infrastructure/http/grid.controller';
+import { MatrixController } from './infrastructure/http/matrix.controller';
 import { PublicSitemapController } from './infrastructure/http/public-sitemap.controller';
 import { SystemCatalogController } from './infrastructure/http/system-catalog.controller';
 
@@ -14,19 +15,23 @@ import { GetSystemCatalogIndexUseCase } from './application/use-cases/system/get
 import { GetGridClustersUseCase } from './application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from './application/use-cases/grid/get-grid-macros.use-case';
 import { GetGridSegmentsUseCase } from './application/use-cases/grid/get-grid-segments.use-case';
+import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-case';
 
 // 3. Ports (Domain Layer)
 import { AssetRepositoryPort } from './domain/ports/outbound/asset-repository.port';
+import { MatrixRepositoryPort } from './application/ports/matrix-repository.port';
 
 // 4. Repositories & Mapper (Infrastructure -> Driven Adapter)
 import { AssetMapper } from './infrastructure/persistence/asset.mapper';
 import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.repository';
+import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j-matrix.repository';
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer
   controllers: [
     GridController,
     CatalogController,
+    MatrixController,
     PublicSitemapController,
     SystemCatalogController,
   ],
@@ -42,6 +47,7 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
     GetContentDetailUseCase,
     GetContentBySlugUseCase,
     GetSystemCatalogIndexUseCase,
+    GetMatrixUseCase,
 
     // C) Der Hexagonal-Trick (Dependency Inversion):
     // Wir sagen NestJS: "Wann immer jemand (z.B. ein UseCase) den 'AssetRepositoryPort' anfordert,
@@ -49,6 +55,10 @@ import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.r
     {
       provide: AssetRepositoryPort, // <-- Das Token (abstrakte Klasse)
       useClass: Neo4jAssetRepository, // <-- Die echte Implementierung
+    },
+    {
+      provide: MatrixRepositoryPort,
+      useClass: Neo4jMatrixRepository,
     },
   ],
   exports: [
