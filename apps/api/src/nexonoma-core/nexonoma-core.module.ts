@@ -29,6 +29,9 @@ import { SystemCatalogRepositoryPort } from './application/ports/system/system-c
 import { AssetMapper } from './infrastructure/persistence/neo4j/shared/asset.mapper';
 import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j/shared/neo4j-asset.repository';
 import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j/matrix/neo4j-matrix.repository';
+import { Neo4jGridRepository } from './infrastructure/persistence/neo4j/grid/neo4j-grid.repository';
+import { Neo4jCatalogRepository } from './infrastructure/persistence/neo4j/catalog/neo4j-catalog.repository';
+import { Neo4jSystemCatalogRepository } from './infrastructure/persistence/neo4j/system/neo4j-system-catalog.repository';
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer
@@ -63,15 +66,15 @@ import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j/matrix
     },
     {
       provide: GridRepositoryPort,
-      useClass: Neo4jAssetRepository,
+      useClass: Neo4jGridRepository,
     },
     {
       provide: CatalogRepositoryPort,
-      useClass: Neo4jAssetRepository,
+      useClass: Neo4jCatalogRepository,
     },
     {
       provide: SystemCatalogRepositoryPort,
-      useClass: Neo4jAssetRepository,
+      useClass: Neo4jSystemCatalogRepository,
     },
     {
       provide: MatrixRepositoryPort,
