@@ -7,16 +7,16 @@ export default function Page() {
   return (
     <>
       <div>
-        <Link href="/sandbox/city-view">City View</Link>
+        <Link href="/de/sandbox/city-view">City View</Link>
       </div>
       <div>
-        <Link href="/sandbox/city-grok">City View Grok </Link>
+        <Link href="/de/sandbox/city-grok">City View Grok </Link>
       </div>
       <div>
-        <Link href="/sandbox/enterprise-city">Enterprise City ChatGPT </Link>
+        <Link href="/de/sandbox/enterprise-city">Enterprise City ChatGPT </Link>
       </div>
       <div>
-        <Link href="/sandbox/nexonoma-city">Nexonoma City Claude Sonet </Link>
+        <Link href="/de/sandbox/nexonoma-city">Nexonoma City Claude Sonet </Link>
       </div>
     </>
   );

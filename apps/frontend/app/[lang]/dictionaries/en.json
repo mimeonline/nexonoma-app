@@ -3,6 +3,7 @@
     "start": "Start",
     "catalog": "Catalog",
     "structure": "Structure",
+    "analyse": "Analyse",
     "preview": "Preview",
     "about": "About Nexonoma",
     "sandbox": "Sandbox"
@@ -264,7 +265,15 @@
   },
   "matrix": {
     "title": "Matrix view",
-    "description": "Explore the knowledge map in a matrix-based view."
+    "description": "Explore the knowledge map in a matrix-based view.",
+    "controls": {
+      "segment": "Segment",
+      "type": "Typ"
+    },
+    "legend": {
+      "present": "● enthalten"
+    },
+    "empty": "No contents for this type."
   },
   "city": {
     "title": "City view",

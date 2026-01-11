@@ -11,6 +11,7 @@ const navItems = [
   { href: "/", labelKey: "nav.start" },
   { href: "/catalog", labelKey: "nav.catalog" },
   { href: "/grid", labelKey: "nav.structure" },
+  { href: "/matrix", labelKey: "nav.analyse" },
   { href: "/preview", labelKey: "nav.preview" },
   { href: "https://nexonoma.de/about", labelKey: "nav.about" },
 ];
@@ -53,7 +54,7 @@ export default function Header() {
             {/* Sandbox Link (Dev only) */}
             {process.env.NODE_ENV === "development" && (
               <Link
-                href="/sandbox"
+                href="/de/sandbox"
                 className="hidden md:block rounded-full bg-nexo-surface px-3 py-1 text-xs font-mono text-nexo-muted hover:text-nexo-aqua transition border border-white/5"
               >
                 {t("nav.sandbox")}
