@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
 import { AssetBlock } from '../../../../domain/entities/asset.entity';
 import { ContentAsset } from '../../../../domain/entities/content-asset.entity';
@@ -13,8 +13,6 @@ import { getI18nProjection } from '../../../../../shared/infrastructure/neo4j/cy
 
 @Injectable()
 export class Neo4jAssetRepository implements AssetRepositoryPort {
-  private readonly logger = new Logger(Neo4jAssetRepository.name);
-
   constructor(private readonly neo4j: Neo4jService) {}
   /**
    * Page 2 & 3: Findet ein Strukturelement (Macro, Cluster, Segment) anhand des Slugs.

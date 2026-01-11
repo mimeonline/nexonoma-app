@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
 import { AssetType } from '../../../../domain/types/asset-enums';
 import { StructuralAsset } from '../../../../domain/entities/structural-asset.entity';
@@ -9,8 +9,6 @@ import { getI18nProjection } from '../../../../../shared/infrastructure/neo4j/cy
 
 @Injectable()
 export class Neo4jGridRepository implements GridRepositoryPort {
-  private readonly logger = new Logger(Neo4jGridRepository.name);
-
   constructor(private readonly neo4j: Neo4jService) {}
 
   /**
