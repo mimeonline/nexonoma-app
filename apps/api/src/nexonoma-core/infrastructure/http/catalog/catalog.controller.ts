@@ -3,6 +3,8 @@ import { I18nLang } from 'nestjs-i18n';
 import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
 import { GetContentBySlugUseCase } from '../../../application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from '../../../application/use-cases/catalog/get-content-detail.use-case';
+import type { ContentAssetDto } from '../../../application/dtos/assets/content-asset.dto';
+import type { AssetBlockDto } from '../../../application/dtos/assets/asset-block.dto';
 @Controller('catalog')
 export class CatalogController {
   constructor(
@@ -16,7 +18,7 @@ export class CatalogController {
    * GET /api/catalog
    */
   @Get()
-  async getCatalog(@I18nLang() lang: string) {
+  async getCatalog(@I18nLang() lang: string): Promise<ContentAssetDto[]> {
     return this.getAll.execute(lang);
   }
 
@@ -29,7 +31,7 @@ export class CatalogController {
   async getContentDetail(
     @I18nLang() lang: string,
     @Param('id', ParseUUIDPipe) id: string,
-  ) {
+  ): Promise<AssetBlockDto> {
     return this.getDetail.execute(lang, id);
   }
 
@@ -44,7 +46,7 @@ export class CatalogController {
     @Param('type') type: string,
     @Param('slug') slug: string,
     @I18nLang() lang: string,
-  ) {
+  ): Promise<ContentAssetDto> {
     return this.getBySlug.execute(lang, type, slug);
   }
 }

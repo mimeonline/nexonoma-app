@@ -1,68 +1,56 @@
 import { Test } from '@nestjs/testing';
 import { PublicSitemapController } from './public-sitemap.controller';
-import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
-import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
-
-const createAsset = (overrides: Partial<any>) => ({
-  id: 'id-1',
-  type: AssetType.CONCEPT,
-  slug: 'domain-driven-design',
-  status: AssetStatus.PUBLISHED,
-  createdAt: new Date('2024-01-01T00:00:00.000Z'),
-  updatedAt: new Date('2024-01-02T00:00:00.000Z'),
-  ...overrides,
-});
+import { GetPublicSitemapNodesUseCase } from '../../../application/use-cases/system/get-public-sitemap-nodes.use-case';
 
 describe('PublicSitemapController', () => {
-  it('filters to published by default and merges languages', async () => {
-    const getAll = {
-      execute: jest
-        .fn()
-        .mockResolvedValueOnce([
-          createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
-          createAsset({ id: 'a2', slug: 'review-item', status: AssetStatus.REVIEW }),
-        ])
-        .mockResolvedValueOnce([
-          createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
-        ]),
-    };
+  it('parses query params and passes them to the use case', async () => {
+    const response = [
+      {
+        id: 'a1',
+        type: 'CONCEPT',
+        slug: 'ddd',
+        updatedAt: '2024-01-02T00:00:00.000Z',
+        createdAt: '2024-01-01T00:00:00.000Z',
+        availableLanguages: ['de'],
+        tags: [{ slug: 'architecture', label: 'Architecture' }],
+        tagOrder: ['architecture'],
+      },
+    ];
+    const getNodes = { execute: jest.fn().mockResolvedValue(response) };
 
     const moduleRef = await Test.createTestingModule({
       controllers: [PublicSitemapController],
-      providers: [{ provide: GetAllContentUseCase, useValue: getAll }],
+      providers: [{ provide: GetPublicSitemapNodesUseCase, useValue: getNodes }],
     }).compile();
 
     const controller = moduleRef.get(PublicSitemapController);
-    const result = await controller.getNodes('1', '100', 'de,en');
+    const result = await controller.getNodes('2', '200', 'de,en', 'true');
 
-    expect(result).toHaveLength(1);
-    expect(result[0].slug).toBe('ddd');
-    expect(result[0].availableLanguages).toEqual(['de', 'en']);
+    expect(getNodes.execute).toHaveBeenCalledWith({
+      page: 2,
+      limit: 200,
+      languages: ['de', 'en'],
+      includeReview: true,
+    });
+    expect(result).toEqual(response);
   });
 
-  it('includes review assets when flag is enabled and supports pagination', async () => {
-    const getAll = {
-      execute: jest
-        .fn()
-        .mockResolvedValueOnce([
-          createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
-          createAsset({ id: 'a2', slug: 'review-item', status: AssetStatus.REVIEW }),
-        ])
-        .mockResolvedValueOnce([
-          createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
-          createAsset({ id: 'a2', slug: 'review-item', status: AssetStatus.REVIEW }),
-        ]),
-    };
+  it('applies defaults when query params are missing', async () => {
+    const getNodes = { execute: jest.fn().mockResolvedValue([]) };
 
     const moduleRef = await Test.createTestingModule({
       controllers: [PublicSitemapController],
-      providers: [{ provide: GetAllContentUseCase, useValue: getAll }],
+      providers: [{ provide: GetPublicSitemapNodesUseCase, useValue: getNodes }],
     }).compile();
 
     const controller = moduleRef.get(PublicSitemapController);
-    const result = await controller.getNodes('1', '1', 'de,en', 'true');
+    await controller.getNodes();
 
-    expect(result).toHaveLength(1);
-    expect(['ddd', 'review-item']).toContain(result[0].slug);
+    expect(getNodes.execute).toHaveBeenCalledWith({
+      page: 1,
+      limit: 1000,
+      languages: ['de', 'en'],
+      includeReview: false,
+    });
   });
 });

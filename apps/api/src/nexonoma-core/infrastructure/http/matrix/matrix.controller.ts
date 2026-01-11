@@ -1,6 +1,6 @@
 import { BadRequestException, Controller, Get, Query } from '@nestjs/common';
 import { GetMatrixUseCase } from '../../../application/use-cases/matrix/get-matrix.use-case';
-import { MatrixResponseDto } from '../../../application/use-cases/matrix/matrix.dto';
+import type { MatrixResponseDto } from '../../../application/dtos/matrix/matrix-response.dto';
 import { AssetType } from '../../../domain/types/asset-enums';
 import { MatrixMode, MatrixPerspective } from '../../../application/use-cases/matrix/matrix.types';
 

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { StructuralAsset } from '../../../domain/entities/structural-asset.entity';
 import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import type { StructuralAssetDto } from '../../dtos/assets/structural-asset.dto';
+import { mapStructuralAssetToDto } from '../shared/asset-dto.mapper';
 
 // TODO: childrenCount zählt aktuell ClusterViews.
 // Da ClusterView im UI noch nicht dargestellt wird,
@@ -10,7 +11,7 @@ import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-reposi
 export class GetGridClustersUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(locale: string, macroSlug: string): Promise<StructuralAsset> {
+  async execute(locale: string, macroSlug: string): Promise<StructuralAssetDto> {
     // 1. Hole das MacroCluster selbst (für den Titel/Header der Page)
     const macroCluster = await this.assetRepo.findStructuralBySlug(
       locale,
@@ -31,6 +32,6 @@ export class GetGridClustersUseCase {
     macroCluster.children = clusters;
     macroCluster.childrenCount = clusters.length;
 
-    return macroCluster;
+    return mapStructuralAssetToDto(macroCluster);
   }
 }

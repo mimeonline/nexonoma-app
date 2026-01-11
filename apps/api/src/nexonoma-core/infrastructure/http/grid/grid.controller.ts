@@ -5,6 +5,7 @@ import { I18nLang } from 'nestjs-i18n';
 import { GetGridClustersUseCase } from '../../../application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from '../../../application/use-cases/grid/get-grid-macros.use-case';
 import { GetGridSegmentsUseCase } from '../../../application/use-cases/grid/get-grid-segments.use-case';
+import type { StructuralAssetDto } from '../../../application/dtos/assets/structural-asset.dto';
 @Controller('grid') // Base Route: /api/grid (wenn global prefix 'api' gesetzt ist)
 export class GridController {
   constructor(
@@ -18,7 +19,7 @@ export class GridController {
    * Zeigt alle Macro Clusters an (z.B. "Software & Architektur", "Organisation").
    */
   @Get('macros')
-  async getMacrosPage(@I18nLang() lang: string) {
+  async getMacrosPage(@I18nLang() lang: string): Promise<StructuralAssetDto[]> {
     return this.getMacros.execute(lang);
   }
 
@@ -31,7 +32,7 @@ export class GridController {
   async getClustersPage(
     @I18nLang() lang: string,
     @Param('slug') macroSlug: string,
-  ) {
+  ): Promise<StructuralAssetDto> {
     return this.getClusters.execute(lang, macroSlug);
   }
 
@@ -45,7 +46,7 @@ export class GridController {
   async getSegmentsPage(
     @I18nLang() lang: string,
     @Param('slug') clusterSlug: string,
-  ) {
+  ): Promise<StructuralAssetDto> {
     return this.getSegments.execute(lang, clusterSlug);
   }
 }

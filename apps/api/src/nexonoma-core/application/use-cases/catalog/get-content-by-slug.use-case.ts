@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ContentAsset } from '../../../domain/entities/content-asset.entity';
 import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
+import type { ContentAssetDto } from '../../dtos/assets/content-asset.dto';
+import { mapContentAssetToDto } from '../shared/asset-dto.mapper';
 
 @Injectable()
 export class GetContentBySlugUseCase {
@@ -14,7 +15,7 @@ export class GetContentBySlugUseCase {
     locale: string,
     type: string,
     slug: string,
-  ): Promise<ContentAsset> {
+  ): Promise<ContentAssetDto> {
     const asset = await this.assetRepo.findContentBySlug(
       locale,
       type.toUpperCase(),
@@ -27,6 +28,6 @@ export class GetContentBySlugUseCase {
       );
     }
 
-    return asset;
+    return mapContentAssetToDto(asset);
   }
 }

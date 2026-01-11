@@ -2,12 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { StructuralAsset } from '../../../domain/entities/structural-asset.entity';
 import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
 import { AssetType } from '../../../domain/types/asset-enums';
+import type { StructuralAssetDto } from '../../dtos/assets/structural-asset.dto';
+import { mapStructuralAssetToDto } from '../shared/asset-dto.mapper';
 
 @Injectable()
 export class GetGridSegmentsUseCase {
   constructor(private readonly assetRepo: AssetRepositoryPort) {}
 
-  async execute(locale: string, clusterSlug: string): Promise<StructuralAsset> {
+  async execute(
+    locale: string,
+    clusterSlug: string,
+  ): Promise<StructuralAssetDto> {
     // 1) Cluster holen
     const cluster = await this.assetRepo.findStructuralBySlug(
       locale,
@@ -67,6 +72,6 @@ export class GetGridSegmentsUseCase {
 
     // 5) Ergebnisstruktur zurückgeben: cluster -> segments -> content
     cluster.children = segments;
-    return cluster;
+    return mapStructuralAssetToDto(cluster);
   }
 }

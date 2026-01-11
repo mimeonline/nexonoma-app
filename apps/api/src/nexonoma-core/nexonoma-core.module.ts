@@ -12,6 +12,7 @@ import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-co
 import { GetContentBySlugUseCase } from './application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from './application/use-cases/catalog/get-content-detail.use-case';
 import { GetSystemCatalogIndexUseCase } from './application/use-cases/system/get-system-catalog-index.use-case';
+import { GetPublicSitemapNodesUseCase } from './application/use-cases/system/get-public-sitemap-nodes.use-case';
 import { GetGridClustersUseCase } from './application/use-cases/grid/get-grid-clusters.use-case';
 import { GetGridMacrosUseCase } from './application/use-cases/grid/get-grid-macros.use-case';
 import { GetGridSegmentsUseCase } from './application/use-cases/grid/get-grid-segments.use-case';
@@ -47,6 +48,7 @@ import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j/matrix
     GetContentDetailUseCase,
     GetContentBySlugUseCase,
     GetSystemCatalogIndexUseCase,
+    GetPublicSitemapNodesUseCase,
     GetMatrixUseCase,
 
     // C) Der Hexagonal-Trick (Dependency Inversion):

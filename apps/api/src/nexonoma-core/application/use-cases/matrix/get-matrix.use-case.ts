@@ -3,7 +3,7 @@ import {
   MatrixCellRecord,
   MatrixRepositoryPort,
 } from '../../ports/matrix/matrix-repository.port';
-import { MatrixResponseDto } from './matrix.dto';
+import type { MatrixResponseDto } from '../../dtos/matrix/matrix-response.dto';
 import { GetMatrixQuery } from './get-matrix.query';
 import {
   DECISION_TYPE_BUCKETS,
