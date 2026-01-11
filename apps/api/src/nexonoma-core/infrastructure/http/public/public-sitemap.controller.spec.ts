@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { PublicSitemapController } from './public-sitemap.controller';
-import { GetAllContentUseCase } from '../../application/use-cases/catalog/get-all-content.use-case';
-import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
+import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const createAsset = (overrides: Partial<any>) => ({
   id: 'id-1',

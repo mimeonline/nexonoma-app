@@ -1,16 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Neo4jService } from '../../../shared/infrastructure/neo4j/neo4j.service';
-import { AssetBlock } from '../../domain/entities/asset.entity';
-import { ContentAsset } from '../../domain/entities/content-asset.entity';
-import { ContextAsset } from '../../domain/entities/context-asset.entity';
-import { StructuralAsset } from '../../domain/entities/structural-asset.entity';
-import { AssetRepositoryPort } from '../../domain/ports/outbound/asset-repository.port';
-import type { CatalogIndexRecord } from '../../domain/entities/catalog-index-record.entity';
-import { AssetType } from '../../domain/types/asset-enums';
+import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
+import { AssetBlock } from '../../../../domain/entities/asset.entity';
+import { ContentAsset } from '../../../../domain/entities/content-asset.entity';
+import { ContextAsset } from '../../../../domain/entities/context-asset.entity';
+import { StructuralAsset } from '../../../../domain/entities/structural-asset.entity';
+import { AssetRepositoryPort } from '../../../../domain/ports/outbound/asset-repository.port';
+import type { CatalogIndexRecord } from '../../../../domain/entities/catalog-index-record.entity';
+import { AssetType } from '../../../../domain/types/asset-enums';
 import { AssetMapper } from './asset.mapper';
 // Importiere deinen Helper (Pfad ggf. anpassen)
 import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
-import { getI18nProjection } from '../../../shared/infrastructure/neo4j/cypher-fragments';
+import { getI18nProjection } from '../../../../../shared/infrastructure/neo4j/cypher-fragments';
 
 @Injectable()
 export class Neo4jAssetRepository implements AssetRepositoryPort {

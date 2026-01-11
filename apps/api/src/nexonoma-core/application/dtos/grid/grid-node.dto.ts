@@ -1,4 +1,4 @@
-import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 // TODO : Wir im Moment nicht genutzt. Später einbinden oder löschen.
 export class GridNodeDto {

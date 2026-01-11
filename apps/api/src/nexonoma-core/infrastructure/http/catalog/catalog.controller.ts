@@ -1,8 +1,8 @@
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { I18nLang } from 'nestjs-i18n';
-import { GetAllContentUseCase } from '../../application/use-cases/catalog/get-all-content.use-case';
-import { GetContentBySlugUseCase } from '../../application/use-cases/catalog/get-content-by-slug.use-case';
-import { GetContentDetailUseCase } from '../../application/use-cases/catalog/get-content-detail.use-case';
+import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
+import { GetContentBySlugUseCase } from '../../../application/use-cases/catalog/get-content-by-slug.use-case';
+import { GetContentDetailUseCase } from '../../../application/use-cases/catalog/get-content-detail.use-case';
 @Controller('catalog')
 export class CatalogController {
   constructor(

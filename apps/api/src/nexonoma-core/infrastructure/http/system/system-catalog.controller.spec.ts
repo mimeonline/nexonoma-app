@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { SystemCatalogController } from './system-catalog.controller';
-import { GetSystemCatalogIndexUseCase } from '../../application/use-cases/system/get-system-catalog-index.use-case';
-import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+import { GetSystemCatalogIndexUseCase } from '../../../application/use-cases/system/get-system-catalog-index.use-case';
+import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const emptyResponse = { page: 1, limit: 500, total: 0, items: [] };
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MatrixCellRecord,
   MatrixRepositoryPort,
-} from '../../ports/matrix-repository.port';
+} from '../../ports/matrix/matrix-repository.port';
 import { MatrixResponseDto } from './matrix.dto';
 import { GetMatrixQuery } from './get-matrix.query';
 import {

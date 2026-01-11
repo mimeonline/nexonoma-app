@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { GetAllContentUseCase } from '../../application/use-cases/catalog/get-all-content.use-case';
-import { AssetStatus } from '../../domain/types/asset-enums';
-import type { ContentAsset } from '../../domain/entities/content-asset.entity';
+import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
+import { AssetStatus } from '../../../domain/types/asset-enums';
+import type { ContentAsset } from '../../../domain/entities/content-asset.entity';
 
 const DEFAULT_LANGS = ['de', 'en'] as const;
 const DEFAULT_LIMIT = 1000;

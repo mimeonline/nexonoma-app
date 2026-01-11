@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import {
   AssetBlock,
   AssetBlockProps,
-} from '../../domain/entities/asset.entity';
+} from '../../../../domain/entities/asset.entity';
 import {
   ContentAsset,
   ContentAssetProps,
-} from '../../domain/entities/content-asset.entity';
-import { ContextAsset } from '../../domain/entities/context-asset.entity';
+} from '../../../../domain/entities/content-asset.entity';
+import { ContextAsset } from '../../../../domain/entities/context-asset.entity';
 import {
   StructuralAsset,
   StructuralAssetProps,
-} from '../../domain/entities/structural-asset.entity';
-import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+} from '../../../../domain/entities/structural-asset.entity';
+import { AssetStatus, AssetType } from '../../../../domain/types/asset-enums';
 // Importiere deinen Helper
-import { LocalizationHelper } from '../../../shared/common/utils/localization.helper';
+import { LocalizationHelper } from '../../../../../shared/common/utils/localization.helper';
 
 @Injectable()
 export class AssetMapper {

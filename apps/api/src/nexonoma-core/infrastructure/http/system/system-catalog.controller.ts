@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { GetSystemCatalogIndexUseCase } from '../../application/use-cases/system/get-system-catalog-index.use-case';
-import { SystemCatalogIndexResponseDto } from '../../application/dtos/system-catalog-index-response.dto';
-import { AssetStatus, AssetType } from '../../domain/types/asset-enums';
+import { GetSystemCatalogIndexUseCase } from '../../../application/use-cases/system/get-system-catalog-index.use-case';
+import { SystemCatalogIndexResponseDto } from '../../../application/dtos/system/system-catalog-index-response.dto';
+import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const DEFAULT_STATUS = AssetStatus.PUBLISHED;
 const DEFAULT_TYPES = [

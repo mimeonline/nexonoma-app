@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Neo4jService } from '../../../shared/infrastructure/neo4j/neo4j.service';
+import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
 import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
-import { getI18nProjection } from '../../../shared/infrastructure/neo4j/cypher-fragments';
-import { AssetType } from '../../domain/types/asset-enums';
+import { getI18nProjection } from '../../../../../shared/infrastructure/neo4j/cypher-fragments';
+import { AssetType } from '../../../../domain/types/asset-enums';
 import {
   MatrixCellRecord,
   MatrixRepositoryPort,
@@ -10,7 +10,7 @@ import {
   MatrixSegmentRecord,
   RolePerspectiveQueryParams,
   SegmentPerspectiveQueryParams,
-} from '../../application/ports/matrix-repository.port';
+} from '../../../../application/ports/matrix/matrix-repository.port';
 
 @Injectable()
 export class Neo4jMatrixRepository implements MatrixRepositoryPort {

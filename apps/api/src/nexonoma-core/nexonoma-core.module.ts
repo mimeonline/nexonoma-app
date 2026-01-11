@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
 // 1. Controller (Infrastructure -> Driving Adapter)
-import { CatalogController } from './infrastructure/http/catalog.controller';
-import { GridController } from './infrastructure/http/grid.controller';
-import { MatrixController } from './infrastructure/http/matrix.controller';
-import { PublicSitemapController } from './infrastructure/http/public-sitemap.controller';
-import { SystemCatalogController } from './infrastructure/http/system-catalog.controller';
+import { CatalogController } from './infrastructure/http/catalog/catalog.controller';
+import { GridController } from './infrastructure/http/grid/grid.controller';
+import { MatrixController } from './infrastructure/http/matrix/matrix.controller';
+import { PublicSitemapController } from './infrastructure/http/public/public-sitemap.controller';
+import { SystemCatalogController } from './infrastructure/http/system/system-catalog.controller';
 
 // 2. Use Cases (Application Layer)
 import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-content.use-case';
@@ -19,12 +19,12 @@ import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-
 
 // 3. Ports (Domain Layer)
 import { AssetRepositoryPort } from './domain/ports/outbound/asset-repository.port';
-import { MatrixRepositoryPort } from './application/ports/matrix-repository.port';
+import { MatrixRepositoryPort } from './application/ports/matrix/matrix-repository.port';
 
 // 4. Repositories & Mapper (Infrastructure -> Driven Adapter)
-import { AssetMapper } from './infrastructure/persistence/asset.mapper';
-import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j-asset.repository';
-import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j-matrix.repository';
+import { AssetMapper } from './infrastructure/persistence/neo4j/shared/asset.mapper';
+import { Neo4jAssetRepository } from './infrastructure/persistence/neo4j/shared/neo4j-asset.repository';
+import { Neo4jMatrixRepository } from './infrastructure/persistence/neo4j/matrix/neo4j-matrix.repository';
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer

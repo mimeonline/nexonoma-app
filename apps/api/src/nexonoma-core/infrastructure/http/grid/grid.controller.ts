@@ -2,9 +2,9 @@ import { Controller, Get, Param } from '@nestjs/common';
 
 // Diese Imports erstellen wir in den nächsten Schritten
 import { I18nLang } from 'nestjs-i18n';
-import { GetGridClustersUseCase } from '../../application/use-cases/grid/get-grid-clusters.use-case';
-import { GetGridMacrosUseCase } from '../../application/use-cases/grid/get-grid-macros.use-case';
-import { GetGridSegmentsUseCase } from '../../application/use-cases/grid/get-grid-segments.use-case';
+import { GetGridClustersUseCase } from '../../../application/use-cases/grid/get-grid-clusters.use-case';
+import { GetGridMacrosUseCase } from '../../../application/use-cases/grid/get-grid-macros.use-case';
+import { GetGridSegmentsUseCase } from '../../../application/use-cases/grid/get-grid-segments.use-case';
 @Controller('grid') // Base Route: /api/grid (wenn global prefix 'api' gesetzt ist)
 export class GridController {
   constructor(

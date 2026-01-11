@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SystemCatalogIndexResponseDto } from '../../dtos/system-catalog-index-response.dto';
-import { SystemCatalogIndexQueryDto } from '../../dtos/system-catalog-index-query.dto';
+import { SystemCatalogIndexResponseDto } from '../../dtos/system/system-catalog-index-response.dto';
+import { SystemCatalogIndexQueryDto } from '../../dtos/system/system-catalog-index-query.dto';
 import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
 import { AssetType } from '../../../domain/types/asset-enums';
 
