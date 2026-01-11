@@ -11,6 +11,7 @@ import {
   RolePerspectiveQueryParams,
   SegmentPerspectiveQueryParams,
 } from '../../../../application/ports/matrix/matrix-repository.port';
+import { MatrixRecordMapper } from './matrix-record.mapper';
 
 @Injectable()
 export class Neo4jMatrixRepository implements MatrixRepositoryPort {
@@ -94,7 +95,7 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
       lang: params.lang,
     });
 
-    return result.map((record) => {
+    const cells = result.map((record) => {
       const items = (record.get('items') ?? []).map((item) =>
         normalizeNeo4j(item),
       );
@@ -105,6 +106,8 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
         items,
       } as MatrixCellRecord;
     });
+
+    return MatrixRecordMapper.rehydrateCells(cells);
   }
 
   async findRolesByIds(
@@ -188,7 +191,7 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
       lang: params.lang,
     });
 
-    return result.map((record) => {
+    const cells = result.map((record) => {
       const items = (record.get('items') ?? []).map((item) =>
         normalizeNeo4j(item),
       );
@@ -199,5 +202,7 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
         items,
       } as MatrixCellRecord;
     });
+
+    return MatrixRecordMapper.rehydrateCells(cells);
   }
 }

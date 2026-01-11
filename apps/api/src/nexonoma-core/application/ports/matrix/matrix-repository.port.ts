@@ -1,5 +1,5 @@
 import { AssetType } from '../../../domain/types/asset-enums';
-import { MatrixPerspective } from '../../use-cases/matrix/matrix.types';
+import { MatrixPerspective, MatrixTagMap } from '../../use-cases/matrix/matrix.types';
 
 export type MatrixAssetPreviewRecord = {
   id: string;
@@ -7,7 +7,7 @@ export type MatrixAssetPreviewRecord = {
   slug: string;
   name: string;
   shortDescription?: string;
-  tags?: { slug: string; label: string }[];
+  tags?: MatrixTagMap | { slug: string; label: string }[];
   valueStreamStage?: string;
   decisionType?: string;
   organizationalMaturity?: string;

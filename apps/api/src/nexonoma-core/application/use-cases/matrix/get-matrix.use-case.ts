@@ -12,6 +12,7 @@ import {
   ORGANIZATIONAL_MATURITY_BUCKETS,
   VALUE_STREAM_BUCKETS,
 } from './matrix.types';
+import { LocalizationHelper } from '../../../../shared/common/utils/localization.helper';
 
 @Injectable()
 export class GetMatrixUseCase {
@@ -44,7 +45,7 @@ export class GetMatrixUseCase {
         lang,
       });
 
-      const mappedCells = this.mapCells(cells, cellLimit);
+      const mappedCells = this.mapCells(cells, cellLimit, lang);
 
       return {
         meta: {
@@ -91,7 +92,7 @@ export class GetMatrixUseCase {
       roleIds,
     });
 
-    const mappedCells = this.mapCells(cells, cellLimit);
+    const mappedCells = this.mapCells(cells, cellLimit, lang);
 
     return {
       meta: {
@@ -122,7 +123,11 @@ export class GetMatrixUseCase {
     };
   }
 
-  private mapCells(cells: MatrixCellRecord[], cellLimit: number) {
+  private mapCells(
+    cells: MatrixCellRecord[],
+    cellLimit: number,
+    lang: string,
+  ) {
     return cells.map((cell) => ({
       xId: cell.xId,
       yId: cell.yId,
@@ -134,12 +139,21 @@ export class GetMatrixUseCase {
         slug: item.slug,
         name: item.name,
         shortDescription: item.shortDescription,
-        tags: item.tags,
+        tags: this.toLocalizedTags(item.tags, lang),
         valueStreamStage: item.valueStreamStage,
         decisionType: item.decisionType,
         organizationalMaturity: item.organizationalMaturity,
       })),
     }));
+  }
+
+  private toLocalizedTags(
+    tags: MatrixCellRecord['items'][number]['tags'],
+    lang: string,
+  ) {
+    if (!tags) return undefined;
+    const localized = LocalizationHelper.localizeTags(tags as any, lang);
+    return localized.length > 0 ? localized : undefined;
   }
 
   private buildStats(cells: { count: number }[]) {

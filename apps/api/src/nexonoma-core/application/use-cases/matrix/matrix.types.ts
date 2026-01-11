@@ -21,3 +21,5 @@ export const ORGANIZATIONAL_MATURITY_BUCKETS = [
   'INTERMEDIATE',
   'ADVANCED',
 ];
+
+export type MatrixTagMap = Record<string, { de?: string; en?: string }>;
