@@ -3,7 +3,10 @@ import type { GridOverviewResponseDto } from '../../../dtos/grid/grid-overview-r
 import { buildOverviewItem } from './grid-dto-helpers';
 
 export class GridOverviewDtoBuilder {
-  static build(records: GridNodeRecord[], locale: string): GridOverviewResponseDto {
+  static build(
+    records: GridNodeRecord[],
+    locale: string,
+  ): GridOverviewResponseDto {
     return records.map((record) => buildOverviewItem(record, locale));
   }
 }

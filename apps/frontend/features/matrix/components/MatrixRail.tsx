@@ -135,10 +135,7 @@ export function MatrixRail() {
   }, [lang, resolvedMacroSlug]);
 
   useEffect(() => {
-    if (yDim !== "STRUCTURE") {
-      setYClusters([]);
-      return;
-    }
+    if (yDim !== "STRUCTURE") return;
     if (!resolvedYMacroSlug) return;
     let cancelled = false;
     const api = createGridApi(lang);

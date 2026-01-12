@@ -63,8 +63,8 @@ function normalizeAxisPair(
   yType: AxisType,
   yDim: AxisDimension
 ): { xType: AxisType; xDim: AxisDimension; yType: AxisType; yDim: AxisDimension } {
-  let nextXType = xType;
-  let nextXDim = xDim;
+  const nextXType = xType;
+  const nextXDim = xDim;
   let nextYType = yType;
   let nextYDim = yDim;
 

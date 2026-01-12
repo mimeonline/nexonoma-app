@@ -21,6 +21,15 @@ type SystemCatalogIndexResponse = {
   items?: SitemapNode[];
 };
 
+type IndexEntry = {
+  id: string;
+  slug: string;
+  type: string;
+  updatedAt?: string;
+  createdAt?: string;
+  availableLanguages: string[];
+};
+
 const fetchCatalogForLocale = async (lang: string): Promise<CatalogItem[]> => {
   const baseUrl = getApiBase({ preferInternal: true });
   const url = `${baseUrl}/catalog?lang=${lang}`;
@@ -45,7 +54,7 @@ export const getIndexableCatalogEntries = async (
   }[]
 > => {
   const includeReview = options?.includeReview ?? false;
-  const entries = new Map<string, { entry: any; locales: Set<string> }>();
+  const entries = new Map<string, { entry: IndexEntry; locales: Set<string> }>();
 
   await Promise.all(
     locales.map(async (lang) => {

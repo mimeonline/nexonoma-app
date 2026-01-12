@@ -80,7 +80,7 @@ export class AssetMapper {
 
       default:
         console.warn(
-          `Unknown AssetType '${baseProps.type}' for ID ${baseProps.id}. Returning plain ContextAsset.`,
+          `Unknown AssetType '${String(baseProps.type)}' for ID ${baseProps.id}. Returning plain ContextAsset.`,
         );
         return new ContextAsset(baseProps);
     }
@@ -168,7 +168,9 @@ export class AssetMapper {
       try {
         const parsed = JSON.parse(value);
         if (Array.isArray(parsed)) return parsed;
-      } catch {}
+      } catch {
+        return [];
+      }
     }
     return [];
   }
@@ -179,7 +181,7 @@ export class AssetMapper {
     if (typeof value === 'string') {
       try {
         return JSON.parse(value);
-      } catch (e) {
+      } catch {
         return fallback;
       }
     }

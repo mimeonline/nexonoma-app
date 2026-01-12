@@ -31,7 +31,12 @@ export class FileLogger implements LoggerService {
     this.write('VERBOSE', message, context);
   }
 
-  private write(level: LogLevel, message: unknown, context?: string, trace?: string) {
+  private write(
+    level: LogLevel,
+    message: unknown,
+    context?: string,
+    trace?: string,
+  ) {
     const line = formatLine(level, message, context, trace);
 
     switch (level) {
@@ -62,7 +67,10 @@ function createLogStream(serviceName: string): fs.WriteStream | null {
     fs.mkdirSync(path.dirname(logFile), { recursive: true });
     return fs.createWriteStream(logFile, { flags: 'a' });
   } catch (error) {
-    console.warn(`[FileLogger] Failed to create log file at ${logFile}:`, error);
+    console.warn(
+      `[FileLogger] Failed to create log file at ${logFile}:`,
+      error,
+    );
     return null;
   }
 }
@@ -77,7 +85,12 @@ function resolveLogFile(serviceName: string): string | null {
   return path.join(logDir, `${serviceName}.log`);
 }
 
-function formatLine(level: LogLevel, message: unknown, context?: string, trace?: string) {
+function formatLine(
+  level: LogLevel,
+  message: unknown,
+  context?: string,
+  trace?: string,
+) {
   const timestamp = new Date().toISOString();
   const contextLabel = context ? ` [${context}]` : '';
   const messageText = stringify(message);
@@ -89,13 +102,18 @@ function formatLine(level: LogLevel, message: unknown, context?: string, trace?:
 function stringify(value: unknown) {
   if (value instanceof Error) return value.stack ?? value.message;
   if (typeof value === 'string') return value;
-  if (typeof value === 'number' || typeof value === 'boolean' || value === null || value === undefined) {
+  if (
+    typeof value === 'number' ||
+    typeof value === 'boolean' ||
+    value === null ||
+    value === undefined
+  ) {
     return String(value);
   }
 
   try {
     return JSON.stringify(value);
   } catch {
-    return String(value);
+    return Object.prototype.toString.call(value);
   }
 }

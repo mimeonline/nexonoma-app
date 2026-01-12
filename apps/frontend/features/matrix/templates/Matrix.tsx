@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { enumAssetKey, useI18n } from "@/features/i18n/I18nProvider";
 import type { MatrixAssetPreview, MatrixCell, MatrixViewResponseDto } from "@/types/matrix";
 import Link from "next/link";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 type AxisTitleProps = {
   typeLabel: string;
@@ -139,11 +139,7 @@ type MatrixProps = {
 export default function Matrix({ data }: MatrixProps) {
   const { t, tRaw, lang } = useI18n();
   const localePrefix = lang ? `/${lang}` : "";
-  const [enablePopovers, setEnablePopovers] = useState(false);
-
-  useEffect(() => {
-    setEnablePopovers(true);
-  }, []);
+  const enablePopovers = true;
 
   const resolveLabel = (key: string, fallback: string) => {
     const raw = tRaw(key);

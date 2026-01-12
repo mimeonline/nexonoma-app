@@ -28,5 +28,4 @@ export abstract class AssetRepositoryPort {
     locale: string,
     parentId: string,
   ): Promise<AssetBlock[]>;
-
 }

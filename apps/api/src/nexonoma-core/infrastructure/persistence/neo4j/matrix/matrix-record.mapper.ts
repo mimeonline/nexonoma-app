@@ -34,7 +34,7 @@ export class MatrixRecordMapper {
       return {};
     }
 
-    if (typeof value === 'object') return value as MatrixTagMap;
+    if (typeof value === 'object') return value;
 
     return {};
   }

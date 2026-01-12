@@ -85,7 +85,7 @@ export class GetClusterViewUseCase {
           AssetType.METHOD,
           AssetType.TOOL,
           AssetType.TECHNOLOGY,
-        ].includes(c.type as AssetType),
+        ].includes(c.type),
       );
 
       segmentInputs.push({

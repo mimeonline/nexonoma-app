@@ -2,7 +2,10 @@ import { BadRequestException, Controller, Get, Query } from '@nestjs/common';
 import { GetMatrixUseCase } from '../../../application/use-cases/matrix/get-matrix.use-case';
 import type { MatrixResponseDto } from '../../../application/dtos/matrix/matrix-response.dto';
 import { AssetType } from '../../../domain/types/asset-enums';
-import { MatrixMode, MatrixPerspective } from '../../../application/use-cases/matrix/matrix.types';
+import {
+  MatrixMode,
+  MatrixPerspective,
+} from '../../../application/use-cases/matrix/matrix.types';
 
 const DEFAULT_CONTENT_TYPES = [
   AssetType.CONCEPT,
@@ -106,12 +109,17 @@ export class MatrixController {
     const parsedLang = parseLang(lang);
     const parsedCellLimit = parseCellLimit(cellLimit);
     const parsedXIds = parseCsv(xIds);
-    if (parsedMode === MatrixMode.ROLE_BY_PERSPECTIVE && parsedXIds.length === 0) {
+    if (
+      parsedMode === MatrixMode.ROLE_BY_PERSPECTIVE &&
+      parsedXIds.length === 0
+    ) {
       throw new BadRequestException('xIds is required for ROLE_BY_PERSPECTIVE');
     }
     if (parsedMode === MatrixMode.SEGMENT_BY_SEGMENT) {
       if (!yClusterId) {
-        throw new BadRequestException('yClusterId is required for SEGMENT_BY_SEGMENT');
+        throw new BadRequestException(
+          'yClusterId is required for SEGMENT_BY_SEGMENT',
+        );
       }
       const parsedPerspective = parsePerspectiveOptional(xPerspective);
       return this.getMatrix.execute({

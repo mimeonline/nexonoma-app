@@ -11,5 +11,8 @@ export abstract class GridRepositoryPort {
   ): Promise<GridNodeRecord | null>;
 
   // Findet alle Kinder eines Parents (egal ob Structure oder Content)
-  abstract findChildren(locale: string, parentId: string): Promise<GridNodeRecord[]>;
+  abstract findChildren(
+    locale: string,
+    parentId: string,
+  ): Promise<GridNodeRecord[]>;
 }

@@ -119,7 +119,7 @@ export class LocalizationHelper {
     if (typeof tags === 'string') {
       try {
         parsedTags = JSON.parse(tags);
-      } catch (e) {
+      } catch {
         console.warn('LocalizationHelper: Could not parse tags JSON', tags);
         return [];
       }

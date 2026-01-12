@@ -28,7 +28,10 @@ export class ClusterViewDtoBuilder {
     input: SegmentWithContent,
     locale: string,
   ): GridSegmentDto {
-    const content = ClusterViewDtoBuilder.groupContent(input.contentItems, locale);
+    const content = ClusterViewDtoBuilder.groupContent(
+      input.contentItems,
+      locale,
+    );
     const base = buildOverviewItem(input.segment, locale);
 
     return {

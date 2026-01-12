@@ -7,7 +7,9 @@ import { FileLogger } from './shared/infrastructure/logging/file-logger';
 dotenv.config();
 
 async function bootstrap() {
-  const fileLoggingEnabled = Boolean(process.env.LOG_FILE?.trim() || process.env.LOG_DIR?.trim());
+  const fileLoggingEnabled = Boolean(
+    process.env.LOG_FILE?.trim() || process.env.LOG_DIR?.trim(),
+  );
   const logger = new FileLogger({ serviceName: 'api' });
   const app = await NestFactory.create(AppModule, {
     logger,

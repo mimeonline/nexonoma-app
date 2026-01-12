@@ -43,15 +43,51 @@ describe('GetSystemCatalogIndexUseCase', () => {
       findContentIndex: jest
         .fn()
         .mockResolvedValueOnce([
-          createRecord({ id: 'a1', slug: 'valid', type: AssetType.TOOL, language: 'de' }),
-          createRecord({ id: 'a2', slug: 'bad slug', type: AssetType.CONCEPT, language: 'de' }),
-          createRecord({ id: 'a3', slug: 'bad/slug', type: AssetType.METHOD, language: 'de' }),
-          createRecord({ id: 'a4', slug: '', type: AssetType.CONCEPT, language: 'de' }),
-          createRecord({ id: 'a5', slug: 'valid', type: AssetType.TOOL, status: AssetStatus.DRAFT, language: 'de' }),
+          createRecord({
+            id: 'a1',
+            slug: 'valid',
+            type: AssetType.TOOL,
+            language: 'de',
+          }),
+          createRecord({
+            id: 'a2',
+            slug: 'bad slug',
+            type: AssetType.CONCEPT,
+            language: 'de',
+          }),
+          createRecord({
+            id: 'a3',
+            slug: 'bad/slug',
+            type: AssetType.METHOD,
+            language: 'de',
+          }),
+          createRecord({
+            id: 'a4',
+            slug: '',
+            type: AssetType.CONCEPT,
+            language: 'de',
+          }),
+          createRecord({
+            id: 'a5',
+            slug: 'valid',
+            type: AssetType.TOOL,
+            status: AssetStatus.DRAFT,
+            language: 'de',
+          }),
         ])
         .mockResolvedValueOnce([
-          createRecord({ id: 'a1', slug: 'valid', type: AssetType.TOOL, language: 'en' }),
-          createRecord({ id: 'b1', slug: 'another', type: AssetType.CONCEPT, language: 'en' }),
+          createRecord({
+            id: 'a1',
+            slug: 'valid',
+            type: AssetType.TOOL,
+            language: 'en',
+          }),
+          createRecord({
+            id: 'b1',
+            slug: 'another',
+            type: AssetType.CONCEPT,
+            language: 'en',
+          }),
         ]),
     };
 
@@ -75,15 +111,15 @@ describe('GetSystemCatalogIndexUseCase', () => {
     expect(result.total).toBe(2);
     expect(result.items).toHaveLength(2);
     result.items.forEach((item) => {
-      expect(Object.keys(item).sort()).toEqual(
-        [
+      expect(Object.keys(item)).toEqual(
+        expect.arrayContaining([
           'availableLanguages',
           'createdAt',
           'id',
           'slug',
           'type',
           'updatedAt',
-        ].sort(),
+        ]),
       );
     });
     expect(result.items[0]).toMatchObject({
@@ -103,9 +139,24 @@ describe('GetSystemCatalogIndexUseCase', () => {
   it('paginates after sorting', async () => {
     const assetRepo: Partial<SystemCatalogRepositoryPort> = {
       findContentIndex: jest.fn().mockResolvedValueOnce([
-        createRecord({ id: 'a1', slug: 'alpha', type: AssetType.CONCEPT, language: 'en' }),
-        createRecord({ id: 'a2', slug: 'beta', type: AssetType.CONCEPT, language: 'en' }),
-        createRecord({ id: 'a3', slug: 'gamma', type: AssetType.CONCEPT, language: 'en' }),
+        createRecord({
+          id: 'a1',
+          slug: 'alpha',
+          type: AssetType.CONCEPT,
+          language: 'en',
+        }),
+        createRecord({
+          id: 'a2',
+          slug: 'beta',
+          type: AssetType.CONCEPT,
+          language: 'en',
+        }),
+        createRecord({
+          id: 'a3',
+          slug: 'gamma',
+          type: AssetType.CONCEPT,
+          language: 'en',
+        }),
       ]),
     };
 

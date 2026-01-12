@@ -11,7 +11,9 @@ describe('SystemCatalogController', () => {
 
     const moduleRef = await Test.createTestingModule({
       controllers: [SystemCatalogController],
-      providers: [{ provide: GetSystemCatalogIndexUseCase, useValue: getIndex }],
+      providers: [
+        { provide: GetSystemCatalogIndexUseCase, useValue: getIndex },
+      ],
     }).compile();
 
     const controller = moduleRef.get(SystemCatalogController);
@@ -36,11 +38,18 @@ describe('SystemCatalogController', () => {
 
     const moduleRef = await Test.createTestingModule({
       controllers: [SystemCatalogController],
-      providers: [{ provide: GetSystemCatalogIndexUseCase, useValue: getIndex }],
+      providers: [
+        { provide: GetSystemCatalogIndexUseCase, useValue: getIndex },
+      ],
     }).compile();
 
     const controller = moduleRef.get(SystemCatalogController);
-    await controller.getIndexNodes('review', 'concept,unknown,tool', '2', '5000');
+    await controller.getIndexNodes(
+      'review',
+      'concept,unknown,tool',
+      '2',
+      '5000',
+    );
 
     expect(getIndex.execute).toHaveBeenCalledWith({
       page: 2,

@@ -23,7 +23,6 @@ export class GetMatrixUseCase {
     const scope = await this.matrixRepo.findClusterScope(lang, clusterId);
 
     if (mode === MatrixMode.SEGMENT_BY_SEGMENT) {
-
       const yScope = await this.matrixRepo.findClusterScope(
         lang,
         query.yClusterId,
@@ -204,7 +203,10 @@ export class GetMatrixUseCase {
           type: 'CONTEXT',
           key: 'ROLE',
           label: 'Role',
-          items: roleIds.map((id) => ({ id, label: roleLabelMap.get(id) ?? id })),
+          items: roleIds.map((id) => ({
+            id,
+            label: roleLabelMap.get(id) ?? id,
+          })),
         },
         y: {
           type: 'PERSPECTIVE',
@@ -218,11 +220,7 @@ export class GetMatrixUseCase {
     };
   }
 
-  private mapCells(
-    cells: MatrixCellRecord[],
-    cellLimit: number,
-    lang: string,
-  ) {
+  private mapCells(cells: MatrixCellRecord[], cellLimit: number, lang: string) {
     return cells.map((cell) => ({
       xId: cell.xId,
       yId: cell.yId,

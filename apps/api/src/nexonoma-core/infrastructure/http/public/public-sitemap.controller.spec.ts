@@ -20,7 +20,9 @@ describe('PublicSitemapController', () => {
 
     const moduleRef = await Test.createTestingModule({
       controllers: [PublicSitemapController],
-      providers: [{ provide: GetPublicSitemapNodesUseCase, useValue: getNodes }],
+      providers: [
+        { provide: GetPublicSitemapNodesUseCase, useValue: getNodes },
+      ],
     }).compile();
 
     const controller = moduleRef.get(PublicSitemapController);
@@ -40,7 +42,9 @@ describe('PublicSitemapController', () => {
 
     const moduleRef = await Test.createTestingModule({
       controllers: [PublicSitemapController],
-      providers: [{ provide: GetPublicSitemapNodesUseCase, useValue: getNodes }],
+      providers: [
+        { provide: GetPublicSitemapNodesUseCase, useValue: getNodes },
+      ],
     }).compile();
 
     const controller = moduleRef.get(PublicSitemapController);
