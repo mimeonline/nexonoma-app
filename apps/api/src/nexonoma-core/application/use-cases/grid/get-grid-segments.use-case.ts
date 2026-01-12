@@ -1,20 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { StructuralAsset } from '../../../domain/entities/structural-asset.entity';
-import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
 import { AssetType } from '../../../domain/types/asset-enums';
-import type { StructuralAssetDto } from '../../dtos/assets/structural-asset.dto';
-import { mapStructuralAssetToDto } from '../shared/asset-dto.mapper';
+import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
+import type { GridSegmentsResponseDto } from '../../dtos/grid/segments-response.dto';
+import { GridDtoBuilder } from './grid.dto-builder';
 
 @Injectable()
 export class GetGridSegmentsUseCase {
-  constructor(private readonly assetRepo: AssetRepositoryPort) {}
+  constructor(private readonly gridRepo: GridRepositoryPort) {}
 
   async execute(
     locale: string,
     clusterSlug: string,
-  ): Promise<StructuralAssetDto> {
+  ): Promise<GridSegmentsResponseDto> {
     // 1) Cluster holen
-    const cluster = await this.assetRepo.findStructuralBySlug(
+    const cluster = await this.gridRepo.findStructuralBySlug(
       locale,
       clusterSlug,
     );
@@ -25,16 +24,20 @@ export class GetGridSegmentsUseCase {
       );
     }
 
+    if (!cluster.id) {
+      throw new NotFoundException(
+        `Cluster with slug '${clusterSlug}' is missing id`,
+      );
+    }
+
     // 2) ClusterView finden (wir überspringen bewusst nur 1 Ebene)
-    const firstLevelChildren = await this.assetRepo.findChildren(
+    const firstLevelChildren = await this.gridRepo.findChildren(
       locale,
       cluster.id,
     );
 
     const clusterView = firstLevelChildren.find(
-      (child) =>
-        child instanceof StructuralAsset &&
-        child.type === AssetType.CLUSTER_VIEW,
+      (child) => child.type === AssetType.CLUSTER_VIEW,
     );
 
     if (!clusterView) {
@@ -43,35 +46,49 @@ export class GetGridSegmentsUseCase {
       );
     }
 
+    if (!clusterView.id) {
+      throw new NotFoundException(
+        `ClusterView for Cluster '${clusterSlug}' is missing id`,
+      );
+    }
+
     // 3) Segmente aus dem ClusterView holen
-    const viewChildren = await this.assetRepo.findChildren(
+    const viewChildren = await this.gridRepo.findChildren(
       locale,
       clusterView.id,
     );
 
     const segments = viewChildren.filter(
-      (child): child is StructuralAsset =>
-        child instanceof StructuralAsset && child.type === AssetType.SEGMENT,
+      (child) => child.type === AssetType.SEGMENT,
     );
-    cluster.childrenCount = segments.length;
 
     // 4) Inhalte der Segmente laden
+    const segmentDtos: GridSegmentsResponseDto['children'] = [];
     for (const segment of segments) {
-      const contents = await this.assetRepo.findChildren(locale, segment.id);
+      if (!segment.id) {
+        throw new NotFoundException(
+          `Segment with slug '${segment.slug}' is missing id`,
+        );
+      }
+      const contents = await this.gridRepo.findChildren(locale, segment.id);
 
-      segment.children = contents.filter((c) =>
+      const contentItems = contents.filter((c) =>
         [
           AssetType.CONCEPT,
           AssetType.METHOD,
           AssetType.TOOL,
           AssetType.TECHNOLOGY,
-        ].includes((c as StructuralAsset).type as AssetType),
+        ].includes(c.type as AssetType),
       );
-      segment.childrenCount = segment.children.length;
+
+      const contentDtos = contentItems.map((item) =>
+        GridDtoBuilder.buildNode(item, locale),
+      );
+
+      segmentDtos.push(GridDtoBuilder.buildNode(segment, locale, contentDtos));
     }
 
     // 5) Ergebnisstruktur zurückgeben: cluster -> segments -> content
-    cluster.children = segments;
-    return mapStructuralAssetToDto(cluster);
+    return GridDtoBuilder.buildNode(cluster, locale, segmentDtos);
   }
 }

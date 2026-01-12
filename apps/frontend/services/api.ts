@@ -14,9 +14,7 @@ export class ApiError extends Error {
 
 function getApiBase() {
   const isServer = typeof window === "undefined";
-  const apiBase = isServer
-    ? process.env.API_INTERNAL_URL ?? process.env.NEXT_PUBLIC_API_URL
-    : process.env.NEXT_PUBLIC_API_URL;
+  const apiBase = isServer ? (process.env.API_INTERNAL_URL ?? process.env.NEXT_PUBLIC_API_URL) : process.env.NEXT_PUBLIC_API_URL;
 
   if (!apiBase) {
     throw new Error(isServer ? "API_INTERNAL_URL is not set" : "NEXT_PUBLIC_API_URL is not set");
@@ -37,17 +35,17 @@ async function fetchJson<T>(url: string, errorLabel: string): Promise<T> {
 export function createNexonomaApi(lang: string) {
   return {
     async getMacroClusters(): Promise<MacroCluster[]> {
-      const url = `${getApiBase()}/grid/macros?lang=${lang}`;
+      const url = `${getApiBase()}/grid/overview?lang=${lang}`;
       return fetchJson(url, "Failed to fetch macros");
     },
 
     async getClusters(macroSlug: string): Promise<MacroCluster> {
-      const url = `${getApiBase()}/grid/macros/${macroSlug}/clusters?lang=${lang}`;
+      const url = `${getApiBase()}/grid/macroclusters/${macroSlug}?lang=${lang}`;
       return fetchJson(url, `Failed to fetch clusters for macro: ${macroSlug}`);
     },
 
     async getSegments(clusterSlug: string): Promise<Cluster> {
-      const url = `${getApiBase()}/grid/clusters/${clusterSlug}/segments?lang=${lang}`;
+      const url = `${getApiBase()}/grid/clusters/${clusterSlug}?lang=${lang}`;
       return fetchJson(url, `Failed to fetch segments for cluster: ${clusterSlug}`);
     },
 

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AssetRepositoryPort } from '../../../domain/ports/outbound/asset-repository.port';
-import type { StructuralAssetDto } from '../../dtos/assets/structural-asset.dto';
-import { mapStructuralAssetToDto } from '../shared/asset-dto.mapper';
+import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
+import type { GridClustersResponseDto } from '../../dtos/grid/clusters-response.dto';
+import { GridDtoBuilder } from './grid.dto-builder';
 
 // TODO: childrenCount zählt aktuell ClusterViews.
 // Da ClusterView im UI noch nicht dargestellt wird,
@@ -9,11 +9,14 @@ import { mapStructuralAssetToDto } from '../shared/asset-dto.mapper';
 // Korrekt, sobald ClusterView-Ebene umgesetzt ist.
 @Injectable()
 export class GetGridClustersUseCase {
-  constructor(private readonly assetRepo: AssetRepositoryPort) {}
+  constructor(private readonly gridRepo: GridRepositoryPort) {}
 
-  async execute(locale: string, macroSlug: string): Promise<StructuralAssetDto> {
+  async execute(
+    locale: string,
+    macroSlug: string,
+  ): Promise<GridClustersResponseDto> {
     // 1. Hole das MacroCluster selbst (für den Titel/Header der Page)
-    const macroCluster = await this.assetRepo.findStructuralBySlug(
+    const macroCluster = await this.gridRepo.findStructuralBySlug(
       locale,
       macroSlug,
     );
@@ -25,13 +28,21 @@ export class GetGridClustersUseCase {
     }
 
     // 2. Hole die Kinder (Cluster)
-    const clusters = await this.assetRepo.findChildren(locale, macroCluster.id);
+    if (!macroCluster.id) {
+      throw new NotFoundException(
+        `MacroCluster with slug '${macroSlug}' is missing id`,
+      );
+    }
 
-    // 3. Wir hängen die Kinder an das Eltern-Objekt
-    // Da wir in Typescript sind, müssen wir sicherstellen, dass wir children pushen können
-    macroCluster.children = clusters;
-    macroCluster.childrenCount = clusters.length;
+    const clusters = await this.gridRepo.findChildren(
+      locale,
+      macroCluster.id,
+    );
 
-    return mapStructuralAssetToDto(macroCluster);
+    const clusterDtos = clusters.map((cluster) =>
+      GridDtoBuilder.buildNode(cluster, locale),
+    );
+
+    return GridDtoBuilder.buildNode(macroCluster, locale, clusterDtos);
   }
 }
