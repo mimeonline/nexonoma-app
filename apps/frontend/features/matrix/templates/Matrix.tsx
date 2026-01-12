@@ -77,10 +77,10 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
     return (
       <Link
         href={cellHref}
-        className="group flex w-full items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
+        className="group flex w-full items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
       >
         <TypeIndicator type={item.type} />
-        <span className="line-clamp-2 text-[11px] leading-snug text-slate-200 group-hover:text-white">{item.name}</span>
+        <span className="line-clamp-2 text-[11px] leading-none text-slate-200 group-hover:text-white">{item.name}</span>
       </Link>
     );
   }
@@ -92,10 +92,10 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
           href={cellHref}
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
-          className="group flex w-full items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
+          className="group flex w-full items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
         >
           <TypeIndicator type={item.type} />
-          <span className="line-clamp-2 text-[11px] leading-snug text-slate-200 group-hover:text-white">{item.name}</span>
+          <span className="line-clamp-2 text-[11px] leading-none text-slate-200 group-hover:text-white">{item.name}</span>
         </Link>
       </PopoverTrigger>
       <PopoverContent
@@ -115,11 +115,11 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
             <span>
               {yAxisLabel}: {bucketLabel}
             </span>
-            <div className="text-sm font-semibold text-white">{item.name}</div>
-            {description && <div className="text-slate-300">{description}</div>}
           </div>
+          <div className="text-sm font-semibold text-white">{item.name}</div>
+          {description && <div className="text-slate-300">{description}</div>}
           {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 text-[11px] text-slate-300 mt-4">
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-300">
               {tags.map((tag) => (
                 <span key={tag.slug} className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">
                   #{tag.label ?? tag.slug}
@@ -168,7 +168,10 @@ export default function Matrix({ data }: MatrixProps) {
   const axisTypeLabel = (type: string) => resolveLabel(`asset.enums.dimensions.${type}.label`, type.charAt(0) + type.slice(1).toLowerCase());
 
   const axisKeyLabel = (key: string, fallback?: string) => {
-    if (key === "SEGMENT" || key === "CLUSTER" || key === "MACRO_CLUSTER" || key === "ROLE") {
+    if (key === "SEGMENT") {
+      return resolveLabel("grid.segments.badge", fallback ?? key);
+    }
+    if (key === "CLUSTER" || key === "MACRO_CLUSTER" || key === "ROLE") {
       return resolveLabel(`asset.enums.types.${key}.label`, fallback ?? key);
     }
     if (key === "VALUE_STREAM" || key === "DECISION_TYPE" || key === "ORGANIZATIONAL_MATURITY") {
@@ -204,6 +207,7 @@ export default function Matrix({ data }: MatrixProps) {
   const hasSingleContentType = contentTypes.length === 1;
   const contentTypeLabel = hasSingleContentType ? t(`asset.labels.${contentTypes[0].toLowerCase()}`) : t("catalog.filtersMeta.typeOptions.all");
   const contentTypeVariant = hasSingleContentType ? contentTypes[0] : "";
+  const [showTypeLegend, setShowTypeLegend] = useState(false);
 
   const xDim = parseAxisDimension(searchParams.get("xDim"));
   const yDim = parseAxisDimension(searchParams.get("yDim") ?? "PERSPECTIVE");
@@ -224,6 +228,13 @@ export default function Matrix({ data }: MatrixProps) {
       value: MatrixPerspective.ORGANIZATIONAL_MATURITY,
       label: axisKeyLabel("ORGANIZATIONAL_MATURITY", t("asset.properties.organizationalMaturity.label")),
     },
+  ];
+
+  const typeLegendItems = [
+    { type: "concept", label: t("asset.labels.concept") },
+    { type: "method", label: t("asset.labels.method") },
+    { type: "tool", label: t("asset.labels.tool") },
+    { type: "technology", label: t("asset.labels.technology") },
   ];
 
   const gridTemplateColumns = `minmax(220px, 1.1fr) repeat(${columns.length}, minmax(160px, 1fr))`;
@@ -268,8 +279,21 @@ export default function Matrix({ data }: MatrixProps) {
           <Badge variant={getBadgeVariant(contentTypeVariant)} size="md" radius="md" className="text-xs text-slate-400">
             {contentTypeLabel}
           </Badge>
+          <button type="button" onClick={() => setShowTypeLegend((prev) => !prev)} className="text-[11px] text-slate-400 hover:text-slate-200">
+            {t("matrix.controls.type")}
+          </button>
         </div>
       </div>
+      {showTypeLegend && (
+        <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-300">
+          {typeLegendItems.map((item) => (
+            <div key={item.type} className="flex items-center gap-2">
+              <TypeIndicator type={item.type} />
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="rounded-2xl border border-white/10 bg-nexo-surface/40">
         <div className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
@@ -348,10 +372,10 @@ export default function Matrix({ data }: MatrixProps) {
                                         <Link
                                           key={item.id}
                                           href={`${localePrefix}/catalog/${item.type.toLowerCase()}/${item.slug}`}
-                                          className="flex items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-[11px] text-slate-200 hover:bg-white/10"
+                                          className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-[11px] text-slate-200 hover:bg-white/10"
                                         >
                                           <TypeIndicator type={item.type} />
-                                          <span className="line-clamp-2">{item.name}</span>
+                                          <span className="line-clamp-2 leading-none">{item.name}</span>
                                         </Link>
                                       ))}
                                     </div>

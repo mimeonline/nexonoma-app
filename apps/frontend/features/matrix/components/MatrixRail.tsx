@@ -199,7 +199,7 @@ export function MatrixRail() {
         {axis === "x" && currentDim === "STRUCTURE" && (
           <div className="space-y-3">
             <div className="space-y-2">
-              <div className={fieldLabel}>MacroCluster</div>
+              <div className={fieldLabel}>{t("grid.macro.badge")}</div>
               <div className="relative w-full">
                 <select
                   value={resolvedMacroSlug}
@@ -209,12 +209,12 @@ export function MatrixRail() {
                 >
                   {!macroClusters.length && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      Keine MacroCluster gefunden
+                      {t("grid.macro.badge")}
                     </option>
                   )}
                   {macroClusters.length > 0 && !resolvedMacroSlug && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      MacroCluster wählen
+                      {t("grid.macro.badge")}
                     </option>
                   )}
                   {macroClusters.map((macro) => (
@@ -232,7 +232,7 @@ export function MatrixRail() {
             </div>
 
             <div className="space-y-2">
-              <div className={fieldLabel}>Cluster</div>
+              <div className={fieldLabel}>{t("grid.clusters.badge")}</div>
               <div className="relative w-full">
                 <select
                   value={selectedClusterSlug ?? clusters[0]?.slug ?? ""}
@@ -245,17 +245,17 @@ export function MatrixRail() {
                 >
                   {!resolvedMacroSlug && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      Bitte zuerst MacroCluster wählen
+                      {t("grid.macro.badge")}
                     </option>
                   )}
                   {resolvedMacroSlug && clusters.length === 0 && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      Keine Cluster gefunden
+                      {t("grid.clusters.badge")}
                     </option>
                   )}
                   {resolvedMacroSlug && clusters.length > 0 && !selectedClusterSlug && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      Cluster wählen
+                      {t("grid.clusters.badge")}
                     </option>
                   )}
                   {clusters.map((cluster) => (
