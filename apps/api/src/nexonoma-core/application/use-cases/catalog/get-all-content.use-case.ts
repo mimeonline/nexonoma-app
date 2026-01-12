@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
+
+import type { CatalogResponseDto } from '../../dtos/catalog/catalog-response.dto';
 import { CatalogRepositoryPort } from '../../ports/catalog/catalog-repository.port';
-import type { ContentAssetDto } from '../../dtos/assets/content-asset.dto';
-import { mapContentAssetToDto } from '../shared/asset-dto.mapper';
+import { CatalogDtoBuilder } from './catalog.dto-builder';
 
 @Injectable()
 export class GetAllContentUseCase {
   constructor(private readonly catalogRepo: CatalogRepositoryPort) {}
 
-  async execute(locale: string): Promise<ContentAssetDto[]> {
-    // Ruft alle Content-Bausteine ab.
-    // Hier könnte man später Filter-Parameter (z.B. type='tool') durchreichen.
-    const assets = await this.catalogRepo.findAllContent(locale);
-    return assets.map(mapContentAssetToDto);
+  async execute(locale: string): Promise<CatalogResponseDto[]> {
+    // Repo liefert CatalogRecords (rehydriert, aber noch nicht lokalisiert)
+    const records = await this.catalogRepo.findAllContent(locale);
+
+    // DTO-Assembly passiert hier (UseCase!)
+    return CatalogDtoBuilder.buildList(records, locale);
   }
 }

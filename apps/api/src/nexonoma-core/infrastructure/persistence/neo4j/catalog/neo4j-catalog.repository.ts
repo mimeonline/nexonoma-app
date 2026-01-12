@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { getI18nProjectionList } from 'src/shared/infrastructure/neo4j/cypher-fragments';
 import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
+
 import { CatalogRepositoryPort } from '../../../../application/ports/catalog/catalog-repository.port';
-import { ContentAsset } from '../../../../domain/entities/content-asset.entity';
 import { AssetType } from '../../../../domain/types/asset-enums';
-import { AssetMapper } from '../shared/asset.mapper';
-import { getI18nProjection } from '../../../../../shared/infrastructure/neo4j/cypher-fragments';
+
+import {
+  CatalogRecordMapper,
+  type CatalogRecord,
+} from './catalog-record.mapper';
 
 @Injectable()
 export class Neo4jCatalogRepository implements CatalogRepositoryPort {
@@ -13,14 +17,17 @@ export class Neo4jCatalogRepository implements CatalogRepositoryPort {
   /**
    * Page 4: Katalog Liste (Alle Content Types)
    */
-  async findAllContent(locale: string = 'en'): Promise<ContentAsset[]> {
-    const i18n = getI18nProjection('n');
+  async findAllContent(locale: string = 'en'): Promise<CatalogRecord[]> {
+    const i18n = getI18nProjectionList('n');
 
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.type IN [$t1, $t2, $t3, $t4]
       RETURN n {
-        .*,
+        .id,
+        .type,
+        .slug,
+        .tags,
         ${i18n}
       } AS assetData
       ORDER BY assetData.name ASC
@@ -38,7 +45,7 @@ export class Neo4jCatalogRepository implements CatalogRepositoryPort {
 
     return result.map((record) => {
       const assetData = record.get('assetData');
-      return AssetMapper.toDomain(assetData, locale) as ContentAsset;
+      return CatalogRecordMapper.toRecord(assetData);
     });
   }
 }

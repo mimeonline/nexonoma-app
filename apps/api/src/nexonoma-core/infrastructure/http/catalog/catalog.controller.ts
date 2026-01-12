@@ -1,10 +1,11 @@
 import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { I18nLang } from 'nestjs-i18n';
+import { CatalogResponseDto } from 'src/nexonoma-core/application/dtos/catalog/catalog-response.dto';
+import type { AssetBlockDto } from '../../../application/dtos/assets/asset-block.dto';
+import type { ContentAssetDto } from '../../../application/dtos/assets/content-asset.dto';
 import { GetAllContentUseCase } from '../../../application/use-cases/catalog/get-all-content.use-case';
 import { GetContentBySlugUseCase } from '../../../application/use-cases/catalog/get-content-by-slug.use-case';
 import { GetContentDetailUseCase } from '../../../application/use-cases/catalog/get-content-detail.use-case';
-import type { ContentAssetDto } from '../../../application/dtos/assets/content-asset.dto';
-import type { AssetBlockDto } from '../../../application/dtos/assets/asset-block.dto';
 @Controller('catalog')
 export class CatalogController {
   constructor(
@@ -18,7 +19,7 @@ export class CatalogController {
    * GET /api/catalog
    */
   @Get()
-  async getCatalog(@I18nLang() lang: string): Promise<ContentAssetDto[]> {
+  async getCatalog(@I18nLang() lang: string): Promise<CatalogResponseDto[]> {
     return this.getAll.execute(lang);
   }
 
