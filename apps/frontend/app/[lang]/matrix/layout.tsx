@@ -3,7 +3,6 @@ import de from "../dictionaries/de.json";
 import en from "../dictionaries/en.json";
 import { buildSeoMetadata, SeoLocale } from "../seo";
 import { MatrixRail } from "@/features/matrix/components/MatrixRail";
-import { MatrixProvider } from "@/features/matrix/state/MatrixProvider";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -22,16 +21,14 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
 export default function MatrixLayout({ children }: { children: React.ReactNode }) {
   return (
-    <MatrixProvider>
-      <div className="flex w-full min-h-[calc(100vh-var(--header))]">
-        <aside className="w-64 shrink-0 border-r border-nexo-border bg-nexo-surface/40">
-          <div className="px-4 py-6">
-            <MatrixRail />
-          </div>
-        </aside>
+    <div className="flex w-full min-h-[calc(100vh-var(--header))]">
+      <aside className="w-64 shrink-0 border-r border-nexo-border bg-nexo-surface/40">
+        <div className="px-4 py-6">
+          <MatrixRail />
+        </div>
+      </aside>
 
-        <section className="flex-1 overflow-auto">{children}</section>
-      </div>
-    </MatrixProvider>
+      <section className="flex-1 overflow-auto">{children}</section>
+    </div>
   );
 }
