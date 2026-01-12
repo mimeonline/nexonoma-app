@@ -35,11 +35,43 @@ type MiniCardProps = {
   enablePopover: boolean;
 };
 
+const typeAbbrev = (type: string) => {
+  // Single-letter codes keep the cell compact: C=Concept, M=Method, T=Tool, G=Technology.
+  const normalized = type.toLowerCase();
+  if (normalized.includes("concept")) return "C";
+  if (normalized.includes("method")) return "M";
+  if (normalized.includes("tool")) return "T";
+  if (normalized.includes("tech")) return "G";
+  return "?";
+};
+
+const typeIndicatorClass = (type: string) => {
+  const variant = getBadgeVariant(type);
+  if (variant === "concept") return "border-accent-primary/30 bg-accent-primary/10 text-accent-primary";
+  if (variant === "method") return "border-success/30 bg-success/10 text-success";
+  if (variant === "tool") return "border-warning/30 bg-warning/10 text-warning";
+  if (variant === "technology") return "border-error/30 bg-error/10 text-error";
+  return "border-slate-500/40 bg-slate-500/10 text-slate-400";
+};
+
+type TypeIndicatorProps = {
+  type: string;
+};
+
+function TypeIndicator({ type }: TypeIndicatorProps) {
+  return (
+    <span className={`inline-flex h-5 w-5 items-center justify-center rounded-full border text-[9px] font-semibold ${typeIndicatorClass(type)}`}>
+      {typeAbbrev(type)}
+    </span>
+  );
+}
+
 function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopover }: MiniCardProps) {
   const [open, setOpen] = useState(false);
   const typeLabel = t(`asset.labels.${item.type.toLowerCase()}`);
   const cellHref = `${localePrefix}/catalog/${item.type.toLowerCase()}/${item.slug}`;
-  const description = `${item.name} – kurzer Überblick zu Zweck und Einsatz.`;
+  const description = item.shortDescription?.trim();
+  const tags = item.tags ?? [];
 
   if (!enablePopover) {
     return (
@@ -47,9 +79,7 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
         href={cellHref}
         className="group flex w-full items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
       >
-        <Badge variant={getBadgeVariant(item.type)} size="sm" radius="full" className="mt-0.5 shrink-0">
-          {typeLabel}
-        </Badge>
+        <TypeIndicator type={item.type} />
         <span className="line-clamp-2 text-[11px] leading-snug text-slate-200 group-hover:text-white">{item.name}</span>
       </Link>
     );
@@ -64,9 +94,7 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
           onMouseLeave={() => setOpen(false)}
           className="group flex w-full items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-left text-xs text-slate-200 hover:bg-white/10"
         >
-          <Badge variant={getBadgeVariant(item.type)} size="sm" radius="full" className="mt-0.5 shrink-0">
-            {typeLabel}
-          </Badge>
+          <TypeIndicator type={item.type} />
           <span className="line-clamp-2 text-[11px] leading-snug text-slate-200 group-hover:text-white">{item.name}</span>
         </Link>
       </PopoverTrigger>
@@ -79,15 +107,26 @@ function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopove
         onMouseLeave={() => setOpen(false)}
       >
         <div className="space-y-2">
-          <div className="text-sm font-semibold text-white">{item.name}</div>
-          <div className="text-slate-300">{description}</div>
-          <div className="flex flex-wrap gap-2 text-[11px] text-slate-400">
-            <span>{typeLabel}</span>
+          <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-400">
+            <Badge variant={getBadgeVariant(item.type)} size="sm" radius="full">
+              {typeLabel}
+            </Badge>
             <span>•</span>
             <span>
               {yAxisLabel}: {bucketLabel}
             </span>
+            <div className="text-sm font-semibold text-white">{item.name}</div>
+            {description && <div className="text-slate-300">{description}</div>}
           </div>
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-300 mt-4">
+              {tags.map((tag) => (
+                <span key={tag.slug} className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5">
+                  #{tag.label ?? tag.slug}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>
@@ -126,8 +165,7 @@ export default function Matrix({ data }: MatrixProps) {
     return typeof raw === "string" ? raw : fallback;
   };
 
-  const axisTypeLabel = (type: string) =>
-    resolveLabel(`asset.enums.dimensions.${type}.label`, type.charAt(0) + type.slice(1).toLowerCase());
+  const axisTypeLabel = (type: string) => resolveLabel(`asset.enums.dimensions.${type}.label`, type.charAt(0) + type.slice(1).toLowerCase());
 
   const axisKeyLabel = (key: string, fallback?: string) => {
     if (key === "SEGMENT" || key === "CLUSTER" || key === "MACRO_CLUSTER" || key === "ROLE") {
@@ -155,10 +193,7 @@ export default function Matrix({ data }: MatrixProps) {
   const columns = data.axes.x.items;
   const rows = data.axes.y.items;
 
-  const cellLookup = useMemo(
-    () => new Map<string, MatrixCell>(data.cells.map((cell) => [`${cell.xId}::${cell.yId}`, cell])),
-    [data.cells]
-  );
+  const cellLookup = useMemo(() => new Map<string, MatrixCell>(data.cells.map((cell) => [`${cell.xId}::${cell.yId}`, cell])), [data.cells]);
 
   const yAxisLabel = axisKeyLabel(data.axes.y.key, data.axes.y.label);
   const xAxisTypeLabel = axisTypeLabel(data.axes.x.type);
@@ -167,9 +202,7 @@ export default function Matrix({ data }: MatrixProps) {
   const xAxisNameLabel = data.meta.scope?.cluster?.name ?? data.axes.x.label;
   const contentTypes = data.meta.contentTypes ?? [];
   const hasSingleContentType = contentTypes.length === 1;
-  const contentTypeLabel = hasSingleContentType
-    ? t(`asset.labels.${contentTypes[0].toLowerCase()}`)
-    : t("catalog.filtersMeta.typeOptions.all");
+  const contentTypeLabel = hasSingleContentType ? t(`asset.labels.${contentTypes[0].toLowerCase()}`) : t("catalog.filtersMeta.typeOptions.all");
   const contentTypeVariant = hasSingleContentType ? contentTypes[0] : "";
 
   const xDim = parseAxisDimension(searchParams.get("xDim"));
@@ -263,9 +296,7 @@ export default function Matrix({ data }: MatrixProps) {
               ))}
 
               {data.stats.totalItems === 0 ? (
-                <div className="col-span-full border-b border-white/5 px-6 py-8 text-center text-sm text-slate-400">
-                  {t("matrix.empty")}
-                </div>
+                <div className="col-span-full border-b border-white/5 px-6 py-8 text-center text-sm text-slate-400">{t("matrix.empty")}</div>
               ) : (
                 rows.map((rowBucket) => (
                   <Fragment key={rowBucket.id}>
@@ -319,9 +350,7 @@ export default function Matrix({ data }: MatrixProps) {
                                           href={`${localePrefix}/catalog/${item.type.toLowerCase()}/${item.slug}`}
                                           className="flex items-start gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-2 text-[11px] text-slate-200 hover:bg-white/10"
                                         >
-                                          <Badge variant={getBadgeVariant(item.type)} size="sm" radius="full" className="mt-0.5 shrink-0">
-                                            {t(`asset.labels.${item.type.toLowerCase()}`)}
-                                          </Badge>
+                                          <TypeIndicator type={item.type} />
                                           <span className="line-clamp-2">{item.name}</span>
                                         </Link>
                                       ))}
