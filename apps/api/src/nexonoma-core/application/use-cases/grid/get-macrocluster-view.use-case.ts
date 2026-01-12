@@ -30,7 +30,6 @@ export class GetMacroClusterViewUseCase {
     }
 
     const clusters = await this.gridRepo.findChildren(locale, macroCluster.id);
-    console.log('[DEBUG]', clusters);
     return MacroClusterViewDtoBuilder.build(macroCluster, clusters, locale);
   }
 }

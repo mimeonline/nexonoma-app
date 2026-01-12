@@ -2,13 +2,13 @@
 import { ContentDetailsTemplate } from "@/features/catalog/templates/ContentDetails";
 import { mapToContentDetails } from "@/features/catalog/utils/contentMapper";
 import { serverLogger } from "@/lib/server-logger";
-import { createNexonomaApi } from "@/services/api";
+import { createCatalogApi } from "@/services/catalogApi";
 import type { ContentDetail } from "@/types/catalog";
 import { notFound } from "next/navigation";
 
 export default async function ContentDetailPage({ params }: PageProps<"/[lang]/catalog/[contentType]/[contentSlug]">) {
   const { lang } = await params;
-  const api = createNexonomaApi(lang);
+  const api = createCatalogApi(lang);
   const { contentType, contentSlug } = await params;
 
   let rawItem: Partial<ContentDetail> | null = null;

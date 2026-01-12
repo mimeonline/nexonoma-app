@@ -1,6 +1,7 @@
 import { SegmentsTemplate } from "@/features/grid/templates/Segments";
 import { serverLogger } from "@/lib/server-logger";
-import { ApiError, createNexonomaApi } from "@/services/api";
+import { ApiError } from "@/services/apiUtils";
+import { createGridApi } from "@/services/gridApi";
 import type { ClusterView, MacroCluster } from "@/types/grid";
 import { AssetType } from "@/types/nexonoma";
 import { notFound } from "next/navigation";
@@ -8,12 +9,12 @@ import { notFound } from "next/navigation";
 export default async function ClusterDetailPage({ params }: PageProps<"/[lang]/grid/[macroClusterSlug]/[clusterSlug]">) {
   const { lang, macroClusterSlug, clusterSlug } = await params;
 
-  const api = createNexonomaApi(lang);
+  const api = createGridApi(lang);
 
   let response: ClusterView | null = null;
 
   try {
-    response = await api.getSegments(clusterSlug);
+    response = await api.getClusterView(clusterSlug);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {
       response = {

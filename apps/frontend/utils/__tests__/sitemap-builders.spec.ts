@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SitemapNode } from "../../services/sitemapNodes";
+import type { SitemapNode } from "../../services/systemApi";
 import { buildSitemapPagesEntries, mapAssetsToSitemapEntries } from "../sitemap-builders";
 
 describe("sitemap builders", () => {

@@ -1,6 +1,6 @@
 import { CatalogTemplate } from "@/features/catalog/templates/Catalog";
 import { mapToCatalogItem } from "@/features/catalog/utils/catalogMapper";
-import { createNexonomaApi } from "@/services/api";
+import { createCatalogApi } from "@/services/catalogApi";
 import type { CatalogItem } from "@/types/catalog";
 import de from "../dictionaries/de.json";
 import en from "../dictionaries/en.json";
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/catalog">)
 
 export default async function CatalogPage({ params }: PageProps<"/[lang]/catalog">) {
   const { lang } = await params;
-  const api = createNexonomaApi(lang);
+  const api = createCatalogApi(lang);
 
   // 1. Daten holen (Typ: any[] oder CatalogItem[], aber wir trauen der API nicht)
   const rawData = await api.getCatalog();

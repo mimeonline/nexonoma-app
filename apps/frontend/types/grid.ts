@@ -43,7 +43,7 @@ export interface Segment extends GridAssetBase {
 
 export interface Cluster extends GridAssetBase {
   type: AssetType.CLUSTER;
-  segments: Segment[];
+  segments?: Segment[];
   childrenCount?: number | 0;
 }
 export interface ClusterView {
@@ -53,7 +53,7 @@ export interface ClusterView {
 
 export interface MacroCluster extends GridAssetBase {
   type: AssetType.MACRO_CLUSTER;
-  children: Cluster[]; // Beachte: Im Mapper hieß es 'clusters', im Type hier 'children'.
+  children?: Cluster[]; // Beachte: Im Mapper hieß es 'clusters', im Type hier 'children'.
   // Falls du im Mapper 'clusters' nutzt, benenne das hier in 'clusters' um!
   // Konsistenz-Check: Wenn MacroCluster.tsx auf .clusters zugreift, muss es hier .clusters heißen.
   clusters?: Cluster[];

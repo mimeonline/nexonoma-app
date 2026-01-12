@@ -1,5 +1,5 @@
 import { SEO_SUPPORTED_LOCALES, type SeoLocale } from "../app/[lang]/seo";
-import { fetchSitemapNodesPage, type SitemapNode } from "../services/sitemapNodes";
+import { createSystemApi, type SitemapNode } from "../services/systemApi";
 import {
   CONTENT_TYPE_ROUTE_MAP,
   dedupeEntries,
@@ -94,7 +94,8 @@ export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<{ ent
   const limit = 2000;
   const page = 1;
 
-  const nodes = await fetchSitemapNodesPage({
+  const systemApi = createSystemApi();
+  const nodes = await systemApi.fetchSitemapNodesPage({
     page,
     limit,
   });
