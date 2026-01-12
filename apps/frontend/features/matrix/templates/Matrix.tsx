@@ -194,6 +194,8 @@ export default function Matrix({ data }: MatrixProps) {
   const structureHeaderLabel = isStructureByStructure ? t("matrix.header.structureXstructure", { x: xAxisNameLabel, y: yAxisNameLabel }) : "";
   const perspectiveStatusLabel =
     data.axes.y.type === "PERSPECTIVE" ? t("matrix.header.perspectiveStatus", { value: yAxisLabel }) : "";
+  const legendTitleRaw = tRaw("matrix.legend.title");
+  const legendTitle = typeof legendTitleRaw === "string" ? legendTitleRaw : lang === "de" ? "Legende" : "Legend";
 
 
   const typeLegendItems = [
@@ -235,10 +237,12 @@ export default function Matrix({ data }: MatrixProps) {
                   <span className="text-slate-200">{xAxisNameLabel}</span>
                 </span>
                 <span className="text-slate-500">×</span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{yAxisTypeLabel}</span>
-                  <span className="text-slate-200">{yAxisNameLabel}</span>
-                </span>
+                {data.axes.y.type !== "PERSPECTIVE" && (
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{yAxisTypeLabel}</span>
+                    <span className="text-slate-200">{yAxisNameLabel}</span>
+                  </span>
+                )}
               </>
             )}
             {data.axes.y.type === "PERSPECTIVE" && (
@@ -248,8 +252,8 @@ export default function Matrix({ data }: MatrixProps) {
             )}
           </div>
         </div>
-        <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-300 lg:w-[260px]">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">{t("matrix.legend.title")}</div>
+        <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-300 lg:w-[260px] lg:mt-8">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">{legendTitle}</div>
           <div className="mt-3 space-y-2">
             {typeLegendItems.map((item) => (
               <div key={item.type} className="flex items-center gap-2">
