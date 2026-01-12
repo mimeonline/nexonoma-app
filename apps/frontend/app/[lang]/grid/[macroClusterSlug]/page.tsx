@@ -1,7 +1,7 @@
 import { ClustersTemplate } from "@/features/grid/templates/Clusters";
 import { serverLogger } from "@/lib/server-logger";
 import { createNexonomaApi } from "@/services/api";
-import type { MacroCluster } from "@/types/grid";
+import { MacroClusterView } from "@/types/grid";
 import { notFound } from "next/navigation";
 
 export default async function MacroClusterPage({ params }: PageProps<"/[lang]/grid/[macroClusterSlug]">) {
@@ -9,16 +9,16 @@ export default async function MacroClusterPage({ params }: PageProps<"/[lang]/gr
 
   const api = createNexonomaApi(lang);
 
-  let macroCluster: MacroCluster;
+  let macroClusterView: MacroClusterView;
 
   try {
-    macroCluster = await api.getClusters(macroClusterSlug);
+    macroClusterView = await api.getClusters(macroClusterSlug);
   } catch (error) {
     serverLogger.error("Failed to load macro cluster", { error });
     notFound();
   }
 
-  if (!macroCluster) notFound();
+  if (!macroClusterView) notFound();
 
-  return <ClustersTemplate macroCluster={macroCluster} />;
+  return <ClustersTemplate macroClusterView={macroClusterView} />;
 }

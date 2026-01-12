@@ -1,5 +1,5 @@
 import type { CatalogContentType, CatalogItem, ContentDetail } from "@/types/catalog";
-import type { Cluster, MacroCluster } from "@/types/grid"; // Import aus grid.ts
+import type { ClusterView, MacroCluster, MacroClusterView } from "@/types/grid"; // Import aus grid.ts
 
 export class ApiError extends Error {
   status: number;
@@ -39,12 +39,12 @@ export function createNexonomaApi(lang: string) {
       return fetchJson(url, "Failed to fetch macros");
     },
 
-    async getClusters(macroSlug: string): Promise<MacroCluster> {
+    async getClusters(macroSlug: string): Promise<MacroClusterView> {
       const url = `${getApiBase()}/grid/macroclusters/${macroSlug}?lang=${lang}`;
       return fetchJson(url, `Failed to fetch clusters for macro: ${macroSlug}`);
     },
 
-    async getSegments(clusterSlug: string): Promise<Cluster> {
+    async getSegments(clusterSlug: string): Promise<ClusterView> {
       const url = `${getApiBase()}/grid/clusters/${clusterSlug}?lang=${lang}`;
       return fetchJson(url, `Failed to fetch segments for cluster: ${clusterSlug}`);
     },

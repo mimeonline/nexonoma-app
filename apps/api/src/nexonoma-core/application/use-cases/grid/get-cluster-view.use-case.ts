@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { AssetType } from '../../../domain/types/asset-enums';
 import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
-import type { GridSegmentsResponseDto } from '../../dtos/grid/segments-response.dto';
-import { GridDtoBuilder } from './grid.dto-builder';
+import type { ClusterViewResponseDto } from '../../dtos/grid/cluster-view-response.dto';
+import { ClusterViewDtoBuilder } from './builders/cluster-view-dto.builder';
+import { AssetType } from '../../../domain/types/asset-enums';
 
 @Injectable()
-export class GetGridSegmentsUseCase {
+export class GetClusterViewUseCase {
   constructor(private readonly gridRepo: GridRepositoryPort) {}
 
   async execute(
     locale: string,
     clusterSlug: string,
-  ): Promise<GridSegmentsResponseDto> {
+  ): Promise<ClusterViewResponseDto> {
     // 1) Cluster holen
     const cluster = await this.gridRepo.findStructuralBySlug(
       locale,
@@ -63,7 +63,10 @@ export class GetGridSegmentsUseCase {
     );
 
     // 4) Inhalte der Segmente laden
-    const segmentDtos: GridSegmentsResponseDto['children'] = [];
+    const segmentInputs: Array<{
+      segment: (typeof segments)[number];
+      contentItems: (typeof segments)[number][];
+    }> = [];
     for (const segment of segments) {
       if (!segment.id) {
         throw new NotFoundException(
@@ -81,14 +84,13 @@ export class GetGridSegmentsUseCase {
         ].includes(c.type as AssetType),
       );
 
-      const contentDtos = contentItems.map((item) =>
-        GridDtoBuilder.buildNode(item, locale),
-      );
-
-      segmentDtos.push(GridDtoBuilder.buildNode(segment, locale, contentDtos));
+      segmentInputs.push({
+        segment,
+        contentItems,
+      });
     }
 
     // 5) Ergebnisstruktur zurückgeben: cluster -> segments -> content
-    return GridDtoBuilder.buildNode(cluster, locale, segmentDtos);
+    return ClusterViewDtoBuilder.build(cluster, segmentInputs, locale);
   }
 }

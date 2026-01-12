@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import type { GridMacroclustersResponseDto } from '../../dtos/grid/macroclusters-response.dto';
+import type { GridOverviewResponseDto } from '../../dtos/grid/grid-overview-response.dto';
 import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
-import { GridDtoBuilder } from './grid.dto-builder';
+import { GridOverviewDtoBuilder } from './builders/grid-overview-dto.builder';
 
 @Injectable()
-export class GetGridMacrosUseCase {
+export class GetGridOverviewUseCase {
   constructor(private readonly gridRepo: GridRepositoryPort) {}
 
-  async execute(locale: string): Promise<GridMacroclustersResponseDto[]> {
+  async execute(locale: string): Promise<GridOverviewResponseDto> {
     // Ruft einfach alle MacroCluster aus dem Repo ab.
     // Hier könnte später Caching passieren.
     const macros = await this.gridRepo.findMacroClusters(locale);
-    return GridDtoBuilder.buildMacroclusters(macros, locale);
+    return GridOverviewDtoBuilder.build(macros, locale);
   }
 }

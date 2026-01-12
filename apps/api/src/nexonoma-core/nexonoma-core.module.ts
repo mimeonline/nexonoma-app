@@ -13,9 +13,9 @@ import { GetContentBySlugUseCase } from './application/use-cases/catalog/get-con
 import { GetContentDetailUseCase } from './application/use-cases/catalog/get-content-detail.use-case';
 import { GetSystemCatalogIndexUseCase } from './application/use-cases/system/get-system-catalog-index.use-case';
 import { GetPublicSitemapNodesUseCase } from './application/use-cases/system/get-public-sitemap-nodes.use-case';
-import { GetGridClustersUseCase } from './application/use-cases/grid/get-grid-clusters.use-case';
-import { GetGridMacrosUseCase } from './application/use-cases/grid/get-grid-macros.use-case';
-import { GetGridSegmentsUseCase } from './application/use-cases/grid/get-grid-segments.use-case';
+import { GetMacroClusterViewUseCase } from './application/use-cases/grid/get-macrocluster-view.use-case';
+import { GetGridOverviewUseCase } from './application/use-cases/grid/get-grid-overview.use-case';
+import { GetClusterViewUseCase } from './application/use-cases/grid/get-cluster-view.use-case';
 import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-case';
 
 // 3. Ports (Domain Layer)
@@ -47,9 +47,9 @@ import { Neo4jSystemCatalogRepository } from './infrastructure/persistence/neo4j
     AssetMapper,
 
     // B) Use Cases registrieren (damit Controller sie injecten können)
-    GetGridMacrosUseCase,
-    GetGridClustersUseCase,
-    GetGridSegmentsUseCase,
+    GetGridOverviewUseCase,
+    GetMacroClusterViewUseCase,
+    GetClusterViewUseCase,
     GetAllContentUseCase,
     GetContentDetailUseCase,
     GetContentBySlugUseCase,

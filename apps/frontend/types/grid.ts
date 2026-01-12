@@ -46,6 +46,10 @@ export interface Cluster extends GridAssetBase {
   segments: Segment[];
   childrenCount?: number | 0;
 }
+export interface ClusterView {
+  cluster: Cluster;
+  segments: Segment[];
+}
 
 export interface MacroCluster extends GridAssetBase {
   type: AssetType.MACRO_CLUSTER;
@@ -54,6 +58,11 @@ export interface MacroCluster extends GridAssetBase {
   // Konsistenz-Check: Wenn MacroCluster.tsx auf .clusters zugreift, muss es hier .clusters heißen.
   clusters?: Cluster[];
   childrenCount?: number | 0;
+}
+
+export interface MacroClusterView {
+  macroCluster: MacroCluster;
+  clusters: Cluster[];
 }
 
 export interface GridData {

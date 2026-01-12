@@ -1,7 +1,8 @@
 import { AssetType } from '../../../domain/types/asset-enums';
 import type { LocalizedTagDto } from '../assets/localized-tag.dto';
+import type { GridSegmentContentDto } from './grid-segment-content.dto';
 
-export type GridNodeDto = {
+export type GridSegmentDto = {
   id: string;
   type: AssetType | string;
   slug: string;
@@ -11,8 +12,5 @@ export type GridNodeDto = {
   icon?: string;
   tags?: LocalizedTagDto[];
   tagOrder?: string[];
-  framework?: string;
-  parentId?: string;
-  children?: GridNodeDto[];
-  childrenCount?: number;
+  content: GridSegmentContentDto;
 };

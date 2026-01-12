@@ -1,7 +1,7 @@
-import { AssetType } from 'src/nexonoma-core/domain/types/asset-enums';
-import { LocalizedTagDto } from '../assets/localized-tag.dto';
+import { AssetType } from '../../../domain/types/asset-enums';
+import type { LocalizedTagDto } from '../assets/localized-tag.dto';
 
-export type GridMacroclustersResponseDto = {
+export type GridOverviewItemDto = {
   id: string;
   type: AssetType | string;
   slug: string;
@@ -11,5 +11,7 @@ export type GridMacroclustersResponseDto = {
   icon?: string;
   tags?: LocalizedTagDto[];
   tagOrder?: string[];
+  framework?: string;
+  parentId?: string;
   childrenCount?: number;
 };
