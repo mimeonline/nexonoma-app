@@ -192,11 +192,8 @@ export default function Matrix({ data }: MatrixProps) {
   const yAxisSubLabel = data.axes.y.type === "STRUCTURE" && data.meta.scope?.yCluster?.name ? axisKeyLabel(data.axes.y.key) : undefined;
   const isStructureByStructure = data.axes.x.type === "STRUCTURE" && data.axes.y.type === "STRUCTURE";
   const structureHeaderLabel = isStructureByStructure ? t("matrix.header.structureXstructure", { x: xAxisNameLabel, y: yAxisNameLabel }) : "";
-  const contentTypes = data.meta.contentTypes ?? [];
-  const hasSingleContentType = contentTypes.length === 1;
-  const contentTypeLabel = hasSingleContentType ? t(`asset.labels.${contentTypes[0].toLowerCase()}`) : t("catalog.filtersMeta.typeOptions.all");
-  const contentTypeVariant = hasSingleContentType ? contentTypes[0] : "";
-  const [showTypeLegend, setShowTypeLegend] = useState(false);
+  const perspectiveStatusLabel =
+    data.axes.y.type === "PERSPECTIVE" ? t("matrix.header.perspectiveStatus", { value: yAxisLabel }) : "";
 
 
   const typeLegendItems = [
@@ -210,8 +207,8 @@ export default function Matrix({ data }: MatrixProps) {
 
   return (
     <div className="w-full px-6 py-6 space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex-1">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-white tracking-tight">{t("matrix.title")}</h1>
             <InfoPopover title={t("matrix.tooltips.title.title")} content={<p>{t("matrix.tooltips.title.body")}</p>} icon iconColor="text-slate-500">
@@ -244,29 +241,25 @@ export default function Matrix({ data }: MatrixProps) {
                 </span>
               </>
             )}
+            {data.axes.y.type === "PERSPECTIVE" && (
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                <span className="text-slate-200">{perspectiveStatusLabel}</span>
+              </span>
+            )}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant={getBadgeVariant(contentTypeVariant)} size="md" radius="md" className="text-xs text-slate-400">
-            {contentTypeLabel}
-          </Badge>
-          <InfoPopover content={<p>{t("matrix.tooltips.type")}</p>} icon iconColor="text-slate-500">
-            <button type="button" onClick={() => setShowTypeLegend((prev) => !prev)} className="text-[11px] text-slate-400 hover:text-slate-200">
-              {t("matrix.controls.type")}
-            </button>
-          </InfoPopover>
+        <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-300 lg:w-[260px]">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">{t("matrix.legend.title")}</div>
+          <div className="mt-3 space-y-2">
+            {typeLegendItems.map((item) => (
+              <div key={item.type} className="flex items-center gap-2">
+                <TypeIndicator type={item.type} />
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      {showTypeLegend && (
-        <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-300">
-          {typeLegendItems.map((item) => (
-            <div key={item.type} className="flex items-center gap-2">
-              <TypeIndicator type={item.type} />
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       <div className="rounded-2xl border border-white/10 bg-nexo-surface/40">
         <div className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">

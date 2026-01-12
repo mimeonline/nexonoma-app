@@ -276,7 +276,11 @@
       "type": "Typ"
     },
     "header": {
-      "structureXstructure": "Struktur: {x} × {y}"
+      "structureXstructure": "Struktur: {x} × {y}",
+      "perspectiveStatus": "Perspektive: {value}"
+    },
+    "legend": {
+      "title": "Legende"
     },
     "axis": {
       "y": {
