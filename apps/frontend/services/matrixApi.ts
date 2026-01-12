@@ -1,22 +1,24 @@
+import type { MatrixMode, MatrixPerspective, MatrixViewResponseDto } from "@/types/matrix";
+import type { AssetType } from "@/types/nexonoma";
 import { fetchJson, getApiBase } from "./apiUtils";
 
 export type MatrixQueryParams = {
   clusterId: string;
-  mode: string;
-  perspective: string;
-  contentTypes?: string[];
+  mode: MatrixMode;
+  perspective: MatrixPerspective;
+  contentTypes?: AssetType[];
   lang?: string;
   cellLimit?: number;
   xIds?: string[];
 };
 
-export type MatrixResponse = unknown;
+const toContentTypeParam = (type: AssetType) => type.toLowerCase();
 
 export function createMatrixApi(lang: string) {
   const baseUrl = getApiBase();
 
   return {
-    async getMatrix(params: Omit<MatrixQueryParams, "lang">): Promise<MatrixResponse> {
+    async getMatrixView(params: Omit<MatrixQueryParams, "lang">): Promise<MatrixViewResponseDto> {
       const searchParams = new URLSearchParams({
         clusterId: params.clusterId,
         mode: params.mode,
@@ -25,7 +27,7 @@ export function createMatrixApi(lang: string) {
       });
 
       if (params.contentTypes?.length) {
-        searchParams.set("contentTypes", params.contentTypes.join(","));
+        searchParams.set("contentTypes", params.contentTypes.map(toContentTypeParam).join(","));
       }
       if (params.cellLimit !== undefined) {
         searchParams.set("cellLimit", String(params.cellLimit));
@@ -35,7 +37,7 @@ export function createMatrixApi(lang: string) {
       }
 
       const url = `${baseUrl}/matrix?${searchParams.toString()}`;
-      return fetchJson(url, { errorLabel: "Failed to fetch matrix" });
+      return fetchJson(url, { errorLabel: "Failed to fetch matrix view" });
     },
   };
 }
