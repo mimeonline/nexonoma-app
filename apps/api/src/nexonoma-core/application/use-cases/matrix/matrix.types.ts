@@ -1,6 +1,7 @@
 export enum MatrixMode {
   SEGMENT_BY_PERSPECTIVE = 'SEGMENT_BY_PERSPECTIVE',
   ROLE_BY_PERSPECTIVE = 'ROLE_BY_PERSPECTIVE',
+  SEGMENT_BY_SEGMENT = 'SEGMENT_BY_SEGMENT',
 }
 
 export enum MatrixPerspective {

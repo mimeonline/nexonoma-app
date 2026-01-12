@@ -204,6 +204,10 @@ export default function Matrix({ data }: MatrixProps) {
   const yAxisTypeLabel = axisTypeLabel(data.axes.y.type);
   const xAxisSubLabel = data.meta.scope?.cluster?.name ? axisKeyLabel(data.axes.x.key) : undefined;
   const xAxisNameLabel = data.meta.scope?.cluster?.name ?? data.axes.x.label;
+  const yAxisNameLabel = data.axes.y.type === "STRUCTURE" ? data.meta.scope?.yCluster?.name ?? data.axes.y.label : yAxisLabel;
+  const yAxisSubLabel = data.axes.y.type === "STRUCTURE" && data.meta.scope?.yCluster?.name ? axisKeyLabel(data.axes.y.key) : undefined;
+  const isStructureByStructure = data.axes.x.type === "STRUCTURE" && data.axes.y.type === "STRUCTURE";
+  const structureHeaderLabel = isStructureByStructure ? t("matrix.header.structureXstructure", { x: xAxisNameLabel, y: yAxisNameLabel }) : "";
   const contentTypes = data.meta.contentTypes ?? [];
   const hasSingleContentType = contentTypes.length === 1;
   const contentTypeLabel = hasSingleContentType ? t(`asset.labels.${contentTypes[0].toLowerCase()}`) : t("catalog.filtersMeta.typeOptions.all");
@@ -259,15 +263,23 @@ export default function Matrix({ data }: MatrixProps) {
             {t("matrix.intro.line2")}
           </p>
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-8">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{xAxisTypeLabel}</span>
-              <span className="text-slate-200">{xAxisNameLabel}</span>
-            </span>
-            <span className="text-slate-500">×</span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{yAxisTypeLabel}</span>
-              <span className="text-slate-200">{yAxisLabel}</span>
-            </span>
+            {isStructureByStructure ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                <span className="text-slate-200">{structureHeaderLabel}</span>
+              </span>
+            ) : (
+              <>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{xAxisTypeLabel}</span>
+                  <span className="text-slate-200">{xAxisNameLabel}</span>
+                </span>
+                <span className="text-slate-500">×</span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{yAxisTypeLabel}</span>
+                  <span className="text-slate-200">{yAxisNameLabel}</span>
+                </span>
+              </>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -320,7 +332,7 @@ export default function Matrix({ data }: MatrixProps) {
         <div className="border-b border-white/10 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           <div className="flex items-center">
             <div className="w-[220px]">
-              <AxisTitle typeLabel={yAxisTypeLabel} nameLabel={yAxisLabel} align="left" />
+              <AxisTitle typeLabel={yAxisTypeLabel} nameLabel={yAxisNameLabel} subLabel={yAxisSubLabel} align="left" />
             </div>
             <div className="flex-1">
               <AxisTitle typeLabel={xAxisTypeLabel} nameLabel={xAxisNameLabel} subLabel={xAxisSubLabel} align="center" />
@@ -340,12 +352,12 @@ export default function Matrix({ data }: MatrixProps) {
                 </div>
               ))}
 
-              {data.stats.totalItems === 0 ? (
+              {!isStructureByStructure && data.stats.totalItems === 0 ? (
                 <div className="col-span-full border-b border-white/5 px-6 py-8 text-center text-sm text-slate-400">{t("matrix.empty")}</div>
               ) : (
                 rows.map((rowBucket) => (
                   <Fragment key={rowBucket.id}>
-                    <div className="sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200">
+                    <div className="sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200 min-h-[84px]">
                       {axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label)}
                     </div>
                     {columns.map((colBucket) => {
@@ -357,7 +369,7 @@ export default function Matrix({ data }: MatrixProps) {
                       const remainder = Math.max(0, (cell?.count ?? 0) - visibleItems.length);
 
                       return (
-                        <div key={`${rowBucket.id}:${colBucket.id}`} className="border-b border-white/5 px-3 py-2">
+                        <div key={`${rowBucket.id}:${colBucket.id}`} className="border-b border-white/5 px-3 py-2 min-h-[84px]">
                           <div className="flex flex-col gap-2">
                             {visibleItems.map((item) => (
                               <MiniCard

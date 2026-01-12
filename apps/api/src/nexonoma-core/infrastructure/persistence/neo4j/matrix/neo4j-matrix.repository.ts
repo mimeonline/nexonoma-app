@@ -11,6 +11,7 @@ import {
   MatrixScopeRecord,
   RolePerspectiveQueryParams,
   SegmentPerspectiveQueryParams,
+  SegmentSegmentQueryParams,
 } from '../../../../application/ports/matrix/matrix-repository.port';
 import { MatrixRecordMapper } from './matrix-record.mapper';
 
@@ -92,6 +93,61 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
       clusterId: params.clusterId,
       contentTypes: params.contentTypes,
       perspective: params.perspective,
+      cellLimit: params.cellLimit,
+      lang: params.lang,
+    });
+
+    const cells = result.map((record) => {
+      const items = (record.get('items') ?? []).map((item) =>
+        normalizeNeo4j(item),
+      );
+      return {
+        xId: record.get('xId'),
+        yId: record.get('yId'),
+        count: Number(record.get('count')),
+        items,
+      } as MatrixCellRecord;
+    });
+
+    return MatrixRecordMapper.rehydrateCells(cells);
+  }
+
+  async findSegmentSegmentCells(
+    params: SegmentSegmentQueryParams,
+  ): Promise<MatrixCellRecord[]> {
+    const i18n = getI18nProjection('asset');
+    const query = `
+      MATCH (xCluster:AssetBlock {id: $xClusterId})
+      MATCH (xCluster)-[:CONTAINS]->(xView:AssetBlock)
+      MATCH (xView)-[:CONTAINS]->(xSegment:AssetBlock)
+      WHERE xSegment.type IS NULL OR xSegment.type <> 'CLUSTER_VIEW'
+      MATCH (yCluster:AssetBlock {id: $yClusterId})
+      MATCH (yCluster)-[:CONTAINS]->(yView:AssetBlock)
+      MATCH (yView)-[:CONTAINS]->(ySegment:AssetBlock)
+      WHERE ySegment.type IS NULL OR ySegment.type <> 'CLUSTER_VIEW'
+      OPTIONAL MATCH (xSegment)-[:CONTAINS]->(asset:AssetBlock)<-[:CONTAINS]-(ySegment)
+      WHERE asset.type IN $contentTypes
+      WITH xSegment, ySegment, collect(asset) AS assets
+      RETURN xSegment.id AS xId,
+        ySegment.id AS yId,
+        size(assets) AS count,
+        [asset IN assets[..$cellLimit] | asset {
+          .id,
+          .type,
+          .slug,
+          .shortDescription,
+          .tags,
+          .valueStreamStage,
+          .decisionType,
+          .organizationalMaturity,
+          ${i18n}
+        }] AS items
+    `;
+
+    const result = await this.neo4j.read(query, {
+      xClusterId: params.xClusterId,
+      yClusterId: params.yClusterId,
+      contentTypes: params.contentTypes,
       cellLimit: params.cellLimit,
       lang: params.lang,
     });

@@ -17,6 +17,8 @@ type MatrixSearchParams = {
   cellLimit?: string;
   macro?: string;
   cluster?: string;
+  yMacro?: string;
+  yCluster?: string;
   persp?: string;
   type?: string;
 };
@@ -27,6 +29,11 @@ const parsePerspective = (value?: string): MatrixPerspective => {
   if (normalized === "DECISION_TYPE") return MatrixPerspective.DECISION_TYPE;
   if (normalized === "ORGANIZATIONAL_MATURITY") return MatrixPerspective.ORGANIZATIONAL_MATURITY;
   return MatrixPerspective.VALUE_STREAM;
+};
+
+const parseAxisDimension = (value?: string): "STRUCTURE" | "PERSPECTIVE" | "CONTEXT" => {
+  if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
+  return "STRUCTURE";
 };
 
 const parseContentTypes = (value?: string): AssetType[] | undefined => {
@@ -49,20 +56,41 @@ const parseCellLimit = (value?: string): number | undefined => {
   return Math.min(50, parsed);
 };
 
-const resolveClusterId = async (lang: string, searchParams?: MatrixSearchParams): Promise<string | null> => {
-  if (searchParams?.clusterId) return searchParams.clusterId;
+type ClusterSelection = {
+  clusterId: string;
+  clusterSlug?: string;
+  macroClusterId?: string;
+  macroClusterSlug?: string;
+};
 
-  const gridApi = createGridApi(lang);
-  const clusterSlug = searchParams?.cluster ?? searchParams?.clusterSlug;
-  if (clusterSlug) {
-    const clusterView = await gridApi.getClusterView(clusterSlug);
-    return clusterView.cluster?.id ?? null;
+const resolveClusterSelection = async (
+  lang: string,
+  options?: { clusterSlug?: string; macroSlug?: string }
+): Promise<ClusterSelection | null> => {
+  if (options?.clusterSlug && !options?.macroSlug) {
+    const gridApi = createGridApi(lang);
+    const clusterView = await gridApi.getClusterView(options.clusterSlug);
+    const clusterId = clusterView.cluster?.id;
+    if (!clusterId) return null;
+    return {
+      clusterId,
+      clusterSlug: clusterView.cluster?.slug ?? options.clusterSlug,
+    };
   }
 
-  const macroSlug = searchParams?.macro ?? searchParams?.macroClusterSlug;
+  const gridApi = createGridApi(lang);
+  const macroSlug = options?.macroSlug;
   if (macroSlug) {
     const macroView = await gridApi.getMacroClusterView(macroSlug);
-    return macroView.clusters?.[0]?.id ?? null;
+    const resolvedCluster =
+      macroView.clusters?.find((cluster) => cluster.slug === options?.clusterSlug) ?? macroView.clusters?.[0];
+    if (!resolvedCluster) return null;
+    return {
+      clusterId: resolvedCluster.id,
+      clusterSlug: resolvedCluster.slug,
+      macroClusterId: macroView.macroCluster?.id,
+      macroClusterSlug: macroView.macroCluster?.slug ?? macroSlug,
+    };
   }
 
   const macroClusters = await gridApi.getOverview();
@@ -70,7 +98,14 @@ const resolveClusterId = async (lang: string, searchParams?: MatrixSearchParams)
   if (!fallbackMacroSlug) return null;
 
   const macroView = await gridApi.getMacroClusterView(fallbackMacroSlug);
-  return macroView.clusters?.[0]?.id ?? null;
+  const fallbackCluster = macroView.clusters?.[0];
+  if (!fallbackCluster) return null;
+  return {
+    clusterId: fallbackCluster.id,
+    clusterSlug: fallbackCluster.slug,
+    macroClusterId: macroView.macroCluster?.id,
+    macroClusterSlug: macroView.macroCluster?.slug ?? fallbackMacroSlug,
+  };
 };
 
 export default async function MatrixPage({
@@ -82,21 +117,38 @@ export default async function MatrixPage({
 
   let data;
   try {
-    const clusterId = await resolveClusterId(lang, resolvedSearchParams);
-    if (!clusterId) notFound();
+    const xDim = parseAxisDimension(resolvedSearchParams?.xDim);
+    const yDim = parseAxisDimension(resolvedSearchParams?.yDim ?? "PERSPECTIVE");
+    const xSelection = await resolveClusterSelection(lang, {
+      clusterSlug: resolvedSearchParams?.cluster ?? resolvedSearchParams?.clusterSlug,
+      macroSlug: resolvedSearchParams?.macro ?? resolvedSearchParams?.macroClusterSlug,
+    });
+    if (!xSelection) notFound();
 
     // Apply defaults when URL params are missing.
     const perspective = parsePerspective(resolvedSearchParams?.persp ?? resolvedSearchParams?.perspective);
     const contentTypes = parseContentTypes(resolvedSearchParams?.type ?? resolvedSearchParams?.types);
     const cellLimit = parseCellLimit(resolvedSearchParams?.cellLimit);
+    const isStructureByStructure = xDim === "STRUCTURE" && yDim === "STRUCTURE";
+    const ySelection = isStructureByStructure
+      ? await resolveClusterSelection(lang, {
+          clusterSlug: resolvedSearchParams?.yCluster ?? xSelection.clusterSlug ?? resolvedSearchParams?.cluster,
+          macroSlug: resolvedSearchParams?.yMacro ?? xSelection.macroClusterSlug ?? resolvedSearchParams?.macro,
+        })
+      : null;
+
+    if (isStructureByStructure && !ySelection) notFound();
 
     const api = createMatrixApi(lang);
     data = await api.getMatrixView({
-      clusterId,
-      mode: MatrixMode.SEGMENT_BY_PERSPECTIVE,
+      clusterId: xSelection.clusterId,
+      mode: isStructureByStructure ? MatrixMode.SEGMENT_BY_SEGMENT : MatrixMode.SEGMENT_BY_PERSPECTIVE,
       perspective,
       contentTypes,
       cellLimit,
+      yDimension: isStructureByStructure ? "STRUCTURE" : undefined,
+      yMacroClusterId: ySelection?.macroClusterId,
+      yClusterId: ySelection?.clusterId,
     });
   } catch (error) {
     serverLogger.error("Failed to load matrix view", { error });

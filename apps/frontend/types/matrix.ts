@@ -3,6 +3,7 @@ import type { AssetType, LocalizedTag } from "./nexonoma";
 export const MatrixMode = {
   SEGMENT_BY_PERSPECTIVE: "SEGMENT_BY_PERSPECTIVE",
   ROLE_BY_PERSPECTIVE: "ROLE_BY_PERSPECTIVE",
+  SEGMENT_BY_SEGMENT: "SEGMENT_BY_SEGMENT",
 } as const;
 
 export type MatrixMode = (typeof MatrixMode)[keyof typeof MatrixMode];
@@ -78,6 +79,8 @@ export type MatrixScope = {
   macroCluster?: MatrixScopeItem;
   cluster?: MatrixScopeItem;
   clusterView?: MatrixScopeItem;
+  yMacroCluster?: MatrixScopeItem;
+  yCluster?: MatrixScopeItem;
   xAxisKey?: string;
   yAxisKey?: string;
 };

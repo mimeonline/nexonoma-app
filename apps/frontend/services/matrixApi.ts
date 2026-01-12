@@ -10,6 +10,9 @@ export type MatrixQueryParams = {
   lang?: string;
   cellLimit?: number;
   xIds?: string[];
+  yDimension?: string;
+  yMacroClusterId?: string;
+  yClusterId?: string;
 };
 
 const toContentTypeParam = (type: AssetType) => type.toLowerCase();
@@ -34,6 +37,15 @@ export function createMatrixApi(lang: string) {
       }
       if (params.xIds?.length) {
         searchParams.set("xIds", params.xIds.join(","));
+      }
+      if (params.yDimension) {
+        searchParams.set("yDimension", params.yDimension);
+      }
+      if (params.yMacroClusterId) {
+        searchParams.set("yMacroClusterId", params.yMacroClusterId);
+      }
+      if (params.yClusterId) {
+        searchParams.set("yClusterId", params.yClusterId);
       }
 
       const url = `${baseUrl}/matrix?${searchParams.toString()}`;

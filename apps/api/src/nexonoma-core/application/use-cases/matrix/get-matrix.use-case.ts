@@ -19,10 +19,84 @@ export class GetMatrixUseCase {
   constructor(private readonly matrixRepo: MatrixRepositoryPort) {}
 
   async execute(query: GetMatrixQuery): Promise<MatrixResponseDto> {
-    const { clusterId, mode, perspective, lang, contentTypes, cellLimit } =
-      query;
+    const { clusterId, mode, lang, contentTypes, cellLimit } = query;
     const scope = await this.matrixRepo.findClusterScope(lang, clusterId);
 
+    if (mode === MatrixMode.SEGMENT_BY_SEGMENT) {
+
+      const yScope = await this.matrixRepo.findClusterScope(
+        lang,
+        query.yClusterId,
+      );
+      const xSegments = await this.matrixRepo.findSegmentsByCluster(
+        lang,
+        clusterId,
+      );
+      const ySegments = await this.matrixRepo.findSegmentsByCluster(
+        lang,
+        query.yClusterId,
+      );
+
+      const filteredXSegments = xSegments.filter(
+        (segment) => segment.type !== 'CLUSTER_VIEW',
+      );
+      const filteredYSegments = ySegments.filter(
+        (segment) => segment.type !== 'CLUSTER_VIEW',
+      );
+
+      const cells = await this.matrixRepo.findSegmentSegmentCells({
+        xClusterId: clusterId,
+        yClusterId: query.yClusterId,
+        contentTypes,
+        cellLimit,
+        lang,
+      });
+
+      const mappedCells = this.mapCells(cells, cellLimit, lang);
+
+      return {
+        meta: {
+          clusterId,
+          mode,
+          perspective: query.perspective ?? MatrixPerspective.VALUE_STREAM,
+          lang,
+          contentTypes,
+          cellLimit,
+          generatedAt: new Date().toISOString(),
+          scope: {
+            ...(scope ?? {}),
+            yMacroCluster: yScope?.macroCluster,
+            yCluster: yScope?.cluster,
+            xAxisKey: 'SEGMENT',
+            yAxisKey: 'SEGMENT',
+          },
+        },
+        axes: {
+          x: {
+            type: 'STRUCTURE',
+            key: 'SEGMENT',
+            label: 'Segment',
+            items: filteredXSegments.map((segment) => ({
+              id: segment.id,
+              label: segment.name,
+            })),
+          },
+          y: {
+            type: 'STRUCTURE',
+            key: 'SEGMENT',
+            label: 'Segment',
+            items: filteredYSegments.map((segment) => ({
+              id: segment.id,
+              label: segment.name,
+            })),
+          },
+        },
+        cells: mappedCells,
+        stats: this.buildStats(mappedCells),
+      };
+    }
+
+    const { perspective } = query;
     const yItems = this.getPerspectiveBuckets(perspective).map((bucket) => ({
       id: bucket,
       label: bucket,

@@ -275,6 +275,19 @@
       "segment": "Segment",
       "type": "Typ"
     },
+    "header": {
+      "structureXstructure": "Struktur: {x} × {y}"
+    },
+    "axis": {
+      "y": {
+        "macroCluster": {
+          "label": "Wissensmodell"
+        },
+        "cluster": {
+          "label": "Themenräume"
+        }
+      }
+    },
     "labels": {
       "perspective": "Perspektive"
     },

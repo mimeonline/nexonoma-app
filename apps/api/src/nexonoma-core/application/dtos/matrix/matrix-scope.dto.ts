@@ -8,6 +8,8 @@ export type MatrixScopeDto = {
   macroCluster?: MatrixScopeNodeDto;
   cluster?: MatrixScopeNodeDto;
   clusterView?: MatrixScopeNodeDto;
+  yMacroCluster?: MatrixScopeNodeDto;
+  yCluster?: MatrixScopeNodeDto;
   xAxisKey?: string;
   yAxisKey?: string;
 };

@@ -48,6 +48,19 @@ pnpm --filter api test:e2e
 pnpm --filter api test:cov
 ```
 
+### Smoke checks (Matrix API)
+
+```bash
+# SEGMENT_BY_SEGMENT without perspective -> 200
+curl "http://localhost:3000/matrix?clusterId=<xClusterId>&mode=SEGMENT_BY_SEGMENT&yClusterId=<yClusterId>"
+
+# ROLE_BY_PERSPECTIVE without perspective -> 400
+curl "http://localhost:3000/matrix?clusterId=<xClusterId>&mode=ROLE_BY_PERSPECTIVE&xIds=<roleId>"
+
+# SEGMENT_BY_PERSPECTIVE with perspective -> 200
+curl "http://localhost:3000/matrix?clusterId=<xClusterId>&mode=SEGMENT_BY_PERSPECTIVE&perspective=VALUE_STREAM"
+```
+
 ---
 
 ## Configuration

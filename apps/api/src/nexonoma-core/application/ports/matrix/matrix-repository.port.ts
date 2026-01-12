@@ -42,11 +42,21 @@ export type MatrixScopeRecord = {
   macroCluster?: MatrixScopeNodeRecord;
   cluster?: MatrixScopeNodeRecord;
   clusterView?: MatrixScopeNodeRecord;
+  yMacroCluster?: MatrixScopeNodeRecord;
+  yCluster?: MatrixScopeNodeRecord;
 };
 
 export type SegmentPerspectiveQueryParams = {
   clusterId: string;
   perspective: MatrixPerspective;
+  contentTypes: AssetType[];
+  cellLimit: number;
+  lang: string;
+};
+
+export type SegmentSegmentQueryParams = {
+  xClusterId: string;
+  yClusterId: string;
   contentTypes: AssetType[];
   cellLimit: number;
   lang: string;
@@ -64,6 +74,10 @@ export abstract class MatrixRepositoryPort {
 
   abstract findSegmentPerspectiveCells(
     params: SegmentPerspectiveQueryParams,
+  ): Promise<MatrixCellRecord[]>;
+
+  abstract findSegmentSegmentCells(
+    params: SegmentSegmentQueryParams,
   ): Promise<MatrixCellRecord[]>;
 
   abstract findRolesByIds(

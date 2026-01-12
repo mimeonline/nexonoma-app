@@ -17,7 +17,8 @@ type GridOverviewItem = {
   name: string;
 };
 
-const allowedAxisPair = (x: AxisDimension, y: AxisDimension) => x === "STRUCTURE" && y === "PERSPECTIVE";
+const allowedAxisPair = (x: AxisDimension, y: AxisDimension) =>
+  x === "STRUCTURE" && (y === "PERSPECTIVE" || y === "STRUCTURE");
 
 const parseAxisDimension = (value?: string | null): AxisDimension => {
   if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
@@ -40,12 +41,15 @@ export function MatrixRail() {
 
   const [macroClusters, setMacroClusters] = useState<GridOverviewItem[]>([]);
   const [clusters, setClusters] = useState<GridOverviewItem[]>([]);
+  const [yClusters, setYClusters] = useState<GridOverviewItem[]>([]);
 
   const xDim = parseAxisDimension(searchParams.get("xDim"));
   const yDim = parseAxisDimension(searchParams.get("yDim") ?? "PERSPECTIVE");
   const typesParam = searchParams.get("type") ?? "";
   const selectedMacroSlug = searchParams.get("macro");
   const selectedClusterSlug = searchParams.get("cluster");
+  const selectedYMacroSlug = searchParams.get("yMacro");
+  const selectedYClusterSlug = searchParams.get("yCluster");
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>, mode: "replace" | "push" = "replace") => {
@@ -93,6 +97,14 @@ export function MatrixRail() {
     return macroClusters[0]?.slug ?? "";
   }, [macroClusters, selectedMacroSlug]);
 
+  const resolvedYMacroSlug = useMemo(() => {
+    if (selectedYMacroSlug) return selectedYMacroSlug;
+    if (yDim === "STRUCTURE") {
+      return selectedMacroSlug ?? macroClusters[0]?.slug ?? "";
+    }
+    return "";
+  }, [macroClusters, selectedMacroSlug, selectedYMacroSlug, yDim]);
+
   useEffect(() => {
     if (!resolvedMacroSlug) return;
     let cancelled = false;
@@ -115,12 +127,46 @@ export function MatrixRail() {
   }, [lang, resolvedMacroSlug]);
 
   useEffect(() => {
+    if (yDim !== "STRUCTURE") {
+      setYClusters([]);
+      return;
+    }
+    if (!resolvedYMacroSlug) return;
+    let cancelled = false;
+    const api = createGridApi(lang);
+
+    api
+      .getMacroClusterView(resolvedYMacroSlug)
+      .then((view) => {
+        if (cancelled) return;
+        setYClusters(view.clusters.map((item) => ({ id: item.id, slug: item.slug, name: item.name })));
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setYClusters([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang, resolvedYMacroSlug, yDim]);
+
+  useEffect(() => {
     if (!macroClusters.length) return;
     if (!selectedMacroSlug) {
       // Sync default macro via replace to avoid history noise.
       updateParams({ macro: macroClusters[0]?.slug ?? null }, "replace");
     }
   }, [macroClusters, selectedMacroSlug, updateParams]);
+
+  useEffect(() => {
+    if (yDim !== "STRUCTURE") return;
+    if (!macroClusters.length) return;
+    if (!selectedYMacroSlug) {
+      const fallbackMacro = selectedMacroSlug ?? macroClusters[0]?.slug ?? null;
+      updateParams({ yMacro: fallbackMacro }, "replace");
+    }
+  }, [macroClusters, selectedMacroSlug, selectedYMacroSlug, updateParams, yDim]);
 
   useEffect(() => {
     if (!clusters.length) return;
@@ -134,6 +180,20 @@ export function MatrixRail() {
       updateParams({ cluster: resolved.slug }, "replace");
     }
   }, [clusters, selectedClusterSlug, updateParams]);
+
+  useEffect(() => {
+    if (yDim !== "STRUCTURE") return;
+    if (!yClusters.length) return;
+    const clusterBySlug = selectedYClusterSlug ? yClusters.find((cluster) => cluster.slug === selectedYClusterSlug) : null;
+    const clusterByXAxis = selectedClusterSlug ? yClusters.find((cluster) => cluster.slug === selectedClusterSlug) : null;
+    const fallback = yClusters[0];
+    const resolved = clusterBySlug ?? clusterByXAxis ?? fallback;
+    if (!resolved) return;
+
+    if (selectedYClusterSlug !== resolved.slug) {
+      updateParams({ yCluster: resolved.slug }, "replace");
+    }
+  }, [selectedClusterSlug, selectedYClusterSlug, updateParams, yClusters, yDim]);
 
   useEffect(() => {
     if (allowedAxisPair(xDim, yDim)) return;
@@ -153,6 +213,7 @@ export function MatrixRail() {
 
   const sectionTitle = "text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500";
   const fieldLabel = "text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600";
+  const axisDimensionLabel = (value: AxisDimension) => t(`asset.enums.dimensions.${value}.label`);
 
   const axisCard = (axis: "x" | "y") => {
     const currentDim = axis === "x" ? xDim : yDim;
@@ -189,7 +250,7 @@ export function MatrixRail() {
                   className="bg-slate-900 text-slate-200"
                   disabled={!allowedAxisPair(axis === "x" ? value : otherDim, axis === "x" ? otherDim : value)}
                 >
-                  {value.charAt(0) + value.slice(1).toLowerCase()}
+                  {axisDimensionLabel(value)}
                 </option>
               ))}
             </select>
@@ -201,27 +262,34 @@ export function MatrixRail() {
           </div>
         </div>
 
-        {axis === "x" && currentDim === "STRUCTURE" && (
+        {currentDim === "STRUCTURE" && (
           <div className="space-y-3">
             <div className="space-y-2">
               <InfoPopover content={<p>{t("matrix.tooltips.macro")}</p>} icon iconColor="text-slate-500">
-                <div className={fieldLabel}>{t("grid.macro.badge")}</div>
+                <div className={fieldLabel}>
+                  {axis === "x" ? t("grid.macro.badge") : t("matrix.axis.y.macroCluster.label")}
+                </div>
               </InfoPopover>
               <div className="relative w-full">
                 <select
-                  value={resolvedMacroSlug}
-                  onChange={(e) => updateParams({ macro: e.target.value, cluster: null }, "push")}
+                  value={axis === "x" ? resolvedMacroSlug : resolvedYMacroSlug}
+                  onChange={(e) =>
+                    updateParams(
+                      axis === "x" ? { macro: e.target.value, cluster: null } : { yMacro: e.target.value, yCluster: null },
+                      "push"
+                    )
+                  }
                   disabled={macroClusters.length === 0}
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
                 >
                   {!macroClusters.length && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      {t("grid.macro.badge")}
+                      {axis === "x" ? t("grid.macro.badge") : t("matrix.axis.y.macroCluster.label")}
                     </option>
                   )}
-                  {macroClusters.length > 0 && !resolvedMacroSlug && (
+                  {macroClusters.length > 0 && !(axis === "x" ? resolvedMacroSlug : resolvedYMacroSlug) && (
                     <option value="" className="bg-slate-900 text-slate-400">
-                      {t("grid.macro.badge")}
+                      {axis === "x" ? t("grid.macro.badge") : t("matrix.axis.y.macroCluster.label")}
                     </option>
                   )}
                   {macroClusters.map((macro) => (
@@ -240,34 +308,64 @@ export function MatrixRail() {
 
             <div className="space-y-2">
               <InfoPopover content={<p>{t("matrix.tooltips.cluster")}</p>} icon iconColor="text-slate-500">
-                <div className={fieldLabel}>{t("grid.clusters.badge")}</div>
+                <div className={fieldLabel}>
+                  {axis === "x" ? t("grid.clusters.badge") : t("matrix.axis.y.cluster.label")}
+                </div>
               </InfoPopover>
               <div className="relative w-full">
                 <select
-                  value={selectedClusterSlug ?? clusters[0]?.slug ?? ""}
+                  value={
+                    axis === "x"
+                      ? selectedClusterSlug ?? clusters[0]?.slug ?? ""
+                      : selectedYClusterSlug ?? yClusters[0]?.slug ?? ""
+                  }
                   onChange={(e) => {
-                    const cluster = clusters.find((item) => item.slug === e.target.value);
-                    updateParams({ cluster: cluster?.slug ?? null }, "push");
+                    if (axis === "x") {
+                      const cluster = clusters.find((item) => item.slug === e.target.value);
+                      updateParams({ cluster: cluster?.slug ?? null }, "push");
+                      return;
+                    }
+                    const cluster = yClusters.find((item) => item.slug === e.target.value);
+                    updateParams({ yCluster: cluster?.slug ?? null }, "push");
                   }}
-                  disabled={!resolvedMacroSlug || clusters.length === 0}
+                  disabled={
+                    axis === "x"
+                      ? !resolvedMacroSlug || clusters.length === 0
+                      : !resolvedYMacroSlug || yClusters.length === 0
+                  }
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
                 >
-                  {!resolvedMacroSlug && (
+                  {axis === "x" && !resolvedMacroSlug && (
                     <option value="" className="bg-slate-900 text-slate-400">
                       {t("grid.macro.badge")}
                     </option>
                   )}
-                  {resolvedMacroSlug && clusters.length === 0 && (
+                  {axis === "y" && !resolvedYMacroSlug && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      {t("matrix.axis.y.macroCluster.label")}
+                    </option>
+                  )}
+                  {axis === "x" && resolvedMacroSlug && clusters.length === 0 && (
                     <option value="" className="bg-slate-900 text-slate-400">
                       {t("grid.clusters.badge")}
                     </option>
                   )}
-                  {resolvedMacroSlug && clusters.length > 0 && !selectedClusterSlug && (
+                  {axis === "y" && resolvedYMacroSlug && yClusters.length === 0 && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      {t("matrix.axis.y.cluster.label")}
+                    </option>
+                  )}
+                  {axis === "x" && resolvedMacroSlug && clusters.length > 0 && !selectedClusterSlug && (
                     <option value="" className="bg-slate-900 text-slate-400">
                       {t("grid.clusters.badge")}
                     </option>
                   )}
-                  {clusters.map((cluster) => (
+                  {axis === "y" && resolvedYMacroSlug && yClusters.length > 0 && !selectedYClusterSlug && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      {t("matrix.axis.y.cluster.label")}
+                    </option>
+                  )}
+                  {(axis === "x" ? clusters : yClusters).map((cluster) => (
                     <option key={cluster.id} value={cluster.slug} className="bg-slate-900 text-slate-200">
                       {cluster.name}
                     </option>

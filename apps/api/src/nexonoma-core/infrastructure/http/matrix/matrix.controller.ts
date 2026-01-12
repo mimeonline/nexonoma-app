@@ -45,6 +45,22 @@ const parsePerspective = (value?: string): MatrixPerspective => {
   return normalized as MatrixPerspective;
 };
 
+const parsePerspectiveOptional = (
+  value?: string,
+): MatrixPerspective | undefined => {
+  if (!value) return undefined;
+  return parsePerspective(value);
+};
+
+const parseDimension = (value?: string): string | undefined => {
+  if (!value) return undefined;
+  const normalized = value.trim().toUpperCase();
+  if (normalized !== 'STRUCTURE') {
+    throw new BadRequestException(`Invalid yDimension: ${value}`);
+  }
+  return normalized;
+};
+
 const parseContentTypes = (value?: string): AssetType[] => {
   if (!value) return [...DEFAULT_CONTENT_TYPES];
   const typeMap: Record<string, AssetType> = {
@@ -88,22 +104,56 @@ export class MatrixController {
     @Query('lang') lang?: string,
     @Query('cellLimit') cellLimit?: string,
     @Query('xIds') xIds?: string,
+    @Query('yDimension') yDimension?: string,
+    @Query('yMacroClusterId') yMacroClusterId?: string,
+    @Query('yClusterId') yClusterId?: string,
   ): Promise<MatrixResponseDto> {
     if (!clusterId) {
       throw new BadRequestException('clusterId is required');
     }
 
     const parsedMode = parseMode(mode);
-    const parsedPerspective = parsePerspective(perspective);
     const parsedContentTypes = parseContentTypes(contentTypes);
     const parsedLang = parseLang(lang);
     const parsedCellLimit = parseCellLimit(cellLimit);
     const parsedXIds = parseCsv(xIds);
+    const parsedYDimension = parseDimension(yDimension);
 
     if (parsedMode === MatrixMode.ROLE_BY_PERSPECTIVE && parsedXIds.length === 0) {
       throw new BadRequestException('xIds is required for ROLE_BY_PERSPECTIVE');
     }
+    if (parsedMode === MatrixMode.SEGMENT_BY_SEGMENT) {
+      if (!yClusterId) {
+        throw new BadRequestException('yClusterId is required for SEGMENT_BY_SEGMENT');
+      }
+      const parsedPerspective = parsePerspectiveOptional(perspective);
+      return this.getMatrix.execute({
+        clusterId,
+        mode: parsedMode,
+        perspective: parsedPerspective,
+        contentTypes: parsedContentTypes,
+        lang: parsedLang,
+        cellLimit: parsedCellLimit,
+        yDimension: parsedYDimension,
+        yMacroClusterId,
+        yClusterId,
+      });
+    }
 
+    if (parsedMode === MatrixMode.ROLE_BY_PERSPECTIVE) {
+      const parsedPerspective = parsePerspective(perspective);
+      return this.getMatrix.execute({
+        clusterId,
+        mode: parsedMode,
+        perspective: parsedPerspective,
+        contentTypes: parsedContentTypes,
+        lang: parsedLang,
+        cellLimit: parsedCellLimit,
+        xIds: parsedXIds,
+      });
+    }
+
+    const parsedPerspective = parsePerspective(perspective);
     return this.getMatrix.execute({
       clusterId,
       mode: parsedMode,
@@ -111,7 +161,6 @@ export class MatrixController {
       contentTypes: parsedContentTypes,
       lang: parsedLang,
       cellLimit: parsedCellLimit,
-      xIds: parsedMode === MatrixMode.ROLE_BY_PERSPECTIVE ? parsedXIds : undefined,
     });
   }
 }
