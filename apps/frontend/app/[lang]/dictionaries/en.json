@@ -411,6 +411,28 @@
           "label": "Role"
         }
       },
+      "dimensions": {
+        "STRUCTURE": {
+          "label": "Structure"
+        },
+        "PERSPECTIVE": {
+          "label": "Perspective"
+        },
+        "CONTEXT": {
+          "label": "Context"
+        }
+      },
+      "perspectives": {
+        "VALUE_STREAM": {
+          "label": "Value Stream"
+        },
+        "DECISION_TYPE": {
+          "label": "Decision Type"
+        },
+        "ORGANIZATIONAL_MATURITY": {
+          "label": "Organizational Maturity"
+        }
+      },
       "organizationalLevel": {
         "ENTERPRISE": {
           "label": "Enterprise",

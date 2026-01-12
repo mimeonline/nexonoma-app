@@ -21,6 +21,7 @@ export class GetMatrixUseCase {
   async execute(query: GetMatrixQuery): Promise<MatrixResponseDto> {
     const { clusterId, mode, perspective, lang, contentTypes, cellLimit } =
       query;
+    const scope = await this.matrixRepo.findClusterScope(lang, clusterId);
 
     const yItems = this.getPerspectiveBuckets(perspective).map((bucket) => ({
       id: bucket,
@@ -56,6 +57,16 @@ export class GetMatrixUseCase {
           contentTypes,
           cellLimit,
           generatedAt: new Date().toISOString(),
+          scope: scope
+            ? {
+                ...scope,
+                xAxisKey: 'SEGMENT',
+                yAxisKey: perspective,
+              }
+            : {
+                xAxisKey: 'SEGMENT',
+                yAxisKey: perspective,
+              },
         },
         axes: {
           x: {
@@ -103,6 +114,16 @@ export class GetMatrixUseCase {
         contentTypes,
         cellLimit,
         generatedAt: new Date().toISOString(),
+        scope: scope
+          ? {
+              ...scope,
+              xAxisKey: 'ROLE',
+              yAxisKey: perspective,
+            }
+          : {
+              xAxisKey: 'ROLE',
+              yAxisKey: perspective,
+            },
       },
       axes: {
         x: {

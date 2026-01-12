@@ -161,7 +161,7 @@ export function MatrixRail() {
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-4">
         <div className="flex items-center justify-between">
           <div className={sectionTitle}>{axis === "x" ? "X-Achse" : "Y-Achse"}</div>
-          {currentDim === "context" && <span className="text-[11px] text-slate-500">Coming soon</span>}
+          {currentDim === "CONTEXT" && <span className="text-[11px] text-slate-500">Coming soon</span>}
         </div>
 
         <div className="space-y-2">

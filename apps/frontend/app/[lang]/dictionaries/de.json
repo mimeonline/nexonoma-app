@@ -393,6 +393,16 @@
         "TECHNOLOGY": { "label": "Technologie" },
         "ROLE": { "label": "Rolle" }
       },
+      "dimensions": {
+        "STRUCTURE": { "label": "Struktur" },
+        "PERSPECTIVE": { "label": "Perspektive" },
+        "CONTEXT": { "label": "Kontext" }
+      },
+      "perspectives": {
+        "VALUE_STREAM": { "label": "Wertstrom" },
+        "DECISION_TYPE": { "label": "Entscheidungstyp" },
+        "ORGANIZATIONAL_MATURITY": { "label": "Organisationsreife" }
+      },
       "organizationalLevel": {
         "ENTERPRISE": {
           "label": "Unternehmen",

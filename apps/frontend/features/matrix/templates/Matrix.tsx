@@ -2,7 +2,7 @@
 
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useI18n } from "@/features/i18n/I18nProvider";
+import { enumAssetKey, useI18n } from "@/features/i18n/I18nProvider";
 import type { MatrixAssetPreview, MatrixCell, MatrixViewResponseDto } from "@/types/matrix";
 import { MatrixPerspective } from "@/types/matrix";
 import Link from "next/link";
@@ -12,14 +12,16 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 type AxisTitleProps = {
   typeLabel: string;
   nameLabel: string;
+  subLabel?: string;
   align?: "left" | "center";
 };
 
-function AxisTitle({ typeLabel, nameLabel, align = "left" }: AxisTitleProps) {
+function AxisTitle({ typeLabel, nameLabel, subLabel, align = "left" }: AxisTitleProps) {
   return (
     <div className={`flex flex-col gap-0.5 ${align === "center" ? "items-center text-center" : "items-start"}`}>
       <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">{typeLabel}</span>
       <span className="text-xs font-semibold text-slate-200">{nameLabel}</span>
+      {subLabel && <span className="text-[11px] text-slate-500">{subLabel}</span>}
     </div>
   );
 }
@@ -96,13 +98,6 @@ type MatrixProps = {
   data: MatrixViewResponseDto;
 };
 
-const toAxisTypeLabel = (value: string) =>
-  value
-    .toLowerCase()
-    .split("_")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-
 const parseAxisDimension = (value?: string | null) => {
   if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
   return "STRUCTURE";
@@ -115,7 +110,7 @@ const parsePerspective = (value?: string | null): MatrixPerspective => {
 };
 
 export default function Matrix({ data }: MatrixProps) {
-  const { t, lang } = useI18n();
+  const { t, tRaw, lang } = useI18n();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -126,6 +121,37 @@ export default function Matrix({ data }: MatrixProps) {
     setEnablePopovers(true);
   }, []);
 
+  const resolveLabel = (key: string, fallback: string) => {
+    const raw = tRaw(key);
+    return typeof raw === "string" ? raw : fallback;
+  };
+
+  const axisTypeLabel = (type: string) =>
+    resolveLabel(`asset.enums.dimensions.${type}.label`, type.charAt(0) + type.slice(1).toLowerCase());
+
+  const axisKeyLabel = (key: string, fallback?: string) => {
+    if (key === "SEGMENT" || key === "CLUSTER" || key === "MACRO_CLUSTER" || key === "ROLE") {
+      return resolveLabel(`asset.enums.types.${key}.label`, fallback ?? key);
+    }
+    if (key === "VALUE_STREAM" || key === "DECISION_TYPE" || key === "ORGANIZATIONAL_MATURITY") {
+      return resolveLabel(`asset.enums.perspectives.${key}.label`, fallback ?? key);
+    }
+    return fallback ?? key;
+  };
+
+  const axisItemLabel = (axisKey: string, id: string, fallback?: string) => {
+    if (axisKey === "VALUE_STREAM") {
+      return resolveLabel(enumAssetKey("valueStreamStage", id), fallback ?? id);
+    }
+    if (axisKey === "DECISION_TYPE") {
+      return resolveLabel(enumAssetKey("decisionType", id), fallback ?? id);
+    }
+    if (axisKey === "ORGANIZATIONAL_MATURITY") {
+      return resolveLabel(enumAssetKey("organizationalMaturity", id), fallback ?? id);
+    }
+    return fallback ?? id;
+  };
+
   const columns = data.axes.x.items;
   const rows = data.axes.y.items;
 
@@ -134,10 +160,11 @@ export default function Matrix({ data }: MatrixProps) {
     [data.cells]
   );
 
-  const xAxisLabel = data.axes.x.label;
-  const yAxisLabel = data.axes.y.label;
-  const xAxisTypeLabel = toAxisTypeLabel(data.axes.x.type);
-  const yAxisTypeLabel = toAxisTypeLabel(data.axes.y.type);
+  const yAxisLabel = axisKeyLabel(data.axes.y.key, data.axes.y.label);
+  const xAxisTypeLabel = axisTypeLabel(data.axes.x.type);
+  const yAxisTypeLabel = axisTypeLabel(data.axes.y.type);
+  const xAxisSubLabel = data.meta.scope?.cluster?.name ? axisKeyLabel(data.axes.x.key) : undefined;
+  const xAxisNameLabel = data.meta.scope?.cluster?.name ?? data.axes.x.label;
   const contentTypes = data.meta.contentTypes ?? [];
   const hasSingleContentType = contentTypes.length === 1;
   const contentTypeLabel = hasSingleContentType
@@ -158,9 +185,12 @@ export default function Matrix({ data }: MatrixProps) {
   };
 
   const perspectiveOptions: { value: MatrixPerspective; label: string }[] = [
-    { value: MatrixPerspective.VALUE_STREAM, label: t("asset.properties.valueStreamStage.label") },
-    { value: MatrixPerspective.DECISION_TYPE, label: t("asset.properties.decisionType.label") },
-    { value: MatrixPerspective.ORGANIZATIONAL_MATURITY, label: t("asset.properties.organizationalMaturity.label") },
+    { value: MatrixPerspective.VALUE_STREAM, label: axisKeyLabel("VALUE_STREAM", t("asset.properties.valueStreamStage.label")) },
+    { value: MatrixPerspective.DECISION_TYPE, label: axisKeyLabel("DECISION_TYPE", t("asset.properties.decisionType.label")) },
+    {
+      value: MatrixPerspective.ORGANIZATIONAL_MATURITY,
+      label: axisKeyLabel("ORGANIZATIONAL_MATURITY", t("asset.properties.organizationalMaturity.label")),
+    },
   ];
 
   const gridTemplateColumns = `minmax(220px, 1.1fr) repeat(${columns.length}, minmax(160px, 1fr))`;
@@ -173,7 +203,7 @@ export default function Matrix({ data }: MatrixProps) {
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{xAxisTypeLabel}</span>
-              <span className="text-slate-200">{xAxisLabel}</span>
+              <span className="text-slate-200">{xAxisNameLabel}</span>
             </span>
             <span className="text-slate-500">×</span>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
@@ -215,7 +245,7 @@ export default function Matrix({ data }: MatrixProps) {
               <AxisTitle typeLabel={yAxisTypeLabel} nameLabel={yAxisLabel} align="left" />
             </div>
             <div className="flex-1">
-              <AxisTitle typeLabel={xAxisTypeLabel} nameLabel={xAxisLabel} align="center" />
+              <AxisTitle typeLabel={xAxisTypeLabel} nameLabel={xAxisNameLabel} subLabel={xAxisSubLabel} align="center" />
             </div>
           </div>
         </div>
@@ -228,7 +258,7 @@ export default function Matrix({ data }: MatrixProps) {
                   key={bucket.id}
                   className="sticky top-0 z-20 border-b border-white/10 px-4 py-3 text-xs font-semibold text-slate-200 bg-nexo-bg/90"
                 >
-                  {bucket.label}
+                  {axisItemLabel(data.axes.x.key, bucket.id, bucket.label)}
                 </div>
               ))}
 
@@ -240,9 +270,11 @@ export default function Matrix({ data }: MatrixProps) {
                 rows.map((rowBucket) => (
                   <Fragment key={rowBucket.id}>
                     <div className="sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200">
-                      {rowBucket.label}
+                      {axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label)}
                     </div>
                     {columns.map((colBucket) => {
+                      const rowLabel = axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label);
+                      const colLabel = axisItemLabel(data.axes.x.key, colBucket.id, colBucket.label);
                       const cell = cellLookup.get(`${colBucket.id}::${rowBucket.id}`);
                       const items = cell?.items ?? [];
                       const visibleItems = items.slice(0, 3);
@@ -255,7 +287,7 @@ export default function Matrix({ data }: MatrixProps) {
                               <MiniCard
                                 key={item.id}
                                 item={item}
-                                bucketLabel={rowBucket.label}
+                                bucketLabel={rowLabel}
                                 yAxisLabel={yAxisLabel}
                                 localePrefix={localePrefix}
                                 t={t}
@@ -278,7 +310,7 @@ export default function Matrix({ data }: MatrixProps) {
                                 >
                                   <div className="space-y-2">
                                     <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                                      {rowBucket.label} · {colBucket.label}
+                                      {rowLabel} · {colLabel}
                                     </div>
                                     <div className="flex flex-col gap-2">
                                       {items.map((item) => (

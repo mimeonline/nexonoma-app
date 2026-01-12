@@ -60,11 +60,26 @@ export type MatrixMeta = {
   contentTypes: AssetType[];
   cellLimit: number;
   generatedAt: string;
+  scope?: MatrixScope;
 };
 
 export type MatrixStats = {
   nonEmptyCells: number;
   totalItems: number;
+};
+
+export type MatrixScopeItem = {
+  id: string;
+  slug?: string;
+  name?: string;
+};
+
+export type MatrixScope = {
+  macroCluster?: MatrixScopeItem;
+  cluster?: MatrixScopeItem;
+  clusterView?: MatrixScopeItem;
+  xAxisKey?: string;
+  yAxisKey?: string;
 };
 
 export type MatrixViewResponseDto = {

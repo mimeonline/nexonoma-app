@@ -32,6 +32,18 @@ export type MatrixRoleRecord = {
   name?: string;
 };
 
+export type MatrixScopeNodeRecord = {
+  id: string;
+  slug?: string;
+  name?: string;
+};
+
+export type MatrixScopeRecord = {
+  macroCluster?: MatrixScopeNodeRecord;
+  cluster?: MatrixScopeNodeRecord;
+  clusterView?: MatrixScopeNodeRecord;
+};
+
 export type SegmentPerspectiveQueryParams = {
   clusterId: string;
   perspective: MatrixPerspective;
@@ -62,4 +74,9 @@ export abstract class MatrixRepositoryPort {
   abstract findRolePerspectiveCells(
     params: RolePerspectiveQueryParams,
   ): Promise<MatrixCellRecord[]>;
+
+  abstract findClusterScope(
+    locale: string,
+    clusterId: string,
+  ): Promise<MatrixScopeRecord | null>;
 }

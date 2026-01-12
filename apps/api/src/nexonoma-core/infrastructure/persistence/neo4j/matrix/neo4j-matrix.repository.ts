@@ -8,6 +8,7 @@ import {
   MatrixRepositoryPort,
   MatrixRoleRecord,
   MatrixSegmentRecord,
+  MatrixScopeRecord,
   RolePerspectiveQueryParams,
   SegmentPerspectiveQueryParams,
 } from '../../../../application/ports/matrix/matrix-repository.port';
@@ -204,5 +205,75 @@ export class Neo4jMatrixRepository implements MatrixRepositoryPort {
     });
 
     return MatrixRecordMapper.rehydrateCells(cells);
+  }
+
+  async findClusterScope(
+    locale: string,
+    clusterId: string,
+  ): Promise<MatrixScopeRecord | null> {
+    const i18nMacro = getI18nProjection('macro');
+    const i18nCluster = getI18nProjection('cluster');
+    const i18nView = getI18nProjection('view');
+    const query = `
+      MATCH (cluster:AssetBlock {id: $clusterId})
+      OPTIONAL MATCH (macro:AssetBlock)-[:CONTAINS]->(cluster)
+      OPTIONAL MATCH (cluster)-[:CONTAINS]->(view:AssetBlock)
+      RETURN macro {
+        .id,
+        .slug,
+        ${i18nMacro}
+      } AS macroData,
+      cluster {
+        .id,
+        .slug,
+        ${i18nCluster}
+      } AS clusterData,
+      view {
+        .id,
+        .slug,
+        ${i18nView}
+      } AS viewData
+      LIMIT 1
+    `;
+
+    const result = await this.neo4j.read(query, {
+      clusterId,
+      lang: locale,
+    });
+
+    if (!result.length) return null;
+
+    const record = result[0];
+    const macroRaw = record.get('macroData');
+    const clusterRaw = record.get('clusterData');
+    const viewRaw = record.get('viewData');
+
+    const macro = macroRaw ? normalizeNeo4j(macroRaw) : null;
+    const cluster = clusterRaw ? normalizeNeo4j(clusterRaw) : null;
+    const view = viewRaw ? normalizeNeo4j(viewRaw) : null;
+
+    return {
+      macroCluster: macro
+        ? {
+            id: macro.id,
+            slug: macro.slug,
+            name: macro.name,
+          }
+        : undefined,
+      cluster: cluster
+        ? {
+            id: cluster.id,
+            slug: cluster.slug,
+            name: cluster.name,
+          }
+        : undefined,
+      clusterView: view
+        ? {
+            id: view.id,
+            slug: view.slug,
+            name: view.name,
+          }
+        : undefined,
+    };
   }
 }
