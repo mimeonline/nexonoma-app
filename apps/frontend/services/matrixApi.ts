@@ -3,15 +3,13 @@ import type { AssetType } from "@/types/nexonoma";
 import { fetchJson, getApiBase } from "./apiUtils";
 
 export type MatrixQueryParams = {
-  clusterId: string;
+  xClusterId: string;
   mode: MatrixMode;
-  perspective: MatrixPerspective;
+  xPerspective: MatrixPerspective;
   contentTypes?: AssetType[];
   lang?: string;
   cellLimit?: number;
   xIds?: string[];
-  yDimension?: string;
-  yMacroClusterId?: string;
   yClusterId?: string;
 };
 
@@ -23,9 +21,9 @@ export function createMatrixApi(lang: string) {
   return {
     async getMatrixView(params: Omit<MatrixQueryParams, "lang">): Promise<MatrixViewResponseDto> {
       const searchParams = new URLSearchParams({
-        clusterId: params.clusterId,
+        xClusterId: params.xClusterId,
         mode: params.mode,
-        perspective: params.perspective,
+        xPerspective: params.xPerspective,
         lang,
       });
 
@@ -37,12 +35,6 @@ export function createMatrixApi(lang: string) {
       }
       if (params.xIds?.length) {
         searchParams.set("xIds", params.xIds.join(","));
-      }
-      if (params.yDimension) {
-        searchParams.set("yDimension", params.yDimension);
-      }
-      if (params.yMacroClusterId) {
-        searchParams.set("yMacroClusterId", params.yMacroClusterId);
       }
       if (params.yClusterId) {
         searchParams.set("yClusterId", params.yClusterId);

@@ -141,13 +141,11 @@ export default async function MatrixPage({
 
     const api = createMatrixApi(lang);
     data = await api.getMatrixView({
-      clusterId: xSelection.clusterId,
+      xClusterId: xSelection.clusterId,
       mode: isStructureByStructure ? MatrixMode.SEGMENT_BY_SEGMENT : MatrixMode.SEGMENT_BY_PERSPECTIVE,
-      perspective,
+      xPerspective: perspective,
       contentTypes,
       cellLimit,
-      yDimension: isStructureByStructure ? "STRUCTURE" : undefined,
-      yMacroClusterId: ySelection?.macroClusterId,
       yClusterId: ySelection?.clusterId,
     });
   } catch (error) {

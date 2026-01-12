@@ -7,8 +7,6 @@ type MatrixBaseQuery = {
   lang: string;
   cellLimit: number;
   xIds?: string[];
-  yDimension?: string;
-  yMacroClusterId?: string;
   yClusterId?: string;
 };
 
