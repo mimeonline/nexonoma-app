@@ -6,11 +6,9 @@ import { AssetType } from "@/types/nexonoma";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-const axisDimensions = ["structure", "perspective", "context"] as const;
+const axisDimensions = ["STRUCTURE", "PERSPECTIVE", "CONTEXT"] as const;
 
 type AxisDimension = (typeof axisDimensions)[number];
-
-type PerspectiveOption = "value_stream" | "decision_type" | "organizational_maturity";
 
 type GridOverviewItem = {
   id: string;
@@ -18,16 +16,11 @@ type GridOverviewItem = {
   name: string;
 };
 
-const allowedAxisPair = (x: AxisDimension, y: AxisDimension) => x === "structure" && y === "perspective";
+const allowedAxisPair = (x: AxisDimension, y: AxisDimension) => x === "STRUCTURE" && y === "PERSPECTIVE";
 
 const parseAxisDimension = (value?: string | null): AxisDimension => {
-  if (value === "structure" || value === "perspective" || value === "context") return value;
-  return "structure";
-};
-
-const parsePerspective = (value?: string | null): PerspectiveOption => {
-  if (value === "decision_type" || value === "organizational_maturity" || value === "value_stream") return value;
-  return "value_stream";
+  if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
+  return "STRUCTURE";
 };
 
 const contentTypeOptions = [
@@ -48,11 +41,10 @@ export function MatrixRail() {
   const [clusters, setClusters] = useState<GridOverviewItem[]>([]);
 
   const xDim = parseAxisDimension(searchParams.get("xDim"));
-  const yDim = parseAxisDimension(searchParams.get("yDim") ?? "perspective");
-  const perspective = parsePerspective(searchParams.get("perspective"));
-  const typesParam = searchParams.get("types") ?? "";
-  const selectedMacroSlug = searchParams.get("macroClusterSlug");
-  const selectedClusterSlug = searchParams.get("clusterSlug");
+  const yDim = parseAxisDimension(searchParams.get("yDim") ?? "PERSPECTIVE");
+  const typesParam = searchParams.get("type") ?? "";
+  const selectedMacroSlug = searchParams.get("macro");
+  const selectedClusterSlug = searchParams.get("cluster");
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>, mode: "replace" | "push" = "replace") => {
@@ -124,8 +116,8 @@ export function MatrixRail() {
   useEffect(() => {
     if (!macroClusters.length) return;
     if (!selectedMacroSlug) {
-      // Sync default macroClusterSlug via replace to avoid history noise.
-      updateParams({ macroClusterSlug: macroClusters[0]?.slug ?? null }, "replace");
+      // Sync default macro via replace to avoid history noise.
+      updateParams({ macro: macroClusters[0]?.slug ?? null }, "replace");
     }
   }, [macroClusters, selectedMacroSlug, updateParams]);
 
@@ -138,28 +130,23 @@ export function MatrixRail() {
 
     if (selectedClusterSlug !== resolved.slug) {
       // Keep URL in sync with resolved cluster for SSR.
-      updateParams({ clusterSlug: resolved.slug }, "replace");
+      updateParams({ cluster: resolved.slug }, "replace");
     }
   }, [clusters, selectedClusterSlug, updateParams]);
 
   useEffect(() => {
     if (allowedAxisPair(xDim, yDim)) return;
-    updateParams({ xDim: "structure", yDim: "perspective" }, "replace");
+    // Default axis pair for stable SSR.
+    updateParams({ xDim: "STRUCTURE", yDim: "PERSPECTIVE" }, "replace");
   }, [updateParams, xDim, yDim]);
-
-  const perspectiveLabel = (value: PerspectiveOption) => {
-    if (value === "decision_type") return t("asset.properties.decisionType.label");
-    if (value === "organizational_maturity") return t("asset.properties.organizationalMaturity.label");
-    return t("asset.properties.valueStreamStage.label");
-  };
 
   const selectedTypeValue = useMemo(() => {
     if (!typesParam) return "all";
-    const entry = typesParam.split(",").map((type) => type.trim().toUpperCase());
-    const single = entry.length === 1 ? entry[0] : "";
-    if (single === AssetType.CONCEPT || single === AssetType.METHOD || single === AssetType.TOOL || single === AssetType.TECHNOLOGY) {
-      return single;
-    }
+    const normalized = typesParam.trim().toLowerCase();
+    if (normalized === "concept") return AssetType.CONCEPT;
+    if (normalized === "method") return AssetType.METHOD;
+    if (normalized === "tool") return AssetType.TOOL;
+    if (normalized === "technology") return AssetType.TECHNOLOGY;
     return "all";
   }, [typesParam]);
 
@@ -186,7 +173,6 @@ export function MatrixRail() {
                 const nextDim = parseAxisDimension(e.target.value);
                 updateParams({
                   [axis === "x" ? "xDim" : "yDim"]: nextDim,
-                  ...(axis === "y" && nextDim === "perspective" ? { perspective } : {}),
                 }, "push");
               }}
               className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
@@ -198,7 +184,7 @@ export function MatrixRail() {
                   className="bg-slate-900 text-slate-200"
                   disabled={!allowedAxisPair(axis === "x" ? value : otherDim, axis === "x" ? otherDim : value)}
                 >
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                  {value.charAt(0) + value.slice(1).toLowerCase()}
                 </option>
               ))}
             </select>
@@ -210,14 +196,14 @@ export function MatrixRail() {
           </div>
         </div>
 
-        {axis === "x" && currentDim === "structure" && (
+        {axis === "x" && currentDim === "STRUCTURE" && (
           <div className="space-y-3">
             <div className="space-y-2">
               <div className={fieldLabel}>MacroCluster</div>
               <div className="relative w-full">
                 <select
                   value={resolvedMacroSlug}
-                  onChange={(e) => updateParams({ macroClusterSlug: e.target.value, clusterSlug: null }, "push")}
+                  onChange={(e) => updateParams({ macro: e.target.value, cluster: null }, "push")}
                   disabled={macroClusters.length === 0}
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
                 >
@@ -252,9 +238,7 @@ export function MatrixRail() {
                   value={selectedClusterSlug ?? clusters[0]?.slug ?? ""}
                   onChange={(e) => {
                     const cluster = clusters.find((item) => item.slug === e.target.value);
-                    updateParams({
-                      clusterSlug: cluster?.slug ?? null,
-                    }, "push");
+                    updateParams({ cluster: cluster?.slug ?? null }, "push");
                   }}
                   disabled={!resolvedMacroSlug || clusters.length === 0}
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
@@ -290,30 +274,7 @@ export function MatrixRail() {
           </div>
         )}
 
-        {currentDim === "perspective" && (
-          <div className="space-y-2">
-            <div className={fieldLabel}>Perspective</div>
-            <div className="grid grid-cols-3 rounded-xl border border-white/10 bg-slate-900/40 p-1 text-[11px]">
-              {(["value_stream", "decision_type", "organizational_maturity"] as PerspectiveOption[]).map((option) => {
-                const selected = perspective === option;
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => updateParams({ perspective: option }, "push")}
-                    className={`rounded-lg px-2 py-2 text-center transition ${
-                      selected ? "bg-nexo-ocean/30 text-white" : "text-slate-400 hover:text-slate-200"
-                    }`}
-                  >
-                    {perspectiveLabel(option)}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {currentDim === "context" && (
+        {currentDim === "CONTEXT" && (
           <div className="rounded-xl border border-dashed border-white/10 bg-white/5 px-3 py-3 text-xs text-slate-500">
             Context ist aktuell nicht verfügbar.
           </div>
@@ -342,9 +303,9 @@ export function MatrixRail() {
               onChange={(e) => {
                 const next = e.target.value;
                 if (next === "all") {
-                  updateParams({ types: null }, "push");
+                  updateParams({ type: null }, "push");
                 } else {
-                  updateParams({ types: next.toLowerCase() }, "push");
+                  updateParams({ type: next.toLowerCase() }, "push");
                 }
               }}
               className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"

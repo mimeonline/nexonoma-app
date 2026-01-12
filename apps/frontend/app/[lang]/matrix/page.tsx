@@ -15,36 +15,31 @@ type MatrixSearchParams = {
   perspective?: string;
   types?: string;
   cellLimit?: string;
+  macro?: string;
+  cluster?: string;
+  persp?: string;
+  type?: string;
 };
 
 const parsePerspective = (value?: string): MatrixPerspective => {
   if (!value) return MatrixPerspective.VALUE_STREAM;
-  const normalized = value.toLowerCase();
-  if (normalized === "decision_type") return MatrixPerspective.DECISION_TYPE;
-  if (normalized === "organizational_maturity") return MatrixPerspective.ORGANIZATIONAL_MATURITY;
+  const normalized = value.toUpperCase();
+  if (normalized === "DECISION_TYPE") return MatrixPerspective.DECISION_TYPE;
+  if (normalized === "ORGANIZATIONAL_MATURITY") return MatrixPerspective.ORGANIZATIONAL_MATURITY;
   return MatrixPerspective.VALUE_STREAM;
 };
 
 const parseContentTypes = (value?: string): AssetType[] | undefined => {
-  if (!value) return undefined;
-  const normalized = value
-    .split(",")
-    .map((entry) => entry.trim().toLowerCase())
-    .filter(Boolean);
-  if (normalized.length === 0) return undefined;
-
+  if (!value || value === "all") return undefined;
+  const normalized = value.trim().toLowerCase();
   const typeMap: Record<string, AssetType> = {
     concept: AssetType.CONCEPT,
     method: AssetType.METHOD,
     tool: AssetType.TOOL,
     technology: AssetType.TECHNOLOGY,
   };
-
-  const resolved = normalized
-    .map((entry) => typeMap[entry])
-    .filter((entry): entry is AssetType => Boolean(entry));
-
-  return resolved.length > 0 ? resolved : undefined;
+  const resolved = typeMap[normalized];
+  return resolved ? [resolved] : undefined;
 };
 
 const parseCellLimit = (value?: string): number | undefined => {
@@ -58,17 +53,23 @@ const resolveClusterId = async (lang: string, searchParams?: MatrixSearchParams)
   if (searchParams?.clusterId) return searchParams.clusterId;
 
   const gridApi = createGridApi(lang);
-
-  if (searchParams?.clusterSlug) {
-    const clusterView = await gridApi.getClusterView(searchParams.clusterSlug);
+  const clusterSlug = searchParams?.cluster ?? searchParams?.clusterSlug;
+  if (clusterSlug) {
+    const clusterView = await gridApi.getClusterView(clusterSlug);
     return clusterView.cluster?.id ?? null;
   }
 
-  const macroClusters = await gridApi.getOverview();
-  const macroSlug = macroClusters[0]?.slug;
-  if (!macroSlug) return null;
+  const macroSlug = searchParams?.macro ?? searchParams?.macroClusterSlug;
+  if (macroSlug) {
+    const macroView = await gridApi.getMacroClusterView(macroSlug);
+    return macroView.clusters?.[0]?.id ?? null;
+  }
 
-  const macroView = await gridApi.getMacroClusterView(macroSlug);
+  const macroClusters = await gridApi.getOverview();
+  const fallbackMacroSlug = macroClusters[0]?.slug;
+  if (!fallbackMacroSlug) return null;
+
+  const macroView = await gridApi.getMacroClusterView(fallbackMacroSlug);
   return macroView.clusters?.[0]?.id ?? null;
 };
 
@@ -84,8 +85,9 @@ export default async function MatrixPage({
     const clusterId = await resolveClusterId(lang, resolvedSearchParams);
     if (!clusterId) notFound();
 
-    const perspective = parsePerspective(resolvedSearchParams?.perspective);
-    const contentTypes = parseContentTypes(resolvedSearchParams?.types);
+    // Apply defaults when URL params are missing.
+    const perspective = parsePerspective(resolvedSearchParams?.persp ?? resolvedSearchParams?.perspective);
+    const contentTypes = parseContentTypes(resolvedSearchParams?.type ?? resolvedSearchParams?.types);
     const cellLimit = parseCellLimit(resolvedSearchParams?.cellLimit);
 
     const api = createMatrixApi(lang);
