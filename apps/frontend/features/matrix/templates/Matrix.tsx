@@ -279,7 +279,7 @@ export default function Matrix({ data }: MatrixProps) {
         <div className="overflow-auto">
           <div className="min-w-[720px]">
             <div className="grid" style={{ gridTemplateColumns }}>
-              <div className="sticky top-0 left-0 z-30 border-b border-white/10 bg-nexo-bg/90 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400" />
+              <div className="sticky top-0 left-0 z-30 border-b border-r border-white/10 bg-nexo-bg/90 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400" />
               {columns.map((bucket) => (
                 <div
                   key={bucket.id}
@@ -296,7 +296,9 @@ export default function Matrix({ data }: MatrixProps) {
                   const zebraClass = rowIndex % 2 === 1 ? "bg-white/[0.03]" : "";
                   return (
                     <Fragment key={rowBucket.id}>
-                    <div className={`sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200 min-h-[84px] ${zebraClass}`}>
+                    <div
+                      className={`sticky left-0 z-10 border-b border-r border-white/10 bg-nexo-bg/70 px-4 py-3 text-sm font-medium leading-snug text-slate-100 min-h-[84px] ${zebraClass}`}
+                    >
                       {axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label)}
                     </div>
                     {columns.map((colBucket) => {
