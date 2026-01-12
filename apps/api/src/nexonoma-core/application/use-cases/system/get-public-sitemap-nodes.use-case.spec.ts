@@ -1,6 +1,6 @@
 import { GetPublicSitemapNodesUseCase } from './get-public-sitemap-nodes.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
-import type { CatalogRepositoryPort } from '../../ports/catalog/catalog-repository.port';
+import type { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
 
 const createAsset = (overrides: Partial<any>) => ({
   id: 'id-1',
@@ -9,7 +9,7 @@ const createAsset = (overrides: Partial<any>) => ({
   status: AssetStatus.PUBLISHED,
   createdAt: new Date('2024-01-01T00:00:00.000Z'),
   updatedAt: new Date('2024-01-02T00:00:00.000Z'),
-  tags: [{ slug: 'architecture', label: 'Architecture' }],
+  tags: { architecture: { de: 'Architektur', en: 'Architecture' } },
   tagOrder: ['architecture'],
   ...overrides,
 });
@@ -17,7 +17,7 @@ const createAsset = (overrides: Partial<any>) => ({
 describe('GetPublicSitemapNodesUseCase', () => {
   it('filters to published by default and merges languages', async () => {
     const assetRepo = {
-      findAllContent: jest
+      findContentIndex: jest
         .fn()
         .mockResolvedValueOnce([
           createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
@@ -30,7 +30,7 @@ describe('GetPublicSitemapNodesUseCase', () => {
         .mockResolvedValueOnce([
           createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
         ]),
-    } as unknown as CatalogRepositoryPort;
+    } as unknown as SystemCatalogRepositoryPort;
 
     const useCase = new GetPublicSitemapNodesUseCase(assetRepo);
     const result = await useCase.execute({
@@ -47,7 +47,7 @@ describe('GetPublicSitemapNodesUseCase', () => {
 
   it('includes review assets when enabled and supports pagination', async () => {
     const assetRepo = {
-      findAllContent: jest
+      findContentIndex: jest
         .fn()
         .mockResolvedValueOnce([
           createAsset({ id: 'a1', slug: 'ddd', status: AssetStatus.PUBLISHED }),
@@ -65,7 +65,7 @@ describe('GetPublicSitemapNodesUseCase', () => {
             status: AssetStatus.REVIEW,
           }),
         ]),
-    } as unknown as CatalogRepositoryPort;
+    } as unknown as SystemCatalogRepositoryPort;
 
     const useCase = new GetPublicSitemapNodesUseCase(assetRepo);
     const result = await useCase.execute({

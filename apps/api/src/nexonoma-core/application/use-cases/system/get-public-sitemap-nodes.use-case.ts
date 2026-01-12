@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import type { PublicSitemapQueryDto } from '../../dtos/system/public-sitemap-query.dto';
 import type { SitemapNodeDto } from '../../dtos/system/sitemap-node.dto';
 import { AssetStatus } from '../../../domain/types/asset-enums';
-import { CatalogRepositoryPort } from '../../ports/catalog/catalog-repository.port';
+import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
+import { LocalizationHelper } from '../../../../shared/common/utils/localization.helper';
 
 const toIso = (value?: Date | string | null) => {
   if (!value) return undefined;
@@ -11,15 +12,26 @@ const toIso = (value?: Date | string | null) => {
   return date.toISOString();
 };
 
+const mapTags = (tags: unknown, lang: string) => {
+  if (!tags) return [];
+  if (Array.isArray(tags)) {
+    const hasStringLabel = tags.some(
+      (tag) => tag && typeof (tag as { label?: unknown }).label === 'string',
+    );
+    if (hasStringLabel) return tags;
+  }
+  return LocalizationHelper.localizeTags(tags as any, lang);
+};
+
 @Injectable()
 export class GetPublicSitemapNodesUseCase {
-  constructor(private readonly catalogRepo: CatalogRepositoryPort) {}
+  constructor(private readonly systemRepo: SystemCatalogRepositoryPort) {}
 
   async execute(query: PublicSitemapQueryDto): Promise<SitemapNodeDto[]> {
     const { page, limit, languages, includeReview } = query;
 
     const results = await Promise.all(
-      languages.map((lang) => this.catalogRepo.findAllContent(lang)),
+      languages.map((lang) => this.systemRepo.findContentIndex(lang)),
     );
 
     const merged = new Map<
@@ -39,6 +51,7 @@ export class GetPublicSitemapNodesUseCase {
         const key = `${asset.type}::${asset.slug}::${asset.id}`;
         const updatedAt = toIso(asset.updatedAt);
         const createdAt = toIso(asset.createdAt);
+        const localizedTags = mapTags(asset.tags, lang);
         const existing = merged.get(key);
 
         if (!existing) {
@@ -50,7 +63,7 @@ export class GetPublicSitemapNodesUseCase {
               updatedAt,
               createdAt,
               availableLanguages: [],
-              tags: asset.tags,
+              tags: localizedTags,
               tagOrder: asset.tagOrder,
             },
             locales: new Set([lang]),
