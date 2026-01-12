@@ -246,12 +246,7 @@ export default function Matrix({ data }: MatrixProps) {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-white tracking-tight">{t("matrix.title")}</h1>
-            <InfoPopover
-              title={t("matrix.tooltips.title.title")}
-              content={<p>{t("matrix.tooltips.title.body")}</p>}
-              icon
-              iconColor="text-slate-500"
-            >
+            <InfoPopover title={t("matrix.tooltips.title.title")} content={<p>{t("matrix.tooltips.title.body")}</p>} icon iconColor="text-slate-500">
               <span className="sr-only">{t("matrix.tooltips.title.title")}</span>
             </InfoPopover>
           </div>
@@ -263,7 +258,7 @@ export default function Matrix({ data }: MatrixProps) {
             </span>
             {t("matrix.intro.line2")}
           </p>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-8">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{xAxisTypeLabel}</span>
               <span className="text-slate-200">{xAxisNameLabel}</span>
@@ -377,10 +372,7 @@ export default function Matrix({ data }: MatrixProps) {
                             ))}
                             {remainder > 0 && !enablePopovers && (
                               <InfoPopover content={<p>{t("matrix.tooltips.more")}</p>}>
-                                <button
-                                  className="text-left text-[11px] text-slate-500 hover:text-slate-300"
-                                  title={t("matrix.tooltips.more")}
-                                >
+                                <button className="text-left text-[11px] text-slate-500 hover:text-slate-300" title={t("matrix.tooltips.more")}>
                                   +{remainder}
                                 </button>
                               </InfoPopover>
@@ -388,10 +380,7 @@ export default function Matrix({ data }: MatrixProps) {
                             {remainder > 0 && enablePopovers && (
                               <Popover>
                                 <PopoverTrigger asChild>
-                                  <button
-                                    className="text-left text-[11px] text-slate-500 hover:text-slate-300"
-                                    title={t("matrix.tooltips.more")}
-                                  >
+                                  <button className="text-left text-[11px] text-slate-500 hover:text-slate-300" title={t("matrix.tooltips.more")}>
                                     +{remainder}
                                   </button>
                                 </PopoverTrigger>
