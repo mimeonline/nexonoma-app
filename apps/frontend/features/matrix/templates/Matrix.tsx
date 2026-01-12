@@ -5,9 +5,7 @@ import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { enumAssetKey, useI18n } from "@/features/i18n/I18nProvider";
 import type { MatrixAssetPreview, MatrixCell, MatrixViewResponseDto } from "@/types/matrix";
-import { MatrixPerspective } from "@/types/matrix";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
 
 type AxisTitleProps = {
@@ -138,22 +136,8 @@ type MatrixProps = {
   data: MatrixViewResponseDto;
 };
 
-const parseAxisDimension = (value?: string | null) => {
-  if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
-  return "STRUCTURE";
-};
-
-const parsePerspective = (value?: string | null): MatrixPerspective => {
-  if (value === "DECISION_TYPE") return MatrixPerspective.DECISION_TYPE;
-  if (value === "ORGANIZATIONAL_MATURITY") return MatrixPerspective.ORGANIZATIONAL_MATURITY;
-  return MatrixPerspective.VALUE_STREAM;
-};
-
 export default function Matrix({ data }: MatrixProps) {
   const { t, tRaw, lang } = useI18n();
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const localePrefix = lang ? `/${lang}` : "";
   const [enablePopovers, setEnablePopovers] = useState(false);
 
@@ -214,26 +198,6 @@ export default function Matrix({ data }: MatrixProps) {
   const contentTypeVariant = hasSingleContentType ? contentTypes[0] : "";
   const [showTypeLegend, setShowTypeLegend] = useState(false);
 
-  const xDim = parseAxisDimension(searchParams.get("xDim"));
-  const yDim = parseAxisDimension(searchParams.get("yDim") ?? "PERSPECTIVE");
-  const activePerspective = parsePerspective(searchParams.get("persp"));
-  const showPerspectiveControl = xDim === "PERSPECTIVE" || yDim === "PERSPECTIVE";
-
-  const updatePerspective = (next: MatrixPerspective) => {
-    const nextParams = new URLSearchParams(searchParams.toString());
-    nextParams.set("persp", next);
-    // Replace to keep back/forward clean while syncing view state.
-    router.replace(`${pathname}?${nextParams.toString()}`);
-  };
-
-  const perspectiveOptions: { value: MatrixPerspective; label: string }[] = [
-    { value: MatrixPerspective.VALUE_STREAM, label: axisKeyLabel("VALUE_STREAM", t("asset.properties.valueStreamStage.label")) },
-    { value: MatrixPerspective.DECISION_TYPE, label: axisKeyLabel("DECISION_TYPE", t("asset.properties.decisionType.label")) },
-    {
-      value: MatrixPerspective.ORGANIZATIONAL_MATURITY,
-      label: axisKeyLabel("ORGANIZATIONAL_MATURITY", t("asset.properties.organizationalMaturity.label")),
-    },
-  ];
 
   const typeLegendItems = [
     { type: "concept", label: t("asset.labels.concept") },
@@ -283,30 +247,6 @@ export default function Matrix({ data }: MatrixProps) {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {showPerspectiveControl && (
-            <div className="flex items-center gap-2">
-              <InfoPopover content={<p>{t("matrix.tooltips.perspective")}</p>} icon iconColor="text-slate-500">
-                <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{t("matrix.labels.perspective")}</span>
-              </InfoPopover>
-              <div className="grid grid-cols-3 rounded-xl border border-white/10 bg-slate-900/40 p-1 text-[11px]">
-                {perspectiveOptions.map((option) => {
-                  const selected = activePerspective === option.value;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => updatePerspective(option.value)}
-                      className={`rounded-lg px-2 py-2 text-center transition ${
-                        selected ? "bg-nexo-ocean/30 text-white" : "text-slate-400 hover:text-slate-200"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
           <Badge variant={getBadgeVariant(contentTypeVariant)} size="md" radius="md" className="text-xs text-slate-400">
             {contentTypeLabel}
           </Badge>

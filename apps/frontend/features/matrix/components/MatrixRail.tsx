@@ -3,6 +3,7 @@
 import { InfoPopover } from "@/components/atoms/InfoPopover";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import { createGridApi } from "@/services/gridApi";
+import { MatrixPerspective } from "@/types/matrix";
 import { AssetType } from "@/types/nexonoma";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,6 +24,12 @@ const allowedAxisPair = (x: AxisDimension, y: AxisDimension) =>
 const parseAxisDimension = (value?: string | null): AxisDimension => {
   if (value === "STRUCTURE" || value === "PERSPECTIVE" || value === "CONTEXT") return value;
   return "STRUCTURE";
+};
+
+const parsePerspective = (value?: string | null): MatrixPerspective => {
+  if (value === "DECISION_TYPE") return MatrixPerspective.DECISION_TYPE;
+  if (value === "ORGANIZATIONAL_MATURITY") return MatrixPerspective.ORGANIZATIONAL_MATURITY;
+  return MatrixPerspective.VALUE_STREAM;
 };
 
 const contentTypeOptions = [
@@ -50,6 +57,7 @@ export function MatrixRail() {
   const selectedClusterSlug = searchParams.get("cluster");
   const selectedYMacroSlug = searchParams.get("yMacro");
   const selectedYClusterSlug = searchParams.get("yCluster");
+  const selectedPerspective = parsePerspective(searchParams.get("persp"));
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>, mode: "replace" | "push" = "replace") => {
@@ -214,6 +222,11 @@ export function MatrixRail() {
   const sectionTitle = "text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500";
   const fieldLabel = "text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-600";
   const axisDimensionLabel = (value: AxisDimension) => t(`asset.enums.dimensions.${value}.label`);
+  const perspectiveOptions: { value: MatrixPerspective; label: string }[] = [
+    { value: MatrixPerspective.VALUE_STREAM, label: t("asset.enums.perspectives.VALUE_STREAM.label") },
+    { value: MatrixPerspective.DECISION_TYPE, label: t("asset.enums.perspectives.DECISION_TYPE.label") },
+    { value: MatrixPerspective.ORGANIZATIONAL_MATURITY, label: t("asset.enums.perspectives.ORGANIZATIONAL_MATURITY.label") },
+  ];
 
   const axisCard = (axis: "x" | "y") => {
     const currentDim = axis === "x" ? xDim : yDim;
@@ -376,6 +389,32 @@ export function MatrixRail() {
                     <path d="m7 10 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {axis === "y" && currentDim === "PERSPECTIVE" && (
+          <div className="space-y-2">
+            <InfoPopover content={<p>{t("matrix.tooltips.perspective")}</p>} icon iconColor="text-slate-500">
+              <div className={fieldLabel}>{t("matrix.axis.y.perspective.label")}</div>
+            </InfoPopover>
+            <div className="relative w-full">
+              <select
+                value={selectedPerspective}
+                onChange={(e) => updateParams({ persp: e.target.value }, "push")}
+                className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
+              >
+                {perspectiveOptions.map((option) => (
+                  <option key={option.value} value={option.value} className="bg-slate-900 text-slate-200">
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="m7 10 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
             </div>
           </div>

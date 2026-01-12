@@ -283,6 +283,9 @@
         "macroCluster": {
           "label": "Knowledge model"
         },
+        "perspective": {
+          "label": "Perspective"
+        },
         "cluster": {
           "label": "Domains"
         }

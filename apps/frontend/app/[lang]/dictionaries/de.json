@@ -283,6 +283,9 @@
         "macroCluster": {
           "label": "Wissensmodell"
         },
+        "perspective": {
+          "label": "Perspektive"
+        },
         "cluster": {
           "label": "Themenräume"
         }
