@@ -11,8 +11,6 @@ export type GridNodeRecord = {
   icon?: string;
   tags?: unknown;
   tagOrder?: string[];
-  framework?: string;
-  parentId?: string;
   childrenCount?: number;
 };
 
@@ -26,8 +24,6 @@ type NeoGridAssetData = {
   icon?: string;
   tags?: unknown;
   tagOrder?: unknown;
-  framework?: string;
-  parentId?: string;
   childrenCount?: number | string | null;
 };
 
@@ -61,8 +57,6 @@ export class GridRecordMapper {
       icon: assetData.icon,
       tags: JsonHydrator.rehydrateJson(assetData.tags) ?? assetData.tags,
       tagOrder: normalizeTagOrder(assetData.tagOrder),
-      framework: assetData.framework,
-      parentId: assetData.parentId,
       childrenCount: normalizeChildrenCount(assetData.childrenCount),
     };
   }

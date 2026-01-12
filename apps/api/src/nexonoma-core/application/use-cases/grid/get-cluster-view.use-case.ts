@@ -1,9 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
-import type { ClusterViewResponseDto } from '../../dtos/grid/cluster-view-response.dto';
-import { ClusterViewDtoBuilder } from './builders/cluster-view-dto.builder';
 import { AssetType } from '../../../domain/types/asset-enums';
+import type { ClusterViewResponseDto } from '../../dtos/grid/cluster-view-response.dto';
+import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
+import { ClusterViewDtoBuilder } from './builders/cluster-view-dto.builder';
 
+// TODO: childrenCount zählt aktuell ClusterViews.
+// Da ClusterView im UI noch nicht dargestellt wird,
+// wirkt der Count auf der Cluster-Seite irreführend.
+// Korrekt, sobald ClusterView-Ebene umgesetzt ist.
 @Injectable()
 export class GetClusterViewUseCase {
   constructor(private readonly gridRepo: GridRepositoryPort) {}

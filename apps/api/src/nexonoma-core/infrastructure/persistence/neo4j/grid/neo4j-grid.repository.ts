@@ -71,8 +71,6 @@ export class Neo4jGridRepository implements GridRepositoryPort {
         .icon,
         .tags,
         .tagOrder,
-        .framework,
-        .parentId,
         ${i18n}
       } AS assetData
     `;
@@ -114,8 +112,6 @@ export class Neo4jGridRepository implements GridRepositoryPort {
         .icon,
         .tags,
         .tagOrder,
-        .framework,
-        .parentId,
         ${i18n},
         childrenCount: childrenCount
       } AS assetData

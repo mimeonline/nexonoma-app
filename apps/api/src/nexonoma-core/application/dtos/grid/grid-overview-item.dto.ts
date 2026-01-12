@@ -11,7 +11,5 @@ export type GridOverviewItemDto = {
   icon?: string;
   tags?: LocalizedTagDto[];
   tagOrder?: string[];
-  framework?: string;
-  parentId?: string;
   childrenCount?: number;
 };

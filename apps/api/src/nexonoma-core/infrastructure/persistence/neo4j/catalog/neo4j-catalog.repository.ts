@@ -27,7 +27,9 @@ export class Neo4jCatalogRepository implements CatalogRepositoryPort {
         .id,
         .type,
         .slug,
+        .icon,
         .tags,
+        .tagOrder,
         ${i18n}
       } AS assetData
       ORDER BY assetData.name ASC

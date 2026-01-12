@@ -14,6 +14,9 @@ export type CatalogRecord = {
    * Use use-case builder to localize it into DTO tags: [{slug,label}]
    */
   tagsRaw?: TagMap;
+  icon?: string;
+
+  tagOrder?: string[];
 };
 
 type NeoCatalogAssetData = {
@@ -22,7 +25,9 @@ type NeoCatalogAssetData = {
   slug: string;
   name: string;
   shortDescription?: string;
+  icon?: string;
   tags?: unknown;
+  tagOrder?: string[];
 };
 
 export class CatalogRecordMapper {
@@ -38,6 +43,8 @@ export class CatalogRecordMapper {
       name: assetData.name,
       shortDescription: assetData.shortDescription,
       tagsRaw: TagsRehydrator.toTagMap(assetData.tags),
+      icon: assetData.icon,
+      tagOrder: assetData.tagOrder,
     };
   }
 

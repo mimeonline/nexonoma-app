@@ -30,7 +30,9 @@ export class CatalogDtoBuilder {
       slug: record.slug,
       name: record.name,
       shortDescription: record.shortDescription,
+      icon: record.icon,
       tags: localizedTags as LocalizedTagDto[] | undefined,
+      tagOrder: record.tagOrder,
     };
   }
 }

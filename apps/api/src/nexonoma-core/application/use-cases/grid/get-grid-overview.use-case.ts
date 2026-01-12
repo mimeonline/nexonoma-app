@@ -10,7 +10,7 @@ export class GetGridOverviewUseCase {
   async execute(locale: string): Promise<GridOverviewResponseDto> {
     // Ruft einfach alle MacroCluster aus dem Repo ab.
     // Hier könnte später Caching passieren.
-    const macros = await this.gridRepo.findMacroClusters(locale);
-    return GridOverviewDtoBuilder.build(macros, locale);
+    const macroclusters = await this.gridRepo.findMacroClusters(locale);
+    return GridOverviewDtoBuilder.build(macroclusters, locale);
   }
 }

@@ -7,5 +7,7 @@ export type CatalogResponseDto = {
   slug: string;
   name: string;
   shortDescription?: string;
+  icon?: string;
   tags?: LocalizedTagDto[];
+  tagOrder?: string[];
 };

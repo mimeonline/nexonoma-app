@@ -3,10 +3,6 @@ import type { MacroClusterViewResponseDto } from '../../dtos/grid/macrocluster-v
 import { GridRepositoryPort } from '../../ports/grid/grid-repository.port';
 import { MacroClusterViewDtoBuilder } from './builders/macrocluster-view-dto.builder';
 
-// TODO: childrenCount zählt aktuell ClusterViews.
-// Da ClusterView im UI noch nicht dargestellt wird,
-// wirkt der Count auf der Cluster-Seite irreführend.
-// Korrekt, sobald ClusterView-Ebene umgesetzt ist.
 @Injectable()
 export class GetMacroClusterViewUseCase {
   constructor(private readonly gridRepo: GridRepositoryPort) {}

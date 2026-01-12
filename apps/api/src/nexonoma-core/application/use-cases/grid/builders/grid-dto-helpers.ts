@@ -14,7 +14,9 @@ const toLocalizedTags = (value: GridNodeRecord['tags'], locale: string) => {
   }
 
   const tagMap = TagsRehydrator.toTagMap(value);
-  return TagsRehydrator.localize(tagMap, locale) as LocalizedTagDto[] | undefined;
+  return TagsRehydrator.localize(tagMap, locale) as
+    | LocalizedTagDto[]
+    | undefined;
 };
 
 export const buildOverviewItem = (
@@ -37,8 +39,6 @@ export const buildOverviewItem = (
     icon: record.icon,
     tags: toLocalizedTags(record.tags, locale),
     tagOrder: record.tagOrder,
-    framework: record.framework,
-    parentId: record.parentId,
     childrenCount: record.childrenCount,
   };
 };
