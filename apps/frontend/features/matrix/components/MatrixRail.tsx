@@ -53,10 +53,9 @@ export function MatrixRail() {
   const typesParam = searchParams.get("types") ?? "";
   const selectedMacroSlug = searchParams.get("macroClusterSlug");
   const selectedClusterSlug = searchParams.get("clusterSlug");
-  const selectedClusterId = searchParams.get("clusterId");
 
   const updateParams = useCallback(
-    (updates: Record<string, string | null>) => {
+    (updates: Record<string, string | null>, mode: "replace" | "push" = "replace") => {
       const nextParams = new URLSearchParams(searchParams.toString());
       Object.entries(updates).forEach(([key, value]) => {
         if (!value) {
@@ -66,7 +65,12 @@ export function MatrixRail() {
         }
       });
       const queryString = nextParams.toString();
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname);
+      const nextUrl = queryString ? `${pathname}?${queryString}` : pathname;
+      if (mode === "push") {
+        router.push(nextUrl);
+        return;
+      }
+      router.replace(nextUrl);
     },
     [pathname, router, searchParams]
   );
@@ -120,26 +124,27 @@ export function MatrixRail() {
   useEffect(() => {
     if (!macroClusters.length) return;
     if (!selectedMacroSlug) {
-      updateParams({ macroClusterSlug: macroClusters[0]?.slug ?? null });
+      // Sync default macroClusterSlug via replace to avoid history noise.
+      updateParams({ macroClusterSlug: macroClusters[0]?.slug ?? null }, "replace");
     }
   }, [macroClusters, selectedMacroSlug, updateParams]);
 
   useEffect(() => {
     if (!clusters.length) return;
     const clusterBySlug = selectedClusterSlug ? clusters.find((cluster) => cluster.slug === selectedClusterSlug) : null;
-    const clusterById = selectedClusterId ? clusters.find((cluster) => cluster.id === selectedClusterId) : null;
     const fallback = clusters[0];
-    const resolved = clusterBySlug ?? clusterById ?? fallback;
+    const resolved = clusterBySlug ?? fallback;
     if (!resolved) return;
 
-    if (selectedClusterSlug !== resolved.slug || selectedClusterId !== resolved.id) {
-      updateParams({ clusterSlug: resolved.slug, clusterId: resolved.id });
+    if (selectedClusterSlug !== resolved.slug) {
+      // Keep URL in sync with resolved cluster for SSR.
+      updateParams({ clusterSlug: resolved.slug }, "replace");
     }
-  }, [clusters, selectedClusterId, selectedClusterSlug, updateParams]);
+  }, [clusters, selectedClusterSlug, updateParams]);
 
   useEffect(() => {
     if (allowedAxisPair(xDim, yDim)) return;
-    updateParams({ xDim: "structure", yDim: "perspective" });
+    updateParams({ xDim: "structure", yDim: "perspective" }, "replace");
   }, [updateParams, xDim, yDim]);
 
   const perspectiveLabel = (value: PerspectiveOption) => {
@@ -182,7 +187,7 @@ export function MatrixRail() {
                 updateParams({
                   [axis === "x" ? "xDim" : "yDim"]: nextDim,
                   ...(axis === "y" && nextDim === "perspective" ? { perspective } : {}),
-                });
+                }, "push");
               }}
               className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
             >
@@ -205,16 +210,27 @@ export function MatrixRail() {
           </div>
         </div>
 
-        {currentDim === "structure" && (
+        {axis === "x" && currentDim === "structure" && (
           <div className="space-y-3">
             <div className="space-y-2">
               <div className={fieldLabel}>MacroCluster</div>
               <div className="relative w-full">
                 <select
                   value={resolvedMacroSlug}
-                  onChange={(e) => updateParams({ macroClusterSlug: e.target.value, clusterSlug: null, clusterId: null })}
+                  onChange={(e) => updateParams({ macroClusterSlug: e.target.value, clusterSlug: null }, "push")}
+                  disabled={macroClusters.length === 0}
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
                 >
+                  {!macroClusters.length && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      Keine MacroCluster gefunden
+                    </option>
+                  )}
+                  {macroClusters.length > 0 && !resolvedMacroSlug && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      MacroCluster wählen
+                    </option>
+                  )}
                   {macroClusters.map((macro) => (
                     <option key={macro.id} value={macro.slug} className="bg-slate-900 text-slate-200">
                       {macro.name}
@@ -238,11 +254,26 @@ export function MatrixRail() {
                     const cluster = clusters.find((item) => item.slug === e.target.value);
                     updateParams({
                       clusterSlug: cluster?.slug ?? null,
-                      clusterId: cluster?.id ?? null,
-                    });
+                    }, "push");
                   }}
+                  disabled={!resolvedMacroSlug || clusters.length === 0}
                   className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
                 >
+                  {!resolvedMacroSlug && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      Bitte zuerst MacroCluster wählen
+                    </option>
+                  )}
+                  {resolvedMacroSlug && clusters.length === 0 && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      Keine Cluster gefunden
+                    </option>
+                  )}
+                  {resolvedMacroSlug && clusters.length > 0 && !selectedClusterSlug && (
+                    <option value="" className="bg-slate-900 text-slate-400">
+                      Cluster wählen
+                    </option>
+                  )}
                   {clusters.map((cluster) => (
                     <option key={cluster.id} value={cluster.slug} className="bg-slate-900 text-slate-200">
                       {cluster.name}
@@ -269,7 +300,7 @@ export function MatrixRail() {
                   <button
                     key={option}
                     type="button"
-                    onClick={() => updateParams({ perspective: option })}
+                    onClick={() => updateParams({ perspective: option }, "push")}
                     className={`rounded-lg px-2 py-2 text-center transition ${
                       selected ? "bg-nexo-ocean/30 text-white" : "text-slate-400 hover:text-slate-200"
                     }`}
@@ -311,9 +342,9 @@ export function MatrixRail() {
               onChange={(e) => {
                 const next = e.target.value;
                 if (next === "all") {
-                  updateParams({ types: null });
+                  updateParams({ types: null }, "push");
                 } else {
-                  updateParams({ types: next.toLowerCase() });
+                  updateParams({ types: next.toLowerCase() }, "push");
                 }
               }}
               className="w-full h-10 appearance-none rounded-xl border border-white/10 bg-white/5 pl-3 pr-10 py-2 text-sm text-slate-200 outline-none focus:border-nexo-ocean/50 focus:bg-slate-900/50 transition-all cursor-pointer shadow-sm"
