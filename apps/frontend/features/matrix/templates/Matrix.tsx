@@ -293,12 +293,10 @@ export default function Matrix({ data }: MatrixProps) {
                 <div className="col-span-full border-b border-white/5 px-6 py-8 text-center text-sm text-slate-400">{t("matrix.empty")}</div>
               ) : (
                 rows.map((rowBucket, rowIndex) => {
-                  const zebraClass = rowIndex % 2 === 1 ? "bg-white/[0.03]" : "";
+                  const zebraClass = rowIndex % 2 === 1 ? "bg-white/[0.012]" : "";
                   return (
                     <Fragment key={rowBucket.id}>
-                    <div
-                      className={`sticky left-0 z-10 border-b border-r border-white/10 bg-nexo-bg/70 px-4 py-3 text-sm font-medium leading-snug text-slate-100 min-h-[84px] ${zebraClass}`}
-                    >
+                    <div className="sticky left-0 z-10 border-b border-r border-white/10 bg-nexo-bg/70 px-4 py-3 text-sm font-medium leading-snug text-slate-100 min-h-[84px]">
                       {axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label)}
                     </div>
                     {columns.map((colBucket) => {
