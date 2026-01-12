@@ -292,9 +292,11 @@ export default function Matrix({ data }: MatrixProps) {
               {!isStructureByStructure && data.stats.totalItems === 0 ? (
                 <div className="col-span-full border-b border-white/5 px-6 py-8 text-center text-sm text-slate-400">{t("matrix.empty")}</div>
               ) : (
-                rows.map((rowBucket) => (
-                  <Fragment key={rowBucket.id}>
-                    <div className="sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200 min-h-[84px]">
+                rows.map((rowBucket, rowIndex) => {
+                  const zebraClass = rowIndex % 2 === 1 ? "bg-white/[0.03]" : "";
+                  return (
+                    <Fragment key={rowBucket.id}>
+                    <div className={`sticky left-0 z-10 border-b border-white/5 bg-nexo-bg/80 px-4 py-3 text-sm text-slate-200 min-h-[84px] ${zebraClass}`}>
                       {axisItemLabel(data.axes.y.key, rowBucket.id, rowBucket.label)}
                     </div>
                     {columns.map((colBucket) => {
@@ -306,7 +308,7 @@ export default function Matrix({ data }: MatrixProps) {
                       const remainder = Math.max(0, (cell?.count ?? 0) - visibleItems.length);
 
                       return (
-                        <div key={`${rowBucket.id}:${colBucket.id}`} className="border-b border-white/5 px-3 py-2 min-h-[84px]">
+                        <div key={`${rowBucket.id}:${colBucket.id}`} className={`border-b border-white/5 px-3 py-2 min-h-[84px] ${zebraClass}`}>
                           <div className="flex flex-col gap-2">
                             {visibleItems.map((item) => (
                               <MiniCard
@@ -364,7 +366,8 @@ export default function Matrix({ data }: MatrixProps) {
                       );
                     })}
                   </Fragment>
-                ))
+                );
+                })
               )}
             </div>
           </div>
