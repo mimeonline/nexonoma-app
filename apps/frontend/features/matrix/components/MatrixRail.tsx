@@ -1,5 +1,6 @@
 "use client";
 
+import { InfoPopover } from "@/components/atoms/InfoPopover";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import { createGridApi } from "@/services/gridApi";
 import { AssetType } from "@/types/nexonoma";
@@ -160,12 +161,16 @@ export function MatrixRail() {
     return (
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <div className={sectionTitle}>{axis === "x" ? "X-Achse" : "Y-Achse"}</div>
+          <InfoPopover content={<p>{t("matrix.tooltips.axis")}</p>} icon iconColor="text-slate-500">
+            <div className={sectionTitle}>{axis === "x" ? "X-Achse" : "Y-Achse"}</div>
+          </InfoPopover>
           {currentDim === "CONTEXT" && <span className="text-[11px] text-slate-500">Coming soon</span>}
         </div>
 
         <div className="space-y-2">
-          <div className={fieldLabel}>Dimension</div>
+          <InfoPopover content={<p>{t("matrix.tooltips.dimension")}</p>} icon iconColor="text-slate-500">
+            <div className={fieldLabel}>Dimension</div>
+          </InfoPopover>
           <div className="relative w-full">
             <select
               value={currentDim}
@@ -199,7 +204,9 @@ export function MatrixRail() {
         {axis === "x" && currentDim === "STRUCTURE" && (
           <div className="space-y-3">
             <div className="space-y-2">
-              <div className={fieldLabel}>{t("grid.macro.badge")}</div>
+              <InfoPopover content={<p>{t("matrix.tooltips.macro")}</p>} icon iconColor="text-slate-500">
+                <div className={fieldLabel}>{t("grid.macro.badge")}</div>
+              </InfoPopover>
               <div className="relative w-full">
                 <select
                   value={resolvedMacroSlug}
@@ -232,7 +239,9 @@ export function MatrixRail() {
             </div>
 
             <div className="space-y-2">
-              <div className={fieldLabel}>{t("grid.clusters.badge")}</div>
+              <InfoPopover content={<p>{t("matrix.tooltips.cluster")}</p>} icon iconColor="text-slate-500">
+                <div className={fieldLabel}>{t("grid.clusters.badge")}</div>
+              </InfoPopover>
               <div className="relative w-full">
                 <select
                   value={selectedClusterSlug ?? clusters[0]?.slug ?? ""}
@@ -296,7 +305,9 @@ export function MatrixRail() {
       <div className="space-y-3">
         <div className={sectionTitle}>Filter</div>
         <div className="space-y-2">
-          <div className={fieldLabel}>{t("matrix.controls.type")}</div>
+          <InfoPopover content={<p>{t("matrix.tooltips.type")}</p>} icon iconColor="text-slate-500">
+            <div className={fieldLabel}>{t("matrix.controls.type")}</div>
+          </InfoPopover>
           <div className="relative w-full">
             <select
               value={selectedTypeValue}

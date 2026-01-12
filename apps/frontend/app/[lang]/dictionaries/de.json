@@ -264,14 +264,35 @@
     }
   },
   "matrix": {
-    "title": "Matrix Ansicht",
-    "description": "Erkunde die Wissenskarte in einer matrixbasierten Ansicht.",
+    "title": "Analyse",
+    "subtitle": "Matrix",
+    "description": "Erkunde die Wissenskarte in einer matrixbasierten Analyse.",
+    "intro": {
+      "line1": "Diese Ansicht hilft dir, Wissensbausteine systemisch zu vergleichen.",
+      "line2": "Du wählst zwei Achsen (z. B. Struktur × Perspektive) und siehst, welche Bausteine in welchen Zellen landen."
+    },
     "controls": {
       "segment": "Segment",
       "type": "Typ"
     },
+    "labels": {
+      "perspective": "Perspektive"
+    },
     "legend": {
       "present": "● enthalten"
+    },
+    "tooltips": {
+      "title": {
+        "title": "Analyse (Matrix)",
+        "body": "Vergleiche Wissensbausteine entlang zweier Achsen. Jede Zelle zeigt passende Bausteine für die gewählte Kombination."
+      },
+      "axis": "Eine Achse besteht aus einer Dimension und einer konkreten Auswahl (z. B. ein Themenraum oder ein Wertstrom).",
+      "dimension": "Bestimmt, welche Art von Vergleich du machst – Struktur, Kontext oder Perspektive.",
+      "macro": "Große thematische Domäne. Sie begrenzt, welche Themenräume in der Analyse verfügbar sind.",
+      "cluster": "Der gewählte Themenraum definiert die Spalten (Themenbereiche) dieser Analyse.",
+      "perspective": "Wähle, aus welcher Sicht du vergleichen willst. Das steuert die Zeilen der Analyse.",
+      "type": "Schränkt die Anzeige auf bestimmte Wissensbausteine ein (Concept, Method, Tool, Technology).",
+      "more": "Zeigt alle weiteren Bausteine, die ebenfalls zu dieser Kombination passen."
     },
     "empty": "Keine Inhalte für diesen Typ."
   },

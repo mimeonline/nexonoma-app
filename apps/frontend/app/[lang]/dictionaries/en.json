@@ -264,14 +264,35 @@
     }
   },
   "matrix": {
-    "title": "Matrix view",
-    "description": "Explore the knowledge map in a matrix-based view.",
+    "title": "Analysis",
+    "subtitle": "Matrix",
+    "description": "Explore the knowledge map in a matrix-based analysis.",
+    "intro": {
+      "line1": "This view helps you compare knowledge building blocks systemically.",
+      "line2": "You choose two axes (e.g., structure × perspective) and see which blocks land in which cells."
+    },
     "controls": {
       "segment": "Segment",
-      "type": "Typ"
+      "type": "Type"
+    },
+    "labels": {
+      "perspective": "Perspective"
     },
     "legend": {
       "present": "● enthalten"
+    },
+    "tooltips": {
+      "title": {
+        "title": "Analysis (Matrix)",
+        "body": "Compare knowledge building blocks across two axes. Each cell shows matching blocks for the selected combination."
+      },
+      "axis": "An axis consists of a dimension and a concrete selection (e.g., a domain or a value stream).",
+      "dimension": "Defines the kind of comparison—structure, context, or perspective.",
+      "macro": "A large thematic domain. It limits which domains are available in the analysis.",
+      "cluster": "The selected domain defines the columns (topic areas) of this analysis.",
+      "perspective": "Choose the perspective to compare from. It drives the rows of the analysis.",
+      "type": "Restricts the view to specific building block types (Concept, Method, Tool, Technology).",
+      "more": "Shows all additional blocks that also match this combination."
     },
     "empty": "No contents for this type."
   },

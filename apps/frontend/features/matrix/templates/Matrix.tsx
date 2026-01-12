@@ -1,5 +1,6 @@
 "use client";
 
+import { InfoPopover } from "@/components/atoms/InfoPopover";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { enumAssetKey, useI18n } from "@/features/i18n/I18nProvider";
@@ -243,7 +244,25 @@ export default function Matrix({ data }: MatrixProps) {
     <div className="w-full px-6 py-6 space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-white tracking-tight">{t("matrix.title")}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold text-white tracking-tight">{t("matrix.title")}</h1>
+            <InfoPopover
+              title={t("matrix.tooltips.title.title")}
+              content={<p>{t("matrix.tooltips.title.body")}</p>}
+              icon
+              iconColor="text-slate-500"
+            >
+              <span className="sr-only">{t("matrix.tooltips.title.title")}</span>
+            </InfoPopover>
+          </div>
+          <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">{t("matrix.subtitle")}</div>
+          <p className="mt-2 max-w-2xl text-sm text-slate-400">
+            {t("matrix.intro.line1")}
+            <span className="hidden sm:inline">
+              <br />
+            </span>
+            {t("matrix.intro.line2")}
+          </p>
           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">{xAxisTypeLabel}</span>
@@ -258,30 +277,37 @@ export default function Matrix({ data }: MatrixProps) {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {showPerspectiveControl && (
-            <div className="grid grid-cols-3 rounded-xl border border-white/10 bg-slate-900/40 p-1 text-[11px]">
-              {perspectiveOptions.map((option) => {
-                const selected = activePerspective === option.value;
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => updatePerspective(option.value)}
-                    className={`rounded-lg px-2 py-2 text-center transition ${
-                      selected ? "bg-nexo-ocean/30 text-white" : "text-slate-400 hover:text-slate-200"
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                );
-              })}
+            <div className="flex items-center gap-2">
+              <InfoPopover content={<p>{t("matrix.tooltips.perspective")}</p>} icon iconColor="text-slate-500">
+                <span className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{t("matrix.labels.perspective")}</span>
+              </InfoPopover>
+              <div className="grid grid-cols-3 rounded-xl border border-white/10 bg-slate-900/40 p-1 text-[11px]">
+                {perspectiveOptions.map((option) => {
+                  const selected = activePerspective === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => updatePerspective(option.value)}
+                      className={`rounded-lg px-2 py-2 text-center transition ${
+                        selected ? "bg-nexo-ocean/30 text-white" : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
           <Badge variant={getBadgeVariant(contentTypeVariant)} size="md" radius="md" className="text-xs text-slate-400">
             {contentTypeLabel}
           </Badge>
-          <button type="button" onClick={() => setShowTypeLegend((prev) => !prev)} className="text-[11px] text-slate-400 hover:text-slate-200">
-            {t("matrix.controls.type")}
-          </button>
+          <InfoPopover content={<p>{t("matrix.tooltips.type")}</p>} icon iconColor="text-slate-500">
+            <button type="button" onClick={() => setShowTypeLegend((prev) => !prev)} className="text-[11px] text-slate-400 hover:text-slate-200">
+              {t("matrix.controls.type")}
+            </button>
+          </InfoPopover>
         </div>
       </div>
       {showTypeLegend && (
@@ -350,12 +376,24 @@ export default function Matrix({ data }: MatrixProps) {
                               />
                             ))}
                             {remainder > 0 && !enablePopovers && (
-                              <button className="text-left text-[11px] text-slate-500 hover:text-slate-300">+{remainder}</button>
+                              <InfoPopover content={<p>{t("matrix.tooltips.more")}</p>}>
+                                <button
+                                  className="text-left text-[11px] text-slate-500 hover:text-slate-300"
+                                  title={t("matrix.tooltips.more")}
+                                >
+                                  +{remainder}
+                                </button>
+                              </InfoPopover>
                             )}
                             {remainder > 0 && enablePopovers && (
                               <Popover>
                                 <PopoverTrigger asChild>
-                                  <button className="text-left text-[11px] text-slate-500 hover:text-slate-300">+{remainder}</button>
+                                  <button
+                                    className="text-left text-[11px] text-slate-500 hover:text-slate-300"
+                                    title={t("matrix.tooltips.more")}
+                                  >
+                                    +{remainder}
+                                  </button>
                                 </PopoverTrigger>
                                 <PopoverContent
                                   side="right"
