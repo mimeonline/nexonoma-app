@@ -10,7 +10,6 @@ type HeroMetaTone = "neutral" | "accent" | "warning";
 type HeroMetaItem = {
   label: string;
   value: string;
-  tone: HeroMetaTone;
 };
 
 type StructurePath = {
@@ -33,6 +32,7 @@ type FactItem = {
   id: string;
   label: string;
   value: string;
+  tone?: HeroMetaTone;
 };
 
 type AssetContent = {
@@ -43,7 +43,6 @@ type AssetContent = {
   heroNote: string;
   actionLabel: string;
   actionHint: string;
-  meta: HeroMetaItem[];
   structurePaths: StructurePath[];
   relations: RelationItem[];
   facts: FactItem[];
@@ -59,11 +58,6 @@ const mockAsset: AssetContent = {
   heroNote: "„Dieser Baustein bündelt Grundinformationen, Kontext und Beziehungen – als neutrale Referenz im Modell.“",
   actionLabel: "360° Detailansicht öffnen",
   actionHint: "Vertiefung mit Einordnung, Trade-offs und Beispielen.",
-  meta: [
-    { label: "Abstraktionsebene", value: "STRUCTURAL", tone: "neutral" },
-    { label: "Reifegrad", value: "ESTABLISHED", tone: "accent" },
-    { label: "Kognitive Last", value: "MEDIUM", tone: "warning" },
-  ],
   structurePaths: [
     {
       id: "path-1",
@@ -109,6 +103,8 @@ const mockAsset: AssetContent = {
     { id: "fact-3", label: "Decision", value: "Technical" },
     { id: "fact-4", label: "Complexity", value: "Medium" },
     { id: "fact-5", label: "Stage", value: "Delivery" },
+    { id: "fact-6", label: "Reifegrad", value: "ESTABLISHED", tone: "accent" },
+    { id: "fact-7", label: "Kognitive Last", value: "MEDIUM", tone: "warning" },
   ],
   longDescription:
     "Snowflake bietet eine einheitliche Plattform für Datenmanagement und Analytik. Es ermöglicht Organisationen, Daten zu lagern, zu verarbeiten und zu analysieren, ohne sich um die zugrunde liegende Infrastruktur kümmern zu müssen. Die Architektur ist skalierbar und unterstützt moderne Datenanwendungen.",
@@ -165,7 +161,7 @@ export default async function ContentAssetPage({ params }: PageProps<"/[lang]/co
         </Link>
       </div>
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_300px]">
+      <section className="grid gap-6 lg:grid-cols-[1fr_300px] lg:items-stretch">
         <Card className="bg-nexo-surface p-8 duration-200 ease-out">
           <div className="flex flex-wrap items-center gap-2 mb-6">
             <Badge variant="tool" size="md" radius="sm">
@@ -203,7 +199,7 @@ export default async function ContentAssetPage({ params }: PageProps<"/[lang]/co
           </div>
         </Card>
 
-        <div className="space-y-4">
+        <div className="flex h-full flex-col gap-4">
           <Card className="p-5 duration-200 ease-out">
             <Link
               href={`/${lang}/catalog`}
@@ -218,25 +214,12 @@ export default async function ContentAssetPage({ params }: PageProps<"/[lang]/co
             <p className="mt-3 text-center text-xs text-text-muted">{mockAsset.actionHint}</p>
           </Card>
 
-          <Card className="p-1 duration-200 ease-out">
-            <div className="grid gap-1">
-              {mockAsset.meta.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors duration-200 ease-out hover:bg-white/[0.02]"
-                >
-                  <span className="text-xs font-medium text-text-secondary">{item.label}</span>
-                  <span
-                    className={cn(
-                      "rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide",
-                      metaToneClasses[item.tone]
-                    )}
-                  >
-                    {item.value}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <Card className="flex-1 bg-nexo-surface p-6 duration-200 ease-out">
+            <h2 className="text-lg font-display font-semibold text-white">Einordnung</h2>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+              Diese Seite bündelt grundlegende Informationen, Kontext und Beziehungen zu diesem Baustein. Sie dient als neutraler Einstiegspunkt ins
+              Modell – unabhängig von Lern- oder Entscheidungswegen.
+            </p>
           </Card>
         </div>
       </section>
@@ -322,11 +305,22 @@ export default async function ContentAssetPage({ params }: PageProps<"/[lang]/co
 
       <section>
         <SectionTitle className="mb-4 px-1">Basisdaten</SectionTitle>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-7">
           {mockAsset.facts.map((fact) => (
             <Card key={fact.id} className="p-4 text-center duration-200 ease-out">
               <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted">{fact.label}</div>
-              <div className="text-sm font-medium text-white">{fact.value}</div>
+              {fact.tone ? (
+                <span
+                  className={cn(
+                    "inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide",
+                    metaToneClasses[fact.tone]
+                  )}
+                >
+                  {fact.value}
+                </span>
+              ) : (
+                <div className="text-sm font-medium text-white">{fact.value}</div>
+              )}
             </Card>
           ))}
         </div>
