@@ -282,19 +282,39 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
 
       <section>
         <SectionTitle className="mb-4 px-1">Basisdaten</SectionTitle>
-        <div className="flex w-full gap-3">
-          {asset.facts.map((fact) => (
-            <Card key={fact.id} className="flex-1 min-w-0 p-4 text-center duration-200 ease-out">
-              <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted">{fact.label}</div>
-              {fact.tone ? (
-                <span className={cn("inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide", metaToneClasses[fact.tone])}>
-                  {fact.value}
-                </span>
-              ) : (
-                <div className="text-sm font-medium text-white">{fact.value}</div>
-              )}
-            </Card>
-          ))}
+
+        <div className="relative">
+          {/* Context Rail */}
+          <div
+            className="pointer-events-none absolute inset-x-0 -bottom-2 h-px
+                bg-linear-to-r from-cyan-400/30 via-indigo-400/30 to-amber-400/30"
+          />
+
+          <div className="flex w-full gap-3">
+            {asset.facts.map((fact) => (
+              <Card
+                key={fact.id}
+                className="flex-1 min-w-0 p-4 text-center
+                    transition
+                    hover:ring-1 hover:ring-cyan-400/30"
+              >
+                <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted ">{fact.label}</div>
+
+                {fact.tone ? (
+                  <span
+                    className={cn(
+                      "inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide  text-cyan-300/60",
+                      metaToneClasses[fact.tone]
+                    )}
+                  >
+                    {fact.value}
+                  </span>
+                ) : (
+                  <div className="text-sm font-medium text-white">{fact.value}</div>
+                )}
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
