@@ -1,168 +1,60 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 
-import { Badge } from "@/components/ui/atoms/Badge";
+import { DynamicIcon } from "@/components/atoms/DynamicIcon";
+import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { useI18n } from "@/features/i18n/I18nProvider";
+import type { Overview360Response } from "@/types/overview360";
 
 const INITIAL_VISIBLE_COUNT = 6;
 
-type AbstractionLevel = "FOUNDATIONAL" | "STRUCTURAL" | "ATOMIC";
+type SectionKey = keyof Overview360Response;
 
-type DecisionHint = {
-  label: string;
-  value: string;
-};
-
-type Overview360Item = {
-  id: string;
-  title: string;
-  description: string;
-  slug: string;
-  catalogType: "concept" | "method" | "tool" | "technology";
-  abstractionLevel: AbstractionLevel;
-  decisionHints: DecisionHint[];
-  searchHints: string[];
-  has360: boolean;
-};
-
-const sectionOrder: { level: AbstractionLevel; key: "foundational" | "structural" | "atomic" }[] = [
-  { level: "FOUNDATIONAL", key: "foundational" },
-  { level: "STRUCTURAL", key: "structural" },
-  { level: "ATOMIC", key: "atomic" },
+const sectionOrder: { key: SectionKey; i18nKey: "foundational" | "structural" | "atomic" }[] = [
+  { key: "foundational", i18nKey: "foundational" },
+  { key: "structural", i18nKey: "structural" },
+  { key: "atomic", i18nKey: "atomic" },
 ];
 
-const abstractionLabel = (level: AbstractionLevel) => level;
+type Overview360TemplateProps = {
+  data: Overview360Response;
+};
 
-const buildMockItems = (t: (key: string) => string): Overview360Item[] => [
-  {
-    id: "ddd",
-    title: t("overview360.items.ddd.title"),
-    description: t("overview360.items.ddd.description"),
-    slug: "domain-driven-design",
-    catalogType: "concept",
-    abstractionLevel: "FOUNDATIONAL",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.design") },
-      { label: t("overview360.meta.cognitiveLoad"), value: t("overview360.metaValues.cognitiveLoad.high") },
-    ],
-    searchHints: ["ddd", "domain driven design", "domain-driven design", "bounded context"],
-    has360: true,
-  },
-  {
-    id: "12-factor",
-    title: t("overview360.items.twelveFactor.title"),
-    description: t("overview360.items.twelveFactor.description"),
-    slug: "12-factor-app",
-    catalogType: "method",
-    abstractionLevel: "FOUNDATIONAL",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.technical") },
-      { label: t("overview360.meta.maturity"), value: t("overview360.metaValues.maturity.established") },
-    ],
-    searchHints: ["12-factor", "12 factor", "twelve factor", "cloud native"],
-    has360: true,
-  },
-  {
-    id: "microservices",
-    title: t("overview360.items.microservices.title"),
-    description: t("overview360.items.microservices.description"),
-    slug: "microservices",
-    catalogType: "concept",
-    abstractionLevel: "STRUCTURAL",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.architecture") },
-      { label: t("overview360.meta.cognitiveLoad"), value: t("overview360.metaValues.cognitiveLoad.high") },
-    ],
-    searchHints: ["microservices", "service architecture", "distributed systems"],
-    has360: true,
-  },
-  {
-    id: "event-storming",
-    title: t("overview360.items.eventStorming.title"),
-    description: t("overview360.items.eventStorming.description"),
-    slug: "event-storming",
-    catalogType: "method",
-    abstractionLevel: "STRUCTURAL",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.organization") },
-      { label: t("overview360.meta.maturity"), value: t("overview360.metaValues.maturity.emerging") },
-    ],
-    searchHints: ["event storming", "domain discovery", "workshop"],
-    has360: true,
-  },
-  {
-    id: "circuit-breaker",
-    title: t("overview360.items.circuitBreaker.title"),
-    description: t("overview360.items.circuitBreaker.description"),
-    slug: "circuit-breaker",
-    catalogType: "method",
-    abstractionLevel: "STRUCTURAL",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.technical") },
-      { label: t("overview360.meta.maturity"), value: t("overview360.metaValues.maturity.advanced") },
-    ],
-    searchHints: ["circuit breaker", "resilience", "fault tolerance"],
-    has360: true,
-  },
-  {
-    id: "kubernetes",
-    title: t("overview360.items.kubernetes.title"),
-    description: t("overview360.items.kubernetes.description"),
-    slug: "kubernetes",
-    catalogType: "technology",
-    abstractionLevel: "ATOMIC",
-    decisionHints: [
-      { label: t("overview360.meta.decisionType"), value: t("overview360.metaValues.decisionType.technical") },
-      { label: t("overview360.meta.cognitiveLoad"), value: t("overview360.metaValues.cognitiveLoad.high") },
-    ],
-    searchHints: ["kubernetes", "k8s", "orchestration"],
-    has360: true,
-  },
-];
+const toCatalogTypeSlug = (value: string) => value.toLowerCase();
 
-export function Overview360Template() {
+export function Overview360Template({ data }: Overview360TemplateProps) {
   const [search, setSearch] = useState("");
-  const [expandedSections, setExpandedSections] = useState<Record<AbstractionLevel, boolean>>({
-    FOUNDATIONAL: false,
-    STRUCTURAL: false,
-    ATOMIC: false,
+  const [expandedSections, setExpandedSections] = useState<Record<SectionKey, boolean>>({
+    foundational: false,
+    structural: false,
+    atomic: false,
   });
   const { t, lang } = useI18n();
   const router = useRouter();
   const localePrefix = lang ? `/${lang}` : "";
 
-  const items = useMemo(() => buildMockItems(t), [t]);
-
   const filteredItems = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) return items;
+    if (!term) return data;
 
-    return items.filter((item) => {
-      const fields = [item.title, item.description, item.abstractionLevel, ...item.searchHints, ...item.decisionHints.map((hint) => hint.value)];
-      return fields.some((field) => field.toLowerCase().includes(term));
-    });
-  }, [items, search]);
+    const matchesTerm = (value?: string | null) => (value ?? "").toLowerCase().includes(term);
 
-  const groupedItems = useMemo(() => {
-    return filteredItems.reduce(
-      (acc, item) => {
-        acc[item.abstractionLevel].push(item);
-        return acc;
-      },
-      {
-        FOUNDATIONAL: [] as Overview360Item[],
-        STRUCTURAL: [] as Overview360Item[],
-        ATOMIC: [] as Overview360Item[],
-      }
-    );
-  }, [filteredItems]);
+    return {
+      foundational: data.foundational.filter((item) => matchesTerm(item.name) || matchesTerm(item.shortDescription)),
+      structural: data.structural.filter((item) => matchesTerm(item.name) || matchesTerm(item.shortDescription)),
+      atomic: data.atomic.filter((item) => matchesTerm(item.name) || matchesTerm(item.shortDescription)),
+    };
+  }, [data, search]);
 
-  const hasResults = filteredItems.length > 0;
+  const translateTypeLabel = (value: string) => {
+    const key = `asset.labels.${value.toLowerCase()}`;
+    return t(key);
+  };
 
   return (
     <div className="space-y-10 pb-16">
@@ -209,93 +101,99 @@ export function Overview360Template() {
         </div>
       </header>
 
-      {!hasResults ? (
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-slate-200">
-          <p className="text-sm font-semibold text-slate-100">{t("overview360.empty.title")}</p>
-          <p className="mt-2 text-sm text-slate-200/80">{t("overview360.empty.description")}</p>
-        </div>
-      ) : (
-        <div className="space-y-12">
-          {sectionOrder.map((section) => {
-            const sectionItems = groupedItems[section.level];
-            const isExpanded = expandedSections[section.level];
-            const visibleItems = isExpanded ? sectionItems : sectionItems.slice(0, INITIAL_VISIBLE_COUNT);
-            const showMore = sectionItems.length > INITIAL_VISIBLE_COUNT && !isExpanded;
+      <div className="space-y-12">
+        {sectionOrder.map((section) => {
+          const sectionItems = filteredItems[section.key] ?? [];
+          const isExpanded = expandedSections[section.key];
+          const visibleItems = isExpanded ? sectionItems : sectionItems.slice(0, INITIAL_VISIBLE_COUNT);
+          const showMore = sectionItems.length > INITIAL_VISIBLE_COUNT && !isExpanded;
 
-            return (
-              <section key={section.level} className="space-y-6">
-                <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-                  <div className="space-y-2">
-                    <h2 className="text-xl font-bold text-white md:text-2xl">{t(`overview360.sections.${section.key}.title`)}</h2>
-                    <p className="max-w-2xl text-sm text-slate-200/70 leading-relaxed">
-                      {t(`overview360.sections.${section.key}.description`)}
-                    </p>
-                  </div>
-                  {showMore && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="self-start md:self-auto text-slate-300 hover:text-white"
-                      onClick={() =>
-                        setExpandedSections((prev) => ({
-                          ...prev,
-                          [section.level]: true,
-                        }))
-                      }
-                    >
-                      {t("overview360.actions.showMore")}
-                    </Button>
-                  )}
+          return (
+            <section key={section.key} className="space-y-6">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div className="space-y-2">
+                  <h2 className="text-xl font-bold text-white md:text-2xl">{t(`overview360.sections.${section.i18nKey}.title`)}</h2>
+                  <p className="max-w-2xl text-sm text-slate-200/70 leading-relaxed">{t(`overview360.sections.${section.i18nKey}.description`)}</p>
                 </div>
+                {showMore && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="self-start md:self-auto text-slate-300 hover:text-white"
+                    onClick={() =>
+                      setExpandedSections((prev) => ({
+                        ...prev,
+                        [section.key]: true,
+                      }))
+                    }
+                  >
+                    {t("overview360.actions.showMore")}
+                  </Button>
+                )}
+              </div>
 
+              {visibleItems.length === 0 ? (
+                <div className="rounded-2xl border border-white/5 bg-white/3 px-5 py-4 text-sm text-slate-300/80">
+                  {t("overview360.empty.description")}
+                </div>
+              ) : (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {visibleItems.map((item) => (
-                    <Card key={item.id} className="flex h-full flex-col">
-                      <CardHeader className="space-y-3">
-                        <Badge variant="outline" size="sm" radius="full" className="text-slate-300 border-white/15 bg-white/5">
-                          {abstractionLabel(item.abstractionLevel)}
-                        </Badge>
-                        <CardTitle className="group-hover:text-white">{item.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-sm text-slate-200/80 leading-relaxed line-clamp-2">{item.description}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {item.decisionHints.map((hint) => (
-                            <span
-                              key={`${item.id}-${hint.label}-${hint.value}`}
-                              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-200/80"
-                            >
-                              {hint.label}: <span className="text-slate-100">{hint.value}</span>
+                  {visibleItems.map((item) => {
+                    const decisionType = item.decisionType ?? "-";
+                    const cognitiveLoad = item.cognitiveLoad ?? "-";
+                    const typeSlug = toCatalogTypeSlug(item.type ?? "");
+
+                    return (
+                      <Card key={item.id} className="flex h-full flex-col border-white/10 bg-white/5 shadow-[0_20px_40px_-30px_rgba(0,0,0,0.65)]">
+                        <CardHeader className="space-y-2">
+                          <div className="flex items-start">
+                            <Badge variant={getBadgeVariant(item.type)} size="sm">
+                              {translateTypeLabel(item.type)}
+                            </Badge>
+                          </div>
+                          <div className="flex items-start gap-3 mb-2">
+                            <DynamicIcon name={item.icon ?? undefined} className="h-5 w-5 text-muted-foreground shrink-0 mt-1" />
+                            <CardTitle className="group-hover:text-white">{item.name}</CardTitle>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <p className="text-sm text-slate-200/80 leading-relaxed line-clamp-2">{item.shortDescription}</p>
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-200/80">
+                              {t("overview360.meta.decisionType")}: <span className="text-slate-100">{decisionType}</span>
                             </span>
-                          ))}
-                        </div>
-                      </CardContent>
-                      <CardFooter className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          className="w-full sm:w-auto"
-                          onClick={() => router.push(`${localePrefix}/content/${item.catalogType}/${item.slug}`)}
-                        >
-                          {t("overview360.actions.view360")}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="w-full sm:w-auto"
-                          onClick={() => router.push(`${localePrefix}/catalog/${item.catalogType}/${item.slug}`)}
-                        >
-                          {t("overview360.actions.openCatalog")}
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
+                            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-200/80">
+                              {t("overview360.meta.cognitiveLoad")}: <span className="text-slate-100">{cognitiveLoad}</span>
+                            </span>
+                          </div>
+                        </CardContent>
+                        <CardFooter className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            className="w-full sm:w-auto"
+                            onClick={() => router.push(`${localePrefix}/content/${typeSlug}/${item.slug}`)}
+                          >
+                            {t("overview360.actions.view360")}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full sm:w-auto"
+                            onClick={() => router.push(`${localePrefix}/catalog/${typeSlug}/${item.slug}`)}
+                          >
+                            {t("overview360.actions.openCatalog")}
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    );
+                  })}
                 </div>
-              </section>
-            );
-          })}
-        </div>
-      )}
+              )}
+            </section>
+          );
+        })}
+      </div>
     </div>
   );
 }
