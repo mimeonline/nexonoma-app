@@ -194,7 +194,7 @@ function useDragToPan(containerRef: React.RefObject<HTMLDivElement | null>) {
 }
 
 export function SegmentBoard({ segments, activeType }: SegmentBoardProps) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { proxyRef, contentRef, spacerRef, hasOverflow } = useSyncedHorizontalScroll();
   const { isDragging } = useDragToPan(contentRef);
 
