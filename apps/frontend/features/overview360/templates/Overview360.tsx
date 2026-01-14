@@ -8,6 +8,7 @@ import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
+import { InfoPopover } from "@/components/atoms/InfoPopover";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
 import type { Overview360Response } from "@/types/overview360";
@@ -77,42 +78,6 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
     }
   }, [page, totalPages]);
 
-  const renderPagination = () => {
-    if (filteredActiveItems.length <= ITEMS_PER_PAGE) return null;
-
-    return (
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.3em] text-slate-500">
-        <span>
-          {t("overview360.pagination.pageLabel", { page: currentPage, total: totalPages })}
-        </span>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => setPage(1)} disabled={currentPage === 1}>
-            {t("overview360.pagination.first")}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-          >
-            {t("overview360.pagination.previous")}
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
-          >
-            {t("overview360.pagination.next")}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages}>
-            {t("overview360.pagination.last")}
-          </Button>
-        </div>
-      </div>
-    );
-  };
-
   const translateTypeLabel = (value: string) => {
     const key = `asset.labels.${value.toLowerCase()}`;
     return t(key);
@@ -138,15 +103,16 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
           </div>
         </div>
 
-        <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 md:grid-cols-2">
-          <div className="space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t("overview360.comparison.catalogLabel")}</span>
-            <p className="text-sm text-slate-200/80 leading-relaxed">{t("overview360.comparison.catalogDescription")}</p>
-          </div>
-          <div className="space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t("overview360.comparison.overviewLabel")}</span>
-            <p className="text-sm text-slate-200/80 leading-relaxed">{t("overview360.comparison.overviewDescription")}</p>
-          </div>
+        <div className="flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[12px] text-slate-300">
+          <span className="flex items-center gap-2">
+            <span className="font-semibold text-slate-200">Katalog:</span>
+            <span className="text-slate-400">{t("overview360.comparison.catalogDescription")}</span>
+          </span>
+          <span className="hidden h-4 border-l border-white/20 opacity-60 md:inline-flex" aria-hidden="true" />
+          <span className="flex items-center gap-2">
+            <span className="font-semibold text-nexo-aqua">360°:</span>
+            <span className="text-slate-400">{t("overview360.comparison.overviewDescription")}</span>
+          </span>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -170,19 +136,23 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
               {sectionsMeta.map((tab) => {
                 const isActive = activeTab === tab.key;
                 const count = tabCounts[tab.key] ?? 0;
+                const label = t(`overview360.tabs.${tab.tabLabelKey}`);
+                const tooltip = t(`overview360.tabTooltips.${tab.tabLabelKey}`);
+
                 return (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    className={cn(
-                      "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
-                      isActive ? "border-white/60 bg-white/10 text-white" : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
-                    )}
-                    onClick={() => handleTabChange(tab.key)}
-                  >
-                    <span>{t(`overview360.tabs.${tab.tabLabelKey}`)}</span>
-                    <span className="text-[10px] text-slate-400">({count})</span>
-                  </button>
+                  <InfoPopover key={tab.key} content={<p>{tooltip}</p>} width={260}>
+                    <button
+                      type="button"
+                      className={cn(
+                        "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
+                        isActive ? "border-white/60 bg-white/10 text-white" : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
+                      )}
+                      onClick={() => handleTabChange(tab.key)}
+                    >
+                      <span>{label}</span>
+                      <span className="text-[10px] text-slate-400">({count})</span>
+                    </button>
+                  </InfoPopover>
                 );
               })}
             </div>
@@ -200,9 +170,11 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
               {activeMeta && t(`overview360.sections.${activeMeta.i18nKey}.description`)}
             </p>
           </div>
-          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
-            {filteredActiveItems.length} / {activeItems.length} {t("overview360.pagination.resultLabel")}
-          </span>
+          {search.trim().length > 0 && (
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              {filteredActiveItems.length} / {activeItems.length} {t("overview360.pagination.resultLabel")}
+            </span>
+          )}
         </div>
 
         {pagedItems.length === 0 ? (
@@ -265,7 +237,33 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
           </div>
         )}
 
-        {renderPagination()}
+        {filteredActiveItems.length > 0 && totalPages > 1 && (
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Button variant="ghost" onClick={() => setPage(1)} disabled={currentPage === 1}>
+              {t("catalog.pagination.first")}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))}
+              disabled={currentPage === 1}
+            >
+              {t("catalog.pagination.previous")}
+            </Button>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">
+              {t("catalog.pagination.pageLabel", { page: currentPage, total: totalPages })}
+            </span>
+            <Button
+              variant="primary"
+              onClick={() => setPage((prev) => Math.min(totalPages, Math.min(totalPages, prev) + 1))}
+              disabled={currentPage === totalPages}
+            >
+              {t("catalog.pagination.next")}
+            </Button>
+            <Button variant="ghost" onClick={() => setPage(totalPages)} disabled={currentPage === totalPages}>
+              {t("catalog.pagination.last")}
+            </Button>
+          </div>
+        )}
       </section>
     </div>
   );

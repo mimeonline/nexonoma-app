@@ -104,7 +104,12 @@
     "tabs": {
       "fundamental": "Fundamental",
       "structural": "Struktural",
-      "atomic": "Feingranular"
+      "atomic": "Konkret"
+    },
+    "tabTooltips": {
+      "fundamental": "Grundlegende Konzepte und Methoden, die Denken und Entscheidungen über viele Kontexte hinweg prägen.",
+      "structural": "Konzepte und Mechanismen, die Zusammenhänge, Trade-offs und typische Probleme erklären.",
+      "atomic": "Konkrete, kontextabhängige Bausteine mit begrenztem Scope, deren Bedeutung erst im Zusammenspiel entsteht."
     },
     "pagination": {
       "pageLabel": "Seite {page} / {total}",

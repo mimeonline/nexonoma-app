@@ -104,7 +104,12 @@
     "tabs": {
       "fundamental": "Fundamental",
       "structural": "Structural",
-      "atomic": "Atomic"
+      "atomic": "Concrete"
+    },
+    "tabTooltips": {
+      "fundamental": "Fundamental concepts and methods that shape thinking and decisions across contexts.",
+      "structural": "Concepts and mechanisms that explain relationships, trade-offs, and typical challenges.",
+      "atomic": "Concrete, context-dependent building blocks whose meaning emerges in combination."
     },
     "pagination": {
       "pageLabel": "Page {page}/{total}",
