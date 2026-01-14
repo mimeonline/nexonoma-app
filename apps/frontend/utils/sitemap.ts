@@ -106,7 +106,7 @@ export const urlForAsset = (asset: UrlForAssetInput, context: UrlForAssetContext
   const contentRoute = CONTENT_TYPE_ROUTE_MAP[type];
 
   if (contentRoute) {
-    return buildUrl(context.baseUrl, `${localePrefix}/catalog/${contentRoute}/${asset.slug}`);
+    return buildUrl(context.baseUrl, `${localePrefix}/content/${contentRoute}/${asset.slug}`);
   }
 
   if (type === "MACRO_CLUSTER") {

@@ -242,7 +242,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
                 {pagedItems.map((item) => {
                   const tagKeys = getCardTagKeys(item);
                   return (
-                    <Link key={`${item.segmentName}:${item.id}`} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
+                    <Link key={`${item.segmentName}:${item.id}`} href={`/${lang}/content/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
                       <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
                         <CardHeader className="pb-2 space-y-0">
                           <div className="flex items-start justify-between gap-2">
@@ -302,7 +302,7 @@ export function SegmentsTemplate({ macroCluster, cluster }: SegmentsTemplateProp
           ) : (
             <div className="mx-auto max-w-[760px] space-y-3">
               {pagedItems.map((item) => (
-                <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
+                <Link key={item.slug} href={`/${lang}/content/${toCatalogTypeSlug(item.type)}/${item.slug}`}>
                   <Card variant="interactive" className="rounded-2xl border-white/10 bg-white/5 px-5 py-4 hover:border-white/20">
                     <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-slate-400">
                       <Badge variant={getBadgeVariant(item.type)} size="sm" className="text-[10px] px-1.5 py-0">

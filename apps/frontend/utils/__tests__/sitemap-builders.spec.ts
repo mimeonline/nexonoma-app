@@ -62,10 +62,10 @@ describe("sitemap builders", () => {
     const result = mapAssetsToSitemapEntries(assets, "https://app.nexonoma.de", ["de", "en"]);
 
     expect(result.entries.map((entry) => entry.loc)).toEqual([
-      "https://app.nexonoma.de/de/catalog/concept/alpha",
-      "https://app.nexonoma.de/en/catalog/concept/alpha",
-      "https://app.nexonoma.de/de/catalog/method/beta",
-      "https://app.nexonoma.de/en/catalog/method/beta",
+      "https://app.nexonoma.de/de/content/concept/alpha",
+      "https://app.nexonoma.de/en/content/concept/alpha",
+      "https://app.nexonoma.de/de/content/method/beta",
+      "https://app.nexonoma.de/en/content/method/beta",
     ]);
     expect(result.skipped).toBe(1);
     expect(result.total).toBe(5);

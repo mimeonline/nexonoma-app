@@ -68,7 +68,7 @@ function TypeIndicator({ type }: TypeIndicatorProps) {
 function MiniCard({ item, bucketLabel, yAxisLabel, localePrefix, t, enablePopover }: MiniCardProps) {
   const [open, setOpen] = useState(false);
   const typeLabel = t(`asset.labels.${item.type.toLowerCase()}`);
-  const cellHref = `${localePrefix}/catalog/${item.type.toLowerCase()}/${item.slug}`;
+  const cellHref = `${localePrefix}/content/${item.type.toLowerCase()}/${item.slug}`;
   const description = item.shortDescription?.trim();
   const tags = item.tags ?? [];
 

@@ -239,7 +239,7 @@ export function SegmentBoard({ segments, activeType }: SegmentBoardProps) {
 
                 <div className="flex-1 space-y-2 overflow-y-auto px-3 py-3 max-h-[calc(100vh-360px)]">
                   {items.map((item) => (
-                    <Link key={item.slug} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`} data-no-drag>
+                    <Link key={item.slug} href={`/${lang}/content/${toCatalogTypeSlug(item.type)}/${item.slug}`} data-no-drag>
                       <Card
                         variant="interactive"
                         className="rounded-xl border-white/10 bg-white/5 px-3 py-2 hover:border-white/20"

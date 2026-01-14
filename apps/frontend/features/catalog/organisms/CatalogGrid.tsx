@@ -30,7 +30,7 @@ export function CatalogGrid({ items }: CatalogGridProps) {
       {items.map((item) => {
         const tagKeys = getCardTagKeys(item);
         return (
-          <Link key={`${item.id}-${item.slug}`} href={`/catalog/${toCatalogTypeSlug(item.type)}/${item.slug}`} className="block">
+          <Link key={`${item.id}-${item.slug}`} href={`/${lang}/content/${toCatalogTypeSlug(item.type)}/${item.slug}`} className="block">
             <Card variant="interactive" className="flex flex-col h-full min-h-40 group cursor-pointer">
               <CardHeader className="pb-2 space-y-0">
                 <div className="flex items-start">

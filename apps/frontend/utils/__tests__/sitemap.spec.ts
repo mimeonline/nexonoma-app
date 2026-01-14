@@ -16,14 +16,14 @@ describe("sitemap utils", () => {
     const context = { baseUrl: "https://app.nexonoma.de", locale: "de" } as const;
 
     expect(urlForAsset({ type: "CONCEPT", slug: "event-storming" }, context)).toBe(
-      "https://app.nexonoma.de/de/catalog/concept/event-storming"
+      "https://app.nexonoma.de/de/content/concept/event-storming"
     );
     expect(urlForAsset({ type: "METHOD", slug: "impact-mapping" }, context)).toBe(
-      "https://app.nexonoma.de/de/catalog/method/impact-mapping"
+      "https://app.nexonoma.de/de/content/method/impact-mapping"
     );
-    expect(urlForAsset({ type: "TOOL", slug: "figma" }, context)).toBe("https://app.nexonoma.de/de/catalog/tool/figma");
+    expect(urlForAsset({ type: "TOOL", slug: "figma" }, context)).toBe("https://app.nexonoma.de/de/content/tool/figma");
     expect(urlForAsset({ type: "TECHNOLOGY", slug: "kafka" }, context)).toBe(
-      "https://app.nexonoma.de/de/catalog/technology/kafka"
+      "https://app.nexonoma.de/de/content/technology/kafka"
     );
   });
 

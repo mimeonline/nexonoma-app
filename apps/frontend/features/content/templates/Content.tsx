@@ -6,8 +6,8 @@ import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
-import { cn } from "@/lib/utils";
 import { useI18n } from "@/features/i18n/I18nProvider";
+import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
 
 type HeroMetaTone = "neutral" | "accent" | "warning";
@@ -200,10 +200,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                 tone: "warning" as const,
               },
             ].map((fact) => (
-              <Card
-                key={fact.id}
-                className="flex-1 min-w-[180px] p-4 text-center transition hover:ring-1 hover:ring-cyan-400/30"
-              >
+              <Card key={fact.id} className="flex-1 min-w-[180px] p-4 text-center transition hover:ring-1 hover:ring-cyan-400/30">
                 <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted ">{fact.label}</div>
 
                 <span className={cn("inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide", metaToneClasses[fact.tone])}>
@@ -301,7 +298,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                 {relations.items.map((relation) => (
                   <HoverCardLink
                     key={relation.id}
-                    href={`/${lang}/catalog/${relation.node.type.toLowerCase()}/${relation.node.slug}`}
+                    href={`/${lang}/content/${relation.node.type.toLowerCase()}/${relation.node.slug}`}
                     className="p-3"
                   >
                     <div className="flex items-center justify-between gap-4">
@@ -311,9 +308,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                         </div>
                         <div className="min-w-0">
                           <div className="truncate text-sm font-medium text-white">{relation.node.name}</div>
-                          <div className="truncate text-[11px] text-text-muted">
-                            {relationSubtitle(relation.type, relation.relation, t)}
-                          </div>
+                          <div className="truncate text-[11px] text-text-muted">{relationSubtitle(relation.type, relation.relation, t)}</div>
                         </div>
                       </div>
                       <span className="rounded p-1 text-text-muted transition-colors duration-200 ease-out group-hover:text-white">
