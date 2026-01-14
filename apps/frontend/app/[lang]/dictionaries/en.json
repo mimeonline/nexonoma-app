@@ -71,6 +71,72 @@
       }
     }
   },
+  "content": {
+    "backToCatalog": "Back to overview",
+    "hero": {
+      "note": "This block bundles baseline information, context, and relations as a neutral reference in the model."
+    },
+    "cta": {
+      "label": "Open 360° detail view",
+      "hint": "Dive deeper with framing, trade-offs, and examples."
+    },
+    "info": {
+      "title": "What is this view?",
+      "body": "This page provides a neutral starting point with core facts, structure context, and immediate relations—independent of learning or decision paths."
+    },
+    "basics": {
+      "title": "Baseline data",
+      "unknown": "N/A"
+    },
+    "structure": {
+      "title": "Context in the model",
+      "subtitle": "Structural placement",
+      "hint": "Where this block lives in the structure.",
+      "empty": "No structure path available."
+    },
+    "relations": {
+      "title": "Relations",
+      "subtitle": "Connected blocks",
+      "hint": "Directly linked content elements.",
+      "empty": "No relations available.",
+      "subtitleFallback": "Related element",
+      "structure": {
+        "belongs_to": "Structure · Belongs to",
+        "contains": "Structure · Contains"
+      },
+      "content": {
+        "related_to": "Content · Related to",
+        "alternative_to": "Content · Alternative to",
+        "contradicts": "Content · Contradicts",
+        "root_cause_of": "Content · Root cause of",
+        "causes": "Content · Causes",
+        "strengthens": "Content · Strengthens",
+        "weakens": "Content · Weakens",
+        "used_by": "Content · Used by",
+        "part_of": "Content · Part of",
+        "example_of": "Content · Example of"
+      },
+      "dependencies": {
+        "depends_on": "Dependency · Depends on",
+        "requires": "Dependency · Requires",
+        "implemented_by": "Dependency · Implemented by",
+        "provides": "Dependency · Provides"
+      },
+      "process": {
+        "precedes": "Process · Precedes",
+        "blocked_by": "Process · Blocked by",
+        "enables": "Process · Enables",
+        "influences": "Process · Influences",
+        "follows": "Process · Follows"
+      },
+      "unknown": {
+        "unknown": "Related element"
+      }
+    },
+    "description": {
+      "title": "Description"
+    }
+  },
   "home": {
     "hero": {
       "badge": "Nexonoma MVP Live",

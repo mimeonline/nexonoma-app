@@ -71,6 +71,72 @@
       }
     }
   },
+  "content": {
+    "backToCatalog": "Zur Übersicht",
+    "hero": {
+      "note": "Dieser Baustein bündelt Grundinformationen, Kontext und Beziehungen – als neutrale Referenz im Modell."
+    },
+    "cta": {
+      "label": "360° Detailansicht öffnen",
+      "hint": "Vertiefung mit Einordnung, Trade-offs und Beispielen."
+    },
+    "info": {
+      "title": "Worum geht es hier?",
+      "body": "Diese Seite bietet einen neutralen Einstieg mit Kerndaten, Strukturkontext und direkten Beziehungen – unabhängig von Lern- oder Entscheidungswegen."
+    },
+    "basics": {
+      "title": "Basisdaten",
+      "unknown": "k.A."
+    },
+    "structure": {
+      "title": "Kontext im Modell",
+      "subtitle": "Strukturelle Einordnung",
+      "hint": "Verortung in der Struktur.",
+      "empty": "Keine Strukturpfade verfügbar."
+    },
+    "relations": {
+      "title": "Beziehungen",
+      "subtitle": "Verknüpfte Bausteine",
+      "hint": "Direkt verbundene Content-Elemente.",
+      "empty": "Keine Beziehungen verfügbar.",
+      "subtitleFallback": "Verknüpftes Element",
+      "structure": {
+        "belongs_to": "Struktur · Gehört zu",
+        "contains": "Struktur · Enthält"
+      },
+      "content": {
+        "related_to": "Inhalt · Steht in Beziehung zu",
+        "alternative_to": "Inhalt · Alternative zu",
+        "contradicts": "Inhalt · Widerspricht",
+        "root_cause_of": "Inhalt · Wurzelursache von",
+        "causes": "Inhalt · Verursacht",
+        "strengthens": "Inhalt · Stärkt",
+        "weakens": "Inhalt · Schwächt",
+        "used_by": "Inhalt · Wird genutzt von",
+        "part_of": "Inhalt · Ist Teil von",
+        "example_of": "Inhalt · Beispiel für"
+      },
+      "dependencies": {
+        "depends_on": "Abhängigkeit · Hängt ab von",
+        "requires": "Abhängigkeit · Benötigt",
+        "implemented_by": "Abhängigkeit · Implementiert durch",
+        "provides": "Abhängigkeit · Stellt bereit"
+      },
+      "process": {
+        "precedes": "Prozess · Geht voraus",
+        "blocked_by": "Prozess · Blockiert durch",
+        "enables": "Prozess · Ermöglicht",
+        "influences": "Prozess · Beeinflusst",
+        "follows": "Prozess · Folgt auf"
+      },
+      "unknown": {
+        "unknown": "Verknüpftes Element"
+      }
+    },
+    "description": {
+      "title": "Beschreibung"
+    }
+  },
   "home": {
     "hero": {
       "badge": "Nexonoma MVP Live",
