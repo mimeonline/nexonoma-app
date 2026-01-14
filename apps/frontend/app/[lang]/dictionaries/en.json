@@ -78,7 +78,7 @@
     },
     "cta": {
       "label": "Open 360° detail view",
-      "hint": "Dive deeper with framing, trade-offs, and examples."
+      "list": "Definition · Framing · Trade-offs · Examples"
     },
     "info": {
       "title": "What is this view?",
@@ -100,6 +100,7 @@
       "hint": "Directly linked content elements.",
       "empty": "No relations available.",
       "subtitleFallback": "Related element",
+      "unknownLabel": { "de": "verknüpft mit", "en": "linked to" },
       "structure": {
         "belongs_to": "Structure · Belongs to",
         "contains": "Structure · Contains"
@@ -134,7 +135,13 @@
       }
     },
     "description": {
-      "title": "Description"
+      "title": "Description",
+      "fallback": "No description available."
+    },
+    "hero": {
+      "showMore": "Show more",
+      "showLess": "Show less",
+      "note": "This block bundles baseline information, context, and relations as a neutral reference in the model."
     }
   },
   "home": {

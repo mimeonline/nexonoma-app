@@ -78,7 +78,7 @@
     },
     "cta": {
       "label": "360° Detailansicht öffnen",
-      "hint": "Vertiefung mit Einordnung, Trade-offs und Beispielen."
+      "list": "Definition · Einordnung · Trade-offs · Beispiele"
     },
     "info": {
       "title": "Worum geht es hier?",
@@ -100,6 +100,7 @@
       "hint": "Direkt verbundene Content-Elemente.",
       "empty": "Keine Beziehungen verfügbar.",
       "subtitleFallback": "Verknüpftes Element",
+      "unknownLabel": { "de": "verknüpft mit", "en": "linked to" },
       "structure": {
         "belongs_to": "Struktur · Gehört zu",
         "contains": "Struktur · Enthält"
@@ -134,7 +135,13 @@
       }
     },
     "description": {
-      "title": "Beschreibung"
+      "title": "Beschreibung",
+      "fallback": "Keine Beschreibung vorhanden."
+    },
+    "hero": {
+      "showMore": "Mehr anzeigen",
+      "showLess": "Weniger anzeigen",
+      "note": "Dieser Baustein bündelt Grundinformationen, Kontext und Beziehungen – als neutrale Referenz im Modell."
     }
   },
   "home": {

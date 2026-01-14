@@ -6,9 +6,10 @@ import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
-import { useI18n } from "@/features/i18n/I18nProvider";
+import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
+import { useMemo, useState } from "react";
 
 type HeroMetaTone = "neutral" | "accent" | "warning";
 
@@ -52,26 +53,60 @@ export function sortTags(tags: ContentTag[] = [], order: string[] = []): Content
   });
 }
 
-function relationSubtitle(type: string | null, relation: string | null, t: ReturnType<typeof useI18n>["t"]): string {
-  if (!type && !relation) return t("content.relations.subtitleFallback");
-  const typeKey = type ? type.toLowerCase() : "unknown";
-  const relKey = relation ? relation.toLowerCase() : "unknown";
-  const key = `content.relations.${typeKey}.${relKey}`;
-  const translated = t(key);
-  if (translated === key) {
-    // missing translation fallback
-    return [type, relation].filter(Boolean).join(" · ") || t("content.relations.subtitleFallback");
-  }
-  return translated;
-}
-
 export function ContentTemplate({ lang, data }: ContentTemplateProps) {
   const { t } = useI18n();
+  const enumAssetLabel = useEnumAssetLabel();
 
   const { assetBlock, structure, relations } = data;
-  const sortedTags = sortTags(assetBlock.tags, assetBlock.tagOrder);
+  const sortedTags = useMemo(() => sortTags(assetBlock.tags, assetBlock.tagOrder).slice(0, 2), [assetBlock.tags, assetBlock.tagOrder]);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const typeLabel = t(`asset.enums.types.${assetBlock.type}.label`);
+  const descriptionHasToggle = assetBlock.longDescription && assetBlock.longDescription.length > 260;
+  const showDescription = assetBlock.longDescription || t("content.description.fallback");
+
+  const fmtEnum = (enumType: Parameters<typeof enumAssetLabel>[0], value?: string | null) =>
+    value ? enumAssetLabel(enumType, value) : t("content.basics.unknown");
+
+  const relationLabel = (type: string | null, rel: string | null) => {
+    const map: Record<string, Record<string, { de: string; en: string }>> = {
+      structure: {
+        belongs_to: { de: "gehört zu", en: "belongs to" },
+        contains: { de: "enthält", en: "contains" },
+      },
+      process: {
+        blocked_by: { de: "blockiert durch", en: "blocked by" },
+        enables: { de: "ermöglicht", en: "enables" },
+        influences: { de: "beeinflusst", en: "influences" },
+        precedes: { de: "geht voraus", en: "precedes" },
+        follows: { de: "folgt", en: "follows" },
+      },
+      dependency: {
+        depends_on: { de: "hängt ab von", en: "depends on" },
+        implemented_by: { de: "umgesetzt durch", en: "implemented by" },
+        requires: { de: "setzt voraus", en: "requires" },
+        provides: { de: "stellt bereit", en: "provides" },
+      },
+      content: {
+        alternative_to: { de: "Alternative zu", en: "alternative to" },
+        contradicts: { de: "widerspricht", en: "contradicts" },
+        related_to: { de: "verwandt mit", en: "related to" },
+        root_cause_of: { de: "Ursache von", en: "root cause of" },
+        causes: { de: "verursacht", en: "causes" },
+        strengthens: { de: "verstärkt", en: "strengthens" },
+        used_by: { de: "genutzt von", en: "used by" },
+        weakens: { de: "schwächt", en: "weakens" },
+        part_of: { de: "Teil von", en: "part of" },
+        example_of: { de: "Beispiel für", en: "example of" },
+      },
+    };
+
+    const typeKey = (type ?? "content").toLowerCase();
+    const relKey = (rel ?? "unknown").toLowerCase();
+    const entry = map[typeKey]?.[relKey];
+    if (entry) return lang === "de" ? entry.de : entry.en;
+    return lang === "de" ? t("content.relations.unknownLabel.de") : t("content.relations.unknownLabel.en");
+  };
 
   return (
     <div className="space-y-8 pb-20">
@@ -115,7 +150,20 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
 
             <div>
               <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-3">{assetBlock.name}</h1>
-              <p className="text-[15px] text-text-secondary leading-relaxed max-w-2xl">{assetBlock.shortDescription}</p>
+              <div className="space-y-2">
+                <p className={cn("text-[15px] text-text-secondary leading-relaxed max-w-3xl", !isDescriptionExpanded && "line-clamp-3")}>
+                  {showDescription}
+                </p>
+                {descriptionHasToggle && (
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-nexo-aqua hover:text-white transition-colors"
+                    onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+                  >
+                    {isDescriptionExpanded ? t("content.hero.showLess") : t("content.hero.showMore")}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
@@ -127,8 +175,8 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
         <div className="flex h-full flex-col gap-4">
           <Card className="p-5 duration-200 ease-out">
             <Link
-              href={`/${lang}/catalog/${assetBlock.type.toLowerCase()}/${assetBlock.slug}`}
-              className="flex items-center justify-center w-full gap-2 rounded-xl bg-accent-primary px-4 py-3 text-sm font-semibold text-nexo-bg transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent-primary/90"
+              href={`/${lang}/content/${assetBlock.type.toLowerCase()}/${assetBlock.slug}`}
+              className="flex items-center justify-start w-full gap-2 rounded-xl bg-accent-primary px-4 py-3 text-sm font-semibold text-nexo-bg transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent-primary/90 text-left"
             >
               <svg
                 className="h-4 w-4"
@@ -144,7 +192,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               </svg>
               {t("content.cta.label")}
             </Link>
-            <p className="mt-3 text-center text-xs text-text-muted">{t("content.cta.hint")}</p>
+            <p className="mt-3 text-left text-xs text-text-muted whitespace-pre-line">{t("content.cta.list")}</p>
           </Card>
 
           <Card className="flex-1 bg-nexo-surface p-6 duration-200 ease-out">
@@ -156,60 +204,68 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
 
       <section>
         <SectionTitle className="mb-4 px-1">{t("content.basics.title")}</SectionTitle>
-
-        <div className="relative">
-          <div className="pointer-events-none absolute inset-x-0 -bottom-2 h-px bg-linear-to-r from-cyan-400/30 via-indigo-400/30 to-amber-400/30" />
-
-          <div className="flex w-full gap-3 flex-wrap">
+        <Card className="bg-nexo-surface/60 border-white/5 p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { id: "type", label: t("asset.properties.type.label"), value: typeLabel, tone: "neutral" as const },
               {
                 id: "org-level",
                 label: t("asset.properties.organizationalLevel.label"),
-                value: assetBlock.organisationLevel ?? t("content.basics.unknown"),
-                tone: "neutral" as const,
+                value: fmtEnum("organizationalLevel", assetBlock.organisationLevel ?? undefined),
               },
               {
                 id: "decision",
                 label: t("asset.properties.decisionType.label"),
-                value: assetBlock.decisionType ?? t("content.basics.unknown"),
-                tone: "neutral" as const,
+                value: fmtEnum("decisionType", assetBlock.decisionType ?? undefined),
               },
               {
                 id: "complexity",
                 label: t("asset.properties.complexityLevel.label"),
-                value: assetBlock.complexityLevel ?? t("content.basics.unknown"),
-                tone: "neutral" as const,
+                value: fmtEnum("complexityLevel", assetBlock.complexityLevel ?? undefined),
               },
               {
                 id: "valueStream",
                 label: t("asset.properties.valueStreamStage.label"),
-                value: assetBlock.valueStream ?? t("content.basics.unknown"),
-                tone: "neutral" as const,
+                value: fmtEnum("valueStreamStage", assetBlock.valueStream ?? undefined),
               },
               {
                 id: "maturity",
                 label: t("asset.properties.maturityLevel.label"),
-                value: assetBlock.maturityLevel ?? t("content.basics.unknown"),
+                value: fmtEnum("maturityLevel", assetBlock.maturityLevel ?? undefined),
                 tone: "accent" as const,
               },
               {
                 id: "cognitive",
                 label: t("asset.properties.cognitiveLoad.label"),
-                value: assetBlock.cognitiveLoad ?? t("content.basics.unknown"),
+                value: fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad ?? undefined),
                 tone: "warning" as const,
               },
+              {
+                id: "impacts",
+                label: t("asset.properties.impacts.label"),
+                value: fmtEnum("impacts", assetBlock.impacts ?? undefined),
+              },
+              {
+                id: "org-maturity",
+                label: t("asset.properties.organizationalMaturity.label"),
+                value: fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity ?? undefined),
+              },
             ].map((fact) => (
-              <Card key={fact.id} className="flex-1 min-w-[180px] p-4 text-center transition hover:ring-1 hover:ring-cyan-400/30">
-                <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted ">{fact.label}</div>
-
-                <span className={cn("inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide", metaToneClasses[fact.tone])}>
+              <div key={fact.id} className="space-y-1">
+                <div className="text-[11px] uppercase tracking-wider text-text-muted">{fact.label}</div>
+                <div
+                  className={cn(
+                    "text-sm font-medium text-white",
+                    fact.tone === "accent" && "inline-flex items-center gap-1 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-nexo-aqua",
+                    fact.tone === "warning" &&
+                      "inline-flex items-center gap-1 px-2 py-0.5 rounded border border-white/10 bg-warning/10 text-warning"
+                  )}
+                >
                   {fact.value}
-                </span>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
+        </Card>
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
@@ -242,25 +298,30 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <p className="text-sm text-text-muted">{t("content.structure.empty")}</p>
             ) : (
               <div className="space-y-3">
-                {structure.paths.map((item, idx) => (
-                  <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-3">
-                    <div className="text-sm font-medium text-white mb-1">
-                      {item.macroCluster.name} → {item.cluster.name} → {item.segment.name}
-                    </div>
-                    {item.segment.tags && item.segment.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 text-[11px] text-text-secondary">
-                        {sortTags(item.segment.tags, item.segment.tagOrder).map((tag) => (
-                          <span
-                            key={tag.slug}
-                            className="inline-flex rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-text-secondary"
-                          >
-                            #{tag.label}
-                          </span>
-                        ))}
+                {structure.paths.map((item, idx) => {
+                  const tags = item.segment.tags ? sortTags(item.segment.tags, item.segment.tagOrder).slice(0, 2) : [];
+                  return (
+                    <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-3">
+                      <div className="grid grid-cols-[120px_140px_1fr] gap-3 items-start text-sm text-white">
+                        <span className="font-semibold">{item.macroCluster.name}</span>
+                        <span className="font-semibold">{item.cluster.name}</span>
+                        <span className="font-medium">{item.segment.name}</span>
                       </div>
-                    )}
-                  </HoverCardLink>
-                ))}
+                      {tags.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-text-secondary">
+                          {tags.map((tag) => (
+                            <span
+                              key={tag.slug}
+                              className="inline-flex rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-text-secondary"
+                            >
+                              #{tag.label}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </HoverCardLink>
+                  );
+                })}
               </div>
             )}
           </Card>
@@ -308,7 +369,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                         </div>
                         <div className="min-w-0">
                           <div className="truncate text-sm font-medium text-white">{relation.node.name}</div>
-                          <div className="truncate text-[11px] text-text-muted">{relationSubtitle(relation.type, relation.relation, t)}</div>
+                          <div className="truncate text-[11px] text-text-muted">{relationLabel(relation.type, relation.relation)}</div>
                         </div>
                       </div>
                       <span className="rounded p-1 text-text-muted transition-colors duration-200 ease-out group-hover:text-white">
@@ -333,12 +394,6 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
         </div>
       </section>
 
-      <section>
-        <SectionTitle className="mb-4 px-1">{t("content.description.title")}</SectionTitle>
-        <Card className="p-6 duration-200 ease-out">
-          <p className="text-[15px] leading-7 text-text-secondary whitespace-pre-line">{assetBlock.longDescription}</p>
-        </Card>
-      </section>
     </div>
   );
 }
