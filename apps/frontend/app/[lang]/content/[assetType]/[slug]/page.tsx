@@ -49,7 +49,6 @@ const mockAsset: AssetContent = {
     },
   ],
   facts: [
-    { id: "fact-1", label: "Typ", value: "Tool / SaaS" },
     { id: "fact-2", label: "Org Level", value: "Enterprise" },
     { id: "fact-3", label: "Decision", value: "Technical" },
     { id: "fact-4", label: "Complexity", value: "Medium" },

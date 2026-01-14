@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { Badge } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
@@ -90,7 +90,15 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
           className="group inline-flex items-center gap-2 text-xs font-medium text-text-secondary transition-colors duration-200 ease-out hover:text-white"
         >
           <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-white/5 transition-colors duration-200 ease-out group-hover:border-white/20">
-            <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              className="h-3 w-3"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M15 19l-7-7 7-7" />
             </svg>
           </span>
@@ -142,7 +150,15 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
               href={`/${lang}/catalog`}
               className="flex items-center justify-center w-full gap-2 rounded-xl bg-accent-primary px-4 py-3 text-sm font-semibold text-nexo-bg transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent-primary/90"
             >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                 <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
@@ -169,7 +185,15 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
           <Card className="flex-1 bg-nexo-surface p-5 duration-200 ease-out">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-text-secondary">
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 1 2-2m0 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M7 7h10" />
                 </svg>
               </div>
@@ -204,7 +228,15 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
           <Card className="flex-1 bg-nexo-surface p-5 duration-200 ease-out">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-nexo-aqua">
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M13.828 10.172a4 4 0 0 0-5.656 0l-4 4a4 4 0 1 0 5.656 5.656l1.102-1.101m-.758-4.899a4 4 0 0 0 5.656 0l4-4a4 4 0 0 0-5.656-5.656l-1.1 1.1" />
                 </svg>
               </div>
@@ -228,7 +260,15 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
                       </div>
                     </div>
                     <span className="rounded p-1 text-text-muted transition-colors duration-200 ease-out group-hover:text-white">
-                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        className="h-4 w-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M9 5l7 7-7 7" />
                       </svg>
                     </span>
@@ -247,12 +287,7 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
             <Card key={fact.id} className="p-4 text-center duration-200 ease-out">
               <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted">{fact.label}</div>
               {fact.tone ? (
-                <span
-                  className={cn(
-                    "inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide",
-                    metaToneClasses[fact.tone]
-                  )}
-                >
+                <span className={cn("inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide", metaToneClasses[fact.tone])}>
                   {fact.value}
                 </span>
               ) : (
