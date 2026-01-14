@@ -4,6 +4,7 @@
     "catalog": "Catalog",
     "structure": "Structure",
     "analyse": "Analyse",
+    "overview360": "360°",
     "preview": "Preview",
     "about": "About Nexonoma",
     "sandbox": "Sandbox"
@@ -68,6 +69,94 @@
       "note": {
         "title": "Context & expectations",
         "body": "These views are functional previews. In the MVP the focus is intentionally on structure, clarity, and curated content (catalog & grid). Matrix and City show the direction for future expansion, but are not yet an active working mode."
+      }
+    }
+  },
+  "overview360": {
+    "hero": {
+      "badge": "360° Overview",
+      "title": "360° Context",
+      "subtitle": "This view bundles building blocks that require a conscious, multi-dimensional assessment—beyond pure exploration."
+    },
+    "comparison": {
+      "catalogLabel": "Catalog",
+      "catalogDescription": "Exploration – What exists in the model?",
+      "overviewLabel": "360°",
+      "overviewDescription": "Assessment – What should I consciously reflect on?"
+    },
+    "search": {
+      "placeholder": "Search 360° context (e.g. Domain-Driven Design, DDD, Zero Trust)"
+    },
+    "sections": {
+      "foundational": {
+        "title": "Foundational mental models",
+        "description": "Fundamental concepts and methods that shape understanding and architectural decisions across contexts."
+      },
+      "structural": {
+        "title": "Structural decision building blocks",
+        "description": "Concepts, patterns, and methods to frame relationships, trade-offs, and typical problems."
+      },
+      "atomic": {
+        "title": "Concrete decision building blocks",
+        "description": "Fine-grained blocks that matter in decisions but always sit within larger concepts."
+      }
+    },
+    "actions": {
+      "showMore": "Show more",
+      "view360": "View 360°",
+      "openCatalog": "Open in catalog"
+    },
+    "meta": {
+      "decisionType": "Decision type",
+      "cognitiveLoad": "Cognitive load",
+      "maturity": "Maturity"
+    },
+    "metaValues": {
+      "decisionType": {
+        "design": "Design",
+        "architecture": "Architecture",
+        "organization": "Organization",
+        "technical": "Technical"
+      },
+      "cognitiveLoad": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "maturity": {
+        "emerging": "Emerging",
+        "established": "Established",
+        "advanced": "Advanced"
+      }
+    },
+    "empty": {
+      "title": "No results",
+      "description": "There are no 360° entries for this search term yet."
+    },
+    "items": {
+      "ddd": {
+        "title": "Domain-Driven Design",
+        "description": "Strategic model for understanding complex domains and defining clear context boundaries."
+      },
+      "twelveFactor": {
+        "title": "12-Factor App",
+        "description": "Principles for cloud-native apps, operational reliability, and clean configuration."
+      },
+      "microservices": {
+        "title": "Microservices",
+        "description": "Architecture approach for loosely coupled services with clear responsibilities and trade-offs."
+      },
+      "eventStorming": {
+        "title": "Event Storming",
+        "description": "Collaborative workshop format to make domain knowledge, processes, and decisions visible."
+      },
+      "circuitBreaker": {
+        "title": "Circuit Breaker",
+        "description": "Resilience pattern that prevents cascading failures in distributed systems."
+      },
+      "kubernetes": {
+        "title": "Kubernetes",
+        "description": "Container orchestration with operational implications for scaling and operating models."
       }
     }
   },
@@ -921,6 +1010,10 @@
     "city": {
       "title": "City view",
       "description": "The visual exploration journey. Capture relationships spatially and intuitively."
+    },
+    "overview360": {
+      "title": "360° Context",
+      "description": "Curated decision building blocks by abstraction level, with search and 360° detail access."
     },
     "catalog": {
       "title": "Nexonoma Catalog",

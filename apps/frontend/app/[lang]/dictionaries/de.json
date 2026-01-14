@@ -4,6 +4,7 @@
     "catalog": "Katalog",
     "structure": "Struktur",
     "analyse": "Analyse",
+    "overview360": "360°",
     "preview": "Preview",
     "about": "Über Nexonoma",
     "sandbox": "Sandbox"
@@ -68,6 +69,94 @@
       "note": {
         "title": "Einordnung & Erwartung",
         "body": "Diese Ansichten sind funktionale Previews. Im MVP liegt der Fokus bewusst auf Struktur, Klarheit und kuratierten Inhalten (Katalog & Grid). Matrix und City zeigen die Richtung für zukünftige Ausbaustufen, sind aber noch kein aktiver Arbeitsmodus."
+      }
+    }
+  },
+  "overview360": {
+    "hero": {
+      "badge": "360° Übersicht",
+      "title": "360° Einordnung",
+      "subtitle": "Diese Ansicht bündelt Wissensbausteine, die eine bewusste mehrdimensionale Bewertung erfordern – jenseits reiner Exploration."
+    },
+    "comparison": {
+      "catalogLabel": "Katalog",
+      "catalogDescription": "Exploration – Was gibt es im Modell?",
+      "overviewLabel": "360°",
+      "overviewDescription": "Bewertung – Worüber sollte ich bewusst nachdenken?"
+    },
+    "search": {
+      "placeholder": "360°-Einordnung suchen (z. B. Domain-Driven Design, DDD, Zero Trust)"
+    },
+    "sections": {
+      "foundational": {
+        "title": "Fundamentale Denkmodelle",
+        "description": "Grundlegende Konzepte und Methoden, die Verständnis und Architekturentscheidungen über viele Kontexte hinweg prägen."
+      },
+      "structural": {
+        "title": "Strukturelle Entscheidungsbausteine",
+        "description": "Konzepte, Patterns und Methoden zur Einordnung von Zusammenhängen, Trade-offs und typischen Problemen."
+      },
+      "atomic": {
+        "title": "Konkrete Entscheidungsbausteine",
+        "description": "Feingranulare Bausteine, die im Entscheidungsprozess relevant werden, aber immer im Kontext größerer Konzepte stehen."
+      }
+    },
+    "actions": {
+      "showMore": "Mehr anzeigen",
+      "view360": "360° ansehen",
+      "openCatalog": "Im Katalog öffnen"
+    },
+    "meta": {
+      "decisionType": "Decision Type",
+      "cognitiveLoad": "Cognitive Load",
+      "maturity": "Reifegrad"
+    },
+    "metaValues": {
+      "decisionType": {
+        "design": "Design",
+        "architecture": "Architektur",
+        "organization": "Organisation",
+        "technical": "Technisch"
+      },
+      "cognitiveLoad": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      },
+      "maturity": {
+        "emerging": "Entstehend",
+        "established": "Etabliert",
+        "advanced": "Fortgeschritten"
+      }
+    },
+    "empty": {
+      "title": "Keine Treffer",
+      "description": "Für diesen Suchbegriff gibt es aktuell keine 360°-Einordnungen."
+    },
+    "items": {
+      "ddd": {
+        "title": "Domain-Driven Design",
+        "description": "Strategisches Denkmodell zur fachlichen Modellierung komplexer Domänen und klaren Kontextgrenzen."
+      },
+      "twelveFactor": {
+        "title": "12-Factor App",
+        "description": "Prinzipien für cloud-native Anwendungen, Betriebssicherheit und saubere Konfigurationsführung."
+      },
+      "microservices": {
+        "title": "Microservices",
+        "description": "Architekturansatz für lose gekoppelte Services mit klaren Verantwortlichkeiten und Trade-offs."
+      },
+      "eventStorming": {
+        "title": "Event Storming",
+        "description": "Kollaboratives Workshop-Format, um Domänenwissen, Prozesse und Entscheidungen sichtbar zu machen."
+      },
+      "circuitBreaker": {
+        "title": "Circuit Breaker",
+        "description": "Resilienz-Pattern zum Schutz vor Kaskadeneffekten in verteilten Systemen."
+      },
+      "kubernetes": {
+        "title": "Kubernetes",
+        "description": "Orchestrierung von Containern mit operativen Implikationen für Skalierung und Betriebsmodelle."
       }
     }
   },
@@ -799,6 +888,10 @@
     "city": {
       "title": "City-Ansicht",
       "description": "Die visuelle Entdeckungsreise. Erfasse Zusammenhänge räumlich und intuitiv."
+    },
+    "overview360": {
+      "title": "360° Einordnung",
+      "description": "Kuratiere Entscheidungsbausteine nach Abstraktionsebene, inkl. Suche und 360°-Detailzugriff."
     },
     "catalog": {
       "title": "Nexonoma Katalog",
