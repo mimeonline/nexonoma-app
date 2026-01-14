@@ -282,9 +282,9 @@ export function ContentTemplate({ lang, asset }: ContentTemplateProps) {
 
       <section>
         <SectionTitle className="mb-4 px-1">Basisdaten</SectionTitle>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-7">
+        <div className="flex w-full gap-3">
           {asset.facts.map((fact) => (
-            <Card key={fact.id} className="p-4 text-center duration-200 ease-out">
+            <Card key={fact.id} className="flex-1 min-w-0 p-4 text-center duration-200 ease-out">
               <div className="mb-1.5 text-[10px] uppercase tracking-wider text-text-muted">{fact.label}</div>
               {fact.tone ? (
                 <span className={cn("inline-flex rounded border px-2 py-0.5 text-[10px] font-bold tracking-wide", metaToneClasses[fact.tone])}>
