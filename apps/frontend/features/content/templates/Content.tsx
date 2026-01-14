@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
+import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
@@ -148,8 +149,10 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <DynamicIcon name={assetBlock.icon ?? undefined} className="h-8 w-8 text-nexo-aqua" />
             </div>
 
-            <div>
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-3">{assetBlock.name}</h1>
+            <div className="w-full">
+              <div className="flex items-start gap-2 mb-3">
+                <h1 className="text-3xl md:text-4xl font-display font-bold text-white">{assetBlock.name}</h1>
+              </div>
               <div className="space-y-2">
                 <p className={cn("text-[15px] text-text-secondary leading-relaxed max-w-3xl", !isDescriptionExpanded && "line-clamp-3")}>
                   {showDescription}
@@ -210,48 +213,68 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               {
                 id: "org-level",
                 label: t("asset.properties.organizationalLevel.label"),
+                field: "organizationalLevel" as const,
                 value: fmtEnum("organizationalLevel", assetBlock.organisationLevel ?? undefined),
+                valueKey: assetBlock.organisationLevel ?? undefined,
               },
               {
                 id: "decision",
                 label: t("asset.properties.decisionType.label"),
+                field: "decisionType" as const,
                 value: fmtEnum("decisionType", assetBlock.decisionType ?? undefined),
+                valueKey: assetBlock.decisionType ?? undefined,
               },
               {
                 id: "complexity",
                 label: t("asset.properties.complexityLevel.label"),
+                field: "complexityLevel" as const,
                 value: fmtEnum("complexityLevel", assetBlock.complexityLevel ?? undefined),
+                valueKey: assetBlock.complexityLevel ?? undefined,
               },
               {
                 id: "valueStream",
                 label: t("asset.properties.valueStreamStage.label"),
+                field: "valueStreamStage" as const,
                 value: fmtEnum("valueStreamStage", assetBlock.valueStream ?? undefined),
+                valueKey: assetBlock.valueStream ?? undefined,
               },
               {
                 id: "maturity",
                 label: t("asset.properties.maturityLevel.label"),
+                field: "maturityLevel" as const,
                 value: fmtEnum("maturityLevel", assetBlock.maturityLevel ?? undefined),
+                valueKey: assetBlock.maturityLevel ?? undefined,
                 tone: "accent" as const,
               },
               {
                 id: "cognitive",
                 label: t("asset.properties.cognitiveLoad.label"),
+                field: "cognitiveLoad" as const,
                 value: fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad ?? undefined),
+                valueKey: assetBlock.cognitiveLoad ?? undefined,
                 tone: "warning" as const,
               },
               {
                 id: "impacts",
                 label: t("asset.properties.impacts.label"),
+                field: "impacts" as const,
                 value: fmtEnum("impacts", assetBlock.impacts ?? undefined),
+                valueKey: assetBlock.impacts ?? undefined,
               },
               {
                 id: "org-maturity",
                 label: t("asset.properties.organizationalMaturity.label"),
+                field: "organizationalMaturity" as const,
                 value: fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity ?? undefined),
+                valueKey: assetBlock.organizationalMaturity ?? undefined,
               },
             ].map((fact) => (
               <div key={fact.id} className="space-y-1">
-                <div className="text-[11px] uppercase tracking-wider text-text-muted">{fact.label}</div>
+                <div className="text-[11px] uppercase tracking-wider text-text-muted">
+                  <ExplainableLabel fieldKey={fact.field} value={fact.valueKey}>
+                    {fact.label}
+                  </ExplainableLabel>
+                </div>
                 <div
                   className={cn(
                     "text-sm font-medium text-white",
