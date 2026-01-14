@@ -101,6 +101,19 @@
         "description": "Fine-grained blocks that matter in decisions but always sit within larger concepts."
       }
     },
+    "tabs": {
+      "fundamental": "Fundamental",
+      "structural": "Structural",
+      "atomic": "Atomic"
+    },
+    "pagination": {
+      "pageLabel": "Page {page}/{total}",
+      "first": "First",
+      "previous": "Previous",
+      "next": "Next",
+      "last": "Last",
+      "resultLabel": "results"
+    },
     "actions": {
       "showMore": "Show more",
       "view360": "View 360°",

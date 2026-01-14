@@ -101,6 +101,19 @@
         "description": "Feingranulare Bausteine, die im Entscheidungsprozess relevant werden, aber immer im Kontext größerer Konzepte stehen."
       }
     },
+    "tabs": {
+      "fundamental": "Fundamental",
+      "structural": "Struktural",
+      "atomic": "Feingranular"
+    },
+    "pagination": {
+      "pageLabel": "Seite {page} / {total}",
+      "first": "Erste",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "last": "Letzte",
+      "resultLabel": "Treffer"
+    },
     "actions": {
       "showMore": "Mehr anzeigen",
       "view360": "360° ansehen",
