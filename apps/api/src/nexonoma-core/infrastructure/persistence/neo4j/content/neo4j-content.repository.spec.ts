@@ -61,6 +61,20 @@ describe('Neo4jContentRepository', () => {
               },
             },
           }),
+          record({
+            relationData: {
+              id: 'rel-2',
+              type: 'STRUCTURE',
+              relation: 'CONTAINS',
+              node: {
+                id: 'node-2',
+                type: AssetType.SEGMENT,
+                slug: 'warehouses',
+                name: 'Warehouses',
+                icon: 'Layers',
+              },
+            },
+          }),
         ]),
     };
 
@@ -85,12 +99,25 @@ describe('Neo4jContentRepository', () => {
       segment: { slug: 'warehouses', name: 'Warehouses', tagOrder: ['data'] },
     });
 
+    expect(result?.relations).toHaveLength(1);
     expect(result?.relations[0]).toMatchObject({
       id: 'rel-1',
       type: 'PROCESS',
       relation: 'ENABLES',
       node: { id: 'node-1', slug: 'sql', name: 'SQL Standard' },
     });
+
+    expect(neo4j.read).toHaveBeenLastCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        allowedContentTypes: [
+          AssetType.CONCEPT,
+          AssetType.METHOD,
+          AssetType.TOOL,
+          AssetType.TECHNOLOGY,
+        ],
+      }),
+    );
   });
 
   it('returns null when asset is missing', async () => {

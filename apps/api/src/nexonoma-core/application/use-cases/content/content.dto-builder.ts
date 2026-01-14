@@ -22,7 +22,8 @@ const toLocalizedTags = (
   }
 
   const tagMap = TagsRehydrator.toTagMap(value);
-  return (TagsRehydrator.localize(tagMap, locale) ?? []) as LocalizedTagDto[];
+  const localizedTags = TagsRehydrator.localize(tagMap, locale);
+  return (localizedTags ?? []) as LocalizedTagDto[];
 };
 
 const buildTagOrder = (

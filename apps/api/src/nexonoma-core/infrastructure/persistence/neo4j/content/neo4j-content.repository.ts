@@ -19,6 +19,13 @@ import {
 export class Neo4jContentRepository implements ContentRepositoryPort {
   constructor(private readonly neo4j: Neo4jService) {}
 
+  private readonly allowedContentTypes = [
+    AssetType.CONCEPT,
+    AssetType.METHOD,
+    AssetType.TOOL,
+    AssetType.TECHNOLOGY,
+  ] as const;
+
   private readonly assetI18nFields: I18nField[] = [
     'name',
     'shortDescription',
@@ -173,6 +180,7 @@ export class Neo4jContentRepository implements ContentRepositoryPort {
       MATCH (asset:AssetBlock)
       WHERE asset.slug = $slug AND asset.type = $type
       MATCH (asset)-[rel]-(neighbor:AssetBlock)
+      WHERE neighbor.type IN $allowedContentTypes
       WITH rel, neighbor,
         neighbor {
           .id,
@@ -195,12 +203,17 @@ export class Neo4jContentRepository implements ContentRepositoryPort {
       slug,
       type: assetType,
       lang: locale,
+      allowedContentTypes: this.allowedContentTypes,
       limit: 30,
     });
 
-    return result.map((record) => {
-      const relationData = normalizeNeo4j(record.get('relationData'));
-      return ContentRecordMapper.toRelationRecord(relationData);
-    });
+    const allowedTypes = new Set<AssetType>(this.allowedContentTypes);
+
+    return result
+      .map((record) => {
+        const relationData = normalizeNeo4j(record.get('relationData'));
+        return ContentRecordMapper.toRelationRecord(relationData);
+      })
+      .filter((relation) => allowedTypes.has(relation.node.type));
   }
 }
