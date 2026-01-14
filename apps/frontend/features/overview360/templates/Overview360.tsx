@@ -3,15 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
+import { InfoPopover } from "@/components/atoms/InfoPopover";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Button } from "@/components/ui/atoms/Button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
-import { InfoPopover } from "@/components/atoms/InfoPopover";
-import { SearchInput } from "@/components/ui/molecules/SearchInput";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
-import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
+import { SearchInput } from "@/components/ui/molecules/SearchInput";
+import { useI18n } from "@/features/i18n/I18nProvider";
+import { cn } from "@/lib/utils";
 import type { Overview360Response } from "@/types/overview360";
 
 const PAGE_SIZE_OPTIONS = [12, 24, 36, 48];
@@ -40,11 +40,10 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
   const [activeTab, setActiveTab] = useState<SectionKey>("foundational");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const [showComparison, setShowComparison] = useState(false);
   const { t, lang } = useI18n();
   const router = useRouter();
   const localePrefix = lang ? `/${lang}` : "";
-  const enumLabel = useEnumAssetLabel();
-
   const activeItems = data[activeTab] ?? [];
 
   const filteredActiveItems = useMemo(() => {
@@ -60,14 +59,17 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
   const totalPages = Math.max(1, Math.ceil(filteredActiveItems.length / pageSize));
   const currentPage = Math.min(page, totalPages);
   const pagedItems = filteredActiveItems.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const tabCounts = sectionsMeta.reduce<Record<SectionKey, number>>((acc, section) => {
-    acc[section.key] = data[section.key]?.length ?? 0;
-    return acc;
-  }, {
-    foundational: 0,
-    structural: 0,
-    atomic: 0,
-  });
+  const tabCounts = sectionsMeta.reduce<Record<SectionKey, number>>(
+    (acc, section) => {
+      acc[section.key] = data[section.key]?.length ?? 0;
+      return acc;
+    },
+    {
+      foundational: 0,
+      structural: 0,
+      atomic: 0,
+    }
+  );
 
   const handleTabChange = (key: SectionKey) => {
     if (key === activeTab) return;
@@ -106,16 +108,30 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[12px] text-slate-300">
-          <span className="flex items-center gap-2">
-            <span className="font-semibold text-slate-200">Katalog:</span>
-            <span className="text-slate-400">{t("overview360.comparison.catalogDescription")}</span>
-          </span>
-          <span className="hidden h-4 border-l border-white/20 opacity-60 md:inline-flex" aria-hidden="true" />
-          <span className="flex items-center gap-2">
-            <span className="font-semibold text-nexo-aqua">360°:</span>
-            <span className="text-slate-400">{t("overview360.comparison.overviewDescription")}</span>
-          </span>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-slate-500">
+            <span className="font-semibold text-slate-200">{t("overview360.comparison.toggle.label")}</span>
+            <button
+              type="button"
+              className="text-[11px] font-semibold text-nexo-aqua underline underline-offset-4 cursor-pointer"
+              onClick={() => setShowComparison((prev) => !prev)}
+            >
+              {showComparison ? t("overview360.comparison.toggle.hide") : t("overview360.comparison.toggle.show")}
+            </button>
+          </div>
+          {showComparison && (
+            <div className="flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[12px] text-slate-300">
+              <span className="flex items-center gap-2">
+                <span className="font-semibold text-slate-200">Katalog:</span>
+                <span className="text-slate-400">{t("overview360.comparison.catalogDescription")}</span>
+              </span>
+              <span className="hidden h-4 border-l border-white/20 opacity-60 md:inline-flex" aria-hidden="true" />
+              <span className="flex items-center gap-2">
+                <span className="font-semibold text-nexo-aqua">360°:</span>
+                <span className="text-slate-400">{t("overview360.comparison.overviewDescription")}</span>
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
@@ -167,8 +183,10 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
                   <button
                     type="button"
                     className={cn(
-                      "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
-                      isActive ? "border-white/60 bg-white/10 text-white" : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
+                      "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer",
+                      isActive
+                        ? "border-white/60 bg-white/10 text-white"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
                     )}
                     onClick={() => handleTabChange(tab.key)}
                   >
@@ -185,9 +203,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
       <section className="space-y-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white md:text-2xl">
-              {activeMeta && t(`overview360.sections.${activeMeta.i18nKey}.title`)}
-            </h2>
+            <h2 className="text-xl font-bold text-white md:text-2xl">{activeMeta && t(`overview360.sections.${activeMeta.i18nKey}.title`)}</h2>
             <p className="max-w-2xl text-sm text-slate-200/70 leading-relaxed">
               {activeMeta && t(`overview360.sections.${activeMeta.i18nKey}.description`)}
             </p>
@@ -200,21 +216,14 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
         </div>
 
         {pagedItems.length === 0 ? (
-          <div className="rounded-2xl border border-white/5 bg-white/3 px-5 py-4 text-sm text-slate-300/80">
-            {t("overview360.empty.description")}
-          </div>
+          <div className="rounded-2xl border border-white/5 bg-white/3 px-5 py-4 text-sm text-slate-300/80">{t("overview360.empty.description")}</div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {pagedItems.map((item) => {
-              const decisionLabel = enumLabel("decisionType", item.decisionType ?? undefined);
-              const cognitiveLabel = enumLabel("cognitiveLoad", item.cognitiveLoad ?? undefined);
               const typeSlug = toCatalogTypeSlug(item.type ?? "");
 
               return (
-                <Card
-                  key={item.id}
-                  className="flex h-full flex-col border border-white/5 bg-white/5 shadow-[0_20px_40px_-30px_rgba(0,0,0,0.65)]"
-                >
+                <Card key={item.id} className="flex h-full flex-col border border-white/5 bg-white/5 shadow-[0_20px_40px_-30px_rgba(0,0,0,0.65)]">
                   <CardHeader className="space-y-2">
                     <Badge variant={getBadgeVariant(item.type)} size="sm">
                       {translateTypeLabel(item.type)}
@@ -224,31 +233,23 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
                       <CardTitle className="group-hover:text-white">{item.name}</CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3">
                     <p className="text-sm text-slate-200/80 leading-relaxed line-clamp-2">{item.shortDescription}</p>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-200/80">
-                        {t("overview360.meta.decisionType")}: <span className="text-slate-100">{t(decisionLabel)}</span>
-                      </span>
-                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-200/80">
-                        {t("overview360.meta.cognitiveLoad")}: <span className="text-slate-100">{t(cognitiveLabel)}</span>
-                      </span>
-                    </div>
                   </CardContent>
                   <CardFooter className="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center">
                     <Button
                       variant="primary"
                       size="sm"
-                      className="w-full sm:w-auto"
-                      onClick={() => router.push(`${localePrefix}/content/${typeSlug}/${item.slug}`)}
+                      className="w-full sm:w-auto whitespace-nowrap h-6 cursor-pointer"
+                      onClick={() => router.push(`${localePrefix}/catalog/${typeSlug}/${item.slug}`)}
                     >
                       {t("overview360.actions.view360")}
                     </Button>
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
-                      className="w-full sm:w-auto"
-                      onClick={() => router.push(`${localePrefix}/catalog/${typeSlug}/${item.slug}`)}
+                      className="w-full sm:w-auto text-slate-300 hover:text-white whitespace-nowrap h-6 cursor-pointer"
+                      onClick={() => router.push(`${localePrefix}/content/${typeSlug}/${item.slug}`)}
                     >
                       {t("overview360.actions.openCatalog")}
                     </Button>
@@ -264,11 +265,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
             <Button variant="ghost" onClick={() => setPage(1)} disabled={currentPage === 1}>
               {t("catalog.pagination.first")}
             </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))}
-              disabled={currentPage === 1}
-            >
+            <Button variant="secondary" onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))} disabled={currentPage === 1}>
               {t("catalog.pagination.previous")}
             </Button>
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">

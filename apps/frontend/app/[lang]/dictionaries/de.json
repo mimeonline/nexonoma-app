@@ -82,7 +82,12 @@
       "catalogLabel": "Katalog",
       "catalogDescription": "Exploration – Was gibt es im Modell?",
       "overviewLabel": "360°",
-      "overviewDescription": "Bewertung – Worüber sollte ich bewusst nachdenken?"
+      "overviewDescription": "Bewertung – Worüber sollte ich bewusst nachdenken?",
+      "toggle": {
+        "label": "Wie ist diese Ansicht gedacht?",
+        "show": "Einordnung anzeigen",
+        "hide": "Einordnung ausblenden"
+      }
     },
     "search": {
       "placeholder": "360°-Einordnung suchen (z. B. Domain-Driven Design, DDD, Zero Trust)",
@@ -122,8 +127,8 @@
     },
     "actions": {
       "showMore": "Mehr anzeigen",
-      "view360": "360° ansehen",
-      "openCatalog": "Im Katalog öffnen"
+      "view360": "360°",
+      "openCatalog": "Katalog"
     },
     "meta": {
       "decisionType": "Decision Type",
@@ -192,26 +197,26 @@
       "title": "Worum geht es hier?",
       "body": "Diese Seite bietet einen neutralen Einstieg mit Kerndaten, Strukturkontext und direkten Beziehungen – unabhängig von Lern- oder Entscheidungswegen."
     },
-  "basics": {
-    "title": "Basisdaten",
-    "unknown": "k.A.",
-    "group": {
-      "context": "Kontext",
-      "decision": "Entscheidung",
-      "assessment": "Einschätzung"
-    }
-  },
-  "structure": {
-    "title": "Kontext im Modell",
-    "subtitle": "Strukturelle Einordnung",
-    "hint": "Verortung in der Struktur.",
-    "empty": "Keine Strukturpfade verfügbar.",
-    "labels": {
-      "themeSpace": "Themenraum",
-      "themeArea": "Themenbereich",
-      "segment": "Segment"
-    }
-  },
+    "basics": {
+      "title": "Basisdaten",
+      "unknown": "k.A.",
+      "group": {
+        "context": "Kontext",
+        "decision": "Entscheidung",
+        "assessment": "Einschätzung"
+      }
+    },
+    "structure": {
+      "title": "Kontext im Modell",
+      "subtitle": "Strukturelle Einordnung",
+      "hint": "Verortung in der Struktur.",
+      "empty": "Keine Strukturpfade verfügbar.",
+      "labels": {
+        "themeSpace": "Themenraum",
+        "themeArea": "Themenbereich",
+        "segment": "Segment"
+      }
+    },
     "relations": {
       "title": "Beziehungen",
       "subtitle": "Verknüpfte Bausteine",

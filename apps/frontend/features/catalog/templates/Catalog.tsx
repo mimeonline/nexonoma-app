@@ -143,21 +143,24 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-            <SearchInput
-              value={search}
-              onValueChange={(value) => {
-                setSearch(value);
-                setPage(1);
-              }}
-              onClear={() => {
-                setSearch("");
-                setPage(1);
-              }}
-              placeholder={t("catalog.search.placeholder")}
-              clearLabel={t("catalog.search.clearLabel")}
-            />
+            <div className="flex min-w-0 flex-1">
+              <SearchInput
+                value={search}
+                onValueChange={(value) => {
+                  setSearch(value);
+                  setPage(1);
+                }}
+                onClear={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                placeholder={t("catalog.search.placeholder")}
+                clearLabel={t("catalog.search.clearLabel")}
+                className="w-full"
+              />
+            </div>
 
-            <div className="flex w-full shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11 sm:w-[200px]">
+            <div className="flex shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11 sm:w-[200px]">
               <span className="sr-only">{t("catalog.pagination.itemsPerPage")}</span>
               <select
                 value={itemsPerPage}
@@ -187,7 +190,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
                     setActiveType(tab.value as FilterType);
                     setPage(1);
                   }}
-                  className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition ${
+                  className={`group flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition cursor-pointer ${
                     isActive
                       ? "border-nexo-ocean/60 bg-nexo-ocean/10 text-white"
                       : "border-white/10 bg-white/5 text-slate-200 hover:border-white/30 hover:text-white"
@@ -195,7 +198,7 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
                 >
                   <span className="whitespace-nowrap">{tab.label}</span>
                   <span
-                    className={`min-w-9 rounded-full px-2 py-0.5 text-xs font-semibold leading-none ${
+                    className={`min-w-9 rounded-full px-2 py-0.5 text-xs font-semibold leading-none cursor-pointer ${
                       isActive ? "bg-white/90 text-slate-900" : "bg-white/10 text-slate-100"
                     }`}
                   >

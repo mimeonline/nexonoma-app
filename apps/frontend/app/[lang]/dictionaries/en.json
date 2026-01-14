@@ -82,7 +82,12 @@
       "catalogLabel": "Catalog",
       "catalogDescription": "Exploration – What exists in the model?",
       "overviewLabel": "360°",
-      "overviewDescription": "Assessment – What should I consciously reflect on?"
+      "overviewDescription": "Assessment – What should I consciously reflect on?",
+      "toggle": {
+        "label": "How is this view intended?",
+        "show": "Show classification",
+        "hide": "Hide classification"
+      }
     },
     "search": {
       "placeholder": "Search 360° context (e.g. Domain-Driven Design, DDD, Zero Trust)",
@@ -122,8 +127,8 @@
     },
     "actions": {
       "showMore": "Show more",
-      "view360": "View 360°",
-      "openCatalog": "Open in catalog"
+      "view360": "360°",
+      "openCatalog": "Catalog"
     },
     "meta": {
       "decisionType": "Decision type",
@@ -192,26 +197,26 @@
       "title": "What is this view?",
       "body": "This page provides a neutral starting point with core facts, structure context, and immediate relations—independent of learning or decision paths."
     },
-  "basics": {
-    "title": "Baseline data",
-    "unknown": "N/A",
-    "group": {
-      "context": "Context",
-      "decision": "Decision",
-      "assessment": "Assessment"
-    }
-  },
-  "structure": {
-    "title": "Context in the model",
-    "subtitle": "Structural placement",
-    "hint": "Where this block lives in the structure.",
-    "empty": "No structure path available.",
-    "labels": {
-      "themeSpace": "Theme space",
-      "themeArea": "Theme area",
-      "segment": "Segment"
-    }
-  },
+    "basics": {
+      "title": "Baseline data",
+      "unknown": "N/A",
+      "group": {
+        "context": "Context",
+        "decision": "Decision",
+        "assessment": "Assessment"
+      }
+    },
+    "structure": {
+      "title": "Context in the model",
+      "subtitle": "Structural placement",
+      "hint": "Where this block lives in the structure.",
+      "empty": "No structure path available.",
+      "labels": {
+        "themeSpace": "Theme space",
+        "themeArea": "Theme area",
+        "segment": "Segment"
+      }
+    },
     "relations": {
       "title": "Relations",
       "subtitle": "Connected blocks",
