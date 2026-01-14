@@ -7,6 +7,7 @@ import { MatrixController } from './infrastructure/http/matrix/matrix.controller
 import { PublicSitemapController } from './infrastructure/http/public/public-sitemap.controller';
 import { SystemCatalogController } from './infrastructure/http/system/system-catalog.controller';
 import { ContentController } from './infrastructure/http/content/content.controller';
+import { Overview360Controller } from './infrastructure/http/overview360/overview360.controller';
 
 // 2. Use Cases (Application Layer)
 import { GetAllContentUseCase } from './application/use-cases/catalog/get-all-content.use-case';
@@ -19,6 +20,7 @@ import { GetGridOverviewUseCase } from './application/use-cases/grid/get-grid-ov
 import { GetClusterViewUseCase } from './application/use-cases/grid/get-cluster-view.use-case';
 import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-case';
 import { GetContentUseCase } from './application/use-cases/content/get-content.use-case';
+import { GetOverview360UseCase } from './application/use-cases/overview360/get-overview360.use-case';
 
 // 3. Ports (Domain Layer)
 import { AssetRepositoryPort } from './domain/ports/outbound/asset-repository.port';
@@ -27,6 +29,7 @@ import { CatalogRepositoryPort } from './application/ports/catalog/catalog-repos
 import { GridRepositoryPort } from './application/ports/grid/grid-repository.port';
 import { SystemCatalogRepositoryPort } from './application/ports/system/system-catalog-repository.port';
 import { ContentRepositoryPort } from './application/ports/content/content-repository.port';
+import { Overview360RepositoryPort } from './application/ports/overview360/overview360-repository.port';
 
 // 4. Repositories & Mapper (Infrastructure -> Driven Adapter)
 import { AssetMapper } from './infrastructure/persistence/neo4j/shared/asset.mapper';
@@ -36,6 +39,7 @@ import { Neo4jGridRepository } from './infrastructure/persistence/neo4j/grid/neo
 import { Neo4jCatalogRepository } from './infrastructure/persistence/neo4j/catalog/neo4j-catalog.repository';
 import { Neo4jSystemCatalogRepository } from './infrastructure/persistence/neo4j/system/neo4j-system-catalog.repository';
 import { Neo4jContentRepository } from './infrastructure/persistence/neo4j/content/neo4j-content.repository';
+import { Neo4jOverview360Repository } from './infrastructure/persistence/neo4j/overview360/neo4j-overview360.repository';
 
 @Module({
   imports: [], // Hier könnte man interne Module importieren, aktuell leer
@@ -46,6 +50,7 @@ import { Neo4jContentRepository } from './infrastructure/persistence/neo4j/conte
     PublicSitemapController,
     SystemCatalogController,
     ContentController,
+    Overview360Controller,
   ],
   providers: [
     // A) Hilfsklassen
@@ -62,6 +67,7 @@ import { Neo4jContentRepository } from './infrastructure/persistence/neo4j/conte
     GetPublicSitemapNodesUseCase,
     GetMatrixUseCase,
     GetContentUseCase,
+    GetOverview360UseCase,
 
     // C) Der Hexagonal-Trick (Dependency Inversion):
     // Wir sagen NestJS: "Wann immer jemand (z.B. ein UseCase) den 'AssetRepositoryPort' anfordert,
@@ -89,6 +95,10 @@ import { Neo4jContentRepository } from './infrastructure/persistence/neo4j/conte
     {
       provide: ContentRepositoryPort,
       useClass: Neo4jContentRepository,
+    },
+    {
+      provide: Overview360RepositoryPort,
+      useClass: Neo4jOverview360Repository,
     },
   ],
   exports: [
