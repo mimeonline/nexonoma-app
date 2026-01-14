@@ -14,7 +14,8 @@ import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
 import type { Overview360Response } from "@/types/overview360";
 
-const ITEMS_PER_PAGE = 9;
+const PAGE_SIZE_OPTIONS = [12, 24, 36, 48];
+const DEFAULT_PAGE_SIZE = 12;
 
 type SectionKey = keyof Overview360Response;
 
@@ -38,6 +39,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<SectionKey>("foundational");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const { t, lang } = useI18n();
   const router = useRouter();
   const localePrefix = lang ? `/${lang}` : "";
@@ -55,9 +57,9 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
     });
   }, [activeItems, search]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredActiveItems.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(filteredActiveItems.length / pageSize));
   const currentPage = Math.min(page, totalPages);
-  const pagedItems = filteredActiveItems.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const pagedItems = filteredActiveItems.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const tabCounts = sectionsMeta.reduce<Record<SectionKey, number>>((acc, section) => {
     acc[section.key] = data[section.key]?.length ?? 0;
     return acc;
@@ -116,46 +118,66 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
           </span>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <SearchInput
-              value={search}
-              onValueChange={(value) => {
-                setSearch(value);
-                setPage(1);
-              }}
-              onClear={() => {
-                setSearch("");
-                setPage(1);
-              }}
-              placeholder={t("overview360.search.placeholder")}
-              clearLabel={t("overview360.search.clearLabel")}
-              className="flex-1"
-            />
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              {sectionsMeta.map((tab) => {
-                const isActive = activeTab === tab.key;
-                const count = tabCounts[tab.key] ?? 0;
-                const label = t(`overview360.tabs.${tab.tabLabelKey}`);
-                const tooltip = t(`overview360.tabTooltips.${tab.tabLabelKey}`);
-
-                return (
-                  <InfoPopover key={tab.key} content={<p>{tooltip}</p>} width={260}>
-                    <button
-                      type="button"
-                      className={cn(
-                        "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
-                        isActive ? "border-white/60 bg-white/10 text-white" : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
-                      )}
-                      onClick={() => handleTabChange(tab.key)}
-                    >
-                      <span>{label}</span>
-                      <span className="text-[10px] text-slate-400">({count})</span>
-                    </button>
-                  </InfoPopover>
-                );
-              })}
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex min-w-0 flex-1">
+              <SearchInput
+                value={search}
+                onValueChange={(value) => {
+                  setSearch(value);
+                  setPage(1);
+                }}
+                onClear={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                placeholder={t("overview360.search.placeholder")}
+                clearLabel={t("overview360.search.clearLabel")}
+                className="w-full"
+              />
             </div>
+            <div className="flex flex-wrap items-center justify-end gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11 lg:justify-end">
+              <span className="sr-only">{t("catalog.pagination.itemsPerPage")}</span>
+              <select
+                value={pageSize}
+                onChange={(event) => {
+                  setPageSize(Number(event.target.value));
+                  setPage(1);
+                }}
+                className="w-full bg-transparent text-sm text-white focus:outline-none h-full whitespace-nowrap"
+                aria-label={t("catalog.pagination.itemsPerPage")}
+              >
+                {PAGE_SIZE_OPTIONS.map((value) => (
+                  <option key={value} value={value} className="bg-slate-900 text-white">
+                    {`${value} ${t("catalog.pagination.perPageSuffix") ?? "pro Seite"}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {sectionsMeta.map((tab) => {
+              const isActive = activeTab === tab.key;
+              const count = tabCounts[tab.key] ?? 0;
+              const label = t(`overview360.tabs.${tab.tabLabelKey}`);
+              const tooltip = t(`overview360.tabTooltips.${tab.tabLabelKey}`);
+
+              return (
+                <InfoPopover key={tab.key} content={<p>{tooltip}</p>} width={260}>
+                  <button
+                    type="button"
+                    className={cn(
+                      "flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wider transition-colors",
+                      isActive ? "border-white/60 bg-white/10 text-white" : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white"
+                    )}
+                    onClick={() => handleTabChange(tab.key)}
+                  >
+                    <span>{label}</span>
+                    <span className="text-[10px] text-slate-400">({count})</span>
+                  </button>
+                </InfoPopover>
+              );
+            })}
           </div>
         </div>
       </header>
