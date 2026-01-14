@@ -85,7 +85,8 @@
       "overviewDescription": "Assessment – What should I consciously reflect on?"
     },
     "search": {
-      "placeholder": "Search 360° context (e.g. Domain-Driven Design, DDD, Zero Trust)"
+      "placeholder": "Search 360° context (e.g. Domain-Driven Design, DDD, Zero Trust)",
+      "clearLabel": "Clear search"
     },
     "sections": {
       "foundational": {
@@ -527,7 +528,8 @@
       }
     },
     "search": {
-      "placeholder": "Search by name or short description..."
+      "placeholder": "Search by name or short description...",
+      "clearLabel": "Clear search"
     },
     "filtersMeta": {
       "typeOptions": {

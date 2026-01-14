@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/atoms/Button";
 import { SectionTitle } from "@/components/ui/atoms/SectionTitle";
 import { ExpandableDescription } from "@/components/ui/molecules/ExpandableDescription";
+import { SearchInput } from "@/components/ui/molecules/SearchInput";
 import { useI18n } from "@/features/i18n/I18nProvider";
 import type { CatalogItem } from "@/types/catalog";
 import { usePathname, useRouter } from "next/navigation";
@@ -142,21 +143,19 @@ export function CatalogTemplate({ items }: CatalogTemplateProps) {
 
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
-            <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-4 w-4 text-slate-300">
-                <circle cx="11" cy="11" r="7" strokeWidth="1.5" />
-                <path strokeWidth="1.5" d="m16.5 16.5 3 3" />
-              </svg>
-              <input
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setPage(1);
-                }}
-                placeholder={t("catalog.search.placeholder")}
-                className="w-full bg-transparent text-sm text-white placeholder:text-slate-400 focus:outline-none"
-              />
-            </div>
+            <SearchInput
+              value={search}
+              onValueChange={(value) => {
+                setSearch(value);
+                setPage(1);
+              }}
+              onClear={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              placeholder={t("catalog.search.placeholder")}
+              clearLabel={t("catalog.search.clearLabel")}
+            />
 
             <div className="flex w-full shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 h-11 sm:w-[200px]">
               <span className="sr-only">{t("catalog.pagination.itemsPerPage")}</span>

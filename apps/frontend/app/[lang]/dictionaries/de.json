@@ -85,7 +85,8 @@
       "overviewDescription": "Bewertung – Worüber sollte ich bewusst nachdenken?"
     },
     "search": {
-      "placeholder": "360°-Einordnung suchen (z. B. Domain-Driven Design, DDD, Zero Trust)"
+      "placeholder": "360°-Einordnung suchen (z. B. Domain-Driven Design, DDD, Zero Trust)",
+      "clearLabel": "Suche löschen"
     },
     "sections": {
       "foundational": {
@@ -527,7 +528,8 @@
       }
     },
     "search": {
-      "placeholder": "Suche nach Namen oder Kurzbeschreibung..."
+      "placeholder": "Suche nach Namen oder Kurzbeschreibung...",
+      "clearLabel": "Suche löschen"
     },
     "filtersMeta": {
       "typeOptions": {
