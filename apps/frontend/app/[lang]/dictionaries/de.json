@@ -93,12 +93,17 @@
       "assessment": "Einschätzung"
     }
   },
-    "structure": {
-      "title": "Kontext im Modell",
-      "subtitle": "Strukturelle Einordnung",
-      "hint": "Verortung in der Struktur.",
-      "empty": "Keine Strukturpfade verfügbar."
-    },
+  "structure": {
+    "title": "Kontext im Modell",
+    "subtitle": "Strukturelle Einordnung",
+    "hint": "Verortung in der Struktur.",
+    "empty": "Keine Strukturpfade verfügbar.",
+    "labels": {
+      "themeSpace": "Themenraum",
+      "themeArea": "Themenbereich",
+      "segment": "Segment"
+    }
+  },
     "relations": {
       "title": "Beziehungen",
       "subtitle": "Verknüpfte Bausteine",

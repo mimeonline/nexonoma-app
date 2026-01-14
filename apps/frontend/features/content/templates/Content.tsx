@@ -7,7 +7,7 @@ import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
-import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
+import { useEnumAssetLabel, useI18n, type AssetEnumType } from "@/features/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
 import { useMemo, useState } from "react";
@@ -22,7 +22,7 @@ type ContentTemplateProps = {
 type SpecRow = {
   id: string;
   label: string;
-  field: Parameters<typeof useEnumAssetLabel>[0];
+  field: AssetEnumType;
   value: string;
   valueKey?: string | null;
   tone?: "accent" | "warning";
@@ -311,7 +311,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.organizationalLevel.label")}</span>
-                  <ExplainableLabel fieldKey="organizationalLevel" value={assetBlock.organisationLevel}>
+                  <ExplainableLabel fieldKey="organizationalLevel" value={assetBlock.organisationLevel ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -325,7 +325,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.organizationalMaturity.label")}</span>
-                  <ExplainableLabel fieldKey="organizationalMaturity" value={assetBlock.organizationalMaturity}>
+                  <ExplainableLabel fieldKey="organizationalMaturity" value={assetBlock.organizationalMaturity ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -339,7 +339,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.impacts.label")}</span>
-                  <ExplainableLabel fieldKey="impacts" value={assetBlock.impacts}>
+                  <ExplainableLabel fieldKey="impacts" value={assetBlock.impacts ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -360,7 +360,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.decisionType.label")}</span>
-                  <ExplainableLabel fieldKey="decisionType" value={assetBlock.decisionType}>
+                  <ExplainableLabel fieldKey="decisionType" value={assetBlock.decisionType ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -374,7 +374,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.valueStreamStage.label")}</span>
-                  <ExplainableLabel fieldKey="valueStreamStage" value={assetBlock.valueStream}>
+                  <ExplainableLabel fieldKey="valueStreamStage" value={assetBlock.valueStream ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -395,7 +395,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.complexityLevel.label")}</span>
-                  <ExplainableLabel fieldKey="complexityLevel" value={assetBlock.complexityLevel}>
+                  <ExplainableLabel fieldKey="complexityLevel" value={assetBlock.complexityLevel ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -409,7 +409,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.maturityLevel.label")}</span>
-                  <ExplainableLabel fieldKey="maturityLevel" value={assetBlock.maturityLevel}>
+                  <ExplainableLabel fieldKey="maturityLevel" value={assetBlock.maturityLevel ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -423,7 +423,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
               <div>
                 <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
                   <span>{t("asset.properties.cognitiveLoad.label")}</span>
-                  <ExplainableLabel fieldKey="cognitiveLoad" value={assetBlock.cognitiveLoad}>
+                  <ExplainableLabel fieldKey="cognitiveLoad" value={assetBlock.cognitiveLoad ?? undefined}>
                     <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
                       i
                     </span>
@@ -472,26 +472,35 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                 {structure.paths.map((item, idx) => {
                   const tags = item.segment.tags ? sortTags(item.segment.tags, item.segment.tagOrder).slice(0, 2) : [];
                   return (
-                    <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-4">
-                      <div className="grid gap-2">
-                        {/* Explicit labeled rows (Version 2) */}
-                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
-                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Themenraum</div>
-                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.macroCluster.name}</div>
+                    <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-3">
+                      <div className="flex flex-col gap-3">
+                        {/* Themenraum */}
+                        <div className="flex items-baseline gap-4">
+                          <div className="w-32 shrink-0 text-[11px] uppercase tracking-wider text-text-muted/70">
+                            {t("content.structure.labels.themeSpace")}
+                          </div>
+                          <div className="min-w-0 flex-1 text-sm font-semibold text-white wrap-break-word">{item.macroCluster.name}</div>
                         </div>
 
-                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
-                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Themenbereich</div>
-                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.cluster.name}</div>
+                        {/* Themenbereich */}
+                        <div className="flex items-baseline gap-4">
+                          <div className="w-32 shrink-0 text-[11px] uppercase tracking-wider text-text-muted/70">
+                            {t("content.structure.labels.themeArea")}
+                          </div>
+                          <div className="min-w-0 flex-1 text-sm font-semibold text-white wrap-break-word">{item.cluster.name}</div>
                         </div>
 
-                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
-                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Segment</div>
-                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.segment.name}</div>
+                        {/* Segment */}
+                        <div className="flex items-baseline gap-4">
+                          <div className="w-32 shrink-0 text-[11px] uppercase tracking-wider text-text-muted/70">
+                            {t("content.structure.labels.segment")}
+                          </div>
+                          <div className="min-w-0 flex-1 text-sm font-semibold text-white wrap-break-word">{item.segment.name}</div>
                         </div>
 
+                        {/* Tags */}
                         {tags.length > 0 && (
-                          <div className="mt-1 flex flex-wrap gap-2 pl-[120px]">
+                          <div className="flex flex-wrap gap-2 pt-1">
                             {tags.map((tag) => (
                               <span
                                 key={tag.slug}

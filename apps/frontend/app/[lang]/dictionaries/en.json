@@ -93,12 +93,17 @@
       "assessment": "Assessment"
     }
   },
-    "structure": {
-      "title": "Context in the model",
-      "subtitle": "Structural placement",
-      "hint": "Where this block lives in the structure.",
-      "empty": "No structure path available."
-    },
+  "structure": {
+    "title": "Context in the model",
+    "subtitle": "Structural placement",
+    "hint": "Where this block lives in the structure.",
+    "empty": "No structure path available.",
+    "labels": {
+      "themeSpace": "Theme space",
+      "themeArea": "Theme area",
+      "segment": "Segment"
+    }
+  },
     "relations": {
       "title": "Relations",
       "subtitle": "Connected blocks",
