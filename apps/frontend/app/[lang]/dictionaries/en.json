@@ -84,10 +84,15 @@
       "title": "What is this view?",
       "body": "This page provides a neutral starting point with core facts, structure context, and immediate relations—independent of learning or decision paths."
     },
-    "basics": {
-      "title": "Baseline data",
-      "unknown": "N/A"
-    },
+  "basics": {
+    "title": "Baseline data",
+    "unknown": "N/A",
+    "group": {
+      "context": "Context",
+      "decision": "Decision",
+      "assessment": "Assessment"
+    }
+  },
     "structure": {
       "title": "Context in the model",
       "subtitle": "Structural placement",

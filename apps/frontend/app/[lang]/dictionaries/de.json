@@ -84,10 +84,15 @@
       "title": "Worum geht es hier?",
       "body": "Diese Seite bietet einen neutralen Einstieg mit Kerndaten, Strukturkontext und direkten Beziehungen – unabhängig von Lern- oder Entscheidungswegen."
     },
-    "basics": {
-      "title": "Basisdaten",
-      "unknown": "k.A."
-    },
+  "basics": {
+    "title": "Basisdaten",
+    "unknown": "k.A.",
+    "group": {
+      "context": "Kontext",
+      "decision": "Entscheidung",
+      "assessment": "Einschätzung"
+    }
+  },
     "structure": {
       "title": "Kontext im Modell",
       "subtitle": "Strukturelle Einordnung",

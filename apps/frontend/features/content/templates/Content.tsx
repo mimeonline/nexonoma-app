@@ -19,6 +19,21 @@ type ContentTemplateProps = {
   data: ContentResponse;
 };
 
+type SpecRow = {
+  id: string;
+  label: string;
+  field: Parameters<typeof useEnumAssetLabel>[0];
+  value: string;
+  valueKey?: string | null;
+  tone?: "accent" | "warning";
+};
+
+type SpecSection = {
+  id: string;
+  titleKey: string;
+  rows: SpecRow[];
+};
+
 const metaToneClasses: Record<HeroMetaTone, string> = {
   neutral: "text-white bg-white/10 border-white/10",
   accent: "text-nexo-aqua bg-nexo-aqua/10 border-nexo-aqua/20",
@@ -68,6 +83,85 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
 
   const fmtEnum = (enumType: Parameters<typeof enumAssetLabel>[0], value?: string | null) =>
     value ? enumAssetLabel(enumType, value) : t("content.basics.unknown");
+
+  const specSections: SpecSection[] = [
+    {
+      id: "context",
+      titleKey: "content.basics.group.context",
+      rows: [
+        {
+          id: "organizationalLevel",
+          label: t("asset.properties.organizationalLevel.label"),
+          field: "organizationalLevel",
+          value: fmtEnum("organizationalLevel", assetBlock.organisationLevel ?? undefined),
+          valueKey: assetBlock.organisationLevel ?? undefined,
+        },
+        {
+          id: "organizationalMaturity",
+          label: t("asset.properties.organizationalMaturity.label"),
+          field: "organizationalMaturity",
+          value: fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity ?? undefined),
+          valueKey: assetBlock.organizationalMaturity ?? undefined,
+        },
+        {
+          id: "impacts",
+          label: t("asset.properties.impacts.label"),
+          field: "impacts",
+          value: fmtEnum("impacts", assetBlock.impacts ?? undefined),
+          valueKey: assetBlock.impacts ?? undefined,
+        },
+      ],
+    },
+    {
+      id: "decision",
+      titleKey: "content.basics.group.decision",
+      rows: [
+        {
+          id: "decisionType",
+          label: t("asset.properties.decisionType.label"),
+          field: "decisionType",
+          value: fmtEnum("decisionType", assetBlock.decisionType ?? undefined),
+          valueKey: assetBlock.decisionType ?? undefined,
+        },
+        {
+          id: "valueStreamStage",
+          label: t("asset.properties.valueStreamStage.label"),
+          field: "valueStreamStage",
+          value: fmtEnum("valueStreamStage", assetBlock.valueStream ?? undefined),
+          valueKey: assetBlock.valueStream ?? undefined,
+        },
+      ],
+    },
+    {
+      id: "assessment",
+      titleKey: "content.basics.group.assessment",
+      rows: [
+        {
+          id: "complexityLevel",
+          label: t("asset.properties.complexityLevel.label"),
+          field: "complexityLevel",
+          value: fmtEnum("complexityLevel", assetBlock.complexityLevel ?? undefined),
+          valueKey: assetBlock.complexityLevel ?? undefined,
+        },
+        {
+          id: "maturityLevel",
+          label: t("asset.properties.maturityLevel.label"),
+          field: "maturityLevel",
+          value: fmtEnum("maturityLevel", assetBlock.maturityLevel ?? undefined),
+          valueKey: assetBlock.maturityLevel ?? undefined,
+          tone: "accent",
+        },
+        {
+          id: "cognitiveLoad",
+          label: t("asset.properties.cognitiveLoad.label"),
+          field: "cognitiveLoad",
+          value: fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad ?? undefined),
+          valueKey: assetBlock.cognitiveLoad ?? undefined,
+          tone: "warning",
+        },
+      ],
+    },
+  ];
 
   const relationLabel = (type: string | null, rel: string | null) => {
     const map: Record<string, Record<string, { de: string; en: string }>> = {
@@ -178,7 +272,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
         <div className="flex h-full flex-col gap-4">
           <Card className="p-5 duration-200 ease-out">
             <Link
-              href={`/${lang}/content/${assetBlock.type.toLowerCase()}/${assetBlock.slug}`}
+              href={`/${lang}/catalog/${assetBlock.type.toLowerCase()}/${assetBlock.slug}`}
               className="flex items-center justify-start w-full gap-2 rounded-xl bg-accent-primary px-4 py-3 text-sm font-semibold text-nexo-bg transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent-primary/90 text-left"
             >
               <svg
@@ -207,86 +301,139 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
 
       <section>
         <SectionTitle className="mb-4 px-1">{t("content.basics.title")}</SectionTitle>
-        <Card className="bg-nexo-surface/60 border-white/5 p-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                id: "org-level",
-                label: t("asset.properties.organizationalLevel.label"),
-                field: "organizationalLevel" as const,
-                value: fmtEnum("organizationalLevel", assetBlock.organisationLevel ?? undefined),
-                valueKey: assetBlock.organisationLevel ?? undefined,
-              },
-              {
-                id: "decision",
-                label: t("asset.properties.decisionType.label"),
-                field: "decisionType" as const,
-                value: fmtEnum("decisionType", assetBlock.decisionType ?? undefined),
-                valueKey: assetBlock.decisionType ?? undefined,
-              },
-              {
-                id: "complexity",
-                label: t("asset.properties.complexityLevel.label"),
-                field: "complexityLevel" as const,
-                value: fmtEnum("complexityLevel", assetBlock.complexityLevel ?? undefined),
-                valueKey: assetBlock.complexityLevel ?? undefined,
-              },
-              {
-                id: "valueStream",
-                label: t("asset.properties.valueStreamStage.label"),
-                field: "valueStreamStage" as const,
-                value: fmtEnum("valueStreamStage", assetBlock.valueStream ?? undefined),
-                valueKey: assetBlock.valueStream ?? undefined,
-              },
-              {
-                id: "maturity",
-                label: t("asset.properties.maturityLevel.label"),
-                field: "maturityLevel" as const,
-                value: fmtEnum("maturityLevel", assetBlock.maturityLevel ?? undefined),
-                valueKey: assetBlock.maturityLevel ?? undefined,
-                tone: "accent" as const,
-              },
-              {
-                id: "cognitive",
-                label: t("asset.properties.cognitiveLoad.label"),
-                field: "cognitiveLoad" as const,
-                value: fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad ?? undefined),
-                valueKey: assetBlock.cognitiveLoad ?? undefined,
-                tone: "warning" as const,
-              },
-              {
-                id: "impacts",
-                label: t("asset.properties.impacts.label"),
-                field: "impacts" as const,
-                value: fmtEnum("impacts", assetBlock.impacts ?? undefined),
-                valueKey: assetBlock.impacts ?? undefined,
-              },
-              {
-                id: "org-maturity",
-                label: t("asset.properties.organizationalMaturity.label"),
-                field: "organizationalMaturity" as const,
-                value: fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity ?? undefined),
-                valueKey: assetBlock.organizationalMaturity ?? undefined,
-              },
-            ].map((fact) => (
-              <div key={fact.id} className="space-y-1">
-                <div className="text-[11px] uppercase tracking-wider text-text-muted">
-                  <ExplainableLabel fieldKey={fact.field} value={fact.valueKey}>
-                    {fact.label}
+
+        <Card className="bg-nexo-surface border border-white/10 rounded-2xl p-0 overflow-hidden">
+          {/* === KONTEXT === */}
+          <div className="px-6 py-4 border-b border-white/5">
+            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-white/80">{t("content.basics.group.context")}</div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.organizationalLevel.label")}</span>
+                  <ExplainableLabel fieldKey="organizationalLevel" value={assetBlock.organisationLevel}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
                   </ExplainableLabel>
                 </div>
-                <div
-                  className={cn(
-                    "text-sm font-medium text-white",
-                    fact.tone === "accent" && "inline-flex items-center gap-1 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-nexo-aqua",
-                    fact.tone === "warning" &&
-                      "inline-flex items-center gap-1 px-2 py-0.5 rounded border border-white/10 bg-warning/10 text-warning"
-                  )}
-                >
-                  {fact.value}
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("organizationalLevel", assetBlock.organisationLevel)}
                 </div>
               </div>
-            ))}
+
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.organizationalMaturity.label")}</span>
+                  <ExplainableLabel fieldKey="organizationalMaturity" value={assetBlock.organizationalMaturity}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity)}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.impacts.label")}</span>
+                  <ExplainableLabel fieldKey="impacts" value={assetBlock.impacts}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("impacts", assetBlock.impacts)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* === ENTSCHEIDUNG === */}
+          <div className="px-6 py-4 border-b border-white/5">
+            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-white/80">{t("content.basics.group.decision")}</div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.decisionType.label")}</span>
+                  <ExplainableLabel fieldKey="decisionType" value={assetBlock.decisionType}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("decisionType", assetBlock.decisionType)}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.valueStreamStage.label")}</span>
+                  <ExplainableLabel fieldKey="valueStreamStage" value={assetBlock.valueStream}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("valueStreamStage", assetBlock.valueStream)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* === EINSCHÄTZUNG === */}
+          <div className="px-6 py-4">
+            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-white/80">{t("content.basics.group.assessment")}</div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4">
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.complexityLevel.label")}</span>
+                  <ExplainableLabel fieldKey="complexityLevel" value={assetBlock.complexityLevel}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-white">
+                  {fmtEnum("complexityLevel", assetBlock.complexityLevel)}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.maturityLevel.label")}</span>
+                  <ExplainableLabel fieldKey="maturityLevel" value={assetBlock.maturityLevel}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-text-secondary">
+                  {fmtEnum("maturityLevel", assetBlock.maturityLevel)}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-text-muted">
+                  <span>{t("asset.properties.cognitiveLoad.label")}</span>
+                  <ExplainableLabel fieldKey="cognitiveLoad" value={assetBlock.cognitiveLoad}>
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[10px] text-text-muted hover:border-white/40 hover:text-white transition-colors">
+                      i
+                    </span>
+                  </ExplainableLabel>
+                </div>
+                <div className="mt-1 inline-flex items-center gap-2 px-2 py-0.5 rounded border border-white/10 bg-white/5 text-sm font-medium text-text-secondary">
+                  {fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad)}
+                </div>
+              </div>
+            </div>
           </div>
         </Card>
       </section>
@@ -296,6 +443,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
           <div className="mb-4 px-1">
             <SectionTitle>{t("content.structure.title")}</SectionTitle>
           </div>
+
           <Card className="flex-1 bg-nexo-surface p-5 duration-200 ease-out">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-text-secondary">
@@ -324,24 +472,37 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
                 {structure.paths.map((item, idx) => {
                   const tags = item.segment.tags ? sortTags(item.segment.tags, item.segment.tagOrder).slice(0, 2) : [];
                   return (
-                    <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-3">
-                      <div className="grid grid-cols-[120px_140px_1fr] gap-3 items-start text-sm text-white">
-                        <span className="font-semibold">{item.macroCluster.name}</span>
-                        <span className="font-semibold">{item.cluster.name}</span>
-                        <span className="font-medium">{item.segment.name}</span>
-                      </div>
-                      {tags.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-text-secondary">
-                          {tags.map((tag) => (
-                            <span
-                              key={tag.slug}
-                              className="inline-flex rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-text-secondary"
-                            >
-                              #{tag.label}
-                            </span>
-                          ))}
+                    <HoverCardLink key={`${item.segment.slug}-${idx}`} href={`/${lang}/catalog`} className="p-4">
+                      <div className="grid gap-2">
+                        {/* Explicit labeled rows (Version 2) */}
+                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
+                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Themenraum</div>
+                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.macroCluster.name}</div>
                         </div>
-                      )}
+
+                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
+                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Themenbereich</div>
+                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.cluster.name}</div>
+                        </div>
+
+                        <div className="grid grid-cols-[120px_1fr] gap-3 items-baseline">
+                          <div className="text-[11px] uppercase tracking-wider text-text-muted/70">Segment</div>
+                          <div className="min-w-0 text-sm font-semibold text-white break-words">{item.segment.name}</div>
+                        </div>
+
+                        {tags.length > 0 && (
+                          <div className="mt-1 flex flex-wrap gap-2 pl-[120px]">
+                            {tags.map((tag) => (
+                              <span
+                                key={tag.slug}
+                                className="inline-flex rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-medium text-text-secondary"
+                              >
+                                #{tag.label}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </HoverCardLink>
                   );
                 })}
@@ -354,6 +515,7 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
           <div className="mb-4 px-1">
             <SectionTitle>{t("content.relations.title")}</SectionTitle>
           </div>
+
           <Card className="flex-1 bg-nexo-surface p-5 duration-200 ease-out">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-nexo-aqua">
@@ -378,45 +540,65 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
             {relations.items.length === 0 ? (
               <p className="text-sm text-text-muted">{t("content.relations.empty")}</p>
             ) : (
-              <div className="space-y-3">
-                {relations.items.map((relation) => (
-                  <HoverCardLink
-                    key={relation.id}
-                    href={`/${lang}/content/${relation.node.type.toLowerCase()}/${relation.node.slug}`}
-                    className="p-3"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-3 overflow-hidden">
-                        <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-[10px] font-bold text-text-secondary transition-colors duration-200 ease-out group-hover:text-white">
-                          <DynamicIcon name={relation.node.icon ?? undefined} className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="truncate text-sm font-medium text-white">{relation.node.name}</div>
-                          <div className="truncate text-[11px] text-text-muted">{relationLabel(relation.type, relation.relation)}</div>
-                        </div>
+              <div className="space-y-4">
+                {Object.entries(
+                  relations.items.reduce<Record<string, typeof relations.items>>((acc, item) => {
+                    const label = relationLabel(item.type, item.relation);
+                    (acc[label] ||= []).push(item);
+                    return acc;
+                  }, {})
+                )
+                  .sort(([a], [b]) => a.localeCompare(b))
+                  .map(([label, items]) => (
+                    <div key={label} className="rel-group">
+                      <div className="mb-2 flex items-baseline gap-2">
+                        <div className="text-[11px] uppercase tracking-[0.14em] text-text-muted/60">{label}</div>
+                        <div className="text-[10px] text-text-muted/40">({items.length})</div>
                       </div>
-                      <span className="rounded p-1 text-text-muted transition-colors duration-200 ease-out group-hover:text-white">
-                        <svg
-                          className="h-4 w-4"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
+
+                      <div className="space-y-2">
+                        {items.map((relation) => (
+                          <HoverCardLink
+                            key={relation.id}
+                            href={`/${lang}/content/${relation.node.type.toLowerCase()}/${relation.node.slug}`}
+                            className="p-3"
+                          >
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-3 overflow-hidden">
+                                <div className="flex h-8 w-8 items-center justify-center rounded border border-white/10 bg-nexo-card text-[10px] font-bold text-text-secondary transition-colors duration-200 ease-out group-hover:text-white">
+                                  <DynamicIcon name={relation.node.icon ?? undefined} className="h-4 w-4" />
+                                </div>
+
+                                <div className="min-w-0">
+                                  <div className="truncate text-sm font-medium text-white">{relation.node.name}</div>
+                                  <div className="truncate text-[11px] text-text-muted">{t(`asset.enums.types.${relation.node.type}.label`)}</div>
+                                </div>
+                              </div>
+
+                              <span className="rounded p-1 text-text-muted transition-colors duration-200 ease-out group-hover:text-white">
+                                <svg
+                                  className="h-4 w-4"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M9 5l7 7-7 7" />
+                                </svg>
+                              </span>
+                            </div>
+                          </HoverCardLink>
+                        ))}
+                      </div>
                     </div>
-                  </HoverCardLink>
-                ))}
+                  ))}
               </div>
             )}
           </Card>
         </div>
       </section>
-
     </div>
   );
 }
