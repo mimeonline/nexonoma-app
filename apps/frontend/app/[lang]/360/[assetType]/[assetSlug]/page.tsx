@@ -47,6 +47,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/360/[asset
       path: `/360/${assetType}/${assetSlug}`,
       title,
       description,
+      openGraphType: "article",
     });
   } catch (error) {
     serverLogger.error("Error fetching content", { error });
@@ -55,6 +56,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/360/[asset
       path: `/360/${assetType}/${assetSlug}`,
       title: dict?.seo?.defaultTitle ?? en.seo.defaultTitle,
       description: dict?.seo?.defaultDescription ?? en.seo.defaultDescription,
+      openGraphType: "article",
     });
   }
 }

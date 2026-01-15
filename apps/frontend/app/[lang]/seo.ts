@@ -19,6 +19,7 @@ type SeoMetadataOptions = {
   description: string;
   indexable?: boolean;
   includeAlternates?: boolean;
+  openGraphType?: "website" | "article";
 };
 
 const normalizePath = (path: string) => {
@@ -45,9 +46,11 @@ export const buildSeoMetadata = ({
   description,
   indexable = true,
   includeAlternates = true,
+  openGraphType = "website",
 }: SeoMetadataOptions): Metadata => {
   const canonical = buildSeoUrl(lang, path);
   const normalizedTitle = applyBrandSuffix(title);
+  const normalizedDescription = truncateDescription(description);
   const languages: Record<string, string> = {};
 
   if (includeAlternates) {
@@ -66,24 +69,24 @@ export const buildSeoMetadata = ({
 
   const metadata: Metadata = {
     title: normalizedTitle,
-    description,
+    description: normalizedDescription,
     alternates: {
       canonical,
       languages,
     },
     openGraph: {
       title: normalizedTitle,
-      description,
+      description: normalizedDescription,
       url: canonical,
       siteName: "Nexonoma",
-      type: "website",
+      type: openGraphType,
       locale: OG_LOCALE_BY_LANG[lang],
       alternateLocale,
     },
     twitter: {
       card: "summary",
       title: normalizedTitle,
-      description,
+      description: normalizedDescription,
     },
   };
 

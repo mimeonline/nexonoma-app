@@ -35,6 +35,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/content/[a
       path: `/content/${assetType}/${slug}`,
       title: dict?.seo?.defaultTitle ?? en.seo.defaultTitle,
       description: dict?.seo?.defaultDescription ?? en.seo.defaultDescription,
+      openGraphType: "article",
     });
   }
 
@@ -54,6 +55,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/content/[a
     path: `/content/${assetType}/${slug}`,
     title,
     description,
+    openGraphType: "article",
   });
 }
 
