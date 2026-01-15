@@ -4,7 +4,11 @@ import { createGridApi } from "@/services/gridApi";
 import { createMatrixApi } from "@/services/matrixApi";
 import { MatrixMode, MatrixPerspective } from "@/types/matrix";
 import { AssetType } from "@/types/nexonoma";
+import { JsonLd, buildBreadcrumbList, buildWebPage } from "@/utils/jsonld";
 import { notFound } from "next/navigation";
+import de from "../dictionaries/de.json";
+import en from "../dictionaries/en.json";
+import { buildSeoUrl, SeoLocale, SEO_BASE_URL } from "../seo";
 
 type MatrixSearchParams = {
   clusterId?: string;
@@ -113,6 +117,22 @@ export default async function MatrixPage({
   searchParams,
 }: PageProps<"/[lang]/matrix"> & { searchParams?: Promise<MatrixSearchParams> }) {
   const { lang } = await params;
+  const dict = lang === "de" ? de : en;
+  const title = dict?.seo?.matrix?.title ?? en.seo.matrix.title;
+  const description = dict?.seo?.matrix?.description ?? en.seo.matrix.description;
+  const webSite = { url: SEO_BASE_URL, name: "Nexonoma" };
+  const pageUrl = buildSeoUrl(lang as SeoLocale, "/matrix");
+  const pageJsonLd = buildWebPage({
+    name: title,
+    description,
+    url: pageUrl,
+    inLanguage: lang,
+    webSite,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbList([
+    { name: dict?.nav?.start ?? en.nav.start, url: buildSeoUrl(lang as SeoLocale, "") },
+    { name: dict?.nav?.analyse ?? en.nav.analyse, url: pageUrl },
+  ]);
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
 
   let data;
@@ -155,5 +175,11 @@ export default async function MatrixPage({
 
   if (!data) notFound();
 
-  return <Matrix data={data} />;
+  return (
+    <>
+      <JsonLd id="jsonld-matrix" data={pageJsonLd} />
+      <JsonLd id="jsonld-matrix-breadcrumbs" data={breadcrumbJsonLd} />
+      <Matrix data={data} />
+    </>
+  );
 }

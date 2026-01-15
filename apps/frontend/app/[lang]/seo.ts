@@ -28,6 +28,8 @@ const normalizePath = (path: string) => {
 
 const buildUrl = (lang: SeoLocale, path: string) => `${SEO_BASE_URL}/${lang}${normalizePath(path)}`;
 
+export const buildSeoUrl = (lang: SeoLocale, path: string) => buildUrl(lang, path);
+
 const applyBrandSuffix = (value: string) => (value.endsWith(BRAND_SUFFIX) ? value : `${value}${BRAND_SUFFIX}`);
 
 export const truncateDescription = (value: string, maxLength: number = 160) => {
@@ -44,13 +46,13 @@ export const buildSeoMetadata = ({
   indexable = true,
   includeAlternates = true,
 }: SeoMetadataOptions): Metadata => {
-  const canonical = buildUrl(lang, path);
+  const canonical = buildSeoUrl(lang, path);
   const normalizedTitle = applyBrandSuffix(title);
   const languages: Record<string, string> = {};
 
   if (includeAlternates) {
     SEO_SUPPORTED_LOCALES.forEach((locale) => {
-      languages[locale] = buildUrl(locale, path);
+      languages[locale] = buildSeoUrl(locale, path);
     });
   } else {
     languages[lang] = canonical;

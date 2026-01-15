@@ -3,24 +3,44 @@
 import { Badge } from "@/components/ui/atoms/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/atoms/Card";
 import { useI18n } from "@/features/i18n/I18nProvider";
+import { JsonLd, buildBreadcrumbList, buildWebPage } from "@/utils/jsonld";
+import { buildSeoUrl, SEO_BASE_URL } from "../seo";
 import { ArrowRight, BookOpen, Construction, Info, Map, Radar, RefreshCw } from "lucide-react";
 
 export default function PreviewTemplate() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const title = t("preview.page.header.title");
+  const description = t("preview.page.header.lead");
+  const webSite = { url: SEO_BASE_URL, name: "Nexonoma" };
+  const pageUrl = buildSeoUrl(lang as "de" | "en", "/preview");
+  const pageJsonLd = buildWebPage({
+    name: title,
+    description,
+    url: pageUrl,
+    inLanguage: lang,
+    webSite,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbList([
+    { name: t("nav.start"), url: buildSeoUrl(lang as "de" | "en", "") },
+    { name: t("nav.preview"), url: pageUrl },
+  ]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
-      {/* --- HEADER --- */}
-      <header className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
-        <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
-            <Construction className="w-3 h-3" />
-            <span>{t("preview.page.header.badge")}</span>
-          </div>
+    <>
+      <JsonLd id="jsonld-preview" data={pageJsonLd} />
+      <JsonLd id="jsonld-preview-breadcrumbs" data={breadcrumbJsonLd} />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        {/* --- HEADER --- */}
+        <header className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-start">
+          <div className="max-w-3xl space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-3 py-1 text-xs font-medium text-purple-300">
+              <Construction className="w-3 h-3" />
+              <span>{t("preview.page.header.badge")}</span>
+            </div>
 
-          <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">{t("preview.page.header.title")}</h1>
-          <p className="text-lg text-gray-400 leading-relaxed">{t("preview.page.header.lead")}</p>
-        </div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">{t("preview.page.header.title")}</h1>
+            <p className="text-lg text-gray-400 leading-relaxed">{t("preview.page.header.lead")}</p>
+          </div>
 
         {/* --- CALLOUT --- */}
         <aside className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
@@ -42,7 +62,7 @@ export default function PreviewTemplate() {
             </span>
           </div>
         </aside>
-      </header>
+        </header>
 
       {/* --- MAIN GRID --- */}
       <div className="grid gap-8 lg:grid-cols-2">
@@ -293,7 +313,8 @@ export default function PreviewTemplate() {
           <p className="text-sm text-gray-400 leading-relaxed max-w-3xl">{t("preview.page.note.body")}</p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
