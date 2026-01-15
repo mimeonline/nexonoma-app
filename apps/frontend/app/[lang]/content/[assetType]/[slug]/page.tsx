@@ -42,7 +42,8 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/content/[a
   const asset = data.assetBlock;
   const name = asset.name || asset.slug;
   const typeKey = normalizeTypeKey(asset.type);
-  const typeLabel = dict?.asset?.labels?.[typeKey] ?? asset.type ?? typeKey;
+  const labels = dict?.asset?.labels;
+  const typeLabel = labels && typeKey in labels ? labels[typeKey as keyof typeof labels] : asset.type ?? typeKey;
   const baseDescription = asset.shortDescription || asset.longDescription || dict?.seo?.detail?.descriptionFallback || en.seo.detail.descriptionFallback;
   const has360 = Boolean((asset as { has360?: boolean | null }).has360);
   const suffix = has360 ? dict?.seo?.detail?.description360Suffix ?? en.seo.detail.description360Suffix : undefined;
@@ -79,7 +80,8 @@ export default async function ContentAssetPage({ params }: PageProps<"/[lang]/co
   const asset = data.assetBlock;
   const name = asset.name || asset.slug;
   const typeKey = normalizeTypeKey(asset.type);
-  const typeLabel = dict?.asset?.labels?.[typeKey] ?? asset.type ?? typeKey;
+  const labels = dict?.asset?.labels;
+  const typeLabel = labels && typeKey in labels ? labels[typeKey as keyof typeof labels] : asset.type ?? typeKey;
   const baseDescription =
     asset.shortDescription || asset.longDescription || dict?.seo?.detail?.descriptionFallback || en.seo.detail.descriptionFallback;
   const has360 = Boolean((asset as { has360?: boolean | null }).has360);

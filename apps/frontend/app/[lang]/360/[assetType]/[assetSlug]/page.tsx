@@ -34,7 +34,8 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/360/[asset
     const { content } = await fetch360Content(lang, assetType, assetSlug);
     const name = content.name || content.slug;
     const typeKey = normalizeTypeKey(content.type);
-    const typeLabel = dict?.asset?.labels?.[typeKey] ?? content.type ?? typeKey;
+    const labels = dict?.asset?.labels;
+    const typeLabel = labels && typeKey in labels ? labels[typeKey as keyof typeof labels] : content.type ?? typeKey;
     const baseDescription =
       content.shortDescription || content.longDescription || dict?.seo?.detail?.descriptionFallback || en.seo.detail.descriptionFallback;
     const suffix = dict?.seo?.detail?.description360Suffix ?? en.seo.detail.description360Suffix;
@@ -86,7 +87,8 @@ export default async function ContentDetailPage({ params }: PageProps<"/[lang]/3
   const { content, heroQuote } = mapToContentDetails(rawItem);
   const name = content.name || content.slug;
   const typeKey = normalizeTypeKey(content.type);
-  const typeLabel = dict?.asset?.labels?.[typeKey] ?? content.type ?? typeKey;
+  const labels = dict?.asset?.labels;
+  const typeLabel = labels && typeKey in labels ? labels[typeKey as keyof typeof labels] : content.type ?? typeKey;
   const baseDescription =
     content.shortDescription || content.longDescription || dict?.seo?.detail?.descriptionFallback || en.seo.detail.descriptionFallback;
   const suffix = dict?.seo?.detail?.description360Suffix ?? en.seo.detail.description360Suffix;

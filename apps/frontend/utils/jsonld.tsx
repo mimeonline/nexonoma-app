@@ -3,7 +3,7 @@ import Script from "next/script";
 type JsonLdValue = Record<string, unknown> | Array<Record<string, unknown>>;
 
 export const JsonLd = ({ data, id }: { data: JsonLdValue; id: string }) => (
-  <Script id={id} type="application/ld+json" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  <Script id={id} type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
 );
 
 export type WebSiteInput = {
