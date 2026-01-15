@@ -37,24 +37,62 @@
     "description": "Diese Ansicht zeigt Beziehungen/Mapping als Visualisierung. Im MVP ist sie als Preview enthalten; Fokus liegt auf Struktur und kuratierten Inhalten.",
     "actionCatalog": "Zum Katalog",
     "page": {
+      "callout": {
+        "title": "Why this preview?",
+        "body": "These views showcase where Nexonoma is going next: additional perspectives that make complex knowledge more tangible and comparable.",
+        "pill1": "City",
+        "pill2": "Learning paths",
+        "pill3": "Radar"
+      },
       "header": {
         "badge": "Labs / In development",
         "title": "Preview: Matrix & City",
         "lead": "Two perspectives on the same knowledge. Nexonoma will not only structure knowledge but make it tangible. These views show where the system evolves after the MVP."
       },
-      "matrix": {
-        "systemLabel": "System View",
-        "label": "Analysis",
-        "badge": "Concept",
-        "title": "Matrix – Analyze connections",
-        "body": "The Matrix provides an analytical view of the knowledge model. It arranges building blocks along clear dimensions and makes dependencies, overlaps, and comparability visible.",
+      "learning": {
+        "systemLabel": "Learning paths",
+        "label": "Learning",
+        "badge": "Planned",
+        "title": "Learning paths – structured onboarding",
+        "body": "Curated sequences that build understanding step by step, from basics to advanced topics.",
         "idealFor": {
           "label": "Ideal for:",
-          "item1": "Systematic portfolio analysis",
-          "item2": "Architecture and technology decisions",
-          "item3": "Detecting patterns and gaps (white spots)"
+          "item1": "Onboarding new team members",
+          "item2": "Structured upskilling",
+          "item3": "Curated learning journeys"
         },
-        "status": "Status: Interaction will follow after the MVP."
+        "status": "Status: Planned for after the MVP."
+      },
+      "radar": {
+        "label": "Radar",
+        "badge": "Planned",
+        "title": "Radar – tech signals",
+        "body": "A concise map of trends, maturity, and adoption to support portfolio and technology decisions.",
+        "idealFor": {
+          "label": "Ideal for:",
+          "item1": "Tech portfolio steering",
+          "item2": "Detecting emerging patterns",
+          "item3": "Strategic roadmap discussions"
+        },
+        "status": "Status: Planned for after the MVP."
+      },
+      "status": {
+        "preview": "Preview",
+        "planned": "Planned",
+        "optional": "Optional"
+      },
+      "transition": {
+        "label": "Transition",
+        "badge": "Optional",
+        "title": "Transition – guided change",
+        "body": "Support for translating insights into next steps, with decision support and migration guidance.",
+        "idealFor": {
+          "label": "Ideal for:",
+          "item1": "Decision handoff into delivery",
+          "item2": "Migration planning",
+          "item3": "Change enablement"
+        },
+        "status": "Status: Optional add-on."
       },
       "city": {
         "spatialLabel": "Spatial View",

@@ -37,36 +37,74 @@
     "description": "Diese Ansicht zeigt Beziehungen/Mapping als Visualisierung. Im MVP ist sie als Preview enthalten; Fokus liegt auf Struktur und kuratierten Inhalten.",
     "actionCatalog": "Zum Katalog",
     "page": {
+      "callout": {
+        "title": "Warum dieses Preview?",
+        "body": "Diese Ansichten zeigen, wie Nexonoma weiterdenkt: zusätzliche Perspektiven, die komplexes Wissen greifbarer und vergleichbarer machen.",
+        "pill1": "City",
+        "pill2": "Lernpfade",
+        "pill3": "Radar"
+      },
       "header": {
         "badge": "Labs / In Entwicklung",
-        "title": "Preview: Matrix & City",
-        "lead": "Zwei Perspektiven auf dasselbe Wissen. Nexonoma wird Wissen nicht nur strukturieren, sondern erlebbar machen. Diese Ansichten zeigen, wohin sich das System nach dem MVP entwickelt."
+        "title": "Preview: Kommende Perspektiven",
+        "lead": "Hier siehst du experimentelle Views, die zeigen, wie sich Nexonoma über Katalog, Struktur, Matrix und 360° hinaus weiterentwickelt. Diese Bereiche sind bewusst als Vorschau markiert – für Orientierung, nicht für tägliche Arbeit im MVP."
       },
-      "matrix": {
-        "systemLabel": "System View",
-        "label": "Analyse",
-        "badge": "Konzept",
-        "title": "Matrix – Zusammenhänge analysieren",
-        "body": "Die Matrix bietet eine analytische Sicht auf das Wissensmodell. Sie ordnet Bausteine entlang klarer Dimensionen und macht Abhängigkeiten, Überschneidungen und Vergleichbarkeit sichtbar.",
+      "learning": {
+        "systemLabel": "Lernpfade",
+        "label": "Lernen",
+        "badge": "Geplant",
+        "title": "Lernpfade – strukturiertes Onboarding",
+        "body": "Kuratiere Sequenzen, die Verständnis Schritt für Schritt aufbauen – von Grundlagen bis zu fortgeschrittenen Themen.",
         "idealFor": {
           "label": "Ideal für:",
-          "item1": "Systematische Analyse von Portfolios",
-          "item2": "Architektur- und Technologieentscheidungen",
-          "item3": "Erkennen von Mustern und Lücken (White Spots)"
+          "item1": "Onboarding neuer Teammitglieder",
+          "item2": "Strukturiertes Upskilling",
+          "item3": "Kuratiertes Lernen"
         },
-        "status": "Status: Interaktion folgt nach MVP."
+        "status": "Status: Nach dem MVP geplant."
+      },
+      "radar": {
+        "label": "Radar",
+        "badge": "Geplant",
+        "title": "Radar – Trends und Reifegrade",
+        "body": "Ein kompaktes Bild aus Trends, Reifegraden und Adoption als Unterstützung für Portfolio- und Technologieentscheidungen.",
+        "idealFor": {
+          "label": "Ideal für:",
+          "item1": "Technologie-Portfolio-Steuerung",
+          "item2": "Frühzeitiges Erkennen von Mustern",
+          "item3": "Strategische Roadmap-Diskussionen"
+        },
+        "status": "Status: Nach dem MVP geplant."
+      },
+      "status": {
+        "preview": "Preview",
+        "planned": "Geplant",
+        "optional": "Optional"
+      },
+      "transition": {
+        "label": "Transition",
+        "badge": "Optional",
+        "title": "Transition – gezielte Veränderung",
+        "body": "Unterstützung beim Übergang von Erkenntnis zu Umsetzung – inklusive Entscheidungs- und Migrationshilfe.",
+        "idealFor": {
+          "label": "Ideal für:",
+          "item1": "Entscheidungsübergabe in die Umsetzung",
+          "item2": "Migrationsplanung",
+          "item3": "Change-Begleitung"
+        },
+        "status": "Status: Optionales Add-on."
       },
       "city": {
         "spatialLabel": "Spatial View",
         "label": "Entdeckung",
         "badge": "Vision",
         "title": "City – Wissen entdecken",
-        "body": "Die City ist eine visuelle Entdeckungsreise. Cluster werden zu Bezirken, Konzepte zu Orten, Beziehungen zu Wegen. Zusammenhänge werden räumlich erfahrbar, statt nur logisch erklärt.",
+        "body": "Eine räumliche Exploration: Cluster werden zu Bezirken, Konzepte zu Orten, Beziehungen zu Wegen. Zusammenhänge werden erlebbar.",
         "idealFor": {
           "label": "Ideal für:",
-          "item1": "Orientierung in komplexen Themenfeldern",
-          "item2": "Intuitives Verständnis von Zusammenhängen",
-          "item3": "Lernen durch Erkunden (Exploration)"
+          "item1": "Intuitive Orientierung in komplexen Themenfeldern",
+          "item2": "Verstehen durch Erkunden statt nur Lesen",
+          "item3": "Storytelling-Pfade durch Modelle und Domänen"
         },
         "status": "Status: Fokus aktuell auf Struktur & Katalog."
       },
