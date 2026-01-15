@@ -11,13 +11,13 @@ import { Example, ExternalResource } from "@/types/nexonoma";
 import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
 import { Info } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { MetricsList } from "../organisms/MetricsList";
-import { ScenarioList } from "../organisms/ScenarioList";
-import { TradeoffMatrix } from "../organisms/TradeoffMatrix";
-import { UseCaseList } from "../organisms/UseCaseList";
+import { MetricsList } from "../../catalog/organisms/MetricsList";
+import { ScenarioList } from "../../catalog/organisms/ScenarioList";
+import { TradeoffMatrix } from "../../catalog/organisms/TradeoffMatrix";
+import { UseCaseList } from "../../catalog/organisms/UseCaseList";
 import { ContextActionsBar } from "@/components/ui/molecules/ContextActionsBar";
 
-interface ContentDetailsTemplateProps {
+interface Details360TemplateProps {
   // Wir nutzen FullAsset.
   // Da die API vielleicht nicht 100% matcht, können wir Partial nutzen
   // oder sicherstellen, dass der Mapper das korrekte Objekt baut.
@@ -53,7 +53,7 @@ const InfoCard = ({
   </div>
 );
 
-export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }: ContentDetailsTemplateProps) {
+export function Details360Template({ contentType, icon, heroQuote, content }: Details360TemplateProps) {
   const { t, lang } = useI18n();
   const localePrefix = lang ? `/${lang}` : "";
   const enumLabel = useEnumAssetLabel();

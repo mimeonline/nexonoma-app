@@ -1,5 +1,5 @@
 // src/app/.../page.tsx
-import { ContentDetailsTemplate } from "@/features/catalog/templates/ContentDetails";
+import { Details360Template } from "@/features/360/templates/360Details";
 import { mapToContentDetails } from "@/features/catalog/utils/contentMapper";
 import { serverLogger } from "@/lib/server-logger";
 import { createCatalogApi } from "@/services/catalogApi";
@@ -30,5 +30,5 @@ export default async function ContentDetailPage({ params }: PageProps<"/[lang]/3
   const { content, heroQuote } = mapToContentDetails(rawItem);
 
   // 3. Render
-  return <ContentDetailsTemplate contentType={assetType} icon={content.icon} heroQuote={heroQuote} content={content} />;
+  return <Details360Template contentType={assetType} icon={content.icon} heroQuote={heroQuote} content={content} />;
 }

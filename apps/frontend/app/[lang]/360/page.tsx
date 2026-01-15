@@ -1,4 +1,4 @@
-import { Overview360Template } from "@/features/overview360/templates/Overview360";
+import { Overview360Template } from "@/features/360/templates/Overview360";
 import { createOverview360Api } from "@/services/overview360Api";
 import { getDictionary, type Locale } from "../dictionaries";
 import { I18nProvider } from "@/features/i18n/I18nProvider";
