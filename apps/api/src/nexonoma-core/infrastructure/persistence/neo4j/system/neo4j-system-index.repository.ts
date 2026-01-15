@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
 import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
-import { SystemContentRepositoryPort } from '../../../../application/ports/system/system-content-repository.port';
+import {
+  SystemContentIndexOptions,
+  SystemContentRepositoryPort,
+} from '../../../../application/ports/system/system-content-repository.port';
 import type { CatalogIndexRecord } from '../../../../domain/entities/catalog-index-record.entity';
 import { AssetType } from '../../../../domain/types/asset-enums';
 
@@ -9,12 +12,17 @@ import { AssetType } from '../../../../domain/types/asset-enums';
 export class Neo4jSystemIndexRepository implements SystemContentRepositoryPort {
   constructor(private readonly neo4j: Neo4jService) {}
 
-  async findContentIndex(locale: string = 'en'): Promise<CatalogIndexRecord[]> {
+  async findContentIndex(
+    locale: string = 'en',
+    options?: SystemContentIndexOptions,
+  ): Promise<CatalogIndexRecord[]> {
+    const require360 = options?.has360 ?? false;
     const query = `
       MATCH (n:AssetBlock)
       WHERE n.type IN [$t1, $t2, $t3, $t4]
         AND n['name_' + $lang] IS NOT NULL
         AND n['name_' + $lang] <> ''
+        AND ($require360 = false OR n.has360 = true)
       RETURN n {
         .id,
         .type,
@@ -34,6 +42,7 @@ export class Neo4jSystemIndexRepository implements SystemContentRepositoryPort {
       t2: AssetType.METHOD,
       t3: AssetType.CONCEPT,
       t4: AssetType.TECHNOLOGY,
+      require360,
     };
 
     const result = await this.neo4j.read(query, params);

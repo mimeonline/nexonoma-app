@@ -1,6 +1,6 @@
 import { CatalogIndexRecord } from '../../../domain/entities/catalog-index-record.entity';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
-import { SystemCatalogRepositoryPort } from '../../ports/system/system-content-repository.port';
+import { SystemContentRepositoryPort } from '../../ports/system/system-content-repository.port';
 import { GetSystemContentIndexUseCase } from './get-system-content-index.use-case';
 
 const createRecord = (
@@ -18,7 +18,7 @@ const createRecord = (
 
 describe('GetSystemContentIndexUseCase', () => {
   it('returns empty result when no types are provided', async () => {
-    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
+    const assetRepo: Partial<SystemContentRepositoryPort> = {
       findContentIndex: jest.fn(),
     };
 
@@ -37,7 +37,7 @@ describe('GetSystemContentIndexUseCase', () => {
   });
 
   it('filters invalid slugs, merges languages, and sorts deterministically', async () => {
-    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
+    const assetRepo: Partial<SystemContentRepositoryPort> = {
       findContentIndex: jest
         .fn()
         .mockResolvedValueOnce([
@@ -133,7 +133,7 @@ describe('GetSystemContentIndexUseCase', () => {
   });
 
   it('paginates after sorting', async () => {
-    const assetRepo: Partial<SystemCatalogRepositoryPort> = {
+    const assetRepo: Partial<SystemContentRepositoryPort> = {
       findContentIndex: jest.fn().mockResolvedValueOnce([
         createRecord({
           id: 'a1',

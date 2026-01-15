@@ -1,5 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { SystemIndexResponseDto } from '../../../application/dtos/system/system-index-response.dto';
+import { GetSystem360IndexUseCase } from '../../../application/use-cases/system/get-system-360-index.use-case';
 import { GetSystemContentIndexUseCase } from '../../../application/use-cases/system/get-system-content-index.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
@@ -55,6 +56,7 @@ const parseTypes = (value?: string): AssetType[] => {
 export class SystemIndexController {
   constructor(
     private readonly getContentIndexUseCase: GetSystemContentIndexUseCase,
+    private readonly get360IndexUseCase: GetSystem360IndexUseCase,
   ) {}
 
   @Get('content/index')
@@ -70,6 +72,27 @@ export class SystemIndexController {
     const parsedTypes = parseTypes(types);
 
     return this.getContentIndexUseCase.execute({
+      page: parsedPage,
+      limit: parsedLimit,
+      status: parsedStatus,
+      types: parsedTypes,
+      languages: [...DEFAULT_LANGS],
+    });
+  }
+
+  @Get('360/index')
+  async get360IndexNodes(
+    @Query('status') status?: string,
+    @Query('types') types?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ): Promise<SystemIndexResponseDto> {
+    const parsedPage = Math.max(1, parseNumber(page, DEFAULT_PAGE));
+    const parsedLimit = Math.min(MAX_LIMIT, parseNumber(limit, DEFAULT_LIMIT));
+    const parsedStatus = parseStatus(status);
+    const parsedTypes = parseTypes(types);
+
+    return this.get360IndexUseCase.execute({
       page: parsedPage,
       limit: parsedLimit,
       status: parsedStatus,

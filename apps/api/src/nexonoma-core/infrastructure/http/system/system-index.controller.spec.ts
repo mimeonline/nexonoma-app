@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { SystemIndexController } from './system-index.controller';
+import { GetSystem360IndexUseCase } from '../../../application/use-cases/system/get-system-360-index.use-case';
 import { GetSystemContentIndexUseCase } from '../../../application/use-cases/system/get-system-content-index.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
@@ -8,11 +9,13 @@ const emptyResponse = { page: 1, limit: 500, total: 0, items: [] };
 describe('SystemIndexController', () => {
   it('applies defaults when query params are missing', async () => {
     const getIndex = { execute: jest.fn().mockResolvedValue(emptyResponse) };
+    const get360Index = { execute: jest.fn().mockResolvedValue(emptyResponse) };
 
     const moduleRef = await Test.createTestingModule({
       controllers: [SystemIndexController],
       providers: [
         { provide: GetSystemContentIndexUseCase, useValue: getIndex },
+        { provide: GetSystem360IndexUseCase, useValue: get360Index },
       ],
     }).compile();
 
@@ -35,11 +38,13 @@ describe('SystemIndexController', () => {
 
   it('maps types, ignores unknowns, and caps limit', async () => {
     const getIndex = { execute: jest.fn().mockResolvedValue(emptyResponse) };
+    const get360Index = { execute: jest.fn().mockResolvedValue(emptyResponse) };
 
     const moduleRef = await Test.createTestingModule({
       controllers: [SystemIndexController],
       providers: [
         { provide: GetSystemContentIndexUseCase, useValue: getIndex },
+        { provide: GetSystem360IndexUseCase, useValue: get360Index },
       ],
     }).compile();
 
