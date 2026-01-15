@@ -312,6 +312,42 @@
         "line2": "Nexonoma ist eine visuelle Wissens- und Navigationsplattform für komplexe Themen aus Software, Architektur und Organisation.",
         "line3": "Statt Inhalte isoliert darzustellen, macht Nexonoma Strukturen, Ebenen und Zusammenhänge sichtbar. Der Fokus liegt auf Orientierung, Einordnung und Verständnis – nicht auf Vollständigkeit."
       },
+      "hero": {
+        "badge": "Nexonoma · Orientierung & Entscheidung",
+        "line1": "Komplexes Wissen als strukturierte Zusammenhänge",
+        "line2": "Nexonoma ist eine visuelle Wissens- und Navigationsplattform für komplexe Themen aus Software, Architektur und Organisation.",
+        "line3": "Statt Inhalte isoliert darzustellen, macht Nexonoma Strukturen, Ebenen und Zusammenhänge sichtbar. Der Fokus liegt auf Orientierung, Einordnung und Verständnis – nicht auf Vollständigkeit."
+      },
+      "quickSteps": {
+        "title": "So nutzt du Nexonoma",
+        "subtitle": "Ein pragmatischer Einstieg in drei Schritten.",
+        "steps": {
+          "discover": {
+            "title": "Entdecken",
+            "description": {
+              "before": "Starte im",
+              "highlight": "Katalog",
+              "after": "und finde relevante Bausteine."
+            }
+          },
+          "locate": {
+            "title": "Verorten",
+            "description": {
+              "before": "Nutze",
+              "highlight": "Struktur",
+              "after": "um den Platz im Modell zu verstehen."
+            }
+          },
+          "evaluate": {
+            "title": "Bewerten",
+            "description": {
+              "before": "Öffne",
+              "highlight": "360°",
+              "after": "um Trade-offs, Risiken und Konsequenzen zu sehen."
+            }
+          }
+        }
+      },
       "cards": {
         "catalog": {
           "title": "Wissens-Katalog",
@@ -327,7 +363,28 @@
           "title": "Visualisierungs-Lab",
           "description": "Eine Vorschau auf weiterführende Perspektiven. Experimentelle Visualisierungen von Beziehungen und Strukturen – im MVP bewusst als Preview.",
           "cta": "Preview starten"
+        },
+        "overview360": {
+          "title": "360° Einordnung",
+          "description": "Bewerten statt nur lesen: Kontext, Trade-offs, Risiken und Beispiele – für bewusstere Entscheidungen.",
+          "cta": "360° öffnen"
         }
+      },
+      "matrix": {
+        "badge": "Vergleich",
+        "title": "Analyse (Matrix)",
+        "description": "Schnittmengen, Beziehungen und Muster sichtbar machen – ideal zum Vergleichen und Einordnen.",
+        "cta": "Zur Matrix"
+      },
+      "preview": {
+        "badge": "Experiment",
+        "title": "Preview",
+        "description": "Eine Vorschau auf weiterführende Perspektiven. Experimentelle Visualisierungen von Beziehungen und Strukturen – im MVP bewusst als Preview.",
+        "cta": "Preview starten"
+      },
+      "footer": {
+        "modelLink": "Modell-Erklärung",
+        "feedbackLink": "Feedback geben"
       },
       "about": {
         "title": "Nexonoma ist kein Wiki und kein Lernportal.",

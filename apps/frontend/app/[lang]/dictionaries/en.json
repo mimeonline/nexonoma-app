@@ -312,6 +312,42 @@
         "line2": "Nexonoma is a visual knowledge and navigation platform for complex topics in software, architecture, and organizations.",
         "line3": "Instead of presenting content in isolation, Nexonoma makes structures, layers, and relationships visible. The focus is on orientation, context, and understanding — not on completeness."
       },
+      "hero": {
+        "badge": "Nexonoma · Orientation & decisions",
+        "line1": "Complex knowledge as structured relationships",
+        "line2": "Nexonoma is a visual knowledge and navigation platform for complex topics in software, architecture, and organizations.",
+        "line3": "Instead of presenting content in isolation, Nexonoma makes structures, layers, and relationships visible. The focus is on orientation, context, and understanding — not on completeness."
+      },
+      "quickSteps": {
+        "title": "How to use Nexonoma",
+        "subtitle": "A pragmatic start in three steps.",
+        "steps": {
+          "discover": {
+            "title": "Discover",
+            "description": {
+              "before": "Start in the",
+              "highlight": "Catalog",
+              "after": "and find relevant building blocks."
+            }
+          },
+          "locate": {
+            "title": "Locate",
+            "description": {
+              "before": "Use",
+              "highlight": "Structure",
+              "after": "to understand the place in the model."
+            }
+          },
+          "evaluate": {
+            "title": "Evaluate",
+            "description": {
+              "before": "Open",
+              "highlight": "360°",
+              "after": "to see trade-offs, risks, and consequences."
+            }
+          }
+        }
+      },
       "cards": {
         "catalog": {
           "title": "Knowledge Catalog",
@@ -327,7 +363,28 @@
           "title": "Visualization Lab",
           "description": "A preview of additional perspectives. Experimental visualizations of relationships and structures — intentionally presented as a preview in the MVP.",
           "cta": "Start preview"
+        },
+        "overview360": {
+          "title": "360° context",
+          "description": "Evaluate instead of just reading: context, trade-offs, risks, and examples — for more deliberate decisions.",
+          "cta": "Open 360°"
         }
+      },
+      "matrix": {
+        "badge": "Comparison",
+        "title": "Analysis (Matrix)",
+        "description": "Make overlaps, relationships, and patterns visible — ideal for comparing and classifying.",
+        "cta": "Go to matrix"
+      },
+      "preview": {
+        "badge": "Experiment",
+        "title": "Preview",
+        "description": "A preview of additional perspectives. Experimental visualizations of relationships and structures — intentionally presented as a preview in the MVP.",
+        "cta": "Start preview"
+      },
+      "footer": {
+        "modelLink": "Model explanation",
+        "feedbackLink": "Give feedback"
       },
       "about": {
         "title": "Nexonoma is not a wiki and not a learning portal.",
