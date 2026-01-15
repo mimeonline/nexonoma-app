@@ -1,4 +1,3 @@
-// features/catalog/organisms/ScenarioList.tsx
 import { ScenarioItem } from "./ScenarioItem";
 import { Scenario } from "@/types/nexonoma";
 

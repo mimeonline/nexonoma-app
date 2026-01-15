@@ -11,10 +11,10 @@ import { Example, ExternalResource } from "@/types/nexonoma";
 import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
 import { Info } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { MetricsList } from "../../catalog/organisms/MetricsList";
-import { ScenarioList } from "../../catalog/organisms/ScenarioList";
-import { TradeoffMatrix } from "../../catalog/organisms/TradeoffMatrix";
-import { UseCaseList } from "../../catalog/organisms/UseCaseList";
+import { MetricsList } from "../organisms/MetricsList";
+import { ScenarioList } from "../organisms/ScenarioList";
+import { TradeoffMatrix } from "../organisms/TradeoffMatrix";
+import { UseCaseList } from "../organisms/UseCaseList";
 import { ContextActionsBar } from "@/components/ui/molecules/ContextActionsBar";
 
 interface Details360TemplateProps {

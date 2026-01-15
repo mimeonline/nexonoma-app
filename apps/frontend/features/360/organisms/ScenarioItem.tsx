@@ -1,4 +1,3 @@
-// features/catalog/organisms/ScenarioItem.tsx
 import { Disclosure } from "@/components/molecules/Disclosure";
 import { Scenario } from "@/types/nexonoma";
 

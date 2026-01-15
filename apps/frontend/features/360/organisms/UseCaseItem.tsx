@@ -1,4 +1,3 @@
-// features/catalog/organisms/UseCaseItem.tsx
 import { Disclosure } from "@/components/molecules/Disclosure";
 import { UseCase } from "@/types/nexonoma";
 
