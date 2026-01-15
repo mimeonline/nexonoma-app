@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { DynamicIcon } from "@/components/atoms/DynamicIcon";
 import { InfoPopover } from "@/components/atoms/InfoPopover";
@@ -44,7 +44,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
   const { t, lang } = useI18n();
   const router = useRouter();
   const localePrefix = lang ? `/${lang}` : "";
-  const activeItems = data[activeTab] ?? [];
+  const activeItems = useMemo(() => data[activeTab] ?? [], [data, activeTab]);
 
   const filteredActiveItems = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -76,12 +76,6 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
     setActiveTab(key);
     setPage(1);
   };
-
-  useEffect(() => {
-    if (page > totalPages) {
-      setPage(totalPages);
-    }
-  }, [page, totalPages]);
 
   const translateTypeLabel = (value: string) => {
     const key = `asset.labels.${value.toLowerCase()}`;
@@ -265,7 +259,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
             <Button variant="ghost" onClick={() => setPage(1)} disabled={currentPage === 1}>
               {t("catalog.pagination.first")}
             </Button>
-            <Button variant="secondary" onClick={() => setPage((prev) => Math.max(1, Math.min(totalPages, prev) - 1))} disabled={currentPage === 1}>
+            <Button variant="secondary" onClick={() => setPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1}>
               {t("catalog.pagination.previous")}
             </Button>
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-200/60">
@@ -273,7 +267,7 @@ export function Overview360Template({ data }: Overview360TemplateProps) {
             </span>
             <Button
               variant="primary"
-              onClick={() => setPage((prev) => Math.min(totalPages, Math.min(totalPages, prev) + 1))}
+              onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
             >
               {t("catalog.pagination.next")}

@@ -81,14 +81,16 @@ export function buildSystemIndexResponse(
 
       if (
         updatedAt &&
-        (!existing.updatedAt || new Date(updatedAt) > new Date(existing.updatedAt))
+        (!existing.updatedAt ||
+          new Date(updatedAt) > new Date(existing.updatedAt))
       ) {
         existing.updatedAt = updatedAt;
       }
 
       if (
         createdAt &&
-        (!existing.createdAt || new Date(createdAt) > new Date(existing.createdAt))
+        (!existing.createdAt ||
+          new Date(createdAt) > new Date(existing.createdAt))
       ) {
         existing.createdAt = createdAt;
       }

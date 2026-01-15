@@ -99,8 +99,6 @@ export function Details360Template({ contentType, icon, heroQuote, content }: De
     };
   }, []);
 
-  const typeLabel = t(`asset.enums.types.${contentType}.label`);
-
   return (
     <div className="space-y-8 pb-20">
       <ContextActionsBar

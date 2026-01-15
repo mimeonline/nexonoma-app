@@ -8,37 +8,14 @@ import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
 import { ContextActionsBar } from "@/components/ui/molecules/ContextActionsBar";
-import { useEnumAssetLabel, useI18n, type AssetEnumType } from "@/features/i18n/I18nProvider";
+import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
 import { useMemo, useState } from "react";
 
-type HeroMetaTone = "neutral" | "accent" | "warning";
-
 type ContentTemplateProps = {
   lang: string;
   data: ContentResponse;
-};
-
-type SpecRow = {
-  id: string;
-  label: string;
-  field: AssetEnumType;
-  value: string;
-  valueKey?: string | null;
-  tone?: "accent" | "warning";
-};
-
-type SpecSection = {
-  id: string;
-  titleKey: string;
-  rows: SpecRow[];
-};
-
-const metaToneClasses: Record<HeroMetaTone, string> = {
-  neutral: "text-white bg-white/10 border-white/10",
-  accent: "text-nexo-aqua bg-nexo-aqua/10 border-nexo-aqua/20",
-  warning: "text-warning bg-warning/10 border-warning/20",
 };
 
 function SectionTitle({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -86,84 +63,6 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
   const fmtEnum = (enumType: Parameters<typeof enumAssetLabel>[0], value?: string | null) =>
     value ? enumAssetLabel(enumType, value) : t("content.basics.unknown");
 
-  const specSections: SpecSection[] = [
-    {
-      id: "context",
-      titleKey: "content.basics.group.context",
-      rows: [
-        {
-          id: "organizationalLevel",
-          label: t("asset.properties.organizationalLevel.label"),
-          field: "organizationalLevel",
-          value: fmtEnum("organizationalLevel", assetBlock.organisationLevel ?? undefined),
-          valueKey: assetBlock.organisationLevel ?? undefined,
-        },
-        {
-          id: "organizationalMaturity",
-          label: t("asset.properties.organizationalMaturity.label"),
-          field: "organizationalMaturity",
-          value: fmtEnum("organizationalMaturity", assetBlock.organizationalMaturity ?? undefined),
-          valueKey: assetBlock.organizationalMaturity ?? undefined,
-        },
-        {
-          id: "impacts",
-          label: t("asset.properties.impacts.label"),
-          field: "impacts",
-          value: fmtEnum("impacts", assetBlock.impacts ?? undefined),
-          valueKey: assetBlock.impacts ?? undefined,
-        },
-      ],
-    },
-    {
-      id: "decision",
-      titleKey: "content.basics.group.decision",
-      rows: [
-        {
-          id: "decisionType",
-          label: t("asset.properties.decisionType.label"),
-          field: "decisionType",
-          value: fmtEnum("decisionType", assetBlock.decisionType ?? undefined),
-          valueKey: assetBlock.decisionType ?? undefined,
-        },
-        {
-          id: "valueStreamStage",
-          label: t("asset.properties.valueStreamStage.label"),
-          field: "valueStreamStage",
-          value: fmtEnum("valueStreamStage", assetBlock.valueStream ?? undefined),
-          valueKey: assetBlock.valueStream ?? undefined,
-        },
-      ],
-    },
-    {
-      id: "assessment",
-      titleKey: "content.basics.group.assessment",
-      rows: [
-        {
-          id: "complexityLevel",
-          label: t("asset.properties.complexityLevel.label"),
-          field: "complexityLevel",
-          value: fmtEnum("complexityLevel", assetBlock.complexityLevel ?? undefined),
-          valueKey: assetBlock.complexityLevel ?? undefined,
-        },
-        {
-          id: "maturityLevel",
-          label: t("asset.properties.maturityLevel.label"),
-          field: "maturityLevel",
-          value: fmtEnum("maturityLevel", assetBlock.maturityLevel ?? undefined),
-          valueKey: assetBlock.maturityLevel ?? undefined,
-          tone: "accent",
-        },
-        {
-          id: "cognitiveLoad",
-          label: t("asset.properties.cognitiveLoad.label"),
-          field: "cognitiveLoad",
-          value: fmtEnum("cognitiveLoad", assetBlock.cognitiveLoad ?? undefined),
-          valueKey: assetBlock.cognitiveLoad ?? undefined,
-          tone: "warning",
-        },
-      ],
-    },
-  ];
 
   const relationLabel = (type: string | null, rel: string | null) => {
     const map: Record<string, Record<string, { de: string; en: string }>> = {
@@ -204,8 +103,6 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
     if (entry) return lang === "de" ? entry.de : entry.en;
     return lang === "de" ? t("content.relations.unknownLabel.de") : t("content.relations.unknownLabel.en");
   };
-
-  const assetName = assetBlock.name ?? assetBlock.slug;
 
   return (
     <div className="space-y-8 pb-20">
