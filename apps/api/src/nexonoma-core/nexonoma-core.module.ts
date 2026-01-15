@@ -6,7 +6,6 @@ import { ContentController } from './infrastructure/http/content/content.control
 import { GridController } from './infrastructure/http/grid/grid.controller';
 import { MatrixController } from './infrastructure/http/matrix/matrix.controller';
 import { Overview360Controller } from './infrastructure/http/overview360/overview360.controller';
-import { PublicSitemapController } from './infrastructure/http/public/public-sitemap.controller';
 import { SystemIndexController } from './infrastructure/http/system/system-index.controller';
 
 // 2. Use Cases (Application Layer)
@@ -19,7 +18,6 @@ import { GetGridOverviewUseCase } from './application/use-cases/grid/get-grid-ov
 import { GetMacroClusterViewUseCase } from './application/use-cases/grid/get-macrocluster-view.use-case';
 import { GetMatrixUseCase } from './application/use-cases/matrix/get-matrix.use-case';
 import { GetOverview360UseCase } from './application/use-cases/overview360/get-overview360.use-case';
-import { GetPublicSitemapNodesUseCase } from './application/use-cases/system/get-public-sitemap-nodes.use-case';
 import { GetSystem360IndexUseCase } from './application/use-cases/system/get-system-360-index.use-case';
 import { GetSystemContentIndexUseCase } from './application/use-cases/system/get-system-content-index.use-case';
 
@@ -48,7 +46,6 @@ import { Neo4jSystemIndexRepository } from './infrastructure/persistence/neo4j/s
     GridController,
     CatalogController,
     MatrixController,
-    PublicSitemapController,
     SystemIndexController,
     ContentController,
     Overview360Controller,
@@ -66,7 +63,6 @@ import { Neo4jSystemIndexRepository } from './infrastructure/persistence/neo4j/s
     GetContentBySlugUseCase,
     GetSystem360IndexUseCase,
     GetSystemContentIndexUseCase,
-    GetPublicSitemapNodesUseCase,
     GetMatrixUseCase,
     GetContentUseCase,
     GetOverview360UseCase,
