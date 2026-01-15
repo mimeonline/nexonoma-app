@@ -1,7 +1,7 @@
-import { GetSystemCatalogIndexUseCase } from './get-system-catalog-index.use-case';
 import { CatalogIndexRecord } from '../../../domain/entities/catalog-index-record.entity';
-import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
+import { SystemCatalogRepositoryPort } from '../../ports/system/system-content-repository.port';
+import { GetSystemContentIndexUseCase } from './get-system-content-index.use-case';
 
 const createRecord = (
   overrides: Partial<CatalogIndexRecord>,
@@ -16,15 +16,13 @@ const createRecord = (
   ...overrides,
 });
 
-describe('GetSystemCatalogIndexUseCase', () => {
+describe('GetSystemContentIndexUseCase', () => {
   it('returns empty result when no types are provided', async () => {
     const assetRepo: Partial<SystemCatalogRepositoryPort> = {
       findContentIndex: jest.fn(),
     };
 
-    const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as SystemCatalogRepositoryPort,
-    );
+    const useCase = new GetSystemContentIndexUseCase(assetRepo);
 
     const result = await useCase.execute({
       page: 1,
@@ -91,9 +89,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
         ]),
     };
 
-    const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as SystemCatalogRepositoryPort,
-    );
+    const useCase = new GetSystemContentIndexUseCase(assetRepo);
 
     const result = await useCase.execute({
       page: 1,
@@ -160,9 +156,7 @@ describe('GetSystemCatalogIndexUseCase', () => {
       ]),
     };
 
-    const useCase = new GetSystemCatalogIndexUseCase(
-      assetRepo as SystemCatalogRepositoryPort,
-    );
+    const useCase = new GetSystemContentIndexUseCase(assetRepo);
 
     const result = await useCase.execute({
       page: 2,

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
 import { Neo4jService } from '../../../../../shared/infrastructure/neo4j/neo4j.service';
+import { SystemContentRepositoryPort } from '../../../../application/ports/system/system-content-repository.port';
 import type { CatalogIndexRecord } from '../../../../domain/entities/catalog-index-record.entity';
 import { AssetType } from '../../../../domain/types/asset-enums';
-import { SystemCatalogRepositoryPort } from '../../../../application/ports/system/system-catalog-repository.port';
-import { normalizeNeo4j } from 'src/shared/infrastructure/neo4j/no4j.utils';
 
 @Injectable()
-export class Neo4jSystemCatalogRepository implements SystemCatalogRepositoryPort {
+export class Neo4jSystemIndexRepository implements SystemContentRepositoryPort {
   constructor(private readonly neo4j: Neo4jService) {}
 
   async findContentIndex(locale: string = 'en'): Promise<CatalogIndexRecord[]> {

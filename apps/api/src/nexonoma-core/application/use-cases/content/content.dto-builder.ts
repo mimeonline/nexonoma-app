@@ -8,10 +8,7 @@ import type {
   ContentStructurePathDto,
 } from '../../dtos/content/content-response.dto';
 
-const toLocalizedTags = (
-  value: unknown,
-  locale: string,
-): LocalizedTagDto[] => {
+const toLocalizedTags = (value: unknown, locale: string): LocalizedTagDto[] => {
   if (!value) return [];
 
   if (Array.isArray(value)) {
@@ -85,10 +82,7 @@ const toStructurePathDtos = (
       if (!path.segment || !path.cluster || !path.macroCluster) return null;
 
       const segmentTags = toLocalizedTags(path.segment.tags, locale);
-      const segmentTagOrder = buildTagOrder(
-        path.segment.tagOrder,
-        segmentTags,
-      );
+      const segmentTagOrder = buildTagOrder(path.segment.tagOrder, segmentTags);
 
       return {
         macroCluster: {

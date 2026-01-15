@@ -1,4 +1,4 @@
-export type SystemCatalogIndexItemDto = {
+export type SystemIndexItemDto = {
   id: string;
   type: string;
   slug: string;

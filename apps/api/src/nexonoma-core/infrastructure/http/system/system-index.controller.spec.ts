@@ -1,22 +1,22 @@
 import { Test } from '@nestjs/testing';
-import { SystemCatalogController } from './system-catalog.controller';
-import { GetSystemCatalogIndexUseCase } from '../../../application/use-cases/system/get-system-catalog-index.use-case';
+import { SystemIndexController } from './system-index.controller';
+import { GetSystemContentIndexUseCase } from '../../../application/use-cases/system/get-system-content-index.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const emptyResponse = { page: 1, limit: 500, total: 0, items: [] };
 
-describe('SystemCatalogController', () => {
+describe('SystemIndexController', () => {
   it('applies defaults when query params are missing', async () => {
     const getIndex = { execute: jest.fn().mockResolvedValue(emptyResponse) };
 
     const moduleRef = await Test.createTestingModule({
-      controllers: [SystemCatalogController],
+      controllers: [SystemIndexController],
       providers: [
-        { provide: GetSystemCatalogIndexUseCase, useValue: getIndex },
+        { provide: GetSystemContentIndexUseCase, useValue: getIndex },
       ],
     }).compile();
 
-    const controller = moduleRef.get(SystemCatalogController);
+    const controller = moduleRef.get(SystemIndexController);
     await controller.getIndexNodes();
 
     expect(getIndex.execute).toHaveBeenCalledWith({
@@ -37,13 +37,13 @@ describe('SystemCatalogController', () => {
     const getIndex = { execute: jest.fn().mockResolvedValue(emptyResponse) };
 
     const moduleRef = await Test.createTestingModule({
-      controllers: [SystemCatalogController],
+      controllers: [SystemIndexController],
       providers: [
-        { provide: GetSystemCatalogIndexUseCase, useValue: getIndex },
+        { provide: GetSystemContentIndexUseCase, useValue: getIndex },
       ],
     }).compile();
 
-    const controller = moduleRef.get(SystemCatalogController);
+    const controller = moduleRef.get(SystemIndexController);
     await controller.getIndexNodes(
       'review',
       'concept,unknown,tool',

@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { GetSystemCatalogIndexUseCase } from '../../../application/use-cases/system/get-system-catalog-index.use-case';
-import { SystemCatalogIndexResponseDto } from '../../../application/dtos/system/system-catalog-index-response.dto';
+import { SystemIndexResponseDto } from '../../../application/dtos/system/system-index-response.dto';
+import { GetSystemContentIndexUseCase } from '../../../application/use-cases/system/get-system-content-index.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
 const DEFAULT_STATUS = AssetStatus.PUBLISHED;
@@ -51,23 +51,25 @@ const parseTypes = (value?: string): AssetType[] => {
   return resolved.length > 0 ? resolved : [];
 };
 
-@Controller('system/catalog')
-export class SystemCatalogController {
-  constructor(private readonly getIndex: GetSystemCatalogIndexUseCase) {}
+@Controller('system')
+export class SystemIndexController {
+  constructor(
+    private readonly getContentIndexUseCase: GetSystemContentIndexUseCase,
+  ) {}
 
-  @Get('index')
+  @Get('content/index')
   async getIndexNodes(
     @Query('status') status?: string,
     @Query('types') types?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
-  ): Promise<SystemCatalogIndexResponseDto> {
+  ): Promise<SystemIndexResponseDto> {
     const parsedPage = Math.max(1, parseNumber(page, DEFAULT_PAGE));
     const parsedLimit = Math.min(MAX_LIMIT, parseNumber(limit, DEFAULT_LIMIT));
     const parsedStatus = parseStatus(status);
     const parsedTypes = parseTypes(types);
 
-    return this.getIndex.execute({
+    return this.getContentIndexUseCase.execute({
       page: parsedPage,
       limit: parsedLimit,
       status: parsedStatus,

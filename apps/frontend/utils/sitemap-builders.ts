@@ -101,7 +101,7 @@ export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<{ ent
   const page = 1;
 
   const systemApi = createSystemApi();
-  const nodes = await systemApi.fetchSitemapNodesPage({
+  const nodes = await systemApi.fetchContentIndexPage({
     page,
     limit,
   });
@@ -114,7 +114,7 @@ export const buildSitemapContentEntries = async (baseUrl: string): Promise<{ ent
   const page = 1;
 
   const systemApi = createSystemApi();
-  const nodes = await systemApi.fetchSitemapNodesPage({
+  const nodes = await systemApi.fetchContentIndexPage({
     page,
     limit,
   });
@@ -127,7 +127,7 @@ export const buildSitemap360Entries = async (baseUrl: string): Promise<{ entries
   const page = 1;
 
   const systemApi = createSystemApi();
-  const nodes = await systemApi.fetchSitemapNodesPage({
+  const nodes = await systemApi.fetchContentIndexPage({
     page,
     limit,
   });

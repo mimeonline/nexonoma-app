@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { LocalizationHelper } from '../../../../shared/common/utils/localization.helper';
+import { AssetStatus } from '../../../domain/types/asset-enums';
 import type { PublicSitemapQueryDto } from '../../dtos/system/public-sitemap-query.dto';
 import type { SitemapNodeDto } from '../../dtos/system/sitemap-node.dto';
-import { AssetStatus } from '../../../domain/types/asset-enums';
-import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
-import { LocalizationHelper } from '../../../../shared/common/utils/localization.helper';
+import { SystemContentRepositoryPort } from '../../ports/system/system-content-repository.port';
 
 const toIso = (value?: Date | string | null) => {
   if (!value) return undefined;
@@ -25,7 +25,7 @@ const mapTags = (tags: unknown, lang: string) => {
 
 @Injectable()
 export class GetPublicSitemapNodesUseCase {
-  constructor(private readonly systemRepo: SystemCatalogRepositoryPort) {}
+  constructor(private readonly systemRepo: SystemContentRepositoryPort) {}
 
   async execute(query: PublicSitemapQueryDto): Promise<SitemapNodeDto[]> {
     const { page, limit, languages, includeReview } = query;

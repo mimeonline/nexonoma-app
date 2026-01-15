@@ -1,6 +1,6 @@
-import { GetPublicSitemapNodesUseCase } from './get-public-sitemap-nodes.use-case';
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
-import type { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
+import type { SystemCatalogRepositoryPort } from '../../ports/system/system-content-repository.port';
+import { GetPublicSitemapNodesUseCase } from './get-public-sitemap-nodes.use-case';
 
 const createAsset = (overrides: Partial<any>) => ({
   id: 'id-1',

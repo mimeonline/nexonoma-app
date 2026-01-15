@@ -100,8 +100,8 @@ describe('GetContentUseCase', () => {
 
     const useCase = new GetContentUseCase(contentRepo as ContentRepositoryPort);
 
-    await expect(useCase.execute('en', 'tool', 'missing')).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+    await expect(
+      useCase.execute('en', 'tool', 'missing'),
+    ).rejects.toBeInstanceOf(NotFoundException);
   });
 });

@@ -17,7 +17,7 @@ export type SitemapNodePageParams = {
   limit: number;
 };
 
-type SystemCatalogIndexResponse = {
+type SystemContentIndexResponse = {
   items?: SitemapNode[];
 };
 
@@ -105,7 +105,7 @@ export function createSystemApi() {
   const baseUrl = getApiBase({ preferInternal: true });
 
   return {
-    async fetchSitemapNodesPage({ page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> {
+    async fetchContentIndexPage({ page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> {
       const searchParams = new URLSearchParams({
         page: String(page),
         limit: String(limit),
@@ -113,9 +113,9 @@ export function createSystemApi() {
         types: "concept,method,tool,technology",
       });
 
-      const url = `${baseUrl}/system/catalog/index?${searchParams.toString()}`;
-      const data = await fetchJsonSafe<SystemCatalogIndexResponse>(url, {
-        logLabel: "system catalog index fetch failed",
+      const url = `${baseUrl}/system/content/index?${searchParams.toString()}`;
+      const data = await fetchJsonSafe<SystemContentIndexResponse>(url, {
+        logLabel: "system content index fetch failed",
         cache: "no-store",
       });
 

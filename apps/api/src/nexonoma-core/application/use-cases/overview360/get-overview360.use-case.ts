@@ -3,7 +3,9 @@ import type { Overview360ResponseDto } from '../../dtos/overview360/overview360-
 import { Overview360RepositoryPort } from '../../ports/overview360/overview360-repository.port';
 import { Overview360DtoBuilder } from './overview360.dto-builder';
 
-const toGroupKey = (value?: string | null): keyof Overview360ResponseDto | null => {
+const toGroupKey = (
+  value?: string | null,
+): keyof Overview360ResponseDto | null => {
   if (!value) return null;
   const normalized = value.trim().toUpperCase();
   if (normalized === 'FOUNDATIONAL') return 'foundational';

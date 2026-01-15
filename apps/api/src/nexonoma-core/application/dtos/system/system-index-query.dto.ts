@@ -1,6 +1,6 @@
 import { AssetStatus, AssetType } from '../../../domain/types/asset-enums';
 
-export type SystemCatalogIndexQueryDto = {
+export type SystemIndexQueryDto = {
   page: number;
   limit: number;
   status?: AssetStatus;

@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { SystemCatalogIndexResponseDto } from '../../dtos/system/system-catalog-index-response.dto';
-import { SystemCatalogIndexQueryDto } from '../../dtos/system/system-catalog-index-query.dto';
-import { SystemCatalogRepositoryPort } from '../../ports/system/system-catalog-repository.port';
 import { AssetType } from '../../../domain/types/asset-enums';
+
+import { SystemIndexQueryDto } from '../../dtos/system/system-index-query.dto';
+import { SystemIndexResponseDto } from '../../dtos/system/system-index-response.dto';
+import { SystemContentRepositoryPort } from '../../ports/system/system-content-repository.port';
 
 const toIso = (value?: Date | string | null) => {
   if (!value) return undefined;
@@ -34,12 +35,10 @@ type IndexEntry = {
 };
 
 @Injectable()
-export class GetSystemCatalogIndexUseCase {
-  constructor(private readonly catalogRepo: SystemCatalogRepositoryPort) {}
+export class GetSystemContentIndexUseCase {
+  constructor(private readonly catalogRepo: SystemContentRepositoryPort) {}
 
-  async execute(
-    query: SystemCatalogIndexQueryDto,
-  ): Promise<SystemCatalogIndexResponseDto> {
+  async execute(query: SystemIndexQueryDto): Promise<SystemIndexResponseDto> {
     const { page, limit, status, types, languages } = query;
 
     if (types.length === 0 || languages.length === 0) {

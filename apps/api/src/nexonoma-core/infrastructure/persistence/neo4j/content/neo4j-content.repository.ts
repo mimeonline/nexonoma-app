@@ -158,11 +158,7 @@ export class Neo4jContentRepository implements ContentRepositoryPort {
       const cluster = clusterRaw ? normalizeNeo4j(clusterRaw) : null;
       const segment = segmentRaw ? normalizeNeo4j(segmentRaw) : null;
 
-      return ContentRecordMapper.toStructurePathRecord(
-        macro,
-        cluster,
-        segment,
-      );
+      return ContentRecordMapper.toStructurePathRecord(macro, cluster, segment);
     });
   }
 
