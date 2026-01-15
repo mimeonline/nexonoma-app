@@ -7,6 +7,7 @@ import { ExplainableLabel } from "@/components/atoms/ExplainableLabel";
 import { TagChip } from "@/components/atoms/TagChip";
 import { Badge, getBadgeVariant } from "@/components/ui/atoms/Badge";
 import { Card } from "@/components/ui/atoms/Card";
+import { ContextActionsBar } from "@/components/ui/molecules/ContextActionsBar";
 import { useEnumAssetLabel, useI18n, type AssetEnumType } from "@/features/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
@@ -71,6 +72,7 @@ export function sortTags(tags: ContentTag[] = [], order: string[] = []): Content
 
 export function ContentTemplate({ lang, data }: ContentTemplateProps) {
   const { t } = useI18n();
+  const localePrefix = lang ? `/${lang}` : "";
   const enumAssetLabel = useEnumAssetLabel();
 
   const { assetBlock, structure, relations } = data;
@@ -203,29 +205,18 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
     return lang === "de" ? t("content.relations.unknownLabel.de") : t("content.relations.unknownLabel.en");
   };
 
+  const assetName = assetBlock.name ?? assetBlock.slug;
+
   return (
     <div className="space-y-8 pb-20">
-      <div>
-        <Link
-          href={`/${lang}/catalog`}
-          className="group inline-flex items-center gap-2 text-xs font-medium text-text-secondary transition-colors duration-200 ease-out hover:text-white"
-        >
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-white/5 transition-colors duration-200 ease-out group-hover:border-white/20">
-            <svg
-              className="h-3 w-3"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-          </span>
-          <span>{t("content.backToCatalog")}</span>
-        </Link>
-      </div>
+      <ContextActionsBar
+        backLabel={t("catalog.detail.referrer.back")}
+        copyLabel={t("contextActionsBar.copy")}
+        copiedLabel={t("contextActionsBar.copied")}
+        contextLabel={t("nav.overview360")}
+        contextHref={`${localePrefix}/360`}
+        className="mt-4"
+      />
 
       <section className="grid gap-6 lg:grid-cols-[1fr_300px] lg:items-stretch">
         <Card className="bg-nexo-surface p-8 duration-200 ease-out">

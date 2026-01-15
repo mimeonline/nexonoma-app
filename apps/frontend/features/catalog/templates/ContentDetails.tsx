@@ -12,10 +12,10 @@ import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
 import { Info } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MetricsList } from "../organisms/MetricsList";
-import ReferrerNavClient from "../organisms/ReferrerNavClient";
 import { ScenarioList } from "../organisms/ScenarioList";
 import { TradeoffMatrix } from "../organisms/TradeoffMatrix";
 import { UseCaseList } from "../organisms/UseCaseList";
+import { ContextActionsBar } from "@/components/ui/molecules/ContextActionsBar";
 
 interface ContentDetailsTemplateProps {
   // Wir nutzen FullAsset.
@@ -55,6 +55,7 @@ const InfoCard = ({
 
 export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }: ContentDetailsTemplateProps) {
   const { t, lang } = useI18n();
+  const localePrefix = lang ? `/${lang}` : "";
   const enumLabel = useEnumAssetLabel();
   const enumLabels = useEnumAssetLabels();
   const tagKeys = getOrderedTagKeys(content);
@@ -98,10 +99,17 @@ export function ContentDetailsTemplate({ contentType, icon, heroQuote, content }
     };
   }, []);
 
+  const typeLabel = t(`asset.enums.types.${contentType}.label`);
+
   return (
     <div className="space-y-8 pb-20">
-      {/* 0. Navigation */}
-      <ReferrerNavClient segmentName={content.segmentName} clusterName={content.clusterName} macroClusterName={content.macroClusterName} />
+      <ContextActionsBar
+        backLabel={t("catalog.detail.referrer.back")}
+        copyLabel={t("contextActionsBar.copy")}
+        copiedLabel={t("contextActionsBar.copied")}
+        contextLabel={t("nav.catalog")}
+        contextHref={`${localePrefix}/catalog`}
+      />
 
       {/* 1. HERO SECTION */}
       <section ref={heroRef} className="relative bg-nexo-card rounded-2xl border border-nexo-border p-8 shadow-card overflow-hidden">

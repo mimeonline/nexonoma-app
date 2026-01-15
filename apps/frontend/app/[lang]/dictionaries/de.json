@@ -12,6 +12,10 @@
   "a11y": {
     "menuToggle": "Menü öffnen"
   },
+  "contextActionsBar": {
+    "copy": "Link kopieren",
+    "copied": "Kopiert"
+  },
   "emptyStates": {
     "curated": {
       "title": "Kuratiert leer",
@@ -476,7 +480,8 @@
       "perspectiveStatus": "Perspektive: {value}"
     },
     "legend": {
-      "title": "Legende"
+      "title": "Legende",
+      "present": "● enthalten"
     },
     "axis": {
       "y": {
@@ -493,9 +498,6 @@
     },
     "labels": {
       "perspective": "Perspektive"
-    },
-    "legend": {
-      "present": "● enthalten"
     },
     "tooltips": {
       "title": {
