@@ -3,18 +3,29 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface ContextActionsBarProps {
   backLabel: string;
   copyLabel: string;
   copiedLabel: string;
+  copyIcon?: ReactNode;
   contextLabel?: string;
   contextHref?: string;
+  contextIcon?: ReactNode;
   className?: string;
 }
 
-export function ContextActionsBar({ backLabel, copyLabel, copiedLabel, contextLabel, contextHref, className }: ContextActionsBarProps) {
+export function ContextActionsBar({
+  backLabel,
+  copyLabel,
+  copiedLabel,
+  copyIcon,
+  contextLabel,
+  contextHref,
+  contextIcon,
+  className,
+}: ContextActionsBarProps) {
   const router = useRouter();
   const [isCopied, setIsCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -56,17 +67,19 @@ export function ContextActionsBar({ backLabel, copyLabel, copiedLabel, contextLa
         <button
           type="button"
           aria-label={copyLabel}
-          className="cursor-pointer font-semibold uppercase tracking-[0.3em] text-slate-300 transition hover:text-white"
+          className="cursor-pointer inline-flex items-center gap-2 font-semibold uppercase tracking-[0.3em] text-slate-300 transition hover:text-white"
           onClick={handleCopy}
         >
+          {copyIcon}
           {isCopied ? copiedLabel : copyLabel}
         </button>
         {contextLabel && contextHref && (
           <Link
             href={contextHref}
             aria-label={contextLabel}
-            className="cursor-pointer font-semibold uppercase tracking-[0.3em] text-slate-300 transition hover:text-white"
+            className="cursor-pointer inline-flex items-center gap-2 font-semibold uppercase tracking-[0.3em] text-slate-300 transition hover:text-white"
           >
+            {contextIcon}
             {contextLabel}
           </Link>
         )}

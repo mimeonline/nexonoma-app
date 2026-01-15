@@ -12,6 +12,7 @@ import { useEnumAssetLabel, useI18n } from "@/features/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 import type { ContentResponse, ContentTag } from "@/types/content";
 import { useMemo, useState } from "react";
+import { Eye, Link as LinkIcon } from "lucide-react";
 
 type ContentTemplateProps = {
   lang: string;
@@ -110,8 +111,10 @@ export function ContentTemplate({ lang, data }: ContentTemplateProps) {
         backLabel={t("catalog.detail.referrer.back")}
         copyLabel={t("contextActionsBar.copy")}
         copiedLabel={t("contextActionsBar.copied")}
+        copyIcon={<LinkIcon className="h-4 w-4" />}
         contextLabel={t("nav.overview360")}
         contextHref={`${localePrefix}/360`}
+        contextIcon={<Eye className="h-4 w-4" />}
         className="mt-4"
       />
 

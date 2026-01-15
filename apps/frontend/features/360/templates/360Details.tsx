@@ -9,7 +9,7 @@ import { useEnumAssetLabel, useEnumAssetLabels, useI18n } from "@/features/i18n/
 import { ContentDetail } from "@/types/catalog";
 import { Example, ExternalResource } from "@/types/nexonoma";
 import { getCardTagLabel, getOrderedTagKeys } from "@/utils/getCardTags";
-import { Info } from "lucide-react";
+import { Info, LayoutGrid, Link as LinkIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MetricsList } from "../organisms/MetricsList";
 import { ScenarioList } from "../organisms/ScenarioList";
@@ -105,8 +105,10 @@ export function Details360Template({ contentType, icon, heroQuote, content }: De
         backLabel={t("catalog.detail.referrer.back")}
         copyLabel={t("contextActionsBar.copy")}
         copiedLabel={t("contextActionsBar.copied")}
+        copyIcon={<LinkIcon className="h-4 w-4" />}
         contextLabel={t("nav.catalog")}
         contextHref={`${localePrefix}/catalog`}
+        contextIcon={<LayoutGrid className="h-4 w-4" />}
       />
 
       {/* 1. HERO SECTION */}
