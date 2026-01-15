@@ -1140,6 +1140,12 @@
     "catalog": {
       "title": "Nexonoma Catalog",
       "description": "All content building blocks (concepts, methods, tools, technologies) in a compact overview. Search, filter by type, and switch directly to the detail view."
+    },
+    "detail": {
+      "titlePattern": "{name} · {type}",
+      "titlePattern360": "{name} · {type} · 360°",
+      "descriptionFallback": "No description available.",
+      "description360Suffix": "Includes a 360° view with context, trade-offs, and examples."
     }
   }
 }

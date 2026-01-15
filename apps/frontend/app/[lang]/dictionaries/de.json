@@ -1018,6 +1018,12 @@
     "catalog": {
       "title": "Nexonoma Katalog",
       "description": "Alle Content-Bausteine (Concepts, Methods, Tools, Technologies) in einer kompakten Übersicht. Suche, filtere nach Typ und wechsle direkt in die Detailansicht."
+    },
+    "detail": {
+      "titlePattern": "{name} · {type}",
+      "titlePattern360": "{name} · {type} · 360°",
+      "descriptionFallback": "Keine Beschreibung verfügbar.",
+      "description360Suffix": "Enthält eine 360°-Einordnung mit Kontext, Trade-offs und Beispielen."
     }
   }
 }
