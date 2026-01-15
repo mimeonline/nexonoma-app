@@ -13,6 +13,7 @@ export type SortableSitemapEntry = SitemapEntry & {
 export type UrlForAssetContext = {
   baseUrl: string;
   locale: string;
+  contentBasePath?: string;
 };
 
 export type UrlForAssetInput = {
@@ -104,9 +105,10 @@ export const urlForAsset = (asset: UrlForAssetInput, context: UrlForAssetContext
 
   const localePrefix = `/${context.locale}`;
   const contentRoute = CONTENT_TYPE_ROUTE_MAP[type];
+  const contentBasePath = context.contentBasePath ?? "content";
 
   if (contentRoute) {
-    return buildUrl(context.baseUrl, `${localePrefix}/content/${contentRoute}/${asset.slug}`);
+    return buildUrl(context.baseUrl, `${localePrefix}/${contentBasePath}/${contentRoute}/${asset.slug}`);
   }
 
   if (type === "MACRO_CLUSTER") {

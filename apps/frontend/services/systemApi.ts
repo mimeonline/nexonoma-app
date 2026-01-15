@@ -104,23 +104,30 @@ export const getIndexableCatalogEntries = async (
 export function createSystemApi() {
   const baseUrl = getApiBase({ preferInternal: true });
 
+  const fetchIndexPage = async (path: string, { page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> => {
+    const searchParams = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+      status: "published",
+      types: "concept,method,tool,technology",
+    });
+
+    const url = `${baseUrl}${path}?${searchParams.toString()}`;
+    const data = await fetchJsonSafe<SystemContentIndexResponse>(url, {
+      logLabel: `system index fetch failed (${path})`,
+      cache: "no-store",
+    });
+
+    if (!data || !Array.isArray(data.items)) return [];
+    return data.items;
+  };
+
   return {
     async fetchContentIndexPage({ page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> {
-      const searchParams = new URLSearchParams({
-        page: String(page),
-        limit: String(limit),
-        status: "published",
-        types: "concept,method,tool,technology",
-      });
-
-      const url = `${baseUrl}/system/content/index?${searchParams.toString()}`;
-      const data = await fetchJsonSafe<SystemContentIndexResponse>(url, {
-        logLabel: "system content index fetch failed",
-        cache: "no-store",
-      });
-
-      if (!data || !Array.isArray(data.items)) return [];
-      return data.items;
+      return fetchIndexPage("/system/content/index", { page, limit });
+    },
+    async fetch360IndexPage({ page, limit }: SitemapNodePageParams): Promise<SitemapNode[]> {
+      return fetchIndexPage("/system/360/index", { page, limit });
     },
   };
 }

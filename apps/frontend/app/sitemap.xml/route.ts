@@ -4,7 +4,8 @@ import { renderSitemapIndexXml } from "@/utils/sitemap";
 
 const buildIndexEntries = (baseUrl: string) => [
   { loc: `${baseUrl}/sitemap-pages.xml` },
-  { loc: `${baseUrl}/sitemap-catalog.xml` },
+  { loc: `${baseUrl}/sitemap-content.xml` },
+  { loc: `${baseUrl}/sitemap-360.xml` },
 ];
 
 export async function GET(request: NextRequest) {

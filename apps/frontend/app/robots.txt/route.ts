@@ -6,7 +6,6 @@ const buildRobots = (baseUrl: string) => {
     "User-agent: *",
     "Allow: /",
     "Disallow: /sandbox",
-    "Disallow: /preview",
     "Disallow: /api",
     "Disallow: /auth",
     "Disallow: /login",

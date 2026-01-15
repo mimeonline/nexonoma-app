@@ -51,7 +51,8 @@ export const buildSitemapPagesEntries = (baseUrl: string, now: Date = new Date()
 export const mapAssetsToSitemapEntries = (
   assets: SitemapNode[],
   baseUrl: string,
-  locales: readonly SeoLocale[]
+  locales: readonly SeoLocale[],
+  options?: { contentBasePath?: string }
 ): { entries: SitemapEntry[]; skipped: number; total: number } => {
   const sortable: SortableSitemapEntry[] = [];
   let skipped = 0;
@@ -75,7 +76,10 @@ export const mapAssetsToSitemapEntries = (
     }
 
     resolvedLocales.forEach((locale) => {
-      const loc = urlForAsset({ type: typeKey, slug: asset.slug }, { baseUrl, locale });
+      const loc = urlForAsset(
+        { type: typeKey, slug: asset.slug },
+        { baseUrl, locale, contentBasePath: options?.contentBasePath }
+      );
       if (!loc) {
         skipped += 1;
         return;
@@ -127,10 +131,12 @@ export const buildSitemap360Entries = async (baseUrl: string): Promise<{ entries
   const page = 1;
 
   const systemApi = createSystemApi();
-  const nodes = await systemApi.fetchContentIndexPage({
+  const nodes = await systemApi.fetch360IndexPage({
     page,
     limit,
   });
 
-  return mapAssetsToSitemapEntries(nodes, baseUrl, SEO_SUPPORTED_LOCALES);
+  return mapAssetsToSitemapEntries(nodes, baseUrl, SEO_SUPPORTED_LOCALES, {
+    contentBasePath: "360",
+  });
 };

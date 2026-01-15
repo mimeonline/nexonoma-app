@@ -1,23 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
+import { NextRequest } from "next/server";
 import { GET } from "./route";
 
-type MockRequest = {
-  url: string;
-  headers: {
-    get: (key: string) => string | null;
-  };
-};
-
-const makeRequest = (url: string, headers: Record<string, string> = {}): MockRequest => {
-  const headerMap = new Map<string, string>();
-  Object.entries(headers).forEach(([key, value]) => headerMap.set(key.toLowerCase(), value));
-  return {
-    url,
-    headers: {
-      get: (key: string) => headerMap.get(key.toLowerCase()) ?? null,
-    },
-  };
-};
+const makeRequest = (url: string, headers: Record<string, string> = {}): NextRequest =>
+  new NextRequest(url, {
+    headers,
+  });
 
 describe("robots.txt route", () => {
   it("uses request host when env not set", async () => {
