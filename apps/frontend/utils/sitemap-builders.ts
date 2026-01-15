@@ -7,9 +7,9 @@ import {
   isValidSlug,
   resolveSitemapLocales,
   sortEntriesByTypeSlugIdLang,
+  urlForAsset,
   type SitemapEntry,
   type SortableSitemapEntry,
-  urlForAsset,
 } from "./sitemap";
 
 const STATIC_SITEMAP_PAGES = [
@@ -17,8 +17,14 @@ const STATIC_SITEMAP_PAGES = [
   "/en/",
   "/de/catalog",
   "/en/catalog",
+  "/de/content",
+  "/en/content",
+  "/de/360",
+  "/en/360",
   "/de/grid",
   "/en/grid",
+  "/de/matrix",
+  "/en/matrix",
   "/de/preview",
   "/en/preview",
 ] as const;
@@ -91,6 +97,32 @@ export const mapAssetsToSitemapEntries = (
 };
 
 export const buildSitemapCatalogEntries = async (baseUrl: string): Promise<{ entries: SitemapEntry[]; skipped: number; total: number }> => {
+  const limit = 2000;
+  const page = 1;
+
+  const systemApi = createSystemApi();
+  const nodes = await systemApi.fetchSitemapNodesPage({
+    page,
+    limit,
+  });
+
+  return mapAssetsToSitemapEntries(nodes, baseUrl, SEO_SUPPORTED_LOCALES);
+};
+
+export const buildSitemapContentEntries = async (baseUrl: string): Promise<{ entries: SitemapEntry[]; skipped: number; total: number }> => {
+  const limit = 2000;
+  const page = 1;
+
+  const systemApi = createSystemApi();
+  const nodes = await systemApi.fetchSitemapNodesPage({
+    page,
+    limit,
+  });
+
+  return mapAssetsToSitemapEntries(nodes, baseUrl, SEO_SUPPORTED_LOCALES);
+};
+
+export const buildSitemap360Entries = async (baseUrl: string): Promise<{ entries: SitemapEntry[]; skipped: number; total: number }> => {
   const limit = 2000;
   const page = 1;
 

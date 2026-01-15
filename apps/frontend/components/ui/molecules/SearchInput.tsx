@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Search, X } from "lucide-react";
-import { ChangeEvent, InputHTMLAttributes, useRef } from "react";
+import { InputHTMLAttributes, useRef } from "react";
 
 interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   value: string;
@@ -11,15 +11,7 @@ interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "
   clearLabel: string;
 }
 
-export function SearchInput({
-  value,
-  onValueChange,
-  onClear,
-  clearLabel,
-  placeholder,
-  className,
-  ...props
-}: SearchInputProps) {
+export function SearchInput({ value, onValueChange, onClear, clearLabel, placeholder, className, ...props }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
